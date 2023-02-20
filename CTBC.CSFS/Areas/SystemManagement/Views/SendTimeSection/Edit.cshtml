@@ -1,0 +1,84 @@
+﻿@model CTBC.CSFS.Models.SendTimeSection
+@{
+    ViewBag.Title = Lang.csfs_sendtimesection;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_edit</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Ajax.BeginForm("Edit", new AjaxOptions() { HttpMethod = "post", OnBegin = "", OnFailure = "displayError" }))
+{
+    <input type="hidden" value="@Model.TimeSection" name="timesectionEdit">
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_timesection
+                        </td>
+                        <td class="col-md-10">
+                            <select id="time_h" name="time_h">
+                                <option>00</option>
+                                <option>01</option>
+                                <option>02</option>
+                                <option>03</option>
+                                <option>04</option>
+                                <option>05</option>
+                                <option>06</option>
+                                <option>07</option>
+                                <option>08</option>
+                                <option>09</option>
+                                <option>10</option>
+                                <option>11</option>
+                                <option>12</option>
+                                <option>13</option>
+                                <option>14</option>
+                                <option>15</option>
+                                <option>16</option>
+                                <option>17</option>
+                                <option>18</option>
+                                <option>19</option>
+                                <option>20</option>
+                                <option>21</option>
+                                <option>22</option>
+                                <option>23</option>
+                            </select>時
+                            <select id="time_m" name="time_m">
+                                <option>00</option>
+                                <option>10</option>
+                                <option>20</option>
+                                <option>30</option>
+                                <option>40</option>
+                                <option>50</option>
+                            </select>分
+                            @Html.TextBoxFor(m => m.TimeSection, new { @class = "", @MaxLength = "4", @style = "display:none" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+        <div class="box-footer text-center">
+            <button type="submit" id="btnSubmit" class="btn btn-primary btn-xs">
+                @Lang.csfs_save
+            </button>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Query", "SendTimeSection", new { area = "SystemManagement" })">@Lang.csfs_cancel</a>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#time_h").val($("#TimeSection").val().substr(0, 2));
+            $("#time_m").val($("#TimeSection").val().substr(3, 2));
+        });
+
+        function displayError() {
+            jAlertError($("#LoadErrorMsg").val());
+        }
+
+    </script>
+}

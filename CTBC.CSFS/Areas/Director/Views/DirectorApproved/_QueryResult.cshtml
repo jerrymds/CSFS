@@ -1,0 +1,139 @@
+﻿@model CTBC.CSFS.ViewModels.DirectorToApproveViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.DirectorToApprovelist != null)
+                {
+                    if (Model.DirectorToApprovelist.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.DirectorToApprove.PageSize, Model.DirectorToApprove.CurrentPage, Model.DirectorToApprove.TotalItemCount, Model.DirectorToApprove, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.DirectorToApprove.SortExpression, Model.DirectorToApprove.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th><input type="checkbox" id="CheckAll"></th>
+                            <th class="col-md-1">@Lang.csfs_seqnum</th>
+                            <th class="">@Lang.csfs_case_no</th>
+                            <th class="col-md-2">@Lang.csfs_gov_unit</th>
+                            <th class="col-md-1">@Lang.csfs_gov_date</th>
+                            <th class="col-md-1">@Lang.csfs_gov_no</th>
+                            <th class="col-md-1">@Lang.csfs_agnet</th>
+                            <th class="col-md-1">@Lang.csfs_fxzg</th>
+                            <th class="col-md-1">@Lang.csfs_senddate</th>
+                            <th class="col-md-1">@Lang.csfs_case_kind</th>
+                            <th class="col-md-1">@Lang.csfs_case_kind2</th>
+                            <th class="col-md-1">@Lang.csfs_case_speed</th>
+                            <th class="col-md-1">@Lang.csfs_sendupdate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.DirectorToApprovelist != null && Model.DirectorToApprovelist.Any())
+{
+    int i = 0;
+    foreach (var item in Model.DirectorToApprovelist)
+    {
+        i++;
+        string className = "";
+        if (item.SendDate != null && item.SendDate != "")
+        {
+            if (Convert.ToInt32(item.SendDate.Replace("/", "")) > Convert.ToInt32(item.LimitDate == null ? "0" : item.LimitDate.Replace("/", "")))
+            {
+                className = "text-red";
+            }
+            if (Convert.ToInt32(item.SendDate.Replace("/", "")) == Convert.ToInt32(item.LimitDate == null ? "0" : item.LimitDate.Replace("/", "")))
+            {
+                className = "text-light-blue";
+            }
+        }
+        else if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) > Convert.ToInt32(item.LimitDate == null ? "0" : item.LimitDate.Replace("/", "")))
+        {
+            className = "text-red";
+        }
+        else if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) == Convert.ToInt32(item.LimitDate == null ? "0" : item.LimitDate.Replace("/", "")))
+        {
+            className = "text-light-blue";
+        }
+        //if(i % 2 == 0)
+        //{
+        //    className = "text-red";
+        //}
+        //else
+        //{
+        //    className = "text-light-blue";
+        //}
+        <tr sendupdate="@item.SendUpDate" mailno="@item.MailNo">
+            <td class="text-center">
+                @*20170714 固定 RQ-2015-019666-019 派件至跨單位(廠商bug一併修正) 宏祥 update start*@
+                <input type="checkbox" name="r2" class="checkfile" value="@item.CaseId" data-status="@item.Status" />
+                @*20170714 固定 RQ-2015-019666-019 派件至跨單位(廠商bug一併修正) 宏祥 update end*@
+            </td>
+            <td class="text-center @className">@i</td>
+            <td class="text-center @className">@item.CaseNo</td>
+            <td class="text-center @className">@item.GovUnit</td>
+            <td class="text-center @className">@item.GovDate</td>
+            <td class="@className">@item.GovNo</td>
+            <td class="text-center @className">@item.AgentUser</td>
+            <td class="text-center @className">@item.ApproveManager</td>
+            <td class="text-center @className">@item.SendDate</td>
+            <td class="text-center @className">@item.CaseKind</td>
+            <td class="text-center @className">@item.CaseKind2</td>
+            <td class="text-center @className">@item.Speed</td>
+            <td class="text-center @className">@item.SendUpDate</td>
+        </tr>
+    }
+}
+else
+{
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.DirectorToApprove.AssignId)
+                @Html.Hidden("querystring", Model.DirectorToApprove.CaseNo)
+                @Html.Hidden("querystring", Model.DirectorToApprove.GovUnit)
+                @Html.Hidden("querystring", Model.DirectorToApprove.GovDate)
+                @Html.Hidden("querystring", Model.DirectorToApprove.GovNo)
+                @Html.Hidden("querystring", Model.DirectorToApprove.Person)
+                @Html.Hidden("querystring", Model.DirectorToApprove.SendDate)
+                @Html.Hidden("querystring", Model.DirectorToApprove.CaseKind)
+                @Html.Hidden("querystring", Model.DirectorToApprove.LimitDate)
+                @Html.Hidden("querystring", Model.DirectorToApprove.CaseKind2)
+                @Html.Hidden("querystring", Model.DirectorToApprove.SendKind)
+                @Html.Hidden("querystring", Model.DirectorToApprove.ApproveManager)
+                @Html.Hidden("querystring", Model.DirectorToApprove.ID)
+                @Html.Hidden("defaultSortColumn", Model.DirectorToApprove.SortExpression)
+                @Html.Hidden("defaultSort", Model.DirectorToApprove.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.BindCheckBox();
+        $.custPagination.sort($("#divResult"));
+        reThStyle();
+    });
+
+    //重置表頭樣式
+    function reThStyle()
+    {
+        var count = "@Model.DirectorToApprovelist.Count";
+        if (count == 0)
+        {
+            var tab = $("#query_table");
+            tab.children("thead").children("tr").children("th").eq(2).addClass("col-md-1");
+            tab.children("thead").children("tr").children("th").eq(3).removeClass();
+        }
+    }
+</script>

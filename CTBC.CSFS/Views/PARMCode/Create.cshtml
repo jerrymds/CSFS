@@ -1,0 +1,211 @@
+﻿@model CTBC.CSFS.Models.PARMCode
+
+@{
+    ViewBag.Title = "Create";
+}
+<script language="javascript" type="text/javascript">
+    //頁面加載調用的jQuery方法
+    $(function () {
+        var hidAction = $("#hidAction").val();
+        ////若Action值為Add，設置頁面物件的默認選項
+            $("#ddlCodeType").attr("selected", "selected").val("");
+
+            $("#SortOrder").val("");
+            //-------------------------------- End
+
+            $("#hidEnable").val(true); //20130325
+            var tSelCoty = '@Model.QueryCodeType';
+            if ($.trim(tSelCoty) == "") {
+                $("#CreateCodeMemo").text('@Lang.csfs_pm_create_msg1');
+            }
+
+        var hidEnable = $("#hidEnable").val(); //20130325 horace
+        switch (hidEnable) {
+            case "true":
+                $("#rdoStart").attr("checked", "checked");
+                $("#rdoCease").removeAttr("checked");
+                break;
+            case "false":
+                $("#rdoStart").removeAttr("checked");
+                $("#rdoCease").attr("checked", "checked");
+                break;
+            default:
+                break;
+
+        }
+        $("#ddlCodeType").val('@Model.QueryCodeType');
+        TblrIsShow();
+    });
+    //判斷類型代碼行是否顯示
+    function TblrIsShow() {
+        var selectVal = $("#ddlCodeType").attr("selected", "selected").val();
+
+        var hidAction = $("#hidAction").val();
+
+        //判斷參數類型選中項是否為“其他”，若是則顯示類型代碼一行，否則隱藏該行
+        if (selectVal == "") {
+            $("#tblrCodeType").show();
+
+            $("#SortOrder").val("1");
+            $("#hidSortOrder").val("");
+            $("#lblSortOrder").val("");
+            //---- edit by katie 2014/3/19 ---End
+
+            $("#CodeType").val("");
+            $("#CodeTypeDesc").val("");
+        }
+        else {
+
+            $("#tblrCodeType").hide();
+            $("#CodeType").val(selectVal);
+            $("#hidCodeType").val(selectVal);
+            $("#CodeTypeDesc").val($("#ddlCodeType").find("option:selected").text());
+            //獲取順序
+            $.ajax({
+                type: "post",
+                traditional: true,
+                url: '@Url.Action("GetSortOrder")',
+                async: true,
+                data: "codeType=" + selectVal,
+                dataType: "html",
+                success: function (result) {
+
+                    //---- edit by katie 2014/3/19，當使用者新增參數時，取得參數的最大順序後，指定給SortOrder欄位值。 ---Start
+                    //---- 移除hidSortOrder、lblSortOrder欄位值設定
+                    if (hidAction == "Add") {
+                        $("#SortOrder").val(result);
+                    }
+                    //----------------------------------------------------------------------------------------------------- end
+                }
+            });
+        }
+    }
+
+    function getHidCodeTypeValue(obj) {
+        $("#hidCodeType").val($(obj).val());
+    }
+
+    function CloseWindow() {
+        var CodeType = $("#QueryCodeType").val();
+        var CodeNo = $("#QueryCodeNo").val();
+        var Enable = $("#QueryEnable").val();
+        location.href = '@Url.Action("Query")?QueryCodeType=' + CodeType + '&QueryCodeNo=' + CodeNo + '&QueryEnable=' + Enable;
+    }
+
+    function displaySuccess(xhr) {
+        $('#errorMessageDiv').show();
+    }
+
+    function ajaxValidate() {
+        Comm_Trim();
+        return true;
+    }
+</script>
+@using (Ajax.BeginForm("Create", new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "post", OnBegin = "ajaxValidate", OnSuccess = "displaySuccess", OnFailure = "displayError" }))
+{
+    <div class="headline">
+        @Lang.csfs_pm_create
+    </div>
+    <div>
+        @Html.ValidationMessageFor(m => m.CodeType)
+        @Html.ValidationMessageFor(m => m.CodeTypeDesc)
+        @Html.ValidationMessageFor(m => m.CodeNo)
+        @Html.ValidationMessageFor(m => m.CodeDesc)
+        @Html.ValidationMessageFor(m => m.SortOrder)
+    </div>
+    <div style="height: 7px">
+    </div>
+    <div style="height: 7px">
+    </div>
+    <table width="100" border="1" cellpadding="3" cellspacing="0" class="query_table">
+        <tr>
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_codetypedesc
+                @Html.HiddenFor(m => m.CodeType, new { @id = "hidCodeType" })
+            </td>
+            <td class="f_word_left" colspan="3" style="width: 70%">
+                @Html.DropDownList("selCodeType", (IEnumerable<SelectListItem>
+                )ViewBag.codeTypeList, Lang.csfs_other, new { @id = "ddlCodeType", @onchange = "javascript:TblrIsShow();" })
+                &nbsp;&nbsp;<span id="CreateCodeMemo"></span>
+            </td>
+        </tr>
+        <tr id="tblrCodeType">
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_codetype
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.TextBoxFor(m => m.CodeType, new {@class = "input_word", @MaxLength = "50", @onblur = "javascript:getHidCodeTypeValue(this);" })
+            </td>
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_codetypedesc
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.TextBoxFor(m => m.CodeTypeDesc, new { @class = "input_word", @MaxLength = "50" })
+            </td>
+        </tr>
+        <tr>
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_detail_code
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.TextBoxFor(m => m.CodeNo, new { @class = "input_word", @MaxLength = "50" })
+            </td>
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_detail_name
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.TextBoxFor(m => m.CodeDesc, new { @class = "input_word", @MaxLength = "50" })
+            </td>
+        </tr>
+        <tr>
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_seq
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.TextBoxFor(m => m.SortOrder, new { @class = "input_word", @MaxLength = "50" })
+                @Html.HiddenFor(m => m.SortOrder, new { @id = "hidSortOrder" })
+            </td>
+            <td class="query_table_td" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_enable
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.RadioButtonFor(m => m.Enable, true)@Lang.csfs_enable
+                @Html.RadioButtonFor(m => m.Enable, false)@Lang.csfs_disable
+            </td>
+        </tr>
+        <tr>
+            <td class="query_table_td" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_codetag
+            </td>
+            <td class="f_word_left" colspan="3" style="width: 70%">
+                @Html.TextBoxFor(m => m.CodeTag, new { @id = "txtCodeTag", @class = "input_word", @MaxLength = "50" })
+            </td>
+        </tr>
+        <tr>
+            <td class="query_table_td" width="15%" nowrap="nowrap">
+                @Lang.csfs_memo
+            </td>
+            <td class="f_word_left" colspan="3" style="width: 70%">
+                @Html.TextAreaFor(m => m.CodeMemo, new { @id = "txtCodeMemo", @cols = "60", @rows = "5" })
+            </td>
+        </tr>
+    </table>
+    <div>
+        <button type="submit" id="btnSubmit">
+            @Lang.csfs_save
+        </button>
+        &nbsp; &nbsp;
+        <button type="button" onclick="CloseWindow();">
+            @Lang.csfs_quit
+        </button>
+    </div>    
+    @Html.Hidden("hidAction")
+    @Html.HiddenFor(m => m.CodeUid, new { @id = "hidCodeUid" })
+    @Html.HiddenFor(m => m.Enable, new { @id = "hidEnable" })
+    @Html.HiddenFor(m => m.QueryEnable)
+    @Html.HiddenFor(m => m.QueryCodeType)
+    @Html.HiddenFor(m => m.QueryCodeNo)
+}
+
+ 
+

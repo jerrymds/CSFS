@@ -1,0 +1,137 @@
+﻿@using System.Web.Mvc.Ajax
+@using System.Web.Mvc.Html
+@model CTBC.CSFS.ViewModels.CaseDeadViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>             
+                @if (Model.CaseDeadVersionList != null)
+                {
+                    if (Model.CaseDeadVersionList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CaseRecordCondition.PageSize, Model.CaseRecordCondition.CurrentPage, Model.CaseRecordCondition.TotalItemCount, Model.CaseRecordCondition, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CaseRecordCondition.SortExpression, Model.CaseRecordCondition.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                             <th nowrap width="5%">
+                                <input type="checkbox" id="check01" onClick="ChkAll();" />
+                            </th>
+                            <th nowrap width="5%">
+                                序號
+                            </th>
+                            <th nowrap width="12%">
+                                案件編號
+                            </th>
+                            <th nowrap width="6%">
+                                設定
+                            </th>
+                            <th nowrap width="6%">
+                                產品啟動
+                            </th>
+                            <th nowrap width="8%">
+                                經辦人員
+                            </th>
+                            <th nowrap width="14%">
+                                建檔日期
+                            </th>
+                            <th nowrap width="6%">
+                                設定結果匯出
+                            </th>
+                            <th nowrap width="6%">
+                                各產品匯出
+                            </th>
+                            <th nowrap width="6%">
+                                產品餘額匯出
+                            </th>
+                            <th nowrap width="5%">
+                                理債檔匯出
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CaseDeadVersionList != null && Model.CaseDeadVersionList.Any())
+                        {
+                            int pNum = 1;
+
+                            for (int i = 0; i < Model.CaseDeadVersionList.Count; i++)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <input name="chkChild" type="checkbox" class="checkfile" id="checkbox_@pNum" onclick="ChildItem();" value="@Model.CaseDeadVersionList[i].NewID" data-casestatus="@Model.CaseDeadVersionList[i].Status" data-version="@Model.CaseDeadVersionList[i].CaseTrsNewID" data-CreatedDate="@Model.CaseDeadVersionList[i].CreatedDate" data-docno="@Model.CaseDeadVersionList[i].DocNo" data-num="@pNum.ToString()" />
+                                        <input type="hidden" id="hidDocNo_@pNum" value="@Model.CaseDeadVersionList[i].DocNo" />
+                                        <input type="hidden" id="hidNewID_@pNum" value="@Model.CaseDeadVersionList[i].NewID.ToString()" />
+                                        <input type="hidden" id="hidCaseTrsNewID_@pNum" value="@Model.CaseDeadVersionList[i].CaseTrsNewID.ToString()" />
+                                    </td>
+                                    <td class="text-center">
+                                       @Model.CaseDeadVersionList[i].RowNum
+                                    </td>
+                                    <td class="text-center">
+                                        @*@Html.ActionLink(@Model.CaseDeadVersionList[i].DocNo, "Index", "eTrsHisRecordDetail", new { area = "TrsDetail",strKey = @Model.CaseDeadVersionList[i].CaseTrsNewID,strNewID = @Model.CaseDeadVersionList[i].NewID, pageFrom = Model.CaseRecordCondition.CurrentPage, Flag = "2" }, new { })*@
+                                        @Model.CaseDeadVersionList[i].DocNo
+                                    </td>
+                                    <td class="text-left">
+                                        @Model.CaseDeadVersionList[i].StatusName1
+                                        @*@Model.CaseDeadVersionList[i].Status*@
+                                    </td>
+                                    <td class="text-left">
+                                        @Model.CaseDeadVersionList[i].StatusName2
+                                        @*@Model.CaseDeadVersionList[i].Status*@
+                                    </td>
+                                    <td class="text-center">
+                                        @Model.CaseDeadVersionList[i].CreatedUser
+                                    </td>
+                                    <td class="text-center">
+                                        @Model.CaseDeadVersionList[i].CreatedDate
+                                    </td>
+                                    <td class="text-center">
+                                        @if (@Model.CaseDeadVersionList[i].SetStatus.Trim() == "2" || @Model.CaseDeadVersionList[i].SetStatus.Trim() == "3")
+                                        {
+                                        @Html.ActionLink("設定回饋檔", "Export", "DeadRecord", new { area = "TrsDetail", uploadkind = "xlsx1", id = Model.CaseDeadVersionList[i].CaseTrsNewID, DocNo = Model.CaseDeadVersionList[i].DocNo }, new { }) 
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (@Model.CaseDeadVersionList[i].SendStatus.Trim() == "2" || @Model.CaseDeadVersionList[i].SendStatus.Trim() == "3")
+                                        {
+                                            @Html.ActionLink("死亡回饋檔", "Export", "DeadRecord", new { area = "TrsDetail", uploadkind = "xlsx2", id = Model.CaseDeadVersionList[i].CaseTrsNewID , DocNo = Model.CaseDeadVersionList[i].DocNo } , new { })
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (@Model.CaseDeadVersionList[i].StatusName2.Trim() == "成功")
+                                        {
+                                            @Html.ActionLink("匯出PDF", "Export", "DeadRecord", new { area = "TrsDetail", uploadkind = "pdf", id = Model.CaseDeadVersionList[i].CaseTrsNewID }, new { })
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (@Model.CaseDeadVersionList[i].EXCEL_SETUP.Length > 3)
+                                        { 
+                                            @Html.ActionLink("下載", "Export", "DeadRecord", new { area = "TrsDetail", uploadkind = "xlsx3", id = Model.CaseDeadVersionList[i].CaseTrsNewID }, new { })
+                                        }
+                                        @*@Model.CaseDeadVersionList[i].EXCEL_SETUP*@
+                                    </td>
+                                </tr>
+                                pNum++;
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>

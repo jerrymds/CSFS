@@ -1,0 +1,74 @@
+﻿@using CTBC.FrameWork.Paging
+@model SendNoSettingViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.SendNoSettingList != null)
+                {
+                    if (Model.SendNoSettingList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.SendNoSetting.PageSize, Model.SendNoSetting.CurrentPage, Model.SendNoSetting.TotalItemCount, Model.SendNoSetting, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.SendNoSetting.SortExpression, Model.SendNoSetting.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th class="col-md-2" data-sortcolumn="SendNoYear">@Lang.csfs_year1</th>
+                            <th class="col-md-2" data-sortcolumn="SendNoStart">@Lang.csfs_CheckNoStart</th>
+                            <th class="col-md-2" data-sortcolumn="SendNoEnd">@Lang.csfs_CheckNoEnd</th>
+                            <th class="col-md-2" data-sortcolumn="SendNoNow">@Lang.csfs_CheckNoNow</th>
+                            <th class="col-md-1">@Lang.csfs_editdelete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.SendNoSettingList != null && Model.SendNoSettingList.Any())
+                        {
+                            foreach (var item in Model.SendNoSettingList)
+                            {
+                                <tr>
+                                    <td class="text-center">@item.SendNoYear</td>
+                                    <td class="text-center">@item.SendNoStart</td>
+                                    <td class="text-center">@item.SendNoEnd</td>
+                                    <td class="text-center">@item.SendNoNow</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-default btn-xs" title="@Lang.csfs_edit" href="@Url.Action("Edit", "SendNoSetting", new { area = "SystemManagement", SendNoId = item.SendNoId })">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-default btn-xs" title="@Lang.csfs_delete" href="#" data-href="@Url.Action("Delete", "SendNoSetting", new { area = "SystemManagement", SendNoId = item.SendNoId })" data-deletelink="true">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.SendNoSetting.SendNoYear)
+                @Html.Hidden("defaultSortColumn", Model.SendNoSetting.SortExpression)
+                @Html.Hidden("defaultSort", Model.SendNoSetting.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.sort($("#divResult"));
+        $.MenuMaintenance.bindGrid();
+    });
+</script>

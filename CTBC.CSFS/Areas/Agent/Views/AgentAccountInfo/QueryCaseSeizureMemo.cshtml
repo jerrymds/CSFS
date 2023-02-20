@@ -1,0 +1,111 @@
+﻿@model CTBC.CSFS.ViewModels.AgentDepartmentAccessViewModel
+
+@{
+    ViewBag.Title = "QueryCaseSeizureMemo";
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+<style type="text/css">
+    .Box {
+        width: 600px;
+        height: 120px;
+        overflow-y: auto;
+    }
+
+    .select {
+        width: 600px;
+    }
+</style>
+
+<div class="margin">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="glyphicon glyphicon-search"></i>
+            <h3 class="box-title">@Lang.csfs_memo</h3>
+            @*@using (Html.BeginForm("DoCreateMemo", "AgentAccountInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmCreateMemo", @class = "form-horizontal" }))
+            {*@
+                <div>
+                    <div class="box-header"></div>
+                    <div style="margin-left:5%">
+                        <table>
+                            <tr>
+                                <th>@Lang.csfs_select_noline：</th>
+                                <th>
+                                    @Html.DropDownListFor(m => m.AgentDeptAccess.CodeMemo, (IEnumerable<SelectListItem>)ViewBag.MemoList, Lang.csfs_select, new { @class = "select", @id = "CodeMemo" })
+                                </th>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="height:8px"></div>
+                    <div style="margin-left:5%">
+                        <table>
+                            <tr>
+                                <td>@Lang.csfs_input：</td>
+                                <td>
+                                    @Html.TextAreaFor(m => m.AgentDeptAccess.AccessData, new { @class = "Box", @id = "AccessDataa" })
+                                    <input type="hidden" name="AccessData" id="AccessData" value="" />
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div style="text-align: center;">
+                        <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+                        <button id="btnAccountCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+                    </div>
+                </div>
+                <input type="hidden" name="CaseId" id="CaseId" value="@Model.AgentDeptAccess.CaseId" />
+            @*}*@
+        </div>
+    </div>
+</div>
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_add_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_add_fail)
+@Html.Hidden("InputMsg", Lang.csfs_input_content)
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script>
+    $(document).ready(function () {
+        $("#btnSave").click(function () { return btnAccountSaveClick(); });
+        $("#btnAccountCancel").click(function () { return btnAccountCancelsClick(); });
+        $("#CodeMemo").change(function () {
+            $("#AccessDataa").val($(this).val());
+        });
+    });
+
+    function btnAccountSaveClick() {
+        var msg = "";
+        var newline = "<br/>";
+        if (!$("#AccessDataa").val().length > 0) {
+            msg += $("#InputMsg").val() + newline;
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        } else {
+            $("#AccessData").val($("#AccessDataa").val());
+            parent.addMemo($("#AccessDataa").val());
+            parent.$.colorbox.close();
+
+            //$.ajax({
+            //    url: $("#frmCreateMemo").attr("action"),
+            //    type: "Post",
+            //    cache: false,
+            //    data: $("#frmCreateMemo").serialize(),
+            //    error: function () {
+            //        jAlertError($("#LoadErrorMsg").val());
+            //        $.unblockUI();
+            //    },
+            //    success: function (data) {
+            //        if (data.ReturnCode === "1") {
+            //            jAlertSuccess($("#CreateSuccessMsg").val(), function () { parent.location.href = parent.location.href; });
+            //        } else {
+            //            jAlertError($("#CreateFailMsg").val());
+            //        }
+            //    }
+            //});
+        }
+    }
+    function btnAccountCancelsClick() {
+        $("#AccessDataa").empty();
+        $("#AccessData").empty();
+        parent.$.colorbox.close();
+    }
+</script>

@@ -1,0 +1,63 @@
+﻿@model CTBC.CSFS.Models.GovAddress
+
+@{
+    ViewBag.Title = Lang.csfs_govdate;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_edit</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("Edit", "GovAddress", new { area = "SystemManagement" }, FormMethod.Post, new { id = "frmEdit", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder col-md-12">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_gov_kind</td>
+                        <td class="col-md-4">
+                            @Html.DropDownListFor(m => m.GovKind, (IEnumerable<SelectListItem>)ViewBag.GovKindList1, Lang.csfs_select, new { @id = "ddlkindEdit" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_name</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovName, new { @id = "txtGovNameEdit" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_address</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.GovAddr, new { @id = "txtGovAddrEdit" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_isenabled</td>
+                        <td class="col-md-5">
+                            @Html.DropDownListFor(m => m.IsEnabled, (IEnumerable<SelectListItem>)ViewBag.IsEnableList, Lang.csfs_select, new{@id="ddlIsEnableEdit" })
+                        </td>
+                    </tr>
+                    @Html.HiddenFor(m => m.GovAddrId, new { @id = "hidGovAddrIdEdit" })
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnSaveEdit" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Index", "GovAddress", new { area = "SystemManagement" })">@Lang.csfs_cancel</a>
+        </div>
+    }
+</div>
+
+
+@Html.Hidden("NowPage", "GovAddressEdit")
+@Html.Hidden("CancelUrl", @Url.Action("Index", "GovAddress", new { area = "SystemManagement" }))
+@Html.Hidden("EditSuccessMsg", Lang.csfs_edit_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_edit_fail)
+
+@Html.Hidden("NameddlkindCreate", Lang.csfs_govkind_ok)
+@Html.Hidden("NametxtGovName", Lang.csfs_govname_ok)
+@Html.Hidden("NametxtGovAddr", Lang.csfs_govaddr_ok)
+@Html.Hidden("NameddlIsEnable", Lang.csfs_isenable_ok)
+
+@section scripts{
+    @Scripts.Render("~/Scripts/SystemManagement/GovAddress.js")
+}

@@ -1,0 +1,219 @@
+﻿@model CTBC.CSFS.ViewModels.CaseWarningViewModel
+@using CTBC.CSFS.Models
+@using CTBC.FrameWork.Util
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_casewarning;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_detail</h3>
+    </div>
+    <div class="box-body ">
+        <table class="table-noborder col-md-12">
+            <tbody>
+                <tr>
+                    <td class="col-md-1 text-right">@Lang.csfs_case_no</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.WarningMaster.DocNo, new { @disabled = "disabled" })
+                    </td>
+                    <td class="col-md-1 text-right"></td>
+                    <td class="col-md-5"></td>
+                </tr>
+                <tr>
+                    <td class="col-md-1 text-right">@Lang.csfs_warn_id</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.WarningMaster.CustId, new { @id = "txtCustId", @MaxLength = "20", @disabled = "disabled" })
+                        舊:
+                        @Html.TextBoxFor(m => m.WarningMaster.CustId_Old, new { @id = "txtCustId_Old", @disabled = "disabled" })
+                    </td>
+                    <td class="col-md-1 text-right">@Lang.csfs_warningnum</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.WarningMaster.CustAccount, new { @MaxLength = "20", @id = "txtCustAccount", @disabled = "disabled" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-1 text-right">外國人統一證號</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.WarningMaster.ForeignId, new { @id = "txtForeignId", @MaxLength = "20", @disabled = "disabled" })
+                        舊:
+                        @Html.TextBoxFor(m => m.WarningMaster.ForeignId_Old, new { @id = "txtForeignId_Old", @disabled = "disabled" })
+                    </td>
+                    <td class="col-md-2 text-right">原ID</td>
+                    <td class="col-md-4">
+                        @Html.TextBoxFor(m => m.WarningMaster.CustId_Old, new { @id = "txtCustId_Old" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-1 text-right">@Lang.csfs_warn_name</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.WarningMaster.CustName, new { @id = "txtCustName", @MaxLength = "10", @disabled = "disabled" })
+                    </td>
+                    <td class="col-md-1 text-right">@Lang.csfs_case_attachment</td>
+                    <td class="col-md-5">
+                        <table class="table table-bordered" id="divUploadList">
+                            @for (int i = 0; i < Model.WarningAttachmentList.Count; i++)
+                            {
+                                <tr>
+                                    <td>
+                                        <a href="@Url.Action("DownFile", "Home", new { area = "", uploadkind = Uploadkind.WarnAttach, id = Model.WarningAttachmentList[i].AttachmentId })" target="frmDownload">
+                                            @Model.WarningAttachmentList[i].AttachmentName
+                                        </a>
+                                    </td>
+                                    <td>
+                                        <a href="@Url.Action("NoticeMail", "Api/Values", new { area = "", mailFromTo = Model.WarningAttachmentList[i] ,InitMessage = Model.WarningAttachmentList[i].AttachmentId })" target="frmDownload">
+                                            測試MAIL
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-1 text-right">@Lang.csfs_warn_status</td>
+                    <td class="col-md-5">
+                        @Html.DropDownListFor(m => m.WarningMaster.AccountStatus, (IEnumerable<SelectListItem>)ViewBag.StatusList, new { @id = "txtAccountStatus", @disabled = "disabled" })
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-1 text-right">@Lang.csfs_bankID</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.WarningMaster.BankID, new { @id = "txtBankID", @MaxLength = "5", @disabled = "disabled" })
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<iframe id="upload_frame" name="upload_frame" src="" class="hidden"></iframe>
+
+@* 警示狀態 *@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_warnstates</h3>
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort ">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th class="col-md-2">@Lang.csfs_warn_source</th>
+                            <th class="col-md-2">@Lang.csfs_warn_relieve</th>
+                            <th class="col-md-2">@Lang.csfs_relieve_reason</th>
+                            <th class="col-md-3">@Lang.csfs_other_reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.WarningStateList != null && Model.WarningStateList.Any())
+                        {
+                            foreach (var item in Model.WarningStateList)
+                            {
+                        <tr>
+                            <td class="text-center">@item.NotificationSource</td>
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(item.RelieveDate))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.RelieveDate)</text>
+                                }
+                            </td>
+                            <td class="text-center">@item.RelieveReason</td>
+                            <td class="text-center">@item.OtherReason</td>
+
+                        </tr>
+                            }
+                        }
+                        else
+                        {
+                        <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@* 結果區域 *@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort ">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th>@Lang.csfs_warn_date</th>
+                            <th>@Lang.csfs_165warn</th>
+                            <th>@Lang.csfs_e_warn</th>
+                            <th>@Lang.csfs_warn_content</th>
+                            <th>@Lang.csfs_warn_source</th>
+                            <th>@Lang.csfs_warn_dates</th>
+                            <th>@Lang.csfs_warn_setdate</th>
+                            <th>@Lang.csfs_warn_address</th>
+                            <th>@Lang.csfs_warn_people</th>
+                            <th>@Lang.csfs_warn_phone</th>
+                            <th>@Lang.csfs_warn_police</th>
+                            <th>@Lang.csfs_warn_victim</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.WarningDetailsList != null && Model.WarningDetailsList.Any())
+                        {
+                            foreach (var item in Model.WarningDetailsList)
+                            {
+                        <tr>
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(item.HappenDateTime))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.HappenDateTime)</text>
+                                }
+                            </td>
+                            <td class="text-center">@item.No_165</td>
+                            <td class="text-center">@item.No_e</td>
+                            <td class="text-center">@item.NotificationContent</td>
+                            <td class="text-center">@item.NotificationSource</td>
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(item.ForCDate))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.ForCDate)</text>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(item.EtabsDatetime))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.EtabsDatetime)</text>
+                                }
+                            </td>
+                            <td class="text-center">@item.NotificationUnit</td>
+                            <td class="text-center">@item.NotificationName</td>
+                            <td class="text-center">@item.ExtPhone</td>
+                            <td class="text-center">@item.PoliceStation</td>
+                            <td class="text-center">@item.VictimName</td>
+                        </tr>
+                            }
+                        }
+                        else
+                        {
+                        <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("NowPage", "CaseWarningEdit")
+@Html.Hidden("DeleteUrl", Url.Action("DeleteWarn", "CaseWarning", new { area = "KeyInput" }))
+@Html.Hidden("DeleteConfirm", Lang.csfs_confirm_delete)
+@Html.Hidden("DeleteSucMsg", Lang.csfs_del_ok)
+@Html.Hidden("DeleteFailMsg", Lang.csfs_del_fail)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/KeyInput/CaseWarning.js")
+    @Scripts.Render("~/Scripts/common.uploadlist.js")
+}

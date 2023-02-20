@@ -1,0 +1,47 @@
+﻿@model CTBC.CSFS.Models.WarningMaster
+
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_casewarning;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("Index", "CaseWarning", new { area = "KeyInput" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_warningnum</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CustAccount, new { @MaxLength = "12", @id = "CustAccountQuery" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">前(ID)</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CustIdOld, new { @MaxLength = "12", @id = "CustIdOld" })
+                            後變更(ID):
+                            @Html.TextBoxFor(m => m.CustIdNew, new { @MaxLength = "12", @id = "CustIdNew" })
+                            <button id="btnChangeID" type="button" class="btn btn-primary btn-xs">變更</button>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+        </div>
+    }
+</div>
+
+@Html.Hidden("NowPage", "CaseWarningQuery")
+@Html.Hidden("AccountNotNull", "請確認帳號是否有誤!")
+@Html.Hidden("ChangeIDUrl", Url.Action("ChangeID", "CaseWarning", new { area = "KeyInput" }))
+
+@section scripts {
+    @Scripts.Render("~/Scripts/KeyInput/CaseWarning.js")
+}

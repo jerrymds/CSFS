@@ -1,0 +1,177 @@
+﻿@model CTBC.CSFS.ViewModels.CaseWarningViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_casewarning;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_create</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("Create", "CaseWarning", new { area = "KeyInput" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal", enctype = "multipart/form-data" }))
+    {
+        <div class="box-body ">
+            <table class="col-md-12 no-border" >
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-4">
+                            @Model.WarningMaster.DocNo
+                        </td>
+                        <td class="col-md-2 text-right"></td>
+                        <td class="col-md-4"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_warn_id</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.CustId, new { @id = "txtCustId", @MaxLength = "20" })
+                        </td>
+                        <td class="col-md-2 text-right">@Lang.csfs_warningnum</td>
+                        <td class="col-md-4">
+                            @Html.HiddenFor(m => m.WarningMaster.CustAccount, new { @MaxLength = "12", @id = "txtCustAccount", @readonly = "readonly" })
+                            @Model.WarningMaster.CustAccount
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">外國人統一證號</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.ForeignId, new { @id = "txtForeignId", @MaxLength = "20" })
+                            @*<button id="btnForeign" type="button" class="btn btn-primary btn-xs">查詢</button>*@
+                        </td>
+                        <td class="col-md-2">
+                        <td class="col-md-4">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_warn_name</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.CustName, new { @id = "txtCustName", @MaxLength = "10" })
+                        </td>
+                        <td class="col-md-2 text-right">@Lang.csfs_warn_status</td>
+                        <td class="col-md-4">
+                            @Html.DropDownListFor(m => m.WarningMaster.AccountStatus, (IEnumerable<SelectListItem>)ViewBag.StatusList, new { @id = "txtAccountStatus" })
+                            結清日
+                            @Html.TextBoxFor(m => m.WarningMaster.ClosedDate, new { data_datepicker = "true", @Maxlength = "10", @style = "width:80px", @id = "txtClosedDate" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_bankID</td>
+                        <td class="col-md-4">
+                            @*@Html.TextBoxFor(m => m.WarningMaster.BankID, new { @id = "txtBankID", @MaxLength = "5" })*@
+                            @Html.DropDownListFor(m => m.WarningMaster.BankID, (IEnumerable<SelectListItem>)ViewBag.BankID, new { @id = "ddlBankID", onchange = "changeBranchName(this)" })
+                        </td>
+                        <td class="col-md-2 text-right">@Lang.csfs_bank_name</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.BankName, new { @id = "txtBankName", @readonly = "readonly" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_case_attachment</td>
+                        <td class="col-md-4">
+                            @***** 上傳部分開始 ******@
+                            <table class="table table-bordered" id="divUploadList" style="width:250px;">
+                                <tr>
+                                    <td><input type="file" class="col-sm-12 no-padding" name="fileAttNames" id="fileAtt1" /></td>
+                                </tr>
+                            </table>
+                            @***** 上傳部分結束 ******@
+                        </td>
+                        <td class="col-md-2 text-right">幣別</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.Currency, new { @id = "txtCurrency", @style = "width:100px" })
+                            通報時餘額
+                            @Html.TextBoxFor(m => m.WarningMaster.NotifyBal, new { @id = "txtNotifyBal", @style = "width:100px" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_create_date</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningQuery.ForCDateS, new { data_datepicker = "true", @Maxlength = "9", @style = "width:80px" })
+                            ～
+                            @Html.TextBoxFor(m => m.WarningQuery.ForCDateE, new { data_datepicker = "true", @Maxlength = "9", @style = "width:80px" })
+                            <button id="btnGenDetail" type="button" class="btn btn-primary btn-xs">產生交易明細</button>
+                        </td>
+                        <td class="col-md-2 text-right">目前餘額</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.CurBal, new { @id = "txtCurBal", @style = "width:100px" })
+                            VD
+                            @Html.TextBoxFor(m => m.WarningMaster.VD, new { @id = "txtVD", @style = "width:100px" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">MD</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.MD, new { @id = "txtMD", @style = "width:100px" })
+                        </td>
+                        <td class="col-md-2 text-right">可用餘額</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.ReleaseBal, new { @id = "txtReleaseBal", @readonly = "readonly" })
+                        </td>
+                    </tr>
+                    @*<tr>
+                        <td class="col-md-2 text-right">生日</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.BirthDay, new { @id = "txtBirthDay", @readonly = "readonly" })
+                        </td>
+                        <td class="col-md-2 text-right">電話</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.Tel, new { @id = "txtTel", @readonly = "readonly" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">地址</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.Address, new { @id = "txtAddress", @readonly = "readonly" })
+                        </td>
+                        <td class="col-md-2 text-right">行動電話</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.Mobile, new { @id = "txtMobile", @readonly = "readonly" })
+                        </td>
+                    </tr>*@
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnRequire" type="button" class="btn btn-primary btn-xs">重發</button>
+            <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+
+@Html.Hidden("NowPage", "CaseWarningCreate")
+@Html.Hidden("HidAccount", (string)ViewBag.CustAccount)
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_add_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_add_fail)
+
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("NameCustId", Lang.csfs_warn_id)
+@Html.Hidden("NameCustAccount", Lang.csfs_warningnum)
+@Html.Hidden("NameCustName", Lang.csfs_warn_name)
+@Html.Hidden("NameBankID", Lang.csfs_bankID)
+@Html.Hidden("GetBranchNameUrl", Url.Action("GetBranchName", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("GenDetailUrl", Url.Action("GetGenDetail", "CaseWarning", new { area = "KeyInput" }))
+@Html.Hidden("RequireUrl", Url.Action("RequireAgain33401", "CaseWarning", new { area = "KeyInput" }))
+@section scripts {
+    @Scripts.Render("~/Scripts/KeyInput/CaseWarning.js")
+    @Scripts.Render("~/Scripts/common.uploadlist.js")
+    <script type="text/javascript">
+        function changeBranchName(obj) {
+            var BankID = $("#ddlBankID").val();
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: $("#GetBranchNameUrl").val(),
+                data: { codeNo: BankID },
+                success: function (data) {
+                    $("#txtBankName").val(data)
+                }
+            });
+        }
+    </script>
+}
+
+

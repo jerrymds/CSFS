@@ -1,0 +1,133 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema id="CaseSendSetting" targetNamespace="http://tempuri.org/CaseSendSetting.xsd" xmlns:mstns="http://tempuri.org/CaseSendSetting.xsd" xmlns="http://tempuri.org/CaseSendSetting.xsd" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata" xmlns:msprop="urn:schemas-microsoft-com:xml-msprop" attributeFormDefault="qualified" elementFormDefault="qualified">
+  <xs:annotation>
+    <xs:appinfo source="urn:schemas-microsoft-com:xml-msdatasource">
+      <DataSource DefaultConnectionIndex="0" FunctionsComponentName="QueriesTableAdapter" Modifier="AutoLayout, AnsiClass, Class, Public" SchemaSerializationMode="IncludeSchema" xmlns="urn:schemas-microsoft-com:xml-msdatasource">
+        <Connections>
+          <Connection AppSettingsObjectName="Web.config" AppSettingsPropertyName="CSFS_ADO" ConnectionStringObject="" IsAppSettingsProperty="true" Modifier="Assembly" Name="CSFS_ADO (Web.config)" ParameterPrefix="@" PropertyReference="AppConfig.System.Configuration.ConfigurationManager.0.ConnectionStrings.CSFS_ADO.ConnectionString" Provider="System.Data.SqlClient" />
+        </Connections>
+        <Tables />
+        <Sources />
+      </DataSource>
+    </xs:appinfo>
+  </xs:annotation>
+  <xs:element name="CaseSendSetting" msdata:IsDataSet="true" msdata:UseCurrentLocale="true" msprop:EnableTableAdapterManager="True" msprop:Generator_DataSetName="CaseSendSetting" msprop:Generator_UserDSName="CaseSendSetting">
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element name="CaseSendSetting" msprop:Generator_TableClassName="CaseSendSettingDataTable" msprop:Generator_TableVarName="tableCaseSendSetting" msprop:Generator_RowChangedName="CaseSendSettingRowChanged" msprop:Generator_TablePropName="_CaseSendSetting" msprop:Generator_RowDeletingName="CaseSendSettingRowDeleting" msprop:Generator_RowChangingName="CaseSendSettingRowChanging" msprop:Generator_RowEvHandlerName="CaseSendSettingRowChangeEventHandler" msprop:Generator_RowDeletedName="CaseSendSettingRowDeleted" msprop:Generator_RowClassName="CaseSendSettingRow" msprop:Generator_UserTableName="CaseSendSetting" msprop:Generator_RowEvArgName="CaseSendSettingRowChangeEvent">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SerialID" msdata:ReadOnly="true" msdata:AutoIncrement="true" msdata:AutoIncrementSeed="-1" msdata:AutoIncrementStep="-1" msprop:Generator_ColumnVarNameInTable="columnSerialID" msprop:Generator_ColumnPropNameInRow="SerialID" msprop:Generator_ColumnPropNameInTable="SerialIDColumn" msprop:Generator_UserColumnName="SerialID" type="xs:int" />
+              <xs:element name="CaseId" msdata:DataType="System.Guid, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" msprop:Generator_ColumnVarNameInTable="columnCaseId" msprop:Generator_ColumnPropNameInRow="CaseId" msprop:Generator_ColumnPropNameInTable="CaseIdColumn" msprop:Generator_UserColumnName="CaseId" type="xs:string" minOccurs="0" />
+              <xs:element name="Template" msprop:Generator_ColumnVarNameInTable="columnTemplate" msprop:Generator_ColumnPropNameInRow="Template" msprop:Generator_ColumnPropNameInTable="TemplateColumn" msprop:Generator_UserColumnName="Template" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="11" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="SendWord" msprop:Generator_ColumnVarNameInTable="columnSendWord" msprop:Generator_ColumnPropNameInRow="SendWord" msprop:Generator_ColumnPropNameInTable="SendWordColumn" msprop:Generator_UserColumnName="SendWord" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="60" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="SendNo" msprop:Generator_ColumnVarNameInTable="columnSendNo" msprop:Generator_ColumnPropNameInRow="SendNo" msprop:Generator_ColumnPropNameInTable="SendNoColumn" msprop:Generator_UserColumnName="SendNo" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="60" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="SendDate" msprop:Generator_ColumnVarNameInTable="columnSendDate" msprop:Generator_ColumnPropNameInRow="SendDate" msprop:Generator_ColumnPropNameInTable="SendDateColumn" msprop:Generator_UserColumnName="SendDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Speed" msprop:Generator_ColumnVarNameInTable="columnSpeed" msprop:Generator_ColumnPropNameInRow="Speed" msprop:Generator_ColumnPropNameInTable="SpeedColumn" msprop:Generator_UserColumnName="Speed" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="200" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Security" msprop:Generator_ColumnVarNameInTable="columnSecurity" msprop:Generator_ColumnPropNameInRow="Security" msprop:Generator_ColumnPropNameInTable="SecurityColumn" msprop:Generator_UserColumnName="Security" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="200" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Subject" msprop:Generator_ColumnVarNameInTable="columnSubject" msprop:Generator_ColumnPropNameInRow="Subject" msprop:Generator_ColumnPropNameInTable="SubjectColumn" msprop:Generator_UserColumnName="Subject" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1073741823" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="Description" msprop:Generator_ColumnVarNameInTable="columnDescription" msprop:Generator_ColumnPropNameInRow="Description" msprop:Generator_ColumnPropNameInTable="DescriptionColumn" msprop:Generator_UserColumnName="Description" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="1073741823" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="isFinish" msprop:Generator_ColumnVarNameInTable="columnisFinish" msprop:Generator_ColumnPropNameInRow="isFinish" msprop:Generator_ColumnPropNameInTable="isFinishColumn" msprop:Generator_UserColumnName="isFinish" type="xs:int" minOccurs="0" />
+              <xs:element name="FinishDate" msprop:Generator_ColumnVarNameInTable="columnFinishDate" msprop:Generator_ColumnPropNameInRow="FinishDate" msprop:Generator_ColumnPropNameInTable="FinishDateColumn" msprop:Generator_UserColumnName="FinishDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="Attachment" msprop:Generator_ColumnVarNameInTable="columnAttachment" msprop:Generator_ColumnPropNameInRow="Attachment" msprop:Generator_ColumnPropNameInTable="AttachmentColumn" msprop:Generator_UserColumnName="Attachment" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="500" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CreatedUser" msprop:Generator_ColumnVarNameInTable="columnCreatedUser" msprop:Generator_ColumnPropNameInRow="CreatedUser" msprop:Generator_ColumnPropNameInTable="CreatedUserColumn" msprop:Generator_UserColumnName="CreatedUser" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="CreatedDate" msprop:Generator_ColumnVarNameInTable="columnCreatedDate" msprop:Generator_ColumnPropNameInRow="CreatedDate" msprop:Generator_ColumnPropNameInTable="CreatedDateColumn" msprop:Generator_UserColumnName="CreatedDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="ModifiedUser" msprop:Generator_ColumnVarNameInTable="columnModifiedUser" msprop:Generator_ColumnPropNameInRow="ModifiedUser" msprop:Generator_ColumnPropNameInTable="ModifiedUserColumn" msprop:Generator_UserColumnName="ModifiedUser" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="50" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="ModifiedDate" msprop:Generator_ColumnVarNameInTable="columnModifiedDate" msprop:Generator_ColumnPropNameInRow="ModifiedDate" msprop:Generator_ColumnPropNameInTable="ModifiedDateColumn" msprop:Generator_UserColumnName="ModifiedDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="SendKind" msprop:Generator_ColumnVarNameInTable="columnSendKind" msprop:Generator_ColumnPropNameInRow="SendKind" msprop:Generator_ColumnPropNameInTable="SendKindColumn" msprop:Generator_UserColumnName="SendKind" minOccurs="0">
+                <xs:simpleType>
+                  <xs:restriction base="xs:string">
+                    <xs:maxLength value="10" />
+                  </xs:restriction>
+                </xs:simpleType>
+              </xs:element>
+              <xs:element name="SendUpDate" msprop:Generator_ColumnVarNameInTable="columnSendUpDate" msprop:Generator_ColumnPropNameInRow="SendUpDate" msprop:Generator_ColumnPropNameInTable="SendUpDateColumn" msprop:Generator_UserColumnName="SendUpDate" type="xs:dateTime" minOccurs="0" />
+              <xs:element name="GovName" msprop:Generator_ColumnVarNameInTable="columnGovName" msprop:Generator_ColumnPropNameInRow="GovName" msprop:Generator_ColumnPropNameInTable="GovNameColumn" msprop:Generator_UserColumnName="GovName" type="xs:string" minOccurs="0" />
+              <xs:element name="GovAddr" msprop:Generator_ColumnVarNameInTable="columnGovAddr" msprop:Generator_ColumnPropNameInRow="GovAddr" msprop:Generator_ColumnPropNameInTable="GovAddrColumn" msprop:Generator_UserColumnName="GovAddr" type="xs:string" minOccurs="0" />
+              <xs:element name="Receive" msprop:Generator_ColumnVarNameInTable="columnReceive" msprop:Generator_ColumnPropNameInRow="Receive" msprop:Generator_ColumnPropNameInTable="ReceiveColumn" msprop:Generator_UserColumnName="Receive" type="xs:string" minOccurs="0" />
+              <xs:element name="Cc" msprop:Generator_ColumnVarNameInTable="columnCc" msprop:Generator_ColumnPropNameInRow="Cc" msprop:Generator_ColumnPropNameInTable="CcColumn" msprop:Generator_UserColumnName="Cc" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+        <xs:element name="SendSettingDesc" msprop:Generator_TableClassName="SendSettingDescDataTable" msprop:Generator_TableVarName="tableSendSettingDesc" msprop:Generator_TablePropName="SendSettingDesc" msprop:Generator_RowDeletingName="SendSettingDescRowDeleting" msprop:Generator_RowChangingName="SendSettingDescRowChanging" msprop:Generator_RowEvHandlerName="SendSettingDescRowChangeEventHandler" msprop:Generator_RowDeletedName="SendSettingDescRowDeleted" msprop:Generator_UserTableName="SendSettingDesc" msprop:Generator_RowChangedName="SendSettingDescRowChanged" msprop:Generator_RowEvArgName="SendSettingDescRowChangeEvent" msprop:Generator_RowClassName="SendSettingDescRow">
+          <xs:complexType>
+            <xs:sequence>
+              <xs:element name="SerialID" msprop:Generator_ColumnVarNameInTable="columnSerialID" msprop:Generator_ColumnPropNameInRow="SerialID" msprop:Generator_ColumnPropNameInTable="SerialIDColumn" msprop:Generator_UserColumnName="SerialID" type="xs:int" minOccurs="0" />
+              <xs:element name="Title" msprop:Generator_ColumnVarNameInTable="columnTitle" msprop:Generator_ColumnPropNameInRow="Title" msprop:Generator_ColumnPropNameInTable="TitleColumn" msprop:Generator_UserColumnName="Title" type="xs:string" minOccurs="0" />
+              <xs:element name="Content" msprop:Generator_ColumnVarNameInTable="columnContent" msprop:Generator_ColumnPropNameInRow="Content" msprop:Generator_ColumnPropNameInTable="ContentColumn" msprop:Generator_UserColumnName="Content" type="xs:string" minOccurs="0" />
+            </xs:sequence>
+          </xs:complexType>
+        </xs:element>
+      </xs:choice>
+    </xs:complexType>
+    <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+      <xs:selector xpath=".//mstns:CaseSendSetting" />
+      <xs:field xpath="mstns:SerialID" />
+    </xs:unique>
+  </xs:element>
+  <xs:annotation>
+    <xs:appinfo>
+      <msdata:Relationship name="CaseSendSetting_SendSettingDesc" msdata:parent="CaseSendSetting" msdata:child="SendSettingDesc" msdata:parentkey="SerialID" msdata:childkey="SerialID" msprop:Generator_UserChildTable="SendSettingDesc" msprop:Generator_ChildPropName="GetSendSettingDescRows" msprop:Generator_UserRelationName="CaseSendSetting_SendSettingDesc" msprop:Generator_ParentPropName="CaseSendSettingRow" msprop:Generator_RelationVarName="relationCaseSendSetting_SendSettingDesc" msprop:Generator_UserParentTable="CaseSendSetting" />
+    </xs:appinfo>
+  </xs:annotation>
+</xs:schema>

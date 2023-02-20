@@ -1,0 +1,160 @@
+﻿@model CTBC.CSFS.Models.SeizureQuery
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_seizurequery;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "SeizureQuery", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                        <td class="col-md-5" colspan="5">
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, Lang.csfs_select, new { @id = "ddlCaseKind" })
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                        </td>
+                    </tr>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_unit</td>
+                        <td class="col-md-5">
+                            @*@Html.DropDownListFor(m => m.GovKind, (IEnumerable<SelectListItem>)ViewBag.GOV_KINDList, Lang.csfs_select, new { @id = "ddlGOV_KIND" })*@
+                            @Html.TextBoxFor(m => m.GovUnit, new { @id = "txtGovUnit", @MaxLength = "200" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-5" colspan="3">
+                            @Html.TextBoxFor(m => m.CaseNo, new { @id = "CaseNo" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.GovDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_speed</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, Lang.csfs_select, new { @id = "ddlSpeed" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_receive_kind</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.ReceiveKind, (IEnumerable<SelectListItem>)ViewBag.ReceiveKindList, Lang.csfs_select, new { @id = "ddlReceiveKind" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_no</td>
+                        <td class="col-md-5">@Html.TextBoxFor(m => m.GovNo, new { @MaxLength = "100" })</td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-2"></td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-2"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CreatedDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.CreatedDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_unit</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.BranchNo, new { @MaxLength = "100" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_person</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CreateUser, new { @MaxLength = "100" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_clientID</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CustId, new { })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_clientName</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CustName, new { })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_account</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.Account, new { })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_senddate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.SendDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.SendDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_sendword1</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.SendNo, new { })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_closeddate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.OverDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.OverDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_status</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.Status, (IEnumerable<SelectListItem>)ViewBag.StatusName, Lang.csfs_select, new { @id = "ddlStatus" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_agnet</td>
+                        <td class="col-md-2">
+                            @*@Html.TextBoxFor(m => m.AgentUser, new { })*@
+                            @Html.DropDownListFor(m => m.AgentUser, (IEnumerable<SelectListItem>)ViewBag.AgentUserList, Lang.csfs_select, new { @id = "ddlAgentUser" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" id="pageNum" name="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnExport" type="button" class="btn btn-primary btn-xs">@Lang.csfs_debtexcel</button>
+        </div>
+    }
+</div>
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "SeizureQuery", new { area = "QueryAndExport" })">
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("NowPage", "SeizureQueryQuery")
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("GovDateText", Lang.csfs_gov_date)
+@Html.Hidden("CreatedDateText", Lang.csfs_keyin_date)
+@Html.Hidden("GetCaseKind2Url", Url.Action("ChangCaseKind1", "SeizureQuery", new { area = "QueryAndExport" }))
+@Html.Hidden("GetGovUnitUrl", Url.Action("ChangGovUnit", "SeizureQuery", new { area = "QueryAndExport" }))
+@Html.Hidden("SeizureQueryExport", Url.Action("BuildSimpleExcel", "SeizureQuery", new { area = "QueryAndExport" }))
+@Html.Hidden("NuclearConfirmMsg", Lang.csfs_confirm_export)
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("CaseSeizure", Lang.csfs_menu_tit_caseseizure)
+@Html.Hidden("Seizure", Lang.csfs_seizure)
+@Html.Hidden("Pay", Lang.csfs_Pay)
+@Html.Hidden("Repeal", Lang.csfs_repeal)
+@Html.Hidden("SeizureandPay", Lang.csfs_seizureandpay)
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+@Html.Hidden("CaseKind2Query", (string)ViewBag.CaseKind2Query)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/QueryAndExport/SeizureQuery.js")
+
+    @*<script src="~/Scripts/bootstrap-typeahead.js"></script>
+    @Html.Hidden("GetGovNameUrl", Url.Action("GetGovNameByGoveKind", "Home", new { area = "" }))*@
+}
+
+

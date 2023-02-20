@@ -1,0 +1,171 @@
+﻿@model CTBC.CSFS.Models.DirectorToApprove
+@{
+    ViewBag.Title = Lang.csfs_approvedcase;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "DirectorApproved", new { area = "Director" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                        <td class="col-md-5" colspan="5">
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, Lang.csfs_select, new { @id = "ddlCaseKind" })
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                            @Lang.csfs_sendkind@Html.DropDownListFor(m => m.SendKind, (IEnumerable<SelectListItem>)ViewBag.SendKindList, Lang.csfs_bqf, new { @id = "ddlSendKind" })
+                        </td>
+                    </tr>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_unit</td>
+                        <td class="col-md-5">
+                            @*@Html.DropDownListFor(m => m.GovKind, (IEnumerable<SelectListItem>)ViewBag.GOV_KINDList, Lang.csfs_select, new { @id = "ddlGOV_KIND" })*@
+                            @Html.TextBoxFor(m => m.GovUnit, new { @id = "txtGovUnit", @MaxLength = "200" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CaseNo, new { @id = "CaseNo" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_fxzg</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.ApproveManager, (IEnumerable<SelectListItem>)ViewBag.ApproveManagerList, Lang.csfs_select, new { @id = "ddlApproveManager" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.GovDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_speed</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, Lang.csfs_select, new { @id = "ddlSpeed" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_receive_kind</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.ReceiveKind, (IEnumerable<SelectListItem>)ViewBag.ReceiveKindList, Lang.csfs_select, new { @id = "ddlReceiveKind" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_no</td>
+                        <td class="col-md-5">@Html.TextBoxFor(m => m.GovNo, new { @MaxLength = "100" })</td>
+                        @*20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 update start*@
+                        @*<td class="col-md-1 text-right">@Lang.csfs_agnet</td>*@
+                        @*<td class="col-md-2">*@
+                            @*@Html.TextBoxFor(m => m.AgentUser, new { @MaxLength = "100" })*@
+                            @*@Html.DropDownListFor(m => m.AgentUser, (IEnumerable<SelectListItem>)ViewBag.AgentUserList, Lang.csfs_select, new { @id = "ddlAgentUser" })*@
+                        @*</td>*@
+                        @*20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 update end*@
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_senddate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.SendDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.SendDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_unit</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.Unit, new { @MaxLength = "100" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_person</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CreateUser, new { @MaxLength = "100" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_fxdt</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.ApproveDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.ApproveDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_clientID</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.ID, new { @MaxLength = "20" })
+                        </td>
+                    </tr>
+                    @*20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add start*@
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_agnet</td>                        
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.AgentDepartment, (IEnumerable<SelectListItem>)ViewBag.AgentDepartmentList, Lang.csfs_select, new { @id = "ddlAgentDepartment" })
+                            @Html.DropDownListFor(m => m.AgentDepartment2, (IEnumerable<SelectListItem>)ViewBag.AgentDepartment2List, Lang.csfs_select, new { @id = "ddlAgentDepartment2" })
+                            @Html.DropDownListFor(m => m.AgentDepartmentUser, (IEnumerable<SelectListItem>)ViewBag.AgentDepartmentUserList, Lang.csfs_select, new { @id = "ddlAgentDepartmentUser" })
+                        </td>                        
+                    </tr>
+                    @*20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add end*@
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" id="pageNum" name="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnReturn" type="button" class="btn btn-primary btn-xs">@Lang.csfs_return</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "DirectorApproved", new { area = "Director" })">
+</div>
+@* 退件畫面*@
+<div class="modal fade" id="modalClose" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_return</h4>
+            </div>
+            <div class="modal-body">
+                @Lang.csfs_return1:
+                @Html.DropDownListFor(m => m.CloseReason, (IEnumerable<SelectListItem>)ViewBag.ReturnReasonList, Lang.csfs_select, new { @id = "CloseReason" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnCloseSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+
+@Html.Hidden("NowPage", "DirectorApprovedQuery")
+@Html.Hidden("GetCaseKind2Url", Url.Action("ChangCaseKind1", "Common", new { area = "Common" }))
+@Html.Hidden("ReturnUrl", Url.Action("Return", "DirectorToApprove", new { area = "Director" }))
+@Html.Hidden("ReportUrl", Url.Action("Report", "Common", new { area = "Common" }))
+
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("GovDateText", Lang.csfs_gov_date)
+@Html.Hidden("SendDateText", Lang.csfs_senddate)
+@Html.Hidden("ApproveDateText", Lang.csfs_fxdt)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("ReturnMsg", Lang.returnmsg)
+
+@* 退回 *@
+@Html.Hidden("ReturnfirmMsg", Lang.csfs_confirm_back)
+@Html.Hidden("ReturnOkMsg", Lang.csfs_back_success)
+@Html.Hidden("ReturnFaileMsg", Lang.csfs_back_fail)
+@Html.Hidden("TextNotNull", Lang.csfs_select_returnReason)
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("CheckCount", "選取案件不能超過30筆")
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+@Html.Hidden("CaseKind2Query", (string)ViewBag.CaseKind2Query)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+
+@* 20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add start *@
+@Html.Hidden("GetAgentDepartment2Url", Url.Action("ChangAgentDepartment1", "CollectionToAgent", new { area = "Collection" }))
+@Html.Hidden("GetAgentDepartmentUserUrl", Url.Action("ChangAgentDepartment2", "CollectionToAgent", new { area = "Collection" }))
+@* 20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add end *@
+
+@section scripts {
+    @Scripts.Render("~/Scripts/bootstrap-typeahead.js")
+    @Html.Hidden("GetGovNameUrl", Url.Action("GetGovNameByGoveKind", "Home", new { area = "" }))
+    @Scripts.Render("~/Scripts/Director/DirectorApproved.js")
+}

@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+    <startup> 
+        <supportedRuntime version="v4.0" sku=".NETFramework,Version=v4.5.2" />
+    </startup>
+  <connectionStrings>
+    <add name="CSFS_ADO" connectionString="data source=10.5.24.125\MSSQLSERVER2014,53332;initial catalog=CSFS_123;user id=sa;password=csAdmin6522;" providerName="System.Data.SqlClient"/>
+  </connectionStrings>
+  <appSettings>
+    <add key="filelog" value=".\Log"/>
+    <!--FTP設置-->
+    <add key="ftpserver" value="10.5.24.72"/>
+    <add key="ftpport" value=""/>
+    <add key="ftpusername" value="administrator"/>
+    <add key="ftppassword" value="cims_sa921"/>
+    <add key="ftpdir" value="CSFStoLAMS/"/>
+    <add key="LoaclFilePath" value="D:\CSFStoLAMS"/>
+
+  </appSettings>
+</configuration>

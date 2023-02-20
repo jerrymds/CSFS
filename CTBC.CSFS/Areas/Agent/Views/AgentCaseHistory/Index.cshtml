@@ -1,0 +1,73 @@
+﻿@model CTBC.CSFS.ViewModels.AgentHandleDetailViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfo", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_document_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentAccountInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_account_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentMeetInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_meet_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentOriginalInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_original_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccess", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_department_access</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentSendSettingInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_sendsetting_info</a></li>
+        <li class="active"><a href="@Url.Action("Index", "AgentCaseHistory", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_history</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseCalculator", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_calculator</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseMemo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_memo</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentTransactionRecords", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_transrecord_info</a></li>
+        @Html.GetBackButtonInTab()
+       </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel7">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div id="querytablediv" class="box-body">
+                            <table id="query_table" class="table table-bordered table-striped text-black sort">
+                                <thead>
+                                    <tr class="alert-success text-center ">
+                                        <th class="col-xs-1">@Lang.csfs_case_no</th>
+                                        <th class="col-xs-1 hidden">@Lang.csfs_from_role</th>
+                                        <th class="col-xs-1 hidden">@Lang.csfs_from_user</th>
+                                        <th class="col-xs-1 hidden">@Lang.csfs_from_folder</th>
+                                        <th class="col-xs-2">@Lang.csfs_event_time</th>
+                                        <th class="col-xs-1">@Lang.csfs_event</th>
+                                        <th class="col-xs-1">@Lang.csfs_to_role</th>
+                                        <th class="col-xs-1">@Lang.csfs_to_user</th>
+                                        <th class="col-xs-1">@Lang.csfs_to_folder</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model != null && Model.AgentHandleDetailList != null && Model.AgentHandleDetailList.Any())
+                                    {
+                                        foreach (var item in Model.AgentHandleDetailList)
+                                        {
+
+                                            <tr>
+                                                <td class="text-center">@item.CaseNo</td>
+                                                <td class="text-center hidden">@item.FromRole</td>
+                                                <td class="text-center hidden">@item.FromUser</td>
+                                                <td class="text-center hidden">@item.FromFolder</td>
+                                                <td class="text-center">@item.EventTime</td>
+                                                <td class="text-center">@item.Event</td>
+                                                <td class="text-center">@item.ToRole</td>
+                                                <td class="text-center">@item.ToUser</td>
+                                                <td class="text-center">@item.ToFolder</td>
+                                            </tr>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

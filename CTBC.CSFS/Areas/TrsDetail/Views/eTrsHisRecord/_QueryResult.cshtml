@@ -1,0 +1,102 @@
+﻿@using System.Web.Mvc.Ajax
+@using System.Web.Mvc.Html
+@model CTBC.CSFS.ViewModels.CaseTrsViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>             
+                @if (Model.CaseTrsQueryVersionList != null)
+                {
+                    if (Model.CaseTrsQueryVersionList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CaseHisCondition.PageSize, Model.CaseHisCondition.CurrentPage, Model.CaseHisCondition.TotalItemCount, Model.CaseHisCondition, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CaseHisCondition.SortExpression, Model.CaseHisCondition.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                             <th nowrap width="5%">
+                                <input type="checkbox" id="check01" onClick="ChkAll();" />
+                            </th>
+                            <th nowrap width="5%">
+                                序號
+                            </th>
+                            <th nowrap width="12%">
+                                案件編號
+                            </th>
+                            <th nowrap width="6%">
+                                案件狀態
+                            </th>
+                            <th nowrap width="10%">
+                                經辦人員
+                            </th>
+                            <th nowrap width="20%">
+                                建檔日期
+                            </th>
+                            <th nowrap width="20%">
+                                匯出檔案格式
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CaseTrsQueryVersionList != null && Model.CaseTrsQueryVersionList.Any())
+                        {
+                            int pNum = 1;
+
+                            for (int i = 0; i < Model.CaseTrsQueryVersionList.Count; i++)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <input name="chkChild" type="checkbox" class="checkfile" id="checkbox_@pNum" onclick="ChildItem();" value="@Model.CaseTrsQueryVersionList[i].NewID" data-casestatus="@Model.CaseTrsQueryVersionList[i].Status" data-version="@Model.CaseTrsQueryVersionList[i].CaseTrsNewID" data-CreatedDate="@Model.CaseTrsQueryVersionList[i].CreatedDate" data-docno="@Model.CaseTrsQueryVersionList[i].DocNo" data-num="@pNum.ToString()" />
+                                        <input type="hidden" id="hidDocNo_@pNum" value="@Model.CaseTrsQueryVersionList[i].DocNo" />
+                                        <input type="hidden" id="hidNewID_@pNum" value="@Model.CaseTrsQueryVersionList[i].NewID.ToString()" />
+                                        <input type="hidden" id="hidCaseTrsNewID_@pNum" value="@Model.CaseTrsQueryVersionList[i].CaseTrsNewID.ToString()" />
+                                    </td>
+                                    <td class="text-center">
+                                       @Model.CaseTrsQueryVersionList[i].RowNum
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.ActionLink(@Model.CaseTrsQueryVersionList[i].DocNo, "Index", "eTrsHisRecordDetail", new { area = "TrsDetail",strKey = @Model.CaseTrsQueryVersionList[i].CaseTrsNewID,strNewID = @Model.CaseTrsQueryVersionList[i].NewID, pageFrom = Model.CaseHisCondition.CurrentPage, Flag = "2" }, new { })
+                                    </td>
+                                    <td class="text-left">
+                                        @Model.CaseTrsQueryVersionList[i].StatusName
+                                        @*@Model.CaseTrsQueryVersionList[i].Status*@
+                                    </td>
+                                    <td class="text-center">
+                                        @Model.CaseTrsQueryVersionList[i].CreatedUser
+                                    </td>
+                                    <td class="text-center">
+                                        @Model.CaseTrsQueryVersionList[i].CreatedDate
+                                    </td>
+                                    <td class="text-center">
+                                        @if (@Model.CaseTrsQueryVersionList[i].StatusName.Trim() == "成功")
+                                        {
+                                        @Html.ActionLink("匯出XLSX", "Export", "eTrsHisRecord", new { area = "TrsDetail", uploadkind = "xlsx", id = Model.CaseTrsQueryVersionList[i].CaseTrsNewID}, new { })
+                                        @Html.ActionLink("匯出PDF", "Export", "eTrsHisRecord", new { area = "TrsDetail", uploadkind = "pdf", id = Model.CaseTrsQueryVersionList[i].CaseTrsNewID }, new { })                                       
+                                        }
+                                    </td>
+                                </tr>
+                                pNum++;
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>

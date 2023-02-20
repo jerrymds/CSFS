@@ -1,0 +1,61 @@
+﻿@model IEnumerable<CTBC.Framework.Platform.User>
+
+@{
+    ViewBag.Title = "Index";
+}
+<script type="text/javascript">
+    var DELETE_CONFIRM = '@Lang.csfs_del_confirm';
+    function RemoveLogonUser(userid) {
+        if (confirm(DELETE_CONFIRM)) {
+            $.post('@Url.Action("Delete","CSFSOnlineStatus")',
+                    { id: userid },
+                    function (msg) {
+                        alert(msg);
+                        window.location.reload();
+                    });
+        } else {
+            return false;
+        }
+    }
+</script>
+<div class="headline">
+    @Lang.csfs_online_status
+</div><br />
+
+<table class="query_table" align="center" border="1" cellpadding="3" cellspacing="0" id="detail">
+    <thead>
+        <tr>
+            <th>@Lang.csfs_seqnum</th>
+            <th>@Lang.csfs_usr_empid</th>
+            <th>@Lang.csfs_usr_empname</th>
+            <th>@Lang.csfs_login_time</th>
+            <th>@Lang.csfs_lastaction_time</th>
+            <th>@Lang.csfs_online_remove</th>
+        </tr>
+    </thead>
+    @{var count = 0;
+        foreach (CTBC.Framework.Platform.User item in Model)
+        {
+        count++;
+        <tr>
+            <td>@count</td>
+            <td>@item.Account</td>
+            <td>@item.Name</td>
+            <td>@item.SessionLoginTime</td>
+            <td>@item.LastActiveTime</td>
+            <td>
+                @if (item.Account != ViewBag.Myself)
+                {
+                <img src="@Url.Content("~/Content/img/u38.gif")" alt="" onclick="RemoveLogonUser('@item.Account');" />
+                }
+            </td>
+        </tr>
+        }
+    } 
+</table>
+
+<script type="text/javascript">
+    $("#detail tr:odd").addClass("gridrow");
+    $("#detail tr:even").addClass("gridrow_alternate");
+</script>
+

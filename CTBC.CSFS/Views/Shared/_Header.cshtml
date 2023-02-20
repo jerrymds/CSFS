@@ -1,0 +1,56 @@
+﻿@using CTBC.CSFS.Models
+@using CTBC.FrameWork.Platform
+
+@{
+    Layout = null;
+}
+
+@{
+    
+    string strName2 = HttpContext.Current.Session!=null && HttpContext.Current.Session["LogonUser"] != null ? ((User)HttpContext.Current.Session["LogonUser"]).Name : "Anonymous";
+}
+<!-- header logo: style can be found in header.less -->
+<header class="header">
+    <a href="@Url.Action("Index", "Home", new {area = ""})" class="logo">
+        <!-- Add the class icon to your logo image or logo icon to add the margining -->
+    </a>
+    <!-- Header Navbar: style can be found in header.less -->
+    <nav class="navbar navbar-static-top" role="navigation">
+        <!-- Sidebar toggle button-->
+        <a href="#" class="navbar-btn sidebar-toggle" data-toggle="offcanvas" role="button" title="收折或展開Menu">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </a>
+        <div class="navbar-right">
+            <ul class="nav navbar-nav">
+                <!-- User Account: style can be found in dropdown.less -->
+                <li class="dropdown dropdown-user">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <i class="glyphicon glyphicon-user"></i>
+                        <span>@strName2<i class="caret"></i></span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <a href="http://was.chinatrust.com.tw" class="text-black">
+                                <i class="fa fa-gear"></i> @Lang.csfs_edit_pwd
+                            </a>
+                        </li>
+                        <li>
+                            <a class="logout_open text-black" href="javascript:;" onclick="Logout()" data-popup-ordinal="0">
+                                <i class="fa fa-sign-out"></i> @Lang.csfs_logoff <strong>@strName2</strong>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+
+<script>
+    function Logout() {
+        $.post('@Url.Action("Logout")', {}, function (data) { parent.location.href = "@Url.Content('~' + @CTBC.CSFS.Pattern.Config.CUF_UserLogoutURL)"; });
+    }
+</script>

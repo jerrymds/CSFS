@@ -1,0 +1,363 @@
+﻿@model CTBC.CSFS.Models.CheckQueryAndPrint
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_checkqueryandprint;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("Query", "CheckQueryAndPrint", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_pay_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CheckDate, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                        <td class="col-md-1 text-right" id="td_checkno">支票號碼</td>
+                        <td class="col-md-5" id="td_checkno_1">
+                            @Html.TextBoxFor(m => m.CheckNoStart, new { @id= "CheckNoStart",@style="width:40%;" }) -
+                            @Html.TextBoxFor(m => m.CheckNoEnd, new { @id = "CheckNoEnd" , @style= "width:40%;" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_info_type</td>
+                        <td class="col-md-5" >
+                            @Html.DropDownListFor(m => m.Type, (IEnumerable<SelectListItem>)ViewBag.TypeList, new { @id = "ddlType", @style = "width:40%" , onchange = "changeddlType()" })
+                        </td>
+                        <td class="col-md-1 text-left" id="t_custname">受款人/受文者</td>
+                        <td class="col-md-5" id="ReceivePerson">
+                            @Html.TextBoxFor(m => m.ReceivePerson, new { @id = "ReceivePerson", @style = "width:40%;" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right" id="td_AmtType">支付金額與解扣金額</td>
+                        <td class="col-md-5" colspan="3" id="td_AmtType_1">
+                            @Html.DropDownListFor(m => m.AmtConsistentType, (IEnumerable<SelectListItem>)ViewBag.AmtConsistentList, new { @id = "ddlAmtConsistent", @style = "width:18%" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" name="pageNum" id="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnRemit" type="button" class="btn btn-primary btn-xs">匯出</button>
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnPrint" type="button" class="btn btn-primary btn-xs">@Lang.csfs_print</button>
+            <button id="btnPreserv" type="button" class="btn btn-primary btn-xs" data-toggle="modal" data-target="#modalPreserv">@Lang.csfs_PreservCheckNumber</button>
+            <button id="btnReturn" type="button" class="btn btn-primary btn-xs">@Lang.csfs_PreservCheckReturn</button>
+        </div>
+    }
+</div>
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("Query", "CheckQueryAndPrint", new { area = "QueryAndExport" })">
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+
+@** 預留支票張數 按鈕彈出畫面 **@
+<div class="modal fade" id="modalPreserv" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@Lang.csfs_PreservCheckNumber</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-3 text-center">@Lang.csfs_PreservCheckNumber</td>
+                            <td class="col-md-9">
+                                <input type="text" value="" id="PreservNum" name="PreservNum" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSavePreservNum">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@** 彈出畫面End **@
+
+
+@Html.Hidden("ReportUrl", Url.Action("Report", "CheckQueryAndPrint", new { area = "QueryAndExport" }))
+@Html.Hidden("OtherCheckNoUrl", Url.Action("OtherCheckNo", "CheckQueryAndPrint", new { area = "QueryAndExport" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("PayDateFormatMsg", Lang.csfs_pay_date_format)
+@Html.Hidden("CheckCountMsg", Lang.csfs_check_count)
+@Html.Hidden("SaveConfirmMsg", Lang.csfs_ohtercheckno_ok)
+@Html.Hidden("SaveFailMsg", Lang.csfs_save_fail)
+@Html.Hidden("SaveSuccessMsg", Lang.csfs_save_ok)
+
+@Html.Hidden("PreservCheckNumber", Lang.csfs_PreservCheckNumber)
+@Html.Hidden("EnterNumber", string.Format(Lang.csfs_plzInputNumberBetween0And1, "0", "999"))
+@Html.Hidden("SavePreservCheckUrl", Url.Action("SavePreservCheck", "CheckQueryAndPrint", new { area = "QueryAndExport" }))
+@Html.Hidden("ReturnPreservCheckUrl", Url.Action("ReturnPreservCheck", "CheckQueryAndPrint", new { area = "QueryAndExport" }))
+
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+@Html.Hidden("ExportForExcel", Url.Action("ExportForExcel", "CheckQueryAndPrint", new { area = "QueryAndExport" }))
+@*<script src="~/Scripts/jquery-2.1.3.js"></script>*@
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $("#btnQuery").click(function () { return btnQueryclick() });
+            $("#btnPrint").click(function () { return btnReportSelected(); });
+            $("#btnSavePreservNum").click(function () { return btnSavePreservNum(); });
+            $("#btnReturn").click(function () { return btnReturnClick(); });
+            $("#btnRemit").click(function () { return btnRemitClick(); });
+        });
+
+        if ($("#isQuery").val() === "1") {
+            $("#pageNum").val(parseInt($("#CurrentPage").val()));
+            btnQueryclick();
+        }
+
+        //* c查詢
+        function btnQueryclick() {
+            if (!ajaxValidateQuery()) {
+                return false;
+            } else {
+                $.blockUI();
+                $.ajax({
+                    url: $("#frmQuery").attr("action"),
+                    type: "Post",
+                    cache: false,
+                    data: $("#frmQuery").serialize(),
+                    error: function () {
+                        jAlertError($("#LoadErrorMsg").val());
+                        $.unblockUI();
+                    },
+                    success: function (data) {
+                        $("#divResult").html(data).show();
+                        $("#querystring").val($("#frmQuery").serialize());
+                        $.unblockUI();
+                    }
+                });
+            }
+        }
+        function ajaxValidateQuery() {
+            var NewLine = "<br/>";
+            var Msg = "";
+            if ($("#CheckDate").val() != "" && !checkIsValidDate($("#CheckDate").val())) {
+                Msg = Msg + $("#PayDateFormatMsg").val() + NewLine;
+            }
+            if (Msg.length > 0) {
+                jAlertError(Msg);
+                return false;
+            }
+            //Add by zhangwei 20180315 start
+            var v_CheckNoStart = $("#CheckNoStart").val();
+            var v_CheckNoEnd = $("#CheckNoEnd").val();
+            if (v_CheckNoStart.trim() != "" && v_CheckNoEnd.trim() != "")
+            {
+                if (isNumber(v_CheckNoStart) && isNumber(v_CheckNoEnd)) {
+                    if (v_CheckNoEnd - v_CheckNoStart< 0) {
+                        jAlertError("訖支票號碼應該大於等於起支票號碼！");
+                        return false;
+                    }
+                }
+                else {
+                    jAlertError("起訖支票號碼格式不一致！");
+                    return false;
+                }
+            }
+            //Add by zhangwei 20180315 start
+            return true;
+        }
+        function isNumber(val) {
+
+            var regPos = /^\d+(\.\d+)?$/; //非负浮点数
+            var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+            if (regPos.test(val) || regNeg.test(val)) {
+                return true;
+            } else {
+                return false;
+            }
+
+        }
+        //* 報表
+        function btnReportSelected() {
+
+            if ($("#ddlType").val() == "1" || $("#ddlType").val() == "3" || $("#ddlType").val() == "4" || $("#ddlType").val() == "5") {
+                var aryCaseId = new Array();
+                var aryCheckNo = new Array();
+                $(".checkfile:checked").each(function () {
+                    aryCaseId.push($(this).val().split('|')[0]);//向数组中添加元素
+                    aryCheckNo.push($(this).val().split('|')[1]);//向数组中添加元素
+                });
+                var strCaseId = aryCaseId.join(',');
+                if (strCaseId.length <= 0) {
+                    jAlertError($("#SelectOneMsg").val());
+                    return false;
+                }
+
+                if ($("#ddlType").val() == "1") {
+                    var actionUrl = $("#ReportUrl").val() + "?Type=1&&payeeIdList=" + strCaseId;
+                    $("#frmForReport").attr("src", actionUrl);
+                }
+  
+                if ($("#ddlType").val() == "3" ) {
+                    var actionUrl = $("#ReportUrl").val() + "?Type=3&&payeeIdList=" + strCaseId;
+                    $("#frmForReport").attr("src", actionUrl);
+                }
+                if ($("#ddlType").val() == "4" ) {
+                    var actionUrl = $("#ReportUrl").val() + "?Type=4&&payeeIdList=" + strCaseId;
+                    $("#frmForReport").attr("src", actionUrl);
+                }
+                if ($("#ddlType").val() == "5") {
+                    var actionUrl = $("#ReportUrl").val() + "?Type=5&&payeeIdList=" + strCaseId;
+                    $("#frmForReport").attr("src", actionUrl);
+                }
+            }
+            else {
+                var actionUrl = $("#ReportUrl").val() + "?Type=2&&payeeIdList=" + strCaseId;
+                $("#frmForReport").attr("src", actionUrl);
+            }
+            return false;
+        }
+        //* 重新取號
+        function UpdateCheck(obj) {
+            jConfirm($("#SaveConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#OtherCheckNoUrl").val(),
+                        async: false,
+                        data: { payeeId: obj },
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#SaveSuccessMsg").val(), function () {
+                                    btnQueryclick();
+                                });
+                            } else {
+                                jAlertError(data.ReturnMsg);
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        //* 儲存支票預留
+        function btnSavePreservNum() {
+            trimAllInput();
+            var preservNum = $("#PreservNum").val();
+            var filter3 = /^([0-9]+)$/;
+            if (!filter3.test(preservNum)) {
+                jAlertError($("#PreservCheckNumber").val() + $("#EnterNumber").val());
+                return;
+            }
+            if (parseInt(preservNum) <= 0 || parseInt(preservNum) > 999) {
+                jAlertError($("#PreservCheckNumber").val() + $("#EnterNumber").val());
+                return;
+            }
+            $.blockUI();
+            $.ajax({
+                url: $("#SavePreservCheckUrl").val(),
+                type: "Post",
+                cache: false,
+                data: { num: preservNum },
+                dataType: "json",
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess(data.ReturnMsg, function () {
+                            btnQueryclick();
+                            $("#modalPreserv").modal("hide");
+                            $("#PreservNum").val("");
+                            $.unblockUI();
+                        });
+                    } else {
+                        jAlertError(data.ReturnMsg);
+                        $("#modalPreserv").modal("hide");
+                        $.unblockUI();
+                    }
+
+                }
+            });
+        }
+
+        //* 撤銷支票預留
+        function btnReturnClick() {
+            trimAllInput();
+            $.blockUI();
+            $.ajax({
+                url: $("#ReturnPreservCheckUrl").val(),
+                type: "Post",
+                cache: false,
+                dataType: "json",
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess(data.ReturnMsg, function () {
+                            btnQueryclick();
+                            $.unblockUI();
+                        });
+                    } else {
+                        jAlertError(data.ReturnMsg);
+                        $.unblockUI();
+                    }
+
+                }
+            });
+        }
+        function btnRemitClick()
+        {
+            var vCheckDate = $("#CheckDate").val();
+            var vCheckNoStart = $("#CheckNoStart").val();
+            var vCheckNoEnd = $("#CheckNoEnd").val();
+            var vAmtConsistentType = $("#AmtConsistentType").val();
+            if ($("#ddlType").val() == "1")
+            {   
+                var actionUrl = $("#ExportForExcel").val() + "?Type=1&&CheckDate=" + vCheckDate+"&&CheckNoStart="+ vCheckNoStart+"&&CheckNoEnd="+vCheckNoEnd+"&&AmtConsistentType="+vAmtConsistentType;
+                $("#frmForReport").attr("src", actionUrl);
+            }
+            else
+            {
+                var actionUrl = $("#ExportForExcel").val() + "?Type=2&&CheckDate=" + vCheckDate ;
+                $("#frmForReport").attr("src", actionUrl);
+            }
+        }
+        function changeddlType()
+        {
+            if ($("#ddlType").val() == "1" || $("#ddlType").val() == "3" || $("#ddlType").val() == "4")
+            {
+                $("#td_checkno").css({ 'visibility': 'visible' });
+                $("#td_checkno_1").css({ 'visibility': 'visible' });
+                $("#td_AmtType").css({ 'visibility': 'visible' });
+                $("#td_AmtType_1").css({ 'visibility': 'visible' });
+
+            }
+            else
+            {
+                $("#td_checkno").css({ 'visibility': 'hidden' });
+                $("#td_checkno_1").css({ 'visibility': 'hidden' });
+                $("#td_AmtType").css({ 'visibility': 'hidden' });
+                $("#td_AmtType_1").css({ 'visibility': 'hidden' });
+            }
+        }
+    </script>
+}

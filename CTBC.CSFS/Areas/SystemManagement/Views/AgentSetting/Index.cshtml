@@ -1,0 +1,310 @@
+﻿@model CTBC.CSFS.Models.AgentSetting
+@{
+    ViewBag.Title = Lang.csfs_agentsetting;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    <div class="box-body ">
+        <table class="table-noborder">
+            <tr>
+                <td class="col-md-1">@Lang.csfs_agent_depart</td>
+                <td class="col-md-5" colspan="5">
+                    @Html.DropDownListFor(m => m.Department, (IEnumerable<SelectListItem>)ViewBag.Department, Lang.csfs_select, new { @id = "Department" })
+                </td>
+            </tr>
+            <tr>
+                <td class="col-md-1"></td>
+                <td class="col-md-2">@Lang.csfs_pm_AllPerson：</td>
+                <td class="col-md-2"></td>
+                <td class="col-md-2">@Lang.csfs_pm_AuthorizedPerson：</td>
+                <td class="col-md-2"></td>
+                <td class="col-md-2">@Lang.csfs_pm_SeizuredStaff：</td>
+            </tr>
+            <tr>
+                <td class="col-md-1"></td>
+                <td class="col-md-2">
+                    <select style="width: 85%; height: 350px" multiple name="list1" id="list1" ondblclick="ListBox_MoveRight('list1', 'list2')"></select>
+                </td>
+                <td class="col-md-2" align="center">
+                    <input type="button" value=">>" onclick="ListBox_MoveRight('list1', 'list2')"><br />
+                    <br />
+                    <input type="button" value="<<" onclick="ListBox_MoveLeft('list2', 'list1')">
+                </td>
+                <td class="col-md-2">
+                    <select style="width:85%; height:350px" multiple name="list2" id="list2" ondblclick="ListBox_MoveLeft('list2', 'list1')"></select>
+                </td>
+                <td class="col-md-2" align="center">
+                    <input type="button" value=">>" onclick="ListBox_Authorized('list2', 'list3')"><br />
+                    <br />
+                    <input type="button" value="<<" onclick="ListBox_MoveBack('list3', 'list2')"><br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <br />
+                    <input type="button" value=">>" onclick="ListBox_Authorized('list2', 'list4')"><br />
+                    <br />
+                    <input type="button" value="<<" onclick="ListBox_MoveBack('list4','list2')">
+                </td>
+                <td class="col-md-2">
+                    <input type="checkbox" name="r2" class="checkfile" id="IsAutoDispatch" value="" />@Lang.csfs_pm_EnableAutoDispatch<br />
+                    <select style="width:85%; height:130px" multiple name="list3" id="list3" ondblclick="ListBox_MoveBack('list3', 'list2')"></select>
+                    <br />
+                    <br />
+                    @Lang.csfs_pm_WailaiwenStaff：<br />
+                    <input type="checkbox" name="r2" class="checkfile" id="IsAutoDispatchFS" value="" />@Lang.csfs_pm_EnableAutoDispatch<br />
+                    <select style="width:85%; height:130px" multiple name="list4" id="list4" ondblclick="ListBox_MoveBack('list4', 'list2')"></select>
+                </td>
+            </tr>
+        </table>
+    </div>
+    <div class="box-footer text-center">
+        <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+        <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+    </div>
+</div>
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("DosaveFn", Url.Action("DoSave", "AgentSetting", new { area = "SystemManagement" }))
+@Html.Hidden("BindAgentSetting", Url.Action("BindAgentSetting", "AgentSetting", new { area = "SystemManagement" }))
+@Html.Hidden("EditSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_save_fail)
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script>
+    var agentList = $.parseJSON('@Html.Raw(ViewBag.AgentsList)');
+
+    $(document).ready(function () {
+        $("#Department").change(function () { changeKeBieBu(); });
+        $("#btnSave").click(function () { DoSave(); });
+        $("#btnCancel").click(function () { DoCancel(); });
+        $('#IsAutoDispatch').on('ifChecked ifUnchecked', function (event) {
+            if ($(this).is(':checked')) {
+                $("#IsAutoDispatch").val("true");
+            } else {
+                $("#IsAutoDispatch").val("false");
+            }
+        });
+        $('#IsAutoDispatchFS').on('ifChecked ifUnchecked', function (event) {
+            if ($(this).is(':checked')) {
+                $("#IsAutoDispatchFS").val("true");
+            } else {
+                $("#IsAutoDispatchFS").val("false");
+            }
+        });
+
+    });
+
+
+    //*所有人員-->授權人員 右移動
+    function ListBox_MoveRight(listfrom, listto) {
+        var size = $("#" + listfrom + " option").size();
+        var selsize = $("#" + listfrom + " option:selected").size();
+        if (size > 0 && selsize > 0) {
+            $.each($("#" + listfrom + " option:selected"), function (i, own) {
+                $(own).appendTo($("#" + listto));
+            });
+        }
+    }
+
+    //授權人員-->所有人員 (既要將選中的人移到list1，又要刪除list2、list3、list4中包含的這個人)
+    function ListBox_MoveLeft(listfrom, listto) {
+        var size = $("#" + listfrom + " option").size();
+        var selsize = $("#" + listfrom + " option:selected").size();
+        var list3 = new Array();
+        var list4 = new Array();
+        $("#list3 option").each(function () {
+            list3.push($(this).val());
+        });
+        $("#list4 option").each(function () {
+            list4.push($(this).val());
+        });
+        if (size > 0 && selsize > 0) {
+            $.each($("#" + listfrom + " option:selected"), function (i, own) {
+                $(own).appendTo($("#" + listto));
+                $("#list3 option").each(function (j, three) {
+                    if ($(own).val() == $(three).val()) {
+                        $(three).remove();
+                    }
+                });
+                $("#list4 option").each(function (k, four) {
+                    if ($(own).val() == $(four).val()) {
+                        $(four).remove();
+                    }
+                });
+            });
+        }
+    }
+
+    //*授權人員-->設定經辦 右移動(只移動，不刪除)
+    function ListBox_Authorized(listfrom, listto) {
+        var size = $("#" + listfrom + " option").size();
+        var selsize = $("#" + listfrom + " option:selected").size();
+        var ListArray = new Array();
+        $("#" + listto + " option").each(function () {
+            ListArray.push($(this).val());
+        });
+        if (size > 0 && selsize > 0) {
+            $.each($("#" + listfrom + " option:selected"), function (i, own) {
+                if ($.inArray($(own).val(), ListArray) < 0) {
+                    $(own).clone(true).appendTo($("#" + listto));
+                }
+            });
+        }
+    }
+
+    //*設定經辦-->授權人員 左移動 (刪除設定經辦中的人即可)
+    function ListBox_MoveBack(listfrom, listto) {
+        var size = $("#" + listfrom + " option").size();
+        var selsize = $("#" + listfrom + " option:selected").size();
+        if (size > 0 && selsize > 0) {
+            $.each($("#" + listfrom + " option:selected"), function (i, own) {
+                $(own).remove();
+            });
+        }
+    }
+
+    //* 科別值改變，下面值對應改變
+    function changeKeBieBu() {
+        var arr = "";
+        var Department = $("#Department").val();
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: $("#BindAgentSetting").val(),
+            data: { Department: Department },
+            success: function (data) {
+                arr = data;
+            }
+        });
+        $("#list1").html("");
+        $("#list2").html("");
+        $("#list3").html("");
+        $("#list4").html("");
+        var myArray = new Array(); 
+        myArray = arr.split("|");
+        var EmpIdArr = new Array();
+        var SeizureArr = new Array();
+        var CaseArr = new Array();
+        var AutoDispatch = "";
+        var AutoDispatchFS = "";
+        if (myArray[0].length > 0) {
+            EmpIdArr = myArray[0].split(",");
+        }
+        if (myArray[1].length > 0) {
+            SeizureArr = myArray[1].split(",");
+        }
+        if (myArray[2].length > 0) {
+            CaseArr = myArray[2].split(",");
+        }
+        if (myArray[3].length > 0) {
+            AutoDispatch = myArray[3].toString();
+            if (AutoDispatch == "true") {
+                $("#IsAutoDispatch").iCheck("check");
+                $("#IsAutoDispatch").val("true");
+            }
+        }
+        if (myArray[4].length > 0) {
+            AutoDispatchFS = myArray[4].toString();
+            if (AutoDispatchFS == "true") {
+                $("#IsAutoDispatchFS").iCheck("check");
+                $("#IsAutoDispatchFS").val("true");
+            }
+            else {
+                $("#IsAutoDispatchFS").val("false");
+            }
+        }
+        if (agentList.length > 0) {
+            $.each(agentList, function (i, item) {
+                //if (item.DeptId === $("#Department").val()) {
+                if ($.inArray(item.EmpId, EmpIdArr) >= 0) {
+                        $("#list2").append($('<option></option>').val(item.EmpId).text(item.EmpName));
+                } else if ($.inArray(item.EmpId, EmpIdArr) < 0 && item.DeptId === $("#Department").val()) {
+                        $("#list1").append($('<option></option>').val(item.EmpId).text(item.EmpName));
+                    }
+                    if ($.inArray(item.EmpId, SeizureArr) >= 0) {
+                        $("#list3").append($('<option></option>').val(item.EmpId).text(item.EmpName));
+                    }
+                    if ($.inArray(item.EmpId, CaseArr) >= 0) {
+                        $("#list4").append($('<option></option>').val(item.EmpId).text(item.EmpName));
+                    }
+                //}
+            });
+        }
+    }
+
+    function DoSave() {
+
+        var EmpIdArr = new Array();
+        var Department = $("#Department").val();
+        var IsAutoDispatch = $("#IsAutoDispatch").val();
+        var IsAutoDispatchFS = $("#IsAutoDispatchFS").val();
+        $("#list2 option").each(function () {
+            EmpIdArr.push($(this).val());//向授權人員数组中添加元素
+        });
+        var Emparr = EmpIdArr.join(',');
+        if (Emparr.length <= 0) {
+            jAlertError($("#SelectOneMsg").val());
+            return;
+        }
+
+        var SeizureArr= new Array();
+        $("#list3 option").each(function () {
+            SeizureArr.push($(this).val());//向扣押經辦数组中添加元素
+        });
+        var Sezarr = SeizureArr.join(',');
+        //if (IsAutoDispatch === "true" && Sezarr.length <= 0) {
+        //    jAlertError($("#SelectOneMsg").val());
+        //    return;
+        //}
+
+        var CaseArr = new Array();
+        $("#list4 option").each(function () {
+            CaseArr.push($(this).val());//向外來文經辦数组中添加元素
+        });
+        var Casarr = CaseArr.join(',');
+        //if (IsAutoDispatchFS === "true" && Casarr.length <= 0) {
+        //    jAlertError($("#SelectOneMsg").val());
+        //    return;
+        //}
+
+        var Empidarr = Emparr + "|" + Sezarr + "|" + Casarr;
+        if (Empidarr.length <= 0) {
+            jAlertError($("#SelectOneMsg").val());
+            return;
+        } else {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: $("#DosaveFn").val(),
+                data: { Empidarr: Empidarr, Department: Department, IsAutoDispatch: IsAutoDispatch, IsAutoDispatchFS: IsAutoDispatchFS },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess(data.ReturnMsg, function () { Empty(); });
+                    } else {
+                        jAlertError($("#EditFailMsg").val());
+                        $.unblockUI();
+                    }
+                }
+            });
+        }
+    }
+    function Empty() {
+        $("#Department").val("");
+        $("#IsAutoDispatch").iCheck("uncheck");
+        $("#IsAutoDispatchFS").iCheck("uncheck");
+        $("#list1").empty();
+        $("#list2").empty();
+        $("#list3").empty();
+        $("#list4").empty();
+    }
+    function DoCancel() {
+        $("#Department").val("");
+    }
+</script>

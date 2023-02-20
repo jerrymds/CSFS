@@ -1,0 +1,77 @@
+﻿@model CTBC.CSFS.ViewModels.PARMMenuViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_menutorole;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_menu_tit_menutorole <button class="btn btn-primary btn-xs" id="btnSyncAuthZ">@Lang.csfs_syncauth_setting</button></h3>
+            </div>
+
+            <div id="querytablediv" class="box-body ">
+                <table id="query_table" class="table table-bordered table-striped  text-black ">
+                    <thead>
+                        <tr class="alert-success text-center">
+                            <th class="col-md-2">@Lang.csfs_menu_page_num</th>
+                            <th class="col-md-4"> @Lang.csfs_menu_name</th>
+                            <th class="col-md-5"> @Lang.csfs_auth_role</th>
+                            <th>@Lang.csfs_auth_main</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @if (Model != null && Model.PARMMenuXMLNodeList != null && Model.PARMMenuXMLNodeList.Any())
+                        {
+                            foreach (var item in Model.PARMMenuXMLNodeList)
+                            {
+                                <tr>
+                                    <td>@item.ID</td>
+                                    <td class="text-left">
+                                        @if (item.MenuLevel == 2)
+                                        {<label class="menu_lev_2"></label>}
+                                        @if (item.MenuLevel == 3)
+                                        {<label class="menu_lev_3"></label>}
+                                        @if (item.MenuLevel == 4)
+                                        {<label class="menu_lev_4"></label>}
+                                        @Lang.ResourceManager.GetString(item.TITLE.Trim())
+                                    </td>
+                                    <td class="text-left">
+                                        @if (item.md_AuthZ.Trim().Length == 0)
+                                        {
+                                            <text>** @Lang.csfs_notyet_auth ** </text>
+                                        }
+                                        else
+                                        {
+                                            @item.md_AuthZ.Replace(",", "、")
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        
+                                        <a href="@Url.Action("Edit", "MenuToRole", new {ID = item.ID})" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="4" class="text-red text-center">@Lang.csfs_no_data</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+
+@Html.Hidden("NowPage", "MenuToRoleQuery")
+@Html.Hidden("SyncAuthUrl", Url.Action("SyncAuthZ", "MenuToRole", new { area = "SystemManagement" }))
+@Html.Hidden("SyncFailMsg", Lang.csfs_sync_fail)
+@Html.Hidden("SyncOkMsg", Lang.csfs_sync_success)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/SystemManagement/MenuToRole.js")
+}

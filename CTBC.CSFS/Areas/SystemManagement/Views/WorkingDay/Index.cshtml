@@ -1,0 +1,37 @@
+﻿@model CTBC.CSFS.Models.PARMWorkingDayVO
+
+@{
+    ViewBag.Title = @Lang.csfs_wkday_parm;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_wkday_parm</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @*@using (Html.BeginForm("Index", "WorkingDay", new { area = "SystemManagement" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal" }))*@
+    @using (Ajax.BeginForm("Index", new AjaxOptions() { HttpMethod = "post", OnSuccess = "displaySuccess", OnFailure = "displayError" }))
+    {
+         if (Model != null)
+        {
+            if (Model.WKList.Any())
+            {
+                <div id="calendar">
+                    @Html.Partial("_Calendar")
+                </div>
+            }
+        }
+        <div class="box-footer text-center">
+            <button id="btnSave" type="submit" class="btn btn-primary btn-xs">@Lang.csfs_save </button>
+        </div>
+    }
+</div>
+
+@Html.Hidden("NowPage", "WorkingDayQuery")
+@Html.Hidden("DeleteUrl", Url.Action("Delete", "GovAddress", new { area = "SystemManagement" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("DeleteConfirmMsg", Lang.csfs_del_confirm)
+@Html.Hidden("DeleteFailMsg", Lang.csfs_del_fail)
+@Html.Hidden("DeleteSuccessMsg", Lang.csfs_del_ok)

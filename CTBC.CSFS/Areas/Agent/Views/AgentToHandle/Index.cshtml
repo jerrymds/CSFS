@@ -1,0 +1,249 @@
+﻿@model CTBC.CSFS.Models.AgentToHandle
+
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "AgentToHandle", new { area = "Agent" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                        <td class="col-md-11" colspan="5">
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, Lang.csfs_select, new { @id = "ddlCaseKind" })
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                        </td>
+                    </tr>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_unit</td>
+                        <td class="col-md-5">
+                            @*@Html.DropDownListFor(m => m.GovKind, (IEnumerable<SelectListItem>)ViewBag.GOV_KINDList, Lang.csfs_select, new { @id = "ddlGOV_KIND" })*@
+                            @Html.TextBoxFor(m => m.GovUnit, new { @id = "txtGovUnit", @MaxLength = "200" })
+
+                        </td>
+                        
+                        <td class="col-md-1 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CaseNo, new { @MaxLength = "100" })
+                        </td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-2"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovDateS, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.GovDateE, new { data_datepicker = "true" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_speed</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, Lang.csfs_select, new { @id = "ddlSpeed", @style = "width:100%" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_receive_kind</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.ReceiveKind, (IEnumerable<SelectListItem>)ViewBag.ReceiveKindList, Lang.csfs_select, new { @id = "ddlReceiveKind", @style = "width:100%" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_no</td>
+                        <td class="col-md-5">@Html.TextBoxFor(m => m.GovNo, new { @MaxLength = "100" })</td>
+                        
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-2"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CreatedDateS, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.CreatedDateE, new { data_datepicker = "true" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_unit</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.Unit, new {@MaxLength = "100"})
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_person</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.Person, new { @MaxLength = "100" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+     <input type="hidden" name="pageNum" id="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnAssignShow" type="button" class="btn btn-primary btn-xs">@Lang.csfs_changeassign</button>
+            <button id="btnReturnClose" type="button" class="btn btn-primary btn-xs">@Lang.csfs_return</button>
+            <button id="btnReportSelected" type="button" class="btn btn-primary btn-xs">@Lang.csfs_print</button>
+            <button id="btnNuclear" type="button" class="btn btn-primary btn-xs">@Lang.csfs_nuclear</button>
+            <button id="AssignAgents" type="button" class="btn btn-primary btn-xs">@Lang.csfs_assign_agents</button>
+            <button id="btnCancelSend" type="button" class="btn btn-primary btn-xs">@Lang.csfs_btnconfirmCancel@Lang.csfs_sendagain</button>
+        </div>
+    }
+</div>
+
+@* 結果區域 *@
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "AgentToHandle", new {area = "Agent"})">
+</div>
+
+@* 選擇指派經辦 *@
+<div class="modal fade" id="modalAgent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@Lang.csfs_query</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-2 text-center">@Lang.csfs_bu_unit</td>
+                            <td class="col-md-10">
+                                @*<select id="ddlAssignDept"></select>*@
+                                @Html.DropDownListFor(m => m.Department, (IEnumerable<SelectListItem>)ViewBag.Department, new { @id = "Department" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="query_table" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th class="col-md-2">@Lang.csfs_select_noline</th>
+                            <th class="col-md-10">@Lang.csfs_agnet</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbobyAgentList"></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAssignSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* 退件畫面*@
+<div class="modal fade" id="modalClose" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_return</h4>
+            </div>
+            <div class="modal-body">
+                @Lang.csfs_return1:
+                @Html.TextAreaFor(m => m.ReturnReason, new { @id = "ReturnReason", @rows = "15", @class = "col-xs-12 no-padding", @MaxLength = "200" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnCloseSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@* 逾期原因*@
+<div class="modal fade" id="modalOver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Over"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="titleForAgent">@*@Lang.*@</h4>
+            </div>
+            <div class="modal-body">
+                @Lang.csfs_over_memo:
+                @Html.TextAreaFor(m => m.OverDueMemo, new { @id = "OverDueMemo", @rows = "15", @class = "col-xs-12 no-padding", @MaxLength = "50" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnOverSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+            <input type="hidden" id="hidTypeForOver" value="0" />
+        </div>
+    </div>
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+
+@Html.Hidden("AssAgents", "0")
+@Html.Hidden("NowPage", "AgentToHandleQuery")
+@Html.Hidden("ReturnCloseUrl", Url.Action("ReturnClose", "AgentToHandle", new { area = "Agent" }))
+@Html.Hidden("AssignUrl", Url.Action("AssignAgent", "AgentToHandle", new { area = "Agent" }))
+@Html.Hidden("AgentsUrl", Url.Action("AssignSet", "AgentToHandle", new { area = "Agent" }))
+@Html.Hidden("AssignChenHe", Url.Action("ChenHe", "AgentToHandle", new { area = "Agent" }))
+@Html.Hidden("CancelSendAgainUrl", Url.Action("CancelSendAgain", "AgentToHandle", new { area = "Agent" }))
+@Html.Hidden("GetCaseKind2Url", Url.Action("ChangCaseKind1", "Common", new { area = "Common" }))
+@Html.Hidden("ReportUrl", Url.Action("Report", "Common", new { area = "Common" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("SelectOnlyOneMsg", Lang.csfs_select_only_one)
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("GovDateText", Lang.csfs_gov_date)
+@Html.Hidden("CreatedDateText", Lang.csfs_keyin_date)
+@Html.Hidden("OverDueUrl", Url.Action("OverDue", "AgentToHandle", new { area = "Agent" }))
+@Html.Hidden("AddDay", (Int32)ViewBag.AddDay)
+@Html.Hidden("isQuery", (string)ViewBag.isQuery) 
+@Html.Hidden("CaseKind2Query", (string)ViewBag.CaseKind2Query)
+@Html.Hidden("CaseKindQuery", (string)ViewBag.CaseKindQuery)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+@Html.Hidden("NuclearOneMsg", Lang.csfs_over_onebyone)
+@* 20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add start *@
+@Html.Hidden("IsBranchAgent", (string)ViewBag.IsBranchAgent)
+@* 20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add end *@
+
+
+@* 退件 *@
+@Html.Hidden("ReturnCloseConfirmMsg", Lang.csfs_return_confirm)
+@Html.Hidden("ReturnCloseFailMsg", Lang.csfs_return_fail)
+@Html.Hidden("ReturnCloseSuccessMsg", Lang.csfs_return_ok)
+@* 呈核 *@
+@Html.Hidden("NuclearConfirmMsg", Lang.csfs_confirm_nuclear)
+@Html.Hidden("NuclearOkMsg", Lang.csfs_nuclear_success)
+@Html.Hidden("NuclearFaileMsg", Lang.csfs_nuclear_fail)
+@Html.Hidden("NuclearTitle", Lang.csfs_nuclear)
+@Html.Hidden("NuclearTitle1", Lang.csfs_assign_agents)
+@* 分派 *@
+@Html.Hidden("AssignConfirmMsg", Lang.csfs_changeassign_confirm)
+@Html.Hidden("AssAgentsConfirmMsg", Lang.csfs_confirm_assign_agents)
+@Html.Hidden("AssignFailMsg", Lang.csfs_changeassign_fail)
+@Html.Hidden("AssAgentsFailMsg", Lang.csfs_assign_agents_fail)
+@Html.Hidden("AssignSuccessMsg", Lang.csfs_changeassign_success)
+@Html.Hidden("AssAgentsSuccessMsg", Lang.csfs_AssAgentsSuccess)
+
+@Html.Hidden("NuclearTitle", Lang.csfs_nuclear)
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("CheckCount", "選取案件不能超過100筆")
+
+@Html.Hidden("SendAgainConfirmCancelMsg", Lang.csfs_confirm_cancel_Send)
+@Html.Hidden("SendAgainMaxMsg", Lang.csfs_only_cancel_max)
+@Html.Hidden("SendAgainMsg", Lang.csfs_only_cancel_send)
+@Html.Hidden("SendAgainOKMsg", Lang.csfs_cancel_ok)
+@Html.Hidden("SendAgainFailMsg", Lang.csfs_cancel_fail)
+@Html.Hidden("SelectOneMsgOnly", Lang.csfs_select_only_one)
+
+@section scripts {
+    <script src="~/Scripts/bootstrap-typeahead.js"></script>
+    @Html.Hidden("GetGovNameUrl", Url.Action("GetGovNameByGoveKind", "Home", new { area = "" }))
+
+    @Scripts.Render("~/Scripts/Agent/AgentToHandle.js")
+    <script language="javascript">
+        //* 所有Bu對Agent的列表
+        var agentList = $.parseJSON('@Html.Raw(ViewBag.AgentList)');
+        @*var AgentsList = $.parseJSON('@Html.Raw(ViewBag.AgentsList)');*@//AgentsList
+    </script>
+}
+
+
+
+
+

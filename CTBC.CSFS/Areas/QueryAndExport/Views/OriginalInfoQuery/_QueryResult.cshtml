@@ -1,0 +1,80 @@
+﻿@model CTBC.CSFS.ViewModels.AgentOriginalInfoViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.LendDataInfoList != null)
+                {
+                    if (Model.LendDataInfoList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.LendDataInfo.PageSize, Model.LendDataInfo.CurrentPage, Model.LendDataInfo.TotalItemCount, Model.LendDataInfo, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.LendDataInfo.SortExpression, Model.LendDataInfo.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th>@Lang.csfs_menu_sort</th>
+                            <th >@Lang.csfs_case_no</th>
+                            <th >@Lang.csfs_clientID</th>
+                            <th >@Lang.csfs_clientName</th>
+                            <th >@Lang.csfs_bankID</th>
+                            <th >@Lang.csfs_account</th>
+                            @*<th >@Lang.csfs_case_attachment</th>*@
+                            <th >@Lang.csfs_postdate</th>
+                            <th >@Lang.csfs_postNo</th>
+                            <th >@Lang.csfs_returncaseid</th>
+                            <th >@Lang.csfs_ReturnDate</th>
+                            <th >@Lang.csfs_ReturnBankDate</th>
+                            <th >@Lang.csfs_ReturnPostNo</th>
+                            <th >@Lang.csfs_BankReceiver</th>
+                            <th >@Lang.csfs_ReturnMemo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.LendDataInfoList != null && Model.LendDataInfoList.Any())
+                        {
+                            foreach (var item in Model.LendDataInfoList)
+                            {
+
+                                <tr>
+                                    <td class="text-center">@item.Sno</td>
+                                    <td class="text-center">
+                                        @Html.ActionLink(item.CaseNo, "Index", "AgentDocumentInfoDetail", new { area = "Common", CaseId = item.CaseId }, new { })
+                                    </td>
+                                    <td class="text-center">@item.ClientID</td>
+                                    <td class="text-center">@item.Name</td>
+                                    <td class="text-center">@item.BankID</td>
+                                    <td>@item.Account</td>
+                                    @*<td class="text-center">@item.AttachNames</td>*@
+                                    <td class="text-center">@item.MailDate</td>
+                                    <td class="text-center">@item.MailNo</td>
+                                    <td class="text-center">@item.returnCaseNo</td>
+                                    <td class="text-center">@item.ReturnDate</td>
+                                    <td class="text-center">@item.ReturnBankDate</td>
+                                    <td class="text-center">@item.ReturnPostNo</td>
+                                    <td class="text-center">@item.BankReceiver</td>
+                                    <td class="text-center">@item.ReturnMemo</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>

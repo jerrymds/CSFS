@@ -1,0 +1,103 @@
+﻿@using CTBC.FrameWork.Paging
+
+@model CTBC.CSFS.ViewModels.AgentOriginalInfoViewModel
+
+@{
+    Layout = null;
+}
+<div id ="querytablediv">
+                <table id="query_table" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th>@Lang.csfs_edit</th>
+                            <th>@Lang.csfs_delete</th>
+                            <th class="col-md-1">@Lang.csfs_clientID</th>
+                            <th class="col-md-1">@Lang.csfs_clientName</th>
+                            <th class="col-md-1">@Lang.csfs_bankID</th>
+                            <th class="col-md-2">@Lang.csfs_bank</th>
+                            <th class="col-md-2">@Lang.csfs_account</th>
+                            <th class="col-md-1">@Lang.csfs_phone</th>
+                            <th class="col-md-2">@Lang.csfs_memo</th>
+                            <th class="col-md-1">@Lang.csfs_case_attachment</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.LendDataInfoList != null && Model.LendDataInfoList.Any())
+                        {
+                            foreach (var item in Model.LendDataInfoList)
+                            {
+
+                                <tr>
+                                    <td class="text-center">
+                                        @*<a href="@Url.Action("Edit", "AgentOriginalInfo" , new { area="Agent" , lendid=item.LendID, @radom=DateTime.Now.ToString() })" class=" glyphicon glyphicon-edit fancy800_300"></a>*@
+                                    </td>
+                                    <td class="text-center">
+                                        @*<a class="glyphicon glyphicon-remove" role="menuitem" tabindex="-1" onclick="DeleteLend(@item.LendID)"></a>*@
+                                    </td>
+                                    <td class="text-center"> @item.ClientID</td>
+                                    <td class="text-center">@item.Name</td>
+                                    <td class="text-center">@item.BankID</td>
+                                    <td class="text-center">@item.Bank</td>
+                                    <td>@item.Account</td>
+                                    <td class="text-center">@item.Phone</td>
+                                    <td>@item.Memo</td>
+                                    <td>
+                                    @if (Model.LendAttachmentInfoList != null )
+                                     {
+                                        <ul>
+                                        @for (int i = 0; i < Model.LendAttachmentInfoList.Count; i++)
+                                        {
+                                            <li>
+                                            <a href="@Url.Action("DownFile", "Home", new { area = "", uploadkind ="LendAttachment", id = Model.LendAttachmentInfoList[i].LendAttachId })" target="frmDownload">
+                                                @Model.LendAttachmentInfoList[i].LendAttachName
+                                            </a>
+                                            </li>
+                                        }
+                                        </ul>
+                                     }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @*@Html.Hidden("defaultSortColumn", Model.LendDataInfo.SortExpression)
+                    @Html.Hidden("defaultSort", Model.LendDataInfo.SortDirection)*@
+           
+    </div>
+@Html.Hidden("ConfirmDelMsg", Lang.csfs_confirm_delete)
+@section scripts {
+    @Scripts.Render("~/Scripts/Agent/AgentDocumentInfo.js")
+    @Scripts.Render("~/Scripts/common.uploadlist.js")
+}
+<script language="javascript">
+    //* 點擊刪除
+    function DeleteLend(lendId) {
+        if (!confirm($("#ConfirmDelMsg").val())) return false;
+        $.blockUI();
+        $.ajax({
+            url: $("#DeleteLendUrl").val(),
+            type: "Post",
+            cache: false,
+            data: { LendId: lendId },
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data) {
+                    jAlertSuccess($("#DeleteSucMsgUrl").val(), function () { $.AgentOriginalInfo.GetQueryResult(); });
+                } else {
+                    jAlertError($("#ReturnFailMsg").val());
+                    $.unblockUI();
+                }
+            }
+        });
+    }
+
+</script>
+

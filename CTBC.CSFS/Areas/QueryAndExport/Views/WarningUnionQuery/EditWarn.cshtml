@@ -1,0 +1,254 @@
+﻿@model CTBC.CSFS.Models.WarningUnionQuery
+
+@{
+    ViewBag.Title = Lang.csfs_edit;
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+
+<div class="margin">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="glyphicon glyphicon-search"></i>
+            <h3 class="box-title">@Lang.csfs_edit</h3>
+        </div>
+        <!-- form start -->
+        @using (Html.BeginForm("EditWarn", "CaseWarning", new { area = "KeyInput" }, FormMethod.Post, new { id = "frmEdit", @class = "form-horizontal" }))
+        {
+            <div class="box-body ">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-2 text-right " style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">類別</td>
+                            <td class="col-md-4">
+                                @Html.DropDownListFor(m => m.Kind, (IEnumerable<SelectListItem>)ViewBag.KindList, new { @id = "ddlKind" })
+                            </td>
+                            <td class="col-md-3 text-right"></td>
+                            <td class="col-md-3">
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">@Lang.csfs_warn_date</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.HappenDateTime, new { data_datepicker = "true", @id = "txtHappenDateTime", @style = "width:50%" })
+                                @Html.TextBoxFor(m => m.HappenDateTimeForHour, new { @id = "txtHappenDateTimeHour", @style = "width:20%", maxlength = 5, onblur = "formatTime(this);" })
+                            </td>
+                            <td class="col-md-3 text-right">案發地點</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.DocAddress, new { @id = "DocAddress", @MaxLength = "30" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">@Lang.csfs_165warn</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.No_165, new { @id = "txtNo_165", @MaxLength = "20" })
+                            </td>
+                            <td class="col-md-3 text-right">E化案號</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.No_e, new { @id = "txtNo_e", @MaxLength = "20" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">@Lang.csfs_warn_content</td>
+                            <td class="col-md-4">
+                                @Html.DropDownListFor(m => m.NotificationContent, (IEnumerable<SelectListItem>)ViewBag.NotificationContentList, new { @id = "ddlNotificationContent" })
+                            </td>
+                            <td class="col-md-3 text-right">@Lang.csfs_warn_source</td>
+                            <td class="col-md-3">
+                                @Html.DropDownListFor(m => m.NotificationSource, (IEnumerable<SelectListItem>)ViewBag.NotificationSourceList, new { @id = "ddlNotificationSource" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">通報聯徵</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.ForCDate, new { data_datepicker = "true", @id = "txtForCDate" })
+                            </td>
+                            <td class="col-md-3 text-right">@Lang.csfs_warn_setdate</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.EtabsDatetime, new { data_datepicker = "true", @style = "width:50%", @id = "txtSetdate" })
+                                @Html.TextBoxFor(m => m.EtabsDatetimeHour, new { @style = "width:20%", maxlength = 5, onblur = "formatTime(this);", @id = "txtSetdatetime" })
+                                @if (Model.Flag_909113 == "Y" || Model.Flag_909113 == "1")
+                                {
+                                    Model.bool_909113 = true;
+                                    @Html.CheckBoxFor(m => m.bool_909113, new { @id = "txtFlag_909113" })
+                                }
+                                else
+                                {
+                                    Model.bool_909113 = false;
+                                    @Html.CheckBoxFor(m => m.bool_909113, new { @id = "txtFlag_909113" })
+                                }
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-md-2 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">@Lang.csfs_warn_address</td>
+                            <td class="col-md-4">
+                                @Html.DropDownListFor(m => m.NotificationUnit, (IEnumerable<SelectListItem>)ViewBag.NotificationUnitList, new { @id = "ddlNotificationUnit" })
+                            </td>
+                            <td class="col-md-3 text-right">@Lang.csfs_warn_people</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.NotificationName, new { @id = "txtNotificationName", @MaxLength = "10" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">@Lang.csfs_warn_phone</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.ExtPhone, new { @id = "txtExtPhone", @MaxLength = "20" })
+                            </td>
+                            <td class="col-md-3 text-right">@Lang.csfs_warn_police</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.PoliceStation, new { @id = "txtPoliceStation", @MaxLength = "60" })
+                                @if (Model.Retry == "Y" || Model.Retry == "1")
+                                {
+                                    Model.bool_Retry = true;
+                                    @Html.CheckBoxFor(m => m.bool_Retry, new { @id = "txtRetry" })
+                                }
+                                else
+                                {
+                                    Model.bool_Retry = false;
+                                    @Html.CheckBoxFor(m => m.bool_Retry, new { @id = "txtRetry" })
+                                }
+                                二層
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">@Lang.csfs_warn_victim</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.VictimName, new { @id = "txtVictimName", @MaxLength = "20" })
+                            </td>
+                            <td class="col-md-3 text-right">正本</td>
+                            <td class="col-md-3">
+                                @Html.DropDownListFor(m => m.Original, (IEnumerable<SelectListItem>)ViewBag.OriginalList, new { @id = "ddlOriginal" })
+                                @if (Model.FIX == "Y" || Model.FIX == "1")
+                                {
+                                    Model.bool_Fix = true;
+                                    @Html.CheckBoxFor(m => m.bool_Fix, new { @id = "txtFix" })
+                                }
+                                else
+                                {
+                                    Model.bool_Fix = false;
+                                    @Html.CheckBoxFor(m => m.bool_Fix, new { @id = "txtFix" })
+                                }
+                                <span id="ErrorSpan" style="color:#F00"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">衍生設定</td>
+                            <td class="col-md-4">
+                                @if (Model.Set == "Y" || Model.Set == "1")
+                                {
+                                    Model.bool_Set = true;
+                                    @Html.CheckBoxFor(m => m.bool_Set, new { @id = "txtSet" })
+                                }
+                                else
+                                {
+                                    Model.bool_Set = false;
+                                    @Html.CheckBoxFor(m => m.bool_Set, new { @id = "txtSet" })
+                                }
+                                警示解除
+                                @if (Model.Release == "Y" || Model.Release == "1")
+                                {
+                                    Model.bool_Release = true;
+                                    @Html.CheckBoxFor(m => m.bool_Release, new { @id = "txtRelease", @readonly = "readonly" })
+                                }
+                                else
+                                {
+                                    Model.bool_Release = false;
+                                    @Html.CheckBoxFor(m => m.bool_Release, new { @id = "txtRelease", @readonly = "readonly" })
+                                }
+                            </td>
+                            <td class="col-md-3 text-right">
+                                正本傳送
+                            </td>
+                            <td class="col-md-3">
+                                @if (Model.FIXSEND == "Y" || Model.FIXSEND == "1")
+                                {
+                                    Model.bool_FIXSEND = true;
+                                    @Html.CheckBoxFor(m => m.bool_FIXSEND, new { @id = "txtFIXSEND" })
+                                }
+                                else
+                                {
+                                    Model.bool_FIXSEND = false;
+                                    @Html.CheckBoxFor(m => m.bool_FIXSEND, new { @id = "txtFIXSEND" })
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">延長文號</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.UniteNo_Old, new { @id = "txtNo_165", @MaxLength = "20" })
+                            </td>
+                            <td class="col-md-3 text-right">延長日期</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.ExtendDate, new { data_datepicker = "true", @style = "width:50%", @id = "txtExtendDate" })
+                                @if (Model.Extend == "Y" || Model.Extend == "1")
+                                {
+                                    Model.bool_Extend = true;
+                                    @Html.CheckBoxFor(m => m.bool_Extend, new { @id = "txtExtend" })
+                                }
+                                else
+                                {
+                                    Model.bool_Extend = false;
+                                    @Html.CheckBoxFor(m => m.bool_Extend, new { @id = "txtExtend" })
+                                }
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">聯徵案號(原)</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.UniteNo_Old, new { @id = "txtNo_165", @MaxLength = "20" })
+                            </td>
+                            <td class="col-md-3 text-right">聯徵案號(新)</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.UniteNo, new { @id = "txtNo_165", @MaxLength = "20" })
+                            </td>
+                        </tr>
+                        @Html.HiddenFor(m => m.DocNo, new { @id = "txtDocNo" })
+                        @Html.HiddenFor(m => m.Status, new { @id = "txtStatus" })
+                        @Html.HiddenFor(m => m.EtabsTrnNum, new { @id = "txtEtabsTrnNum" })
+                    </tbody>
+                </table>
+                @Html.HiddenFor(m => m.SerialID)
+            </div>
+            <div class="box-footer text-center">
+                @if (Model.Status == "D01")
+                {
+                    <button id="btnSaveWarnEdit" type="button" class="btn btn-primary btn-xs" disabled>@Lang.csfs_confirm</button>
+                }
+                else
+                {
+                    <button id="btnSaveWarnEdit" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+                }
+                <button id="btnCancelOriginal" type="button" class="btn btn-primary btn-xs">沖正</button>
+                <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+                <button id="btnSetting" type="button" class="btn btn-primary btn-xs">設定</button>
+                @*<button id="btnUnite" type="button" class="btn btn-primary btn-xs">修改聯徵</button>*@
+                @if (Model.Status == "D01")
+                {
+                    <button id="btnEditChenHe" type="button" class="btn btn-primary btn-xs" disabled>呈核</button>
+                }
+                else
+                {
+                    <button id="btnEditChenHe" type="button" class="btn btn-primary btn-xs">呈核</button>
+                }
+            </div>
+        }
+    </div>
+</div>
+@Html.Hidden("NowPage", "EditWarn")
+@Html.Hidden("EditSuccessMsg", Lang.csfs_edit_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_edit_fail)
+
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("NametxtHappenDateTime", Lang.csfs_warn_date)
+@Html.Hidden("NametxtNo_165", Lang.csfs_165warn)
+@Html.Hidden("NametxtNo_e", Lang.csfs_e_warn)
+@Html.Hidden("NametxtForCDate", Lang.csfs_warn_dates)
+@Html.Hidden("NametxtNotificationName", Lang.csfs_warn_people)
+@Html.Hidden("NameEtabsDatetime", Lang.csfs_warn_setdate)
+@Html.Hidden("SettingUrl", Url.Action("GetOriginalData", "CaseWarning", new { area = "KeyInput" }))
+@Html.Hidden("CancelOriginalUrl", Url.Action("CancelOriginalData", "CaseWarning", new { area = "KeyInput" }))
+@Html.Hidden("EditChenHeUrl", Url.Action("EditChenHe", "CaseWarning", new { area = "KeyInput" }))
+@section scripts{
+    @Scripts.Render("~/Scripts/KeyInput/CaseWarning.js")
+}

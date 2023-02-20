@@ -1,0 +1,572 @@
+﻿@model CTBC.CSFS.Models.CollectionToAgent
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_collectiontoagent;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "CollectionToAgent", new { area = "Collection" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                        <td class="col-md-11" colspan="5">
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, Lang.csfs_select, new { @id = "ddlCaseKind" })
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                        </td>
+                    </tr>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_unit</td>
+                        <td class="col-md-5">
+                            @*@Html.DropDownListFor(m => m.GovKind, (IEnumerable<SelectListItem>)ViewBag.GOV_KINDList, Lang.csfs_select, new { @id = "ddlGOV_KIND" })*@
+                            @Html.TextBoxFor(m => m.GovUnit, new { @id = "txtGovUnit", @MaxLength = "200" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CaseNo, new { @MaxLength = "100" })
+                        </td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-2"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovDateS, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.GovDateE, new { data_datepicker = "true" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_speed</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, Lang.csfs_select, new { @id = "ddlSpeed", @style = "width:100%" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_receive_kind</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.ReceiveKind, (IEnumerable<SelectListItem>)ViewBag.ReceiveKindList, Lang.csfs_select, new { @id = "ddlReceiveKind", @style = "width:100%" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_no</td>
+                        <td class="col-md-5">@Html.TextBoxFor(m => m.GovNo, new { @MaxLength = "100" })</td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-2"></td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-2"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CreatedDateS, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.CreatedDateE, new { data_datepicker = "true" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_unit</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.Unit, new { @MaxLength = "100" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_person</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CreatedUser, new { @MaxLength = "100" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_agnet</td>
+                        @*20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 update start*@                       
+                        <td class="col-md-2" colspan="5">
+                            @*@Html.DropDownListFor(m => m.AgentUser, (IEnumerable<SelectListItem>)ViewBag.AgentUserList, Lang.csfs_select, new { @id = "ddlAgentUser" })*@
+                            @Html.DropDownListFor(m => m.AgentDepartment, (IEnumerable<SelectListItem>)ViewBag.AgentDepartmentList, Lang.csfs_select, new { @id = "ddlAgentDepartment" })
+                            @Html.DropDownListFor(m => m.AgentDepartment2, (IEnumerable<SelectListItem>)ViewBag.AgentDepartment2List, Lang.csfs_select, new { @id = "ddlAgentDepartment2" })
+                            @Html.DropDownListFor(m => m.AgentDepartmentUser, (IEnumerable<SelectListItem>)ViewBag.AgentDepartmentUserList, Lang.csfs_select, new { @id = "ddlAgentDepartmentUser" })
+                        </td>                        
+                        @*20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 update end*@
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <input type="hidden" name="pageNum" id="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnAssignShow" type="button" class="btn btn-primary btn-xs">@Lang.csfs_send_agent</button>
+            <button id="btnReportSelected" type="button" class="btn btn-primary btn-xs">@Lang.csfs_print</button>
+            <button id="btnNuclear" type="button" class="btn btn-primary btn-xs">@Lang.csfs_nuclear</button>
+        </div>
+    }
+</div>
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "CollectionToAgent", new { area = "Collection" })">
+</div>
+
+
+@* 逾期原因*@
+<div class="modal fade" id="modalOver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Over"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_nuclear</h4>
+            </div>
+            <div class="modal-body">
+                @Lang.csfs_over_memo:
+                @Html.TextAreaFor(m => m.OverDueMemo, new { @id = "OverDueMemo", @rows = "15", @class = "col-xs-12 no-padding", @MaxLength = "50" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnOverSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("GovDateText", Lang.csfs_gov_date)
+@Html.Hidden("CreatedDateText", Lang.csfs_keyin_date)
+@Html.Hidden("GetCaseKind2Url", Url.Action("ChangCaseKind1", "AgentToHandle", new { area = "Agent" }))
+@*@Html.Hidden("GetGovUnitUrl", Url.Action("ChangGovUnit", "CollectionToAssignment", new { area = "Collection" }))*@
+@Html.Hidden("AssignUrl", Url.Action("SendAgent", "CollectionToAgent", new { area = "Collection" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("AssignConfirmMsg", Lang.csfs_confirm_send)
+@Html.Hidden("AssignFailMsg", Lang.csfs_send_fail)
+@Html.Hidden("AssignSuccessMsg", Lang.csfs_send_success)
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("CheckCount", "選取案件不能超過100筆")
+@Html.Hidden("ReportUrl", Url.Action("Report", "Common", new { area = "Common" }))
+@Html.Hidden("AssignChenHe", Url.Action("ChenHe", "CollectionToAgent", new { area = "Collection" }))
+@Html.Hidden("OverDueUrl", Url.Action("OverDue", "CollectionToAgent", new { area = "Collection" }))
+@Html.Hidden("AddDay", (Int32)ViewBag.AddDay)
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+@Html.Hidden("CaseKind2Query", (string)ViewBag.CaseKind2Query)
+@Html.Hidden("CaseKindQuery", (string)ViewBag.CaseKindQuery)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+@*20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add start*@
+@Html.Hidden("GetAgentDepartment2Url", Url.Action("ChangAgentDepartment1", "CollectionToAgent", new { area = "Collection" }))
+@Html.Hidden("GetAgentDepartmentUserUrl", Url.Action("ChangAgentDepartment2", "CollectionToAgent", new { area = "Collection" }))
+@*20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add end*@
+
+
+@* 呈核 *@
+@Html.Hidden("NuclearConfirmMsg", Lang.csfs_confirm_nuclear)
+@Html.Hidden("NuclearOkMsg", Lang.csfs_nuclear_success)
+@Html.Hidden("NuclearFaileMsg", Lang.csfs_nuclear_fail)
+@Html.Hidden("NuclearOneMsg", Lang.csfs_over_onebyone)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/common.uploadlist.js")
+    @* 來文機關聯動 start*@
+    <script src="~/Scripts/bootstrap-typeahead.js"></script>
+    @Html.Hidden("GetGovNameUrl", Url.Action("GetGovNameByGoveKind", "Home", new { area = "" }))
+    @* 來文機關聯動 end *@
+
+    <script type="text/javascript">
+        $(document).ready(function () {            
+            $.CSFS.bindGovKindAndUnit1("txtGovUnit");
+            //* 點查詢
+            $("#btnQuery").click(function () { return btnQueryclick(); });
+            //* 案件類型
+            $("#ddlCaseKind").change(function () { changeCaseKind(); });
+            //* 送經辦
+            $("#btnAssignShow").click(function () { return btnAssignShowClick(); });
+            $("#btnAssignSubmit").click(function () { return btnAssignSubmit(); });
+
+            //* 點選列印
+            $("#btnReportSelected").click(function () { return btnReportSelected(); });
+            //* 點擊呈核
+            $("#btnNuclear").click(function () { return btnOverClick(); });
+            $("#btnOverSubmit").click(function () { return btnOverSubmit(); });
+            //20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add start
+            $("#ddlAgentDepartment2").prop("disabled", "disabled"),
+            $("#ddlAgentDepartmentUser").prop("disabled", "disabled"),
+            //* 經辦人員
+            $("#ddlAgentDepartment").change(function () { changeAgentDepartment(); });
+            $("#ddlAgentDepartment2").change(function () { changeAgentDepartment2(); });
+            //20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add end
+
+        });
+
+        //*返回按鈕
+        if ($("#isQuery").val() == "1") {
+            $("#ddlCaseKind").val($("#CaseKindQuery").val());
+            changeCaseKind();
+            if ($("#CaseKindQuery").val() != "") {
+                $("#ddlCaseKind2").prop("disabled", "");
+            }
+            $("#ddlCaseKind2").val($("#CaseKind2Query").val());
+            $("#pageNum").val(parseInt($("#CurrentPage").val()));
+            btnQueryclick();
+        }
+
+        function changeCaseKind() {
+            try {
+                var selectedValue = $("#ddlCaseKind option:selected").val();
+                if (selectedValue === "") {
+                    $("#ddlGovUnit").attr("disabled", "true");
+                    $("#ddlCaseKind2").empty();
+                    $("#ddlCaseKind2").append($("<option></option>").val("").text($("#PleaseSelect").val()));
+                } else {
+                    if ($.trim(selectedValue).length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: $("#GetCaseKind2Url").val(),
+                            data: { caseKind: selectedValue },
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    $("#ddlCaseKind2").removeAttr("disabled");
+                                    $("#ddlCaseKind2").empty();
+                                    $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                    $.each(data, function (i, item) {
+                                        $("#ddlCaseKind2").append($("<option></option>").val(item.Value).text(item.Value));
+                                    });
+                                } else {
+                                    $("#ddlCaseKind2").attr("disabled", "true");
+                                    $("#ddlCaseKind2").empty();
+                                    $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            catch (e) {
+            }
+        }
+        //20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add start
+        //* 經辦人員下拉(處)
+        function changeAgentDepartment() {
+            try {
+                $("#ddlAgentDepartmentUser").attr("disabled", "true");
+                $("#ddlAgentDepartmentUser").empty();
+                $("#ddlAgentDepartmentUser").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                var selectedValue = $("#ddlAgentDepartment option:selected").val();
+                if (selectedValue === "") {
+                    $("#ddlAgentDepartment2").attr("disabled", "true");                    
+                    $("#ddlAgentDepartment2").empty();
+                    $("#ddlAgentDepartment2").append($("<option></option>").val("").text($("#PleaseSelect").val()));
+                } else {
+                    if ($.trim(selectedValue).length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: $("#GetAgentDepartment2Url").val(),
+                            data: { AgentDepartment: selectedValue },
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    $("#ddlAgentDepartment2").removeAttr("disabled");
+                                    $("#ddlAgentDepartment2").empty();
+                                    $("#ddlAgentDepartment2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                    $.each(data, function (i, item) {
+                                        $("#ddlAgentDepartment2").append($("<option></option>").val(item.Value).text(item.Value));
+                                    });
+                                } else {
+                                    $("#ddlAgentDepartment2").attr("disabled", "true");
+                                    $("#ddlAgentDepartment2").empty();
+                                    $("#ddlAgentDepartment2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            catch (e) {
+            }
+        }
+        //* 經辦人員下拉(科組)
+        function changeAgentDepartment2() {
+            try {
+                var selectedValue = $("#ddlAgentDepartment2 option:selected").val();
+                if (selectedValue === "") {
+                    $("#ddlAgentDepartmentUser").attr("disabled", "true");
+                    $("#ddlAgentDepartmentUser").empty();
+                    $("#ddlAgentDepartmentUser").append($("<option></option>").val("").text($("#PleaseSelect").val()));
+                } else {
+                    if ($.trim(selectedValue).length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: $("#GetAgentDepartmentUserUrl").val(),
+                            data: { AgentDepartment: selectedValue },
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    $("#ddlAgentDepartmentUser").removeAttr("disabled");
+                                    $("#ddlAgentDepartmentUser").empty();
+                                    $("#ddlAgentDepartmentUser").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                    $.each(data, function (i, item) {
+                                        $("#ddlAgentDepartmentUser").append($("<option></option>").val(item.Value).text(item.Value));
+                                    });
+                                } else {
+                                    $("#ddlAgentDepartmentUser").attr("disabled", "true");
+                                    $("#ddlAgentDepartmentUser").empty();
+                                    $("#ddlAgentDepartmentUser").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            catch (e) {
+            }
+        }
+        //20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add end
+        //* 查詢
+        function btnQueryclick() {
+            trimAllInput();
+            if (!ajaxValidateQuery()) {
+                return false;
+            } else {
+                $.blockUI();
+                $.ajax({
+                    url: $("#frmQuery").attr("action"),
+                    type: "Post",
+                    cache: false,
+                    data: $("#frmQuery").serialize(),
+                    error: function () {
+                        jAlertError($("#LoadErrorMsg").val());
+                        $.unblockUI();
+                    },
+                    success: function (data) {
+                        $("#divResult").html(data).show();
+                        $("#querystring").val($("#frmQuery").serialize());
+                        $.unblockUI();
+                    }
+                });
+            }
+        }
+        //* 送經辦
+        function btnAssignShowClick() {
+            var iLen = 0;
+            var strKey = "";
+            $(".checkfile").each(function () {
+                if ($(this).prop("checked") === true) {
+                    iLen = iLen + 1;
+                    strKey = strKey + $(this).val() + ",";
+                }
+            });
+            if (iLen <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+            btnAssignSubmit();
+        }
+        //* 送經辦
+        function btnAssignSubmit() {
+            var aryCaseId = new Array();
+            $(".checkfile:checked").each(function () {
+                aryCaseId.push($(this).val());//向数组中添加元素
+            });
+            var strCaseId = aryCaseId.join(',');
+
+            jConfirm($("#AssignConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    //* click confirm ok
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#AssignUrl").val(),
+                        async: false,
+                        data: { caseIdList: strCaseId },
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#AssignSuccessMsg").val(), function () {
+                                    $("#modalAgent").modal("hide");
+                                    btnQueryclick();
+                                });
+                            } else {
+                                jAlertError($("#AssignFailMsg").val());
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function ajaxValidateQuery() {
+            var newLine = "<br/>";
+            var msg = "";
+            if (!checkIsValidDate($("#GovDateS").val())) {
+                msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#GovDateText").val()) + newLine;
+            }
+            if (!checkIsValidDate($("#GovDateE").val())) {
+                msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#GovDateText").val()) + newLine;
+            }
+            if (!checkIsValidDate($("#CreatedDateS").val())) {
+                msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#CreatedDateText").val()) + newLine;
+            }
+            if (!checkIsValidDate($("#CreatedDateE").val())) {
+                msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#CreatedDateText").val()) + newLine;
+            }
+            if (msg.length > 0) {
+                jAlertError(msg);
+                return false;
+            }
+            return true;
+        }
+        function trimAllInput() {
+            $(":input[type='text']").each(function () {
+                $(this).val($.trim($(this).val()));
+            });
+        }
+        //* 報表
+        function btnReportSelected() {
+            var aryCaseId = new Array();
+            $(".checkfile:checked").each(function () {
+                aryCaseId.push($(this).val());//向数组中添加元素
+            });
+            var strCaseId = aryCaseId.join(',');
+            if (strCaseId.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return false;
+            }
+
+            if (aryCaseId.length > 100) {
+                jAlertError($("#CheckCount").val());
+            }
+
+            var actionUrl = $("#ReportUrl").val() + "?caseIdList=" + strCaseId;
+            $("#frmForReport").attr("src", actionUrl);
+            return false;
+        }
+
+        function GetDateStr(addDayCount) {
+            var dd = new Date();
+            dd.setDate(dd.getDate() + addDayCount);//获取AddDayCount天后的日期
+            var y = dd.getFullYear();
+            var m = dd.getMonth() + 1;//获取当前月份的日期
+            var d = dd.getDate();
+            return y + "" + (m < 10 ? "0" + m : m) + "" + (d < 10 ? "0" + d : d);
+        }
+        //*點擊呈核
+        function btnOverClick() {
+            var arylimitDate = new Array();
+
+            var arylimit = new Array();
+            $(".checkfile:checked").each(function () {
+                arylimitDate.push($(this).attr("data-limitDate").replace("/", "").replace("/", ""));//向数组中添加元素
+            });
+            var strlimitDate = arylimitDate.sort().join(',');
+            var strNowDate = GetDateStr(parseInt($("#AddDay").val()));
+
+            if (strlimitDate < strNowDate) {
+                var iLen = 0;
+                var strKey = "";
+                var strOverDueMemo = new Array();
+                $(".checkfile").each(function () {
+                    if ($(this).prop("checked") === true) {
+                        iLen = iLen + 1;
+                        strKey = strKey + $(this).val() + ",";
+                        strOverDueMemo.push($(this).attr("data-overduememo"));
+                    }
+                });
+                if (iLen <= 0) {
+                    jAlertError($("#SelectOneMsg").val());
+                    return;
+                }
+
+                if (iLen >= 2) {
+                    jAlertError($("#NuclearOneMsg").val());
+                    return;
+                }
+                $("#OverDueMemo").val(strOverDueMemo);
+                $("#modalOver").modal();
+            }
+            else {
+                var caseIdArr = new Array();
+                $(".checkfile:checked").each(function () {
+                    caseIdArr.push($(this).val());//向数组中添加元素
+                });
+                var strCaseId = caseIdArr.join(',');
+
+                if (strCaseId.length <= 0) {
+                    jAlertError($("#SelectOneMsg").val());
+                    return;
+                }
+                jConfirm($("#NuclearConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                    if (bFlag === true) {
+                        $.blockUI();
+                        $.ajax({
+                            type: "POST",
+                            traditional: true,
+                            url: $("#AssignChenHe").val(),
+                            async: false,
+                            data: { CaseIdarr: strCaseId },
+                            error: function () {
+                                jAlertError($("#LoadErrorMsg").val());
+                                $.unblockUI();
+                            },
+                            success: function (data) {
+                                if (data.ReturnCode === "1") {
+                                    jAlertSuccess($("#NuclearOkMsg").val(), function () {
+                                        btnQueryclick();
+                                    });
+                                } else {
+                                    jAlertError($("#NuclearFaileMsg").val());
+                                    $.unblockUI();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        }
+        function btnOverSubmit() {
+            var aryCaseId = new Array();
+            $(".checkfile:checked").each(function () {
+                aryCaseId.push($(this).val());//向数组中添加元素
+            });
+            var strCaseId = aryCaseId.join(',');
+            if (strCaseId.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+            if (!ajaxValidateOver()) {
+                return false;
+            }
+            jConfirm($("#NuclearConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    //* click confirm ok
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#OverDueUrl").val(),
+                        async: false,
+                        data: { strIds: strCaseId, OverDueMemo: $("#OverDueMemo").val() },
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#NuclearOkMsg").val(), function () {
+                                    $("#modalOver").modal("hide");
+                                    btnQueryclick();
+                                });
+                            } else {
+                                jAlertError($("#NuclearFaileMsg").val());
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        function ajaxValidateOver() {
+            if ($.trim($("#OverDueMemo").val()) === "") {
+                jAlertError($("#TextNotNull").val());
+                return false;
+            }
+            return true;
+        }
+    </script>
+}

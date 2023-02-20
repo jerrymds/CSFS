@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CSFS_UATModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="GssDoc">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocType" Type="int" />
+          <Property Name="BatchNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="CompanyID" Type="nvarchar" MaxLength="20" />
+          <Property Name="Batchmetadata" Type="nvarchar(max)" />
+          <Property Name="BatchDate" Type="datetime" />
+          <Property Name="TransferType" Type="nvarchar" MaxLength="5" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ParserStatus" Type="int" />
+          <Property Name="ParserMessage" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="GssDoc_Detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BatchNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="DocNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="Metadata" Type="nvarchar(max)" />
+          <Property Name="FileNames" Type="nvarchar" MaxLength="2000" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ParserStatus" Type="int" />
+          <Property Name="ParserMessage" Type="nvarchar" MaxLength="50" />
+          <Property Name="CaseKind" Type="nvarchar" MaxLength="10" />
+          <Property Name="CaseId" Type="uniqueidentifier" />
+          <Property Name="SendBatchNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="SendDate" Type="datetime" />
+          <Property Name="SendStatus" Type="int" />
+          <Property Name="SendMessage" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sendmetadata" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityContainer Name="CSFS_UATModelStoreContainer">
+          <EntitySet Name="GssDoc" EntityType="Self.GssDoc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GssDoc_Detail" EntityType="Self.GssDoc_Detail" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CSFS_UATModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="GssEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="GssDoc" EntityType="CSFS_UATModel.GssDoc" />
+          <EntitySet Name="GssDoc_Detail" EntityType="CSFS_UATModel.GssDoc_Detail" />
+        </EntityContainer>
+        <EntityType Name="GssDoc">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocType" Type="Int32" />
+          <Property Name="BatchNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Batchmetadata" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BatchDate" Type="DateTime" Precision="3" />
+          <Property Name="TransferType" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ParserStatus" Type="Int32" />
+          <Property Name="ParserMessage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="GssDoc_Detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BatchNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DocNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Metadata" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FileNames" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ParserStatus" Type="Int32" />
+          <Property Name="ParserMessage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CaseKind" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CaseId" Type="Guid" />
+          <Property Name="SendBatchNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SendDate" Type="DateTime" Precision="3" />
+          <Property Name="SendStatus" Type="Int32" />
+          <Property Name="SendMessage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sendmetadata" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CSFS_UATModelStoreContainer" CdmEntityContainer="GssEntities">
+          <EntitySetMapping Name="GssDoc">
+            <EntityTypeMapping TypeName="CSFS_UATModel.GssDoc">
+              <MappingFragment StoreEntitySet="GssDoc">
+                <ScalarProperty Name="ParserMessage" ColumnName="ParserMessage" />
+                <ScalarProperty Name="ParserStatus" ColumnName="ParserStatus" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="TransferType" ColumnName="TransferType" />
+                <ScalarProperty Name="BatchDate" ColumnName="BatchDate" />
+                <ScalarProperty Name="Batchmetadata" ColumnName="Batchmetadata" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+                <ScalarProperty Name="DocType" ColumnName="DocType" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GssDoc_Detail">
+            <EntityTypeMapping TypeName="CSFS_UATModel.GssDoc_Detail">
+              <MappingFragment StoreEntitySet="GssDoc_Detail">
+                <ScalarProperty Name="Sendmetadata" ColumnName="Sendmetadata" />
+                <ScalarProperty Name="SendMessage" ColumnName="SendMessage" />
+                <ScalarProperty Name="SendStatus" ColumnName="SendStatus" />
+                <ScalarProperty Name="SendDate" ColumnName="SendDate" />
+                <ScalarProperty Name="SendBatchNo" ColumnName="SendBatchNo" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="CaseKind" ColumnName="CaseKind" />
+                <ScalarProperty Name="ParserMessage" ColumnName="ParserMessage" />
+                <ScalarProperty Name="ParserStatus" ColumnName="ParserStatus" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="FileNames" ColumnName="FileNames" />
+                <ScalarProperty Name="Metadata" ColumnName="Metadata" />
+                <ScalarProperty Name="DocNo" ColumnName="DocNo" />
+                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

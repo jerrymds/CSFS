@@ -1,0 +1,426 @@
+﻿@using CTBC.CSFS.Models
+@model  HistoryCaseSeizureViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class="active"><a href="@Url.Action("Index", "HistoryAgentDocumentInfoDetail", new { area = "Common", CaseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_document_info</a></li>
+        @if (Html.GetBackControllerName() != "DebtPersonQuery")
+        {
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">帳務資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">正本備查</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">發文資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseHistoryDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">流程紀錄</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseCalculatorDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">利息計算</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseMemoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">內部註記</a></li>
+        }
+        @Html.GetBackButtonInTab()
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel1">
+            @***** Body Start****@
+            <div class="box box-primary">
+                <!-- form start -->
+                <div class="box-body ">
+                    <table class="table-noborder col-md-12">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-1 text-right">@Lang.csfs_gov_unit</td>
+                                <td class="col-md-3">
+                                    @*@Html.TextBoxFor(m => m.HistoryCaseMaster.GovKind, new { @id = "ddlGOV_KIND1", @disabled = "true", @style = "width:20%" })
+                                        &nbsp;*@
+                                    @if (Model.HistoryCaseMaster.GovUnitflag == "true")
+                                    {
+                                        @Html.TextBoxFor(m => m.HistoryCaseMaster.GovUnit, new { @id = "txtGovUnit1", @MaxLength = "200", @disabled = "true", @style = "color:red;width:250px;" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(m => m.HistoryCaseMaster.GovUnit, new { @id = "txtGovUnit1", @MaxLength = "200", @disabled = "true", @style = "width:250px;" })
+
+                                    }
+                                </td>
+                                <td class="col-md-1 text-right"></td>
+                                <td class="col-md-3"></td>
+                                <td class="col-md-1 text-right">@Lang.csfs_keyin_date</td>
+                                <td class="col-md-3">
+                                    @Html.TextBoxFor(m => m.HistoryCaseMaster.CreatedDate, new { @id = "txtCreatedDate", @disabled = "true" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1 text-right">@Lang.csfs_gov_date</td>
+                                <td class="col-md-3">
+                                    @if (Model.HistoryCaseMaster.GovDateflag == "true")
+                                    {
+                                        @Html.TextBoxFor(m => m.HistoryCaseMaster.GovDate, new { @id = "txtGovDate", data_datepicker = "true", @disabled = "true", @style = "color:red" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(m => m.HistoryCaseMaster.GovDate, new { @id = "txtGovDate", data_datepicker = "true", @disabled = "true" })
+                                    }
+                                </td>
+                                <td class="col-md-1 text-right">@Lang.csfs_case_speed</td>
+                                <td class="col-md-3">
+
+                                    @Html.TextBoxFor(m => m.HistoryCaseMaster.Speed, new { @id = "ddlSpeed", @disabled = "true" })
+                                </td>
+                                <td class="col-md-1 text-right">@Lang.csfs_receive_kind</td>
+                                <td class="col-md-3">
+                                    @Html.TextBoxFor(m => m.HistoryCaseMaster.ReceiveKind, new { @id = "ddlReceiveKind", @disabled = "true" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1 text-right">@Lang.csfs_gov_no</td>
+                                <td class="col-md-3">
+                                    @if (Model.HistoryCaseMaster.GovNoflag == "true")
+                                    {
+                                        @Html.TextBoxFor(m => m.HistoryCaseMaster.GovNo, new { @id = "txtGovNo", @MaxLength = "60", @disabled = "true", @style = "color:red;width:250px;" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(m => m.HistoryCaseMaster.GovNo, new { @id = "txtGovNo", @MaxLength = "60", @disabled = "true", @style = "width:250px;" })
+                                    }
+                                    <i id="iLogo" class=""></i>
+                                </td>
+                                <td class="col-md-1 text-right">@Lang.csfs_case_limited_date</td>
+                                <td class="col-md-3">
+                                    @Html.TextBoxFor(m => m.HistoryCaseMaster.LimitDate, new { @id = "txtLimitDate", @disabled = "true" })
+                                </td>
+                                <td class="col-md-1 text-right">@Lang.csfs_case_no</td>
+                                <td class="col-md-3">
+                                    @Html.TextBoxFor(m => m.HistoryCaseMaster.CaseNo, new { @id = "txtCaseNo", @disabled = "true" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                                <td class="col-md-3">
+                                    @Html.TextBoxFor(m => m.HistoryCaseMaster.CaseKind, new { @id = "ddlCaseKind", @disabled = "true", @style = "width:30%" })
+                                    &nbsp;
+                                    @Html.TextBoxFor(m => m.HistoryCaseMaster.CaseKind2, new { @id = "ddlCaseKind2", @disabled = "true" })
+                                </td>
+                                <td class="col-md-1 text-right">@Lang.csfs_case_unit</td>
+                                <td class="col-md-3">
+                                    @Html.TextBoxFor(m => m.HistoryCaseMaster.Unit, new { @id = "txtUnit", @disabled = "true" })
+                                </td>
+                                <td class="col-md-1 text-right">@Lang.csfs_keyin_person</td>
+                                <td class="col-md-3">
+                                    @Html.TextBoxFor(m => m.HistoryCaseMaster.Person, new { @id = "txtPerson", @disabled = "true" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1 text-right">@Lang.csfs_case_attachment</td>
+                                <td class="col-md-11" colspan="5">
+                                    <table class="table table-bordered" id="divUploadList">
+                                        @for (int i = 0; i < Model.HistoryCaseAttachmentlistO.Count; i++)
+                                        {
+                                            <tr>
+                                                <td>
+                                                    <a href="@Url.Action("HistoryDownFile", "Home", new {area = "", uploadkind = Uploadkind.CaseAttach, id = Model.HistoryCaseAttachmentlistO[i].AttachmentId})" target="frmDownload">
+                                                        @Model.HistoryCaseAttachmentlistO[i].AttachmentName
+                                                    </a>
+                                                </td>
+                                                <td>
+                                                    @*<a data-href="@Url.Action("DeleteAttatch", "AgentDocumentInfo", new {area = "Agent", attachId = Model.CaseAttachmentlistO[i].AttachmentId})" data-deletelink="true">
+                                                            @Lang.csfs_delete
+                                                        </a>*@
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+
+                                    @*<ul>
+                                            @for (int i = 0; i < Model.CaseAttachmentlistO.Count; i++)
+                                            {
+                                                <li>
+                                                    <a href="@Url.Action("HistoryDownFile", "Home", new { area = "", uploadkind = Uploadkind.CaseAttach, id = Model.CaseAttachmentlistO[i].AttachmentId })">
+                                                        @Model.CaseAttachmentlistO[i].AttachmentName
+                                                    </a>
+                                                </li>
+                                            }
+                                        </ul>*@
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-2 text-right"></td>
+                                <td class="col-md-10" colspan="3">
+                                    <table class="table table-bordered table-striped text-black">
+                                        <thead>
+                                            <tr class="alert-success text-center">
+                                                <td>功能</td>
+                                                <td>檔案名稱</td>
+                                                <td>類型</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model.HistoryCaseEdocFilelist != null && Model.HistoryCaseEdocFilelist.Count > 0)
+                                            {
+                                                for (int i = 0; i < Model.HistoryCaseEdocFilelist.Count; i++)
+                                                {
+                                                    <tr>
+                
+                    <td class="text-center">
+
+                        <a href="@Url.Action("HistoryDownFile", "Home", new {area = "", uploadkind = Model.HistoryCaseEdocFilelist[i].CaseId+"|"+Model.HistoryCaseEdocFilelist[i].FileName, id =i+1})" target="frmDownload">
+                            下載
+                        </a>
+                       @* <a data-href="@Url.Action("DownloadTxtDoc", "AgentDocumentInfo", new { area = "Agent", CaseId = Model.CaseEdocFilelist[i].CaseId,fName = Model.CaseEdocFilelist[i].FileName })" link="true" >下載
+                        </a>*@
+                                                        </td>
+
+                                                        <td class="text-center">
+                                                            @Model.HistoryCaseEdocFilelist[i].FileName
+                                                        </td>
+                                                        <td class="text-center">
+                                                            @Model.HistoryCaseEdocFilelist[i].FileType
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        </tbody>
+
+                                    </table>
+
+                                </td>
+                            </tr>
+                            @if (Model.HistoryCaseMaster.CaseKind2 == Lang.csfs_seizure || Model.HistoryCaseMaster.CaseKind2 == Lang.csfs_seizureandpay)
+                            {
+                                <tr>
+                                    <td class="col-md-1 text-right">受文者</td>
+                                    <td class="col-md-3">
+                                        @if (Model.HistoryCaseMaster.Receiverflag == "true")
+                                        {
+                                            @Html.TextBoxFor(m => m.HistoryCaseMaster.Receiver, new { @id = "txtReceiver", @MaxLength = "100", @disabled = "true", @style = "color:red;width:250px;" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.HistoryCaseMaster.Receiver, new { @id = "txtReceiver", @MaxLength = "100", @disabled = "true", @style = "width:250px;" })
+                                        }
+                                    </td>
+                                    <td class="col-md-1 text-right">來函扣押總金額</td>
+                                    <td class="col-md-3">
+                                        @if (Model.HistoryCaseMaster.ReceiveAmountflag == "true")
+                                        {
+                                            @Html.TextBoxFor(m => m.HistoryCaseMaster.ReceiveAmount, new { @id = "txtReceiveAmount", @disabled = "true", @style = "color:red" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.HistoryCaseMaster.ReceiveAmount, new { @id = "txtReceiveAmount", @disabled = "true" })
+                                        }
+                                    </td>
+                                    <td class="col-md-1 text-right">金額未達毋需扣押</td>
+                                    <td class="col-md-3">
+                                        @if (Model.HistoryCaseMaster.NotSeizureAmountflag == "true")
+                                        {
+                                            @Html.TextBoxFor(m => m.HistoryCaseMaster.NotSeizureAmount, new { @id = "txtNotSeizureAmount", @disabled = "true", @style = "color:red" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.HistoryCaseMaster.NotSeizureAmount, new { @id = "txtNotSeizureAmount", @disabled = "true" })
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                            @if (Model.HistoryCaseMaster.CaseKind2 == "支付")
+                            {
+                                <tr>
+                                    <td class="col-md-1 text-right">前案扣押金額</td>
+                                    <td class="col-md-3">
+                                        @Html.TextBoxFor(m => m.HistoryCaseMaster.PreSubAmount, new { @id = "txtPreSubAmount", @MaxLength = "100", @style = "color:red;width:250px;" })
+                                        @Html.HiddenFor(m => m.HistoryCaseMaster.PreSubAmount)
+                                    </td>
+                                    <td class="col-md-1 text-right">收取金額</td>
+                                    <td class="col-md-3">
+                                        @Html.TextBoxFor(m => m.HistoryCaseMaster.PreReceiveAmount, new { @id = "txtPreReceiveAmount" })
+                                        @Html.HiddenFor(m => m.HistoryCaseMaster.PreReceiveAmount)
+                                    </td>
+                                    <td class="col-md-1 text-right">超過收取金額部份是否撤銷</td>
+                                    <td class="col-md-3">
+
+                                        @if (Model.HistoryCaseMaster.OverCancel == null)
+                                        {
+                                            Model.HistoryCaseMaster.OverCancel = "Y";
+                                            @Html.TextBoxFor(m => m.HistoryCaseMaster.OverCancel, new { @id = "txtOverCancel" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.HistoryCaseMaster.OverCancel, new { @id = "txtOverCancel" })
+                                        }
+                                        @Html.HiddenFor(m => m.HistoryCaseMaster.OverCancel)
+                                    </td>
+                                </tr>
+                            }
+
+                            
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer text-center">
+                        @*<button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save_and_send</button>
+                        <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>*@
+                        <a onclick="openTxtDoc()" class="btn btn-primary btn-xs" id="btnOpenTxtDoc">
+                            @Lang.csfs_opentxt
+                        </a>
+                        @if (Model.HistoryCaseMaster.CaseKind2 == "支付" && Model.HistoryCaseMaster.ReceiveKind == "電子公文")
+                        {
+                        <a onclick="openPayPdfDoc1('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnOpenPdfDoc">
+                            @Lang.csfs_openpdf
+                        </a>
+                        }
+                        else
+                        {
+                            <a onclick="openPdfDoc('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnOpenPdfDoc">
+                                @Lang.csfs_openpdf
+                            </a>
+                        }
+                    </div>
+            </div>
+            <div class="col-xs-12">
+                <div class="box box-primary">
+                    <div class="box-header"></div>
+                    <div class="box-body">
+                        <table id="query_table" class="table table-bordered table-striped text-black sort">
+                            <thead>
+                                <tr class="alert-success text-center ">
+                                    <th class="col-xs-3"> @Lang.csfs_obligor_name</th>
+                                    <th class="col-xs-3"> @Lang.csfs_obligor_no</th>
+                                    <th class="col-xs-5"> @Lang.csfs_usr_id</th>
+                                    <th class="col-xs-1"> @Lang.csfs_remove</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < 10; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if(Model.HistoryCaseObligorlistO[i].Nameflag == "true")
+                                            {
+                                                @Html.TextBoxFor(m => m.HistoryCaseObligorlistO[i].ObligorName, new { @MaxLength = "20", @class = "col-xs-12 no-padding", @disabled = "true", @style = "color:red;" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.HistoryCaseObligorlistO[i].ObligorName, new { @MaxLength = "20", @class = "col-xs-12 no-padding", @disabled = "true" })
+                                            }
+                                        </td>
+                                        <td>
+                                            @if(Model.HistoryCaseObligorlistO[i].Noflag == "true")
+                                            {
+                                                @Html.TextBoxFor(m => m.HistoryCaseObligorlistO[i].ObligorNo, new { @MaxLength = "14", @class = "col-xs-12 no-padding", @disabled = "true", @style = "color:red;" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.HistoryCaseObligorlistO[i].ObligorNo, new { @MaxLength = "14", @class = "col-xs-12 no-padding", @disabled = "true" })
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (Model.HistoryCaseObligorlistO[i].Accountflag == "true")
+                                            {
+                                                @Html.TextBoxFor(m => m.HistoryCaseObligorlistO[i].ObligorAccount, new { @MaxLength = "16", @class = "col-xs-12 no-padding", @disabled = "true", @style = "color:red;" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.HistoryCaseObligorlistO[i].ObligorAccount, new { @MaxLength = "16", @class = "col-xs-12 no-padding", @disabled = "true" })
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            <a class="btn btn-default btn-xs js-CleanLine" title="@Lang.csfs_delete" href="#" onclick="">
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.HistoryCaseMaster.CaseId, new { @id = "HidCaseIdValue" })
+            @Html.HiddenFor(m => m.HistoryCaseMaster.LimitDate, new { @id = "HidLimitDateValue" })
+            @Html.HiddenFor(m => m.HistoryCaseMaster.Person, new { @id = "HidPersonValue" })
+            @Html.HiddenFor(m => m.HistoryCaseMaster.Unit, new { @id = "HidUnitValue" })
+            @Html.HiddenFor(m => m.HistoryCaseMaster.CaseKind, new { @id = "HidCaseKindValue" })
+            @Html.HiddenFor(m => m.HistoryCaseMaster.DocNo, new { @id = "HidDocNoValue" })
+            @Html.HiddenFor(m => m.HistoryCaseMaster.CaseNo, new { @id = "HidCaseNoValue" })
+            @Html.HiddenFor(m => m.HistoryCaseMaster.Status, new { @id = "HidStatusValue" })
+            <iframe id="upload_frame" name="upload_frame" src="" class="hidden"></iframe>
+            @***** Body End*****@
+        </div>
+    </div>
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("EndTime", (string)ViewBag.CASE_END_TIME)
+@Html.Hidden("OpenTxtDocUrl", Url.Action("OpenTxtDoc", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId }))
+@Html.Hidden("OpenPdfDocUrl", Url.Action("OpenPdfDoc", "HistoryAgentAccountInfoDetail", new { area = "Common" }))
+@Html.Hidden("OpenPayPdfDoc1Url", Url.Action("OpenPdfDoc", "HistoryAgentAccountInfoDetail", new { area = "Common" }))
+@Html.Hidden("OpenPayPdfDoc2Url", Url.Action("OpenPdfDoc", "HistoryAgentAccountInfoDetail", new { area = "Common" }))
+@*@Html.Hidden("OpenTxtDocUrl", Url.Action("OpenTxtDoc", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId }))*@
+@*@Html.Hidden("OpenPayPdfDoc1Url", Url.Action("OpenPdfDoc", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("OpenPdfDocUrl", Url.Action("OpenPdfDoc", "AgentAccountInfo", new { area = "Agent" }))*@
+@Html.Hidden("HidHasFile", (string)ViewBag.HasFile)
+@section scripts {
+    @Scripts.Render("~/Scripts/Agent/AgentDocumentInfo.js")
+    <script>
+    $(document).ready(function () {
+        $("#HidHasFile").val() == "1" ? $("#btnOpenTxtDoc").show() : $("#btnOpenTxtDoc").hide();
+    });
+
+    function openTxtDoc() {
+        //$.ajax({
+        //    type: "POST",
+        //    async: false,
+        //    url: $("#OpenTxtDocUrl").val(),
+        //    error: function () {
+        //        jAlertError($("#LoadErrorMsg").val());
+        //        $.unblockUI();
+        //    },
+
+        //    success: function (data) {
+
+        //        jAlertSuccess(data.ReturnMsg);
+        //        $.unblockUI();
+        //    }
+        //});
+        var url = $("#OpenTxtDocUrl").val();
+        //弹出窗口的宽度; 
+        var iWidth = 600;
+        //弹出窗口的高度; 
+        var iHeight = 600;
+        //获得窗口的垂直位置 
+        var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+        //获得窗口的水平位置 
+        var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+        window.open(url, 'Agent', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',scrollbars= yes, resiable = yes');
+    }
+    function openPayPdfDoc1(caseid) {
+        var actionUrl = $("#OpenPayPdfDoc1Url").val() + "?caseId=" + caseid + "|di";
+        $("#frmForReport").attr("src", actionUrl);
+        return false;
+    }
+    function openPayPdfDoc2(caseid) {
+        var actionUrl = $("#OpenPayPdfDoc2Url").val() + "?caseId=" + caseid + "|Attach";
+        $("#frmForReport").attr("src", actionUrl);
+        return false;
+    }
+    function openPdfDoc(caseid) {
+        var actionUrl = $("#OpenPdfDocUrl").val() + "?caseId=" + caseid;
+        //alert(actionUrl);
+        $("#frmForReport").attr("src", actionUrl);
+        return false;
+    }
+    //function openPayPdfDoc1(caseid) {
+    //    var actionUrl = $("#OpenPayPdfDoc1Url").val() + "?caseId=" + caseid + "|di";
+    //    $("#frmForReport").attr("src", actionUrl);
+    //    return false;
+    //}
+    //function openPdfDoc(caseid) {
+    //    var actionUrl = $("#OpenPdfDocUrl").val() + "?caseId=" + caseid;
+    //    $("#frmForReport").attr("src", actionUrl);
+    //    return false;
+    //}
+</script>
+
+}
+

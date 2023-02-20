@@ -1,0 +1,23 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = "CacheQuery";
+}
+<div class="headline">
+    @Lang.csfs_cache_mg
+</div>
+<p></p>
+<input type="button" onclick="SyncCache()" value="@Lang.csfs_cache_updateall" />
+<script type="text/javascript">
+    function SyncCache() {
+        $.ajax({
+            url: '@Url.Action("SyncCache","Cache")',
+            cache: false,
+            type: "POST",
+            async: false,
+            dataType: "html",
+            success: function (data) { alert(data); },
+            error: function (data) { displayError(data); }
+        });
+    }
+</script>
+

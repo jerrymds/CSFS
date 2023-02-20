@@ -1,0 +1,121 @@
+﻿@using System.Web.Optimization;
+@using System.Web.Mvc.Html;
+@{
+    ViewBag.Title = "歷史記錄查詢與重送維護";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <title>@Lang.csfs_sysname @ViewBag.Title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" /><!--bootstrap.min /3.3.1-->
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" /><!--font-awesome/4.2.0-->
+    <link href="~/Content/AdminLTE.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/themes/date/jquery-ui-1.10.4.custom.min.css")" rel="stylesheet" type="text/css" />
+    <link href="~/Content/BoostrapUpdate.css" rel="stylesheet" />
+    <link href="~/Content/colorbox.css" rel="stylesheet" />
+    @Scripts.Render("~/Scripts/jquery-2.1.3.js")
+    @Scripts.Render("~/Scripts/jquery-ui-1.10.4.custom.min.js")
+    @Scripts.Render("~/Scripts/jquery.ui.datepicker-en-US.min.js")
+    @Scripts.Render("~/Scripts/jquery.ui.datepicker-zh-TW.min.js")
+    @Scripts.Render("~/Scripts/json2.js")
+    <script type="text/javascript"> function getRootURL() { return '@Url.Content("~/")'; } </script>
+    @Scripts.Render("~/Scripts/AdminLTE/cross-page.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/bootstrap-typeahead.js")
+    @Scripts.Render("~/Scripts/jquery.blockUI-vsdoc.js")
+    @Scripts.Render("~/Scripts/jquery.alerts-vsdoc.js")
+    @Scripts.Render("~/Scripts/Common.SortTable.js")
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+    @Scripts.Render("~/scripts/jquery.validate.min.js")
+    @Scripts.Render("~/Scripts/Common.js")
+    @Scripts.Render("~/Scripts/Colorbox/jquery.colorbox.js")
+   @Scripts.Render("~/Scripts/jquery.alerts-vsdoc.js")
+    <script src="~/Scripts/jquery-2.1.3.js"></script>
+    <script language="javaScript" type="text/javaScript">
+        // 確定
+        function Save() {
+            var Content = $.trim($("#txtContent").val());
+
+            if (Content != "") {
+               // if (confirm("確定要保存嗎？")) {
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        //url: "/CaseCust/CaseCustHistory/SaveResult",
+                        url: '@Url.Action("SaveResult", "NewCaseCustHistory", new { area = "NewCaseCust" })', 
+                        data: {
+                            Key: $("#hidKey").val(),
+                            Content: Content
+                        },
+                        success: function (data) {
+                            if (data) {
+                                // 檢視主管放行-強制結案
+                                if ($("#hidKey").val() == "1") {
+                                    alert("強制結案成功");
+                                } else {
+                                    alert("儲存成功");
+                                }
+                                //window.returnValue = "ok";
+                                window.opener.QueryData();//執行父視窗的function
+                                window.close();
+                            } else {
+                                // 檢視主管放行-強制結案
+                                if ($("#hidKey").val() == "1") {
+                                    alert("強制結案失敗");
+                                } else {
+                                    alert("儲存失敗");
+                                }
+                            }
+                        }
+                    });
+                //}
+            } else {
+                alert("請輸入處理方式");
+                return;
+            }
+        }
+
+    </script>
+</head>
+<body>
+    <div class="box box-primary">
+        <div class="box-body ">
+            <table width="100%" border="0" cellpadding="3" cellspacing="0" class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="text-left">處理方式</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input id="txtContent" type="text" maxlength="30" style="width:98%;"/>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="box-footer text-center">
+                <button type="button" class="btn btn-primary btn-xs" onclick="Save();">確定</button>&nbsp;&nbsp;
+                <button type="button" class="btn btn-default btn-xs" onclick="window.returnValue = '';window.close();">取消</button>
+            </div>
+        </div>
+    </div>
+    <div class="container text-center footer">
+        <span>中國信託銀行 版權所有 © All Rights Reserved. </span>
+    </div>
+    <input type="hidden" value="@ViewBag.Key" id="hidKey" />
+    <input type="hidden" value="@ViewBag.Flag" id="hidFlag" />
+    @Html.Hidden("j_confirm_ok", Lang.csfs_btnconfirmOk)
+    @Html.Hidden("j_loadingImg", Url.Content("~/content/img/ajax-loader1.gif"))
+
+    @Html.Hidden("j_confirm_ok", Lang.csfs_btnconfirmOk)
+    @Html.Hidden("j_confirm_cancel", Lang.csfs_btnconfirmCancel)
+    @Html.Hidden("j_confirm_header", Lang.csfs_confirmToSubmit)
+    @Html.Hidden("j_confirm_message", Lang.csfs_confirmHeader)
+    @Html.Hidden("LoadErrorMsg", Lang.csfs_load_error)
+</body>
+</html>

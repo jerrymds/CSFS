@@ -1,0 +1,12 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="CTBC.CSFS.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="CTBC_CSFS_WebService_OpenStream_OpenFileStream" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:35947/OpenFile.asmx</Value>
+    </Setting>
+    <Setting Name="CTBC_CSFS_CSFSURL_attDownload" Type="(Web Service URL)" Scope="Application">
+      <Value Profile="(Default)">http://localhost:35947/attDownload.asmx</Value>
+    </Setting>
+  </Settings>
+</SettingsFile>

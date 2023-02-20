@@ -1,0 +1,92 @@
+﻿@model CTBC.CSFS.Models.PARMCode
+
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_parmcode;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_edit</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("Edit", "ParmCode", new { area = "SystemManagement" }, FormMethod.Post, new { id = "frmEdit", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder col-md-12">
+                <tbody>
+                    <tr>
+                        <td class="col-md-3 text-right">@Lang.csfs_pm_codetype</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.CodeType, new { @MaxLength = "50", @disabled = "disabled" })
+                        </td>
+                        <td class="col-md-3 text-right">@Lang.csfs_pm_codetypedesc</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.CodeTypeDesc, new { @MaxLength = "50", @disabled = "disabled" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-3 text-right">@Lang.csfs_pm_detail_code</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.CodeNo, new { @MaxLength = "50" })
+                        </td>
+                        <td class="col-md-3 text-right">@Lang.csfs_pm_detail_name</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.CodeDesc, new { @MaxLength = "50" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-3 text-right">@Lang.csfs_menu_sort</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.SortOrder, new { @MaxLength = "50" })
+                            @Html.HiddenFor(m => m.SortOrder, new { @id = "hidSortOrder" })
+                        </td>
+                        <td class="col-md-3 text-right">@Lang.csfs_isenabled</td>
+                        <td class="col-md-3">
+                            @Html.RadioButtonFor(m => m.Enable, true)@Lang.csfs_enable
+                            @Html.RadioButtonFor(m => m.Enable, false)@Lang.csfs_disable
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-3 text-right">@Lang.csfs_parmtag</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.CodeTag, new { @id = "txtCodeTag", @MaxLength = "50" })
+                        </td>
+                        <td class="col-md-3 text-right">修改日期</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.ModifiedDate, new { @MaxLength = "50", @disabled = "disabled" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-3 text-right">@Lang.csfs_memo</td>
+                        <td class="col-md-3">
+                            @Html.TextAreaFor(m => m.CodeMemo, new { @id = "txtCodeMemo", @cols = "60", @rows = "5" })
+                        </td>
+                    </tr>
+                    @Html.HiddenFor(m => m.CodeUid)
+                    @Html.HiddenFor(m => m.CodeType)
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnSaveEdit" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Index", "ParmCode", new { area = "SystemManagement" })">@Lang.csfs_cancel</a>
+        </div>
+    }
+</div>
+
+
+@Html.Hidden("NowPage", "ParmCodeEdit")
+@Html.Hidden("CancelUrl", @Url.Action("Index", "ParmCode", new { area = "SystemManagement" }))
+@Html.Hidden("EditSuccessMsg", Lang.csfs_edit_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_edit_fail)
+
+@Html.Hidden("NameCodeNo", Lang.csfs_codeno_ok)
+@Html.Hidden("NameCodeDesc", Lang.csfs_codedesc_ok)
+@Html.Hidden("NameSortOrder", Lang.csfs_codesort_ok)
+@Html.Hidden("NameSortOrderNAV", Lang.csfs_codesort_ok1)
+
+@section scripts{
+    @Scripts.Render("~/Scripts/SystemManagement/ParmCode.js")
+}

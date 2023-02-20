@@ -1,0 +1,437 @@
+﻿@model CTBC.CSFS.Models.DirectorToApprove
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    @* 為了default Active頁簽*@
+    string seizureClass = "";
+    string payClass = "";
+    string cancelClass = "";
+    if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+    {
+        seizureClass = "active";
+    }
+    else if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+    {
+        payClass = "active";
+    }
+    else if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+    {
+        cancelClass = "active";
+    }
+
+
+}
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "HistoryAgentDocumentInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_document_info</a></li>
+        <li class="active"><a href="@Url.Action("Index", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_account_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "HistoryAgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_original_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "HistoryAgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_sendsetting_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseHistoryDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_case_history</a></li>
+        <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseCalculatorDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_case_calculator</a></li>
+        <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseMemoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_case_memo</a></li>
+        @Html.GetBackButtonInTab()
+    </ul>
+    <div class="tab-content ">
+     <div class="row">
+         <div class="col-md-4">
+             <!--
+        @Lang.csfs_gov_no : @ViewBag.GovNo
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                 -->
+
+
+
+             @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+             {
+                 <a onclick="openTxtDoc()" class="btn btn-primary btn-xs" id="btnOpenTxtDoc">
+                     開啟TXT
+                 </a>
+             }
+             @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+             {
+                 <a onclick="openPdfDoc('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnOpenPdfDoc">
+                     開啟PDF
+                 </a>
+             }
+             @if (ViewBag.ReceiveKind == "電子公文" && ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+            {
+                 <a onclick="openTxtDoc()" class="btn btn-primary btn-xs" id="btnOpenTxtDoc">
+                     開啟TXT
+                 </a>
+                 <a onclick="openPayPdfDoc1('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnOpenPdfDoc">
+                     來文
+                 </a>
+                 <a onclick="openPayPdfDoc2('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnOpenPdfDoc2">
+                     附表
+                 </a>
+             }
+             <a onclick="openEmsg()" class="btn btn-primary btn-xs" id="btnOpenEmsg">
+                 電文記錄
+             </a>
+             @*  </div> *@
+             @if (ViewBag.FromControl == "Director" && ViewBag.CaseKind == CTBC.CSFS.Models.CaseKind.CASE_SEIZURE)
+             {
+                 <a onclick="btnReturnClick()" class="btn btn-primary btn-xs" id="btnReturn">
+                     退回
+                 </a>
+                 <a class="btn btn-primary btn-xs" href="@Url.Action("Report", "Common", new { area = "Common", caseIdList = ViewBag.CaseId,Con=ViewBag.CaseNo, fileName = ViewBag.CaseNo })" target="frmForReport">@Lang.csfs_sendinfo</a>
+                 <button id="btnApprove" type="button" class="btn btn-primary btn-xs">@Lang.csfs_approve</button>
+             }
+         </div>
+             @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+            {
+                 <div class="col-md-4 text-left ">
+                     <a>
+                         @Lang.csfs_gov_no : @ViewBag.GovNo
+                     </a>
+                 </div>
+                 <div class="col-md-2 text-left ">
+                     <a>
+                         收取金額 : @ViewBag.PreReceiveAmount
+                     </a>
+                 </div>
+                 <div class="col-md-2 text-left ">
+                     <a>
+                         手續費 : @ViewBag.AddCharge
+                     </a>
+                 </div>
+             }
+             else
+             {
+                 <div class="col-md-6 text-left ">
+                     @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+                     {
+                         <a>
+                             @Lang.csfs_gov_no : @ViewBag.GovNo
+                         </a>
+                     }
+                 </div>
+                 <div class="col-md-1 text-left ">
+                 </div>
+                 <div class="col-md-1 text-left ">
+                 </div>
+             }
+         </div>
+         @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+         {
+             <div class="row">
+                 <div class="col-md-4 text-left ">
+                     <a>
+                         扣押來文日期:@ViewBag.PreSubDate
+                     </a>
+                 </div>
+                 <div class="col-md-4 text-left ">
+                     <a>
+                         前案字號 : @ViewBag.PreGovNo
+                     </a>
+                 </div>
+                 <div class="col-md-2 text-left ">
+                     <a>
+                         扣押金額 : @ViewBag.PreSubAmount
+                     </a>
+                 </div>
+                 <div class="col-md-2 text-left ">
+                     <a>
+                         超扣撤銷 : @ViewBag.OverCancel
+                     </a>
+                 </div>
+             </div>
+         }
+        <div class="tab-pane active" id="panel1">
+            @if (ViewBag.CaseKind == CTBC.CSFS.Models.CaseKind.CASE_EXTERNAL)
+            {
+                @* 外來文 *@
+                @Html.Action("_AccountForExternal", "AgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })
+            }
+            else if (ViewBag.CaseKind == CTBC.CSFS.Models.CaseKind.CASE_SEIZURE)
+            {
+                @* 扣押 *@
+                 <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs" style="cursor: move;">
+                        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+                        {
+                            <li class="@seizureClass"><a href="#panelAccount1" data-toggle="tab">@Lang.csfs_seizure_set</a></li>
+                        }
+                        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+                        {
+                            <li class="@payClass"><a href="#panelAccount2" data-toggle="tab">@Lang.csfs_pay_set</a></li>
+                            <li class=""><a href="#panelAccount3" data-toggle="tab">@Lang.csfs_receive_set</a></li>
+                        }
+                        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+                        {
+                            <li class="@cancelClass"><a href="#panelAccount4" data-toggle="tab">@Lang.csfs_cancel_set</a></li>
+                        }
+                    </ul>
+                    <div class="tab-content">
+                        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+                        {
+                            <div class="tab-pane @seizureClass" id="panelAccount1">
+                                @Html.Action("_SeizureSetting", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })
+                            </div>
+                        }
+                        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+                        {
+                            <div class="tab-pane @payClass" id="panelAccount2">
+                                @Html.Action("_PaySetting", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })
+                            </div>
+
+                            <div class="tab-pane" id="panelAccount3">
+                                @Html.Action("_PayeeSetting", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })
+                            </div>
+                        }
+                        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+                        {
+                            <div class="tab-pane @cancelClass" id="panelAccount4">
+                                @Html.Action("_SeizureCancel", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })
+                            </div>
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+@* 退件畫面*@
+<div class="modal fade" id="modalClose" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_return</h4>
+            </div>
+            <div class="modal-body">
+                @Lang.csfs_return1
+                @Html.DropDownListFor(m => m.CloseReason, (IEnumerable<SelectListItem>)ViewBag.ReturnReasonList, Lang.csfs_select, new { @id = "CloseReason" });
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnCloseSubmit" onclick="btnCloseSubmit()">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("OpenTxtDocUrl", Url.Action("OpenTxtDoc", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId }))
+@Html.Hidden("OpenPdfDocUrl", Url.Action("OpenPdfDoc", "HistoryAgentAccountInfoDetail", new { area = "Common" }))
+@Html.Hidden("OpenPayPdfDoc1Url", Url.Action("OpenPdfDoc", "HistoryAgentAccountInfoDetail", new { area = "Common" }))
+@Html.Hidden("OpenPayPdfDoc2Url", Url.Action("OpenPdfDoc", "HistoryAgentAccountInfoDetail", new { area = "Common" }))
+@Html.Hidden("AccountPageUrl", Url.Action("Index", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId }))
+@Html.Hidden("ResetStatusUrl", Url.Action("ResetStatus", "HistoryAgentAccountInfoDetail", new { area = "Common" }))
+@Html.Hidden("panelAccount1Url", Url.Action("_SeizureSetting", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId }))
+@Html.Hidden("panelAccount2Url", Url.Action("_PaySetting", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId }))
+@Html.Hidden("panelAccount3Url", Url.Action("_PayeeSetting", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId }))
+@Html.Hidden("panelAccount4Url", Url.Action("_SeizureCancel", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId }))
+@Html.Hidden("loadImgUrl", Url.Content("~/Content/img/ajax-loader1.gif"))
+@Html.Hidden("HidStatus", (string)ViewBag.Status)
+@Html.Hidden("HidHasFile", (string)ViewBag.HasFile)
+@Html.Hidden("HidReceiveKind", (string)ViewBag.ReceiveKind)
+@Html.Hidden("HidCaseId", (Guid)ViewBag.CaseId)
+@Html.Hidden("HidApproveStatus", (String)ViewBag.HidApproveStatusStatus)
+@Html.Hidden("ReturnUrl", Url.Action("Return", "DirectorToApprove", new { area = "Director" }))
+@Html.Hidden("BackUrl", Html.GetBackUrl())
+@Html.Hidden("ApproveUrl", Url.Action("FangXing", "DirectorToApprove", new { area = "Director" }))
+@Html.Hidden("OpenEmsgUrl", Url.Action("OpenEmsg", "AgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId }))
+@* 放行 *@
+@Html.Hidden("ApprovefirmMsg", Lang.csfs_confirm_approve)
+@Html.Hidden("ApproveOkMsg", Lang.csfs_approve_success)
+@Html.Hidden("ApproveFaileMsg", Lang.csfs_approve_fail)
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $("#btnApprove").click(function () { return btnApproveSubmit() });
+            if ($("#HidStatus").val() == "2") {
+                $("#lblDianWenStatus").html("成功");
+                $("#lblDianWenStatus").removeClass("text-red");
+            }
+
+            if ($("#HidStatus").val() == "1") {
+                $("#lblDianWenStatus").html("成功");
+                $("#lblDianWenStatus").addClass("text-red");
+            }
+
+            if ($("#HidStatus").val() == "0") {
+                $("#lblDianWenStatus").html("待查");
+                $("#lblDianWenStatus").removeClass("text-red");
+            }
+
+            function getQueryString(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]);
+                return null;
+            }
+
+            var tabNo = getQueryString("tabNo");
+            switch (tabNo) {
+                case "1":
+                    $('#panel1 a[href="#panelAccount1"]').tab('show');
+                    break;
+                case "2":
+                    $('#panel1 a[href="#panelAccount2"]').tab('show');
+                    break;
+                case "3":
+                    $('#panel1 a[href="#panelAccount3"]').tab('show');
+                    break;
+                case "4":
+                    $('#panel1 a[href="#panelAccount4"]').tab('show');
+                    break;
+            }
+            $("#HidReceiveKind").val() == "電子公文" ? $("#btnOpenTxtDoc").show() : $("#btnOpenTxtDoc").hide();
+            //$("#HidHasFile").val() == "1" ? $("#btnOpenTxtDoc").show() : $("#btnOpenTxtDoc").hide();
+        });
+
+
+        function ResetStatus(caseid) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: $("#ResetStatusUrl").val(),
+                data: { CaseId: caseid },
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess($("#ResetSuccessMsg").val(), function () {
+                            //location.href = $("#AccountPageUrl").val() + "&TabNo=1";
+                            $("#lblDianWenStatus").html("待查");
+                        });
+                    } else {
+                        jAlertError($("#ResetFailMsg").val());
+                        $.unblockUI();
+                    }
+                }
+            });
+        }
+
+        function openTxtDoc() {
+            //$.ajax({
+            //    type: "POST",
+            //    async: false,
+            //    url: $("#OpenTxtDocUrl").val(),
+            //    error: function () {
+            //        jAlertError($("#LoadErrorMsg").val());
+            //        $.unblockUI();
+            //    },
+            //    success: function (data) {
+            //        jAlertSuccess(data.ReturnMsg);
+            //        $.unblockUI();
+            //    }
+            //});
+            var url = $("#OpenTxtDocUrl").val();
+            //弹出窗口的宽度; 
+            var iWidth = 600;
+            //弹出窗口的高度; 
+            var iHeight = 600;
+            //获得窗口的垂直位置 
+            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+            //获得窗口的水平位置 
+            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+            window.open(url, 'Agent', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',scrollbars= yes, resiable = yes');
+        }
+        function openPayPdfDoc1(caseid) {
+            var actionUrl = $("#OpenPayPdfDoc1Url").val() + "?caseId=" + caseid + "|di";
+            $("#frmForReport").attr("src", actionUrl);
+            return false;
+        }
+        function openPayPdfDoc2(caseid) {
+            var actionUrl = $("#OpenPayPdfDoc2Url").val() + "?caseId=" + caseid + "|Attach";
+            $("#frmForReport").attr("src", actionUrl);
+            return false;
+        }
+        function openPdfDoc(caseid) {
+            var actionUrl = $("#OpenPdfDocUrl").val() + "?caseId=" + caseid;
+            //alert(actionUrl);
+            $("#frmForReport").attr("src", actionUrl);
+            return false;
+        }
+        //* 點選退件
+        function btnReturnClick() {
+            $("#modalClose").modal();
+        }
+
+        //退件提交
+        function btnCloseSubmit() {
+            var strCaseId = $("#HidCaseId").val();
+            var strStatus = $("#HidApproveStatus").val();
+            $.blockUI();
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: $("#ReturnUrl").val(),
+                async: false,
+                data: { strIds: strCaseId, statusArr:strStatus, CloseReason: $("#CloseReason").val() },
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess("案件退回成功！", function () {
+                            $("#modalClose").modal("hide");
+                            location.href = $("#BackUrl").val();
+                            @*window.location = "@Url.Action("Index", "AgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })";*@
+                            $.unblockUI();
+                        }); 
+                    } else {
+                        //jAlertError($("#ReturnFaileMsg").val());
+                        jAlertError(data.ReturnMsg);
+                        $.unblockUI();
+                    }
+                }
+            });
+        }
+        function btnApproveSubmit() {
+            var strCaseId = $("#HidCaseId").val();
+            var strStatus = $("#HidApproveStatus").val();
+            jConfirm($("#ApprovefirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#ApproveUrl").val(),
+                        async: false,
+                        data: { CaseIdarr: strCaseId, statusArr: strStatus },
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            //jAlertError(data.ReturnMsg);
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#ApproveOkMsg").val(), function () {
+                                    $.unblockUI();
+                                    location.href = $("#BackUrl").val();
+                                });
+                            } else {
+                                //jAlertError($("#ApproveFaileMsg").val());
+                                jAlertError(data.ReturnMsg);
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        //電文記錄
+        function openEmsg() {
+            var url = $("#OpenEmsgUrl").val();
+            //弹出窗口的宽度; 
+            var iWidth = 1000;
+            //弹出窗口的高度; 
+            var iHeight = 400;
+            //获得窗口的垂直位置 
+            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+            //获得窗口的水平位置 
+            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+            window.open(url, 'Agent', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',scrollbars= yes, resiable = yes');
+        }
+    </script>
+}

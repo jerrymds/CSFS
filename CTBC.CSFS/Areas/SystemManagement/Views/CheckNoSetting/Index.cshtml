@@ -1,0 +1,53 @@
+﻿@model CTBC.CSFS.Models.CheckNoSetting
+
+@{
+    ViewBag.Title = Lang.csfs_checkno_setting;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "CheckNoSetting", new { area = "SystemManagement" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-1 text-right">@Lang.csfs_CheckIntervalID</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CheckIntervalID, new { @id = "txtCheckIntervalID", @MaxLength = "14" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <a class="btn btn-primary btn-xs" href="@Url.Action("Create", "CheckNoSetting", new { area = "SystemManagement" })">@Lang.csfs_create</a>
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "CheckNoSetting", new { area = "SystemManagement" })">
+
+</div>
+@Html.Hidden("NowPage", "CheckNoSettingQuery")
+@Html.Hidden("EditUrl", Url.Action("Edit", "CheckNoSetting", new { area = "SystemManagement" }))
+@Html.Hidden("DeleteUrl", Url.Action("Delete", "CheckNoSetting", new { area = "SystemManagement" }))
+@Html.Hidden("ActiveUrl", Url.Action("Active", "CheckNoSetting", new { area = "SystemManagement" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("DeleteConfirmMsg", Lang.csfs_del_confirm)
+@Html.Hidden("DeleteFailMsg", Lang.csfs_del_fail)
+@Html.Hidden("DeleteSuccessMsg", Lang.csfs_del_ok)
+@Html.Hidden("ActiveConfirmMsg", Lang.csfs_active_confirm)
+@Html.Hidden("ActiveFailMsg",Lang.csfs_active_fail)
+@Html.Hidden("ActiveSuccessMsg",Lang.csfs_active_success)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/SystemManagement/CheckNoSetting.js")
+}

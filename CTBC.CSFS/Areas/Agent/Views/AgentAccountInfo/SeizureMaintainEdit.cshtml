@@ -1,0 +1,201 @@
+﻿@using CTBC.CSFS.Models
+
+@model CTBC.CSFS.Models.CaseSeizure
+
+@{
+    ViewBag.Title = Lang.csfs_edit;
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+<div class="margin">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="glyphicon glyphicon-search"></i>
+            <h3 class="box-title">@Lang.csfs_edit</h3>
+        </div>
+        <!-- form start -->
+        @using (Html.BeginForm("SeizureMaintainEdit", "AgentAccountInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmEdit", @class = "form-horizontal" }))
+        {
+            <div class="box-body ">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-2 text-right">@Lang.csfs_case_no</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.CaseNo, new { @id = "txtCaseNo", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right">@Lang.csfs_id_1</td>
+                            <td class="col-md-4">
+                                @Html.DropDownListFor(m => m.CustId, (IEnumerable<SelectListItem>)ViewBag.ObligorNoList, new { @id = "ddlCustId" })
+                            </td>
+                            <td class="col-md-2 text-right">@Lang.csfs_name</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.CustName, new { @id = "txtCustName",@readonly="readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+
+                            <td class="col-md-2 text-right">@Lang.csfs_case_unit</td>
+                            <td class="col-md-4">
+                                @Html.DropDownListFor(m => m.BranchNo, (IEnumerable<SelectListItem>)ViewBag.BranchNoList, new { @id = "ddlBranchNo" })
+                            </td>
+                            <td class="col-md-2 text-right">@Lang.csfs_bank_name</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.BranchName, new { @id = "txtBranchName" ,@readonly="readonly"})
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right">@Lang.csfs_deposit_account</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.Account, new { @id = "txtAccount" })
+                            </td>
+                            <td class="col-md-2 text-right">@Lang.csfs_currency_1</td>
+                            <td class="col-md-4">
+                                @Html.DropDownListFor(m => m.Currency, (IEnumerable<SelectListItem>)ViewBag.CurrencyList, new { @id = "ddlCurrency" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right">@Lang.csfs_Amount</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.SeizureAmount, new { @id = "txtSeizureAmount", @onblur = "onBlur()" })
+                            </td>
+                            <td class="col-md-2 text-right">@Lang.csfs_rate</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.ExchangeRate, new { @id = "txtExchangeRate",@readonly="readonly"})
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-2 text-right">@Lang.csfs_t_amt</td>
+                            <td class="col-md-4">
+                                @Html.TextBoxFor(m => m.SeizureAmountNtd, new { @id = "txtSeizureAmountNtd" })
+                            </td>
+                            @Html.HiddenFor(m => m.SeizureId)
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer text-center">
+                <button id="btnSaveEdit" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+                <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            </div>
+        }
+    </div>
+</div>
+
+@Html.Hidden("GetBranchNameUrl", Url.Action("GetBranchName", "AgentOriginalInfo", new { area = "Agent" }))
+@Html.Hidden("RedictToUrl", Url.Action("SeizureMaintainQuery", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("hidCaseId", (Guid)ViewBag.CaseId)
+
+@Html.Hidden("NametxtSeizureAmount", Lang.csfs_amount_ok)
+
+@section scripts{
+    <script type="text/javascript">
+        $("#btnSaveEdit").click(function () { return btnSaveEditClick(); });
+        $("#btnCancel").click(function () {
+            $('#frmEdit')[0].reset();
+            change();
+            return false;
+        });
+        $("#ddlCustId").change(function() { return changeCustId(); });
+        $("#ddlBranchNo").change(function() { return ChangBranchNO(); });
+        $("#ddlCurrency").change(function() { return change(); });
+        $("#txtExchangeRate").change(function() { return onBlur(); });
+
+        jQuery(document).ready(function () {
+            change();
+        });
+
+        function onBlur() {
+            if (!isNaN($("#txtSeizureAmount").val()) && !isNaN($("#txtExchangeRate").val())) {
+                 $("#txtSeizureAmountNtd").val(parseFloat($("#txtSeizureAmount").val()) * parseFloat($("#txtExchangeRate").val()));
+            }
+        }
+
+        //function change(obj) {
+        //    var td = $(obj).parents("tr").children("td").eq(9);
+        //    if ($("#ddlCurrency").val() == "TWD") {
+        //        $("#txtExchangeRate").attr("readonly", "readonly");
+        //    } else {
+        //        $("#txtExchangeRate").removeAttr("readonly");
+        //    }
+            
+        //}
+
+        function change() {
+            if ($("#ddlCurrency option:selected").val() == "TWD") {
+                $("#txtExchangeRate").val("1").attr("readonly", "readonly");
+            } else {
+                $("#txtExchangeRate").removeAttr("readonly");
+            }
+            onBlur();
+        }
+
+        function changeCustId() {
+            var text = $("#ddlCustId option:selected").text();
+            if (text == "") {
+                $("#txtCustName").val("");
+                return;
+            }
+            var name = text.split("-")[1];
+            $("#txtCustName").val(name);
+        }
+
+        function ChangBranchNO() {
+            var selectedValue = $("#ddlBranchNo option:selected").val();
+            $.ajax({
+                url: $("#GetBranchNameUrl").val(),
+                type: "Get",
+                cache: false,
+                data: { BranchNo: selectedValue },
+                success: function (data) {
+                    $("#txtBranchName").val(data);
+                },
+                error: function () {
+                }
+            });
+        }
+
+       
+
+        function btnSaveEditClick() {
+            var newLine = "<br />";
+            var msg = "";
+            if ($("#txtSeizureAmount").val().length <= 0) {
+                msg = msg + $("#NametxtSeizureAmount").val() + newLine;
+            }
+            if (isNaN($("#txtSeizureAmount").val())) { msg = msg + " @Lang.csfs_Amount @Lang.csfs_enter_number" + newLine; }
+            if (isNaN($("#txtExchangeRate").val())) { msg = msg + " @Lang.csfs_rate @Lang.csfs_enter_number" + newLine; }
+            if (isNaN($("#txtSeizureAmountNtd").val())) { msg = msg + "@Lang.csfs_t_amt @Lang.csfs_enter_number" + newLine; }
+           
+            //* 有必填檢核錯誤
+            if (msg.length > 0) {
+                jAlertError(msg);
+                return false;
+            }
+
+            $.blockUI();
+            $.ajax({
+                url: $("#frmEdit").attr("action"),
+                type: "Post",
+                cache: false,
+                data: $("#frmEdit").serialize(),
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        $.unblockUI();
+                        location.href = $("#RedictToUrl").val() + "?caseId=" + $("#hidCaseId").val();
+                    } else {
+                        jAlertError($("#LoadErrorMsg").val());
+                        $.unblockUI();
+                    }
+                }
+            });
+            return true;
+        }
+
+    </script>
+}

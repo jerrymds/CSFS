@@ -1,0 +1,92 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{19302F68-9C61-4AD2-A8A8-A23A2FF04B18}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CTBC.WinExe.ImportEDocALL</RootNamespace>
+    <AssemblyName>CTBC.WinExe.ImportEDocALL</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CTBC.CSFS.BussinessLogic\CTBC.CSFS.BussinessLogic.csproj">
+      <Project>{567e7007-7b4a-499b-84d6-d11742b240a4}</Project>
+      <Name>CTBC.CSFS.BussinessLogic</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.CSFS.Models\CTBC.CSFS.Models.csproj">
+      <Project>{de6758e5-4029-466b-841b-69c5deebb530}</Project>
+      <Name>CTBC.CSFS.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.CSFS.Pattern\CTBC.CSFS.Pattern.csproj">
+      <Project>{0e078a06-8e4b-40a8-8f0b-625e854452ad}</Project>
+      <Name>CTBC.CSFS.Pattern</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.CSFS.Resource\CTBC.CSFS.Resource.csproj">
+      <Project>{b26fc559-ff34-42fe-bb98-2bff855b3a2c}</Project>
+      <Name>CTBC.CSFS.Resource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.CSFS.Service.WebLog\CTBC.CSFS.Service.WebLog.csproj">
+      <Project>{23bd816c-1fcc-4e5a-bf77-5f77b2a27879}</Project>
+      <Name>CTBC.CSFS.Service.WebLog</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.CSFS.ViewModels\CTBC.CSFS.ViewModels.csproj">
+      <Project>{d8ce84f3-5c1c-429a-9166-535da8da036b}</Project>
+      <Name>CTBC.CSFS.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.Framework.Util\CTBC.Framework.Util.csproj">
+      <Project>{36a819bb-7f0a-408c-9e36-9bfefdfd2278}</Project>
+      <Name>CTBC.Framework.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -1,0 +1,54 @@
+ 磁碟區 D 中的磁碟沒有標籤。
+ 磁碟區序號:  72BE-55B2
+
+ D:\CSFS\20180622\CTBC.WinExe.AutoSeizure 的目錄
+
+2018/12/10  下午 01:58    <DIR>          .
+2018/12/10  下午 01:58    <DIR>          ..
+2018/06/29  下午 04:46               892 AgentSetting.cs
+2018/10/16  下午 04:00             3,671 App.config
+2018/06/05  下午 07:38             1,099 AutoLog.cs
+2018/09/05  下午 01:22             2,526 AutoSeizureModel.Context.cs
+2018/03/30  上午 11:42            22,940 AutoSeizureModel.Context.tt
+2018/09/05  下午 01:22               444 AutoSeizureModel.cs
+2018/09/05  下午 01:22               746 AutoSeizureModel.Designer.cs
+2018/08/24  下午 02:42           199,246 AutoSeizureModel.edmx
+2018/09/05  下午 01:22             3,375 AutoSeizureModel.edmx.diagram
+2018/03/30  上午 11:43            24,893 AutoSeizureModel.tt
+2018/06/22  下午 03:36    <DIR>          bin
+2018/06/14  下午 06:03             1,040 CaseAssignTable.cs
+2018/06/13  下午 06:16             1,191 CaseHistory.cs
+2018/05/16  下午 02:32             3,060 CaseMaster.cs
+2018/06/13  下午 06:16               884 CaseMemo.cs
+2018/06/15  下午 02:25               731 CaseNoTable.cs
+2018/08/16  下午 07:26               956 CaseObligor.cs
+2018/10/23  下午 01:38             1,303 CaseObligorOther.cs
+2018/07/15  上午 11:35             2,282 CaseSeizure.cs
+2018/06/14  下午 06:03             1,605 CaseSendSetting.cs
+2018/04/17  下午 03:18             3,643 CompareHelper.cs
+2018/09/21  上午 11:16            10,819 CTBC.WinExe.AutoSeizure.csproj
+2018/12/10  下午 01:43               650 CTBC.WinExe.AutoSeizure.csproj.user
+2018/07/03  下午 05:36             1,359 EDocTXT1.cs
+2018/04/27  下午 04:18             1,373 EDocTXT2.cs
+2018/12/10  下午 01:58                 0 exe
+2018/11/26  下午 02:32             1,758 Log.config
+2018/06/22  下午 03:36    <DIR>          obj
+2018/05/14  下午 04:46               910 ObligorAccount.cs
+2018/04/12  下午 04:51               226 packages.config
+2018/06/07  下午 04:03             1,358 PARMCode.cs
+2018/09/03  上午 09:20               206 PersonSeizure.cs
+2018/12/10  下午 01:46           371,170 Program.cs
+2018/06/22  下午 03:36    <DIR>          Properties
+2018/05/16  下午 02:32               942 TX_00417.cs
+2018/05/16  下午 02:32             1,068 TX_00450.cs
+2018/04/27  下午 05:08             5,061 TX_33401.cs
+2018/04/16  下午 02:19             1,225 TX_60491_Detl.cs
+2018/04/16  下午 03:31             3,715 TX_60491_Grp.cs
+2018/05/16  下午 02:32             2,668 TX_60600.cs
+2018/05/16  下午 02:32             3,244 TX_60629.cs
+2018/05/16  下午 02:32             2,785 TX_67002.cs
+2018/04/27  上午 10:59             1,435 TX_67072_Detl.cs
+2018/04/27  下午 05:08             3,163 TX_67072_Grp.cs
+2018/05/16  下午 02:32             3,699 TX_67102.cs
+              42 個檔案         695,361 位元組
+               5 個目錄  262,722,277,376 位元組可用

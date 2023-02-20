@@ -1,0 +1,52 @@
+﻿@using CTBC.CSFS.Models
+@model CTBC.CSFS.ViewModels.TransactionRecordsViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var n = 0;
+}
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfoDetail", new { area = "Common", CaseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_document_info</a></li>
+        @if (Html.GetBackControllerName() != "DebtPersonQuery")
+        {
+            <li class=""><a href="@Url.Action("Index", "AgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">帳務資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentMeetInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">會辦資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">正本備查</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccessDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">資訊部調閱</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">發文資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseHistoryDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">流程紀錄</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseCalculatorDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">利息計算</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseMemoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">內部註記</a></li>
+        }
+        <li class="active"><a href="@Url.Action("Index", "AgentTransactionRecordsDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_transrecord_info</a></li>
+        @Html.GetBackButtonInTab()
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel9">
+            <div class="box box-primary">
+
+                <div id="divResult">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div>
+    @using (Ajax.BeginForm("Query", "AgentTransactionRecordsDetail", new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "post" }, new { @id = "frm0" }))
+    {
+        @Html.HiddenFor(m => m.CaseId)
+    }
+</div>
+@section scripts {
+    <script type="text/javascript">
+        //頁面加載時
+        $(function () {
+            $("#frm0").submit();
+        });
+    </script>
+}
+
+

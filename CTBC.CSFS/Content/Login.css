@@ -1,0 +1,88 @@
+﻿body{}
+.logon-box
+{
+    width: 1055px; /*530px;*/
+    height: 481px; /*207px;*/
+    z-index: 0;
+    position: relative;
+    top: 50px;
+    margin: 0 auto;
+    background-image: url('../Content/img/nums_login.jpg');
+    font-family:Verdana,Arial,新細明體;
+}
+.logon-area
+{
+    width: 417px;/*430px;*/
+    height: 395px;/*167px;*/
+    z-index: 3;
+    position: relative; /*top: 20px;*/
+    left:660px; /*padding-left: 20px;*/
+    top:68px;
+    vertical-align: middle;
+    text-align: left;
+    line-height: 33px;
+    font-size: 17px;
+}
+.ap-div{text-align:left;padding-left:40px;letter-spacing:10px;padding-top:5px;}
+.logon-ap{font-size:25pt;font-weight:bold;}
+.note-div{width:336px;line-height:17px;text-align:right;margin-top:12px;font-size: 14px;}
+.note
+{
+    font-size: 15px;
+    color: #0066FF;}
+.note a:link, .note a:visited, .note a:active, .note a:hover
+{
+    color: #0066FF;
+    text-decoration:underline;
+}
+.tx-div
+{width:336px;text-align:center;margin-bottom:0px;}
+.tx-div2
+{width:168px;text-align:center;margin-bottom:0px;}
+.tx
+{
+    width: 250px;
+    font-size: 19px;/*19*/
+    height:21px;/*27*/
+}
+.tx2
+{
+    width: 116px;
+    font-size: 19px;/*19*/
+    height:21px;/*27*/
+}
+.tx3
+{   width: 256px;/*256*/
+    font-size: 15px;/*19*/
+    height:25px;/*27*/
+    }
+.title-div
+{width:290px;text-align:left;padding-left:40px;padding-bottom:1px;line-height:25px; 
+    font-size: 15pt;
+    color: #000000;
+    letter-spacing:1px;}/*23*/
+.title-div label
+{width:130px;font-size: 15pt;letter-spacing:1px;float:left;display: block;}/*23*/
+.btn-div{width:290px;text-align:left;padding-left:40px;padding-top:2px;}
+.btn{width:50px;height:25px;}
+.err-msg-div{width:290px;line-height:19px;text-align:left;padding-top:0px;padding-left:10px;margin-right:5px;}
+.err-msg
+{
+    font-size: 12px;
+    color: #FF0000;
+    font-family: Arial, Helvetica, sans-serif, 新細明體;
+}
+.copyright
+{
+    position: relative;
+    top:88px;
+    width: 1055px;
+    line-height: 25px;
+    /*background-color: #00655B;*/
+    font-size: 12px;
+    color: #000000;
+    letter-spacing: 1px;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    text-align: center;
+    vertical-align: middle;
+}

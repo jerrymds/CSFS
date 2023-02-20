@@ -1,0 +1,71 @@
+﻿@model CTBC.CSFS.ViewModels.CaseSeizureViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.CaseMasterlistO != null)
+                {
+                    if (Model.CaseMasterlistO.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CaseMaster.PageSize, Model.CaseMaster.CurrentPage, Model.CaseMaster.TotalItemCount, Model.CaseMaster, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CaseMaster.SortExpression, Model.CaseMaster.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th>@Lang.csfs_seqnum</th>
+                            <th>@Lang.csfs_case_no</th>
+                            <th>@Lang.csfs_clientID</th>
+                            <th>@Lang.csfs_case_kind</th>
+                            <th>@Lang.csfs_case_kind2</th>
+                            <th>@Lang.csfs_gov_no</th>
+                            <th>@Lang.csfs_keyin_date</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CaseMasterlistO != null && Model.CaseMasterlistO.Any())
+                        {
+                            int i=0;
+                            foreach (var item in Model.CaseMasterlistO)
+                            {
+                                i++;
+                                <tr>
+                                    <td class="text-center">@i</td>
+                                    <td class="text-center">
+                                        @Html.ActionLink(Convert.ToString(item.CaseNo + " "), "Index", "AgentDocumentInfoDetail", new { area = "Common", CaseId = item.CaseId }, new { })
+                                    </td>
+                                    <td class="text-center">@item.ObligorNo</td>
+                                    <td class="text-center">@item.CaseKind</td>
+                                    <td class="text-center">@item.CaseKind2</td>
+                                    <td class="text-center">@item.GovNo</td>
+                                    @if (item.CreatedDate == "2001/01/01")
+                                    {
+                                        <td class="text-center">扣押補建</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">@item.CreatedDate</td>
+                                    }
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>

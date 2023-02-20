@@ -1,0 +1,53 @@
+﻿@using CTBC.FrameWork.Paging;
+@model CTBC.CSFS.ViewModels.AgentHandleDetailViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th class="col-md-1" data-sortcolumn="CaseNo">案號</th>
+                            <th class="col-md-1" data-sortcolumn="FromRole">前處理角色</th>
+                            <th class="col-md-1" data-sortcolumn="FromUser">前處理人員</th>
+                            <th class="col-md-1" data-sortcolumn="FromFolder">前處理狀態</th>
+                            <th class="col-md-2" data-sortcolumn="EventTime">時間</th>
+                            <th class="col-md-1" data-sortcolumn="Event">事件</th>
+                            <th class="col-md-1" data-sortcolumn="ToRole">後處理角色</th>
+                            <th class="col-md-1" data-sortcolumn="ToUser">後處理人員</th>
+                            <th class="col-md-1" data-sortcolumn="ToFolder">後處理狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.AgentHandleDetailList != null && Model.AgentHandleDetailList.Any())
+                        {
+                            foreach (var item in Model.AgentHandleDetailList)
+                            {
+
+                                <tr>
+                                    <td class="text-center">@item.CaseNo</td>
+                                    <td class="text-center">@item.FromRole</td>
+                                    <td class="text-center">@item.FromUser</td>
+                                    <td class="text-center">@item.FromFolder</td>
+                                    <td class="text-center">@item.EventTime</td>
+                                    <td class="text-center">@item.Event</td>
+                                    <td class="text-center">@item.ToRole</td>
+                                    <td class="text-center">@item.ToUser</td>
+                                    <td class="text-center">@item.ToFolder</td>
+                                </tr>
+                            }
+
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,146 @@
+﻿@using CTBC.CSFS.Models
+@model CTBC.CSFS.ViewModels.TransactionRecordsViewModel
+@{
+    Layout = null;
+    var n = 0;
+}
+<div class="box-header">
+    @if (Model.TransRecordsMaster != null)
+    {
+        if (Model.TransRecordsMaster.Any())
+        {
+            <div class="box-tools pull-right" id="pager">
+                @Ajax.Pager(Model.TransRecords.PageSize, Model.TransRecords.CurrentPage, Model.TransRecords.TotalItemCount, Model.TransRecords, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, "", "")
+            </div>
+        }
+    }
+</div>
+<div class="box-body">
+    <table id="query_table" class="table table-bordered table-striped text-black sort">
+        <thead>
+            <tr class="alert-success text-center ">
+                <th style="width:5%">@Lang.csfs_SelectNo</th>
+                <th style="width:14%">@Lang.csfs_agent_date_time</th>
+                <th style="width:13%">@Lang.csfs_agent_tab_name</th>
+                <th style="width:13%">@Lang.csfs_agent_func_name</th>
+                <th style="width:5%">@Lang.csfs_event</th>
+                <th style="width:8%">@Lang.csfs_agent_handle_person</th>
+                <th style="width:14%">@Lang.csfs_column_name</th>
+                <th style="width:14%">@Lang.csfs_agent_modify_before</th>
+                <th style="width:14%">@Lang.csfs_agent_modify_later</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.TransRecordsMaster != null && Model.TransRecordsMaster.Any())
+            {
+                foreach (var item in Model.TransRecordsMaster)
+                {
+
+                    <tr>
+                        <td style="text-align:center;vertical-align:middle">
+                            <button id="btnDetail" type="button" class="btn btn-primary btn-xs" onclick="btnDetail('@item.CaseId', '@item.idkey')">@Lang.csfs_detail</button>
+                        </td>
+                        <td style="text-align:center;vertical-align:middle">@item.TXDateTime</td>
+                        <td style="text-align:center;vertical-align:middle">@item.TabName</td>
+                        <td style="text-align:center;vertical-align:middle">@item.TITLE</td>
+                        <td style="text-align:center;vertical-align:middle">@item.TXType</td>
+                        <td style="text-align:center;vertical-align:middle">@item.TXUser</td>
+                        <td style="text-align:center;vertical-align:middle">
+                            @{ n = 0;}
+                            <table style="text-align:center;border:none;width:100%;">
+                                @foreach (var it in Model.TransRecordsDetail)
+                                {
+                                    if (it.idkey == item.idkey)
+                                    {
+                                        <tr>
+                                            @if (n != 0)
+                                            {
+                                                <td style="text-align:center;">@it.ColumnName</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;border-top:none">@it.ColumnName</td>
+                                            }
+                                        </tr>
+                                            n++;
+                                    }
+                                }
+                            </table>
+                        </td>
+                        <td style="text-align:center;vertical-align:middle">
+                            <table style="text-align:center;border:none;width:100%;">
+                                @{ n = 0;}
+                                @foreach (var it in Model.TransRecordsDetail)
+                                {
+
+                                    if (it.idkey == item.idkey)
+                                    {
+                                        <tr>
+                                            @if (n != 0)
+                                            {
+                                                <td style="text-align:center;">@it.ColumnValueBefore</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;border-top:none">@it.ColumnValueBefore</td>
+                                            }
+                                        </tr>
+                                            n++;
+                                    }
+                                }
+                            </table>
+                        </td>
+                        <td style="text-align:center;vertical-align:middle">
+                            <table style="text-align:center;width:100%;" border="0">
+                                @{ n = 0;}
+                                @foreach (var it in Model.TransRecordsDetail)
+                                {
+
+                                    if (it.idkey == item.idkey)
+                                    {
+                                        <tr>
+                                            @if (n != 0)
+                                            {
+                                                <td style="text-align:center">@it.ColumnValueAfter</td>
+                                            }
+                                            else
+                                            {
+                                                <td style="text-align:center;border-top:none">@it.ColumnValueAfter</td>
+                                            }
+                                        </tr>
+                                            n++;
+                                    }
+                                }
+                            </table>
+                        </td>
+
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@using (Html.BeginForm("Detail", "AgentTransactionRecordsDetail", new { area = "Common" }, FormMethod.Post, new { id = "frmDetail" }))
+{
+    @Html.HiddenFor(m => m.TransRecords.CaseId)
+    @Html.HiddenFor(m => m.TransRecords.idkey, new { @id = "Hididkey" })
+}
+<div id="DetailShow">
+
+</div>
+<script type="text/javascript">
+    //*明細
+    function btnDetail(id, key) {
+        var caseId = id;
+        var idkey = key;
+        $("#HidCaseId").val(caseId);
+        $("#Hididkey").val(idkey);
+        $("#frmDetail").submit();
+        document.getElementById("DetailShow").style.display = "block";
+    }
+</script> 

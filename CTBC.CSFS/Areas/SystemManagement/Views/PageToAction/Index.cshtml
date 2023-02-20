@@ -1,0 +1,53 @@
+﻿@model CTBC.CSFS.ViewModels.PARMMenuViewModel
+@{
+    ViewBag.Title = @Lang.csfs_page_to_action;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_page_to_action</h3>
+            </div>
+
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped">
+                    <thead>
+                        <tr class="alert-success text-center">
+                            <th class="col-md-5">@Lang.csfs_menu_page_num</th>
+                            <th class="col-md-6"> @Lang.csfs_menu_type</th>
+                            <th>@Lang.csfs_auth_main</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model.PARMMenuXMLNodeList.Any())
+                        {
+                            foreach (var item in Model.PARMMenuXMLNodeList)
+                            {
+                                <tr>
+                                    
+                                    <td>@item.ID</td>
+                                    <td>@Lang.ResourceManager.GetString(item.TITLE.Trim()) </td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("Edit", "PageToAction", new {ID = item.ID, TITLE = item.TITLE, md_FuncID = item.md_FuncID})" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr><td colspan="3" class="text-red text-center">@Lang.csfs_no_data</td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+@Html.Hidden("NowPage", "PageToActionQuery")
+
+@section scripts {
+    @Scripts.Render("~/Scripts/SystemManagement/PageToAction.js")
+}

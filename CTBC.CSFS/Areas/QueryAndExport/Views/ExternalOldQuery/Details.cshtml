@@ -1,0 +1,148 @@
+﻿@model CTBC.CSFS.ViewModels.ExternalOldQueryViewModel
+@using CTBC.CSFS.Models
+@using CTBC.FrameWork.Util
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+   
+    <div class="nav-tabs-custom">
+        <!-- Tabs within a box -->
+        <ul class="nav nav-tabs" style="cursor: move;">
+            <li class="active"><a>@Lang.csfs_agent_document_info</a></li>
+            @Html.GetBackButtonInTab()
+        </ul>
+        <div class="tab-content ">
+            <div class="tab-pane active" id="panel1">
+                @***** Body Start****@
+                <div class="box box-primary">
+                    <!-- form start -->
+                    <div class="box-body">
+                        <table class="table-noborder col-md-12">
+                            <tbody>
+                                @if (Model != null && Model.ExternalOldDetailsList != null && Model.ExternalOldDetailsList.Any())
+                                {
+                                    foreach (var item in Model.ExternalOldDetailsList)
+                                    {
+                                        <tr>
+                                            @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                                            <td class="col-md-2 text-right">@Lang.csfs_GovNoD</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.ReceiveNbr, new { @id = "txtReceiveNbr", style = "width:200px;", @MaxLength = "200", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_CaseStatus</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.StatusCode, new { @id = "txtStatusCode", style = "width:200px;", @MaxLength = "60", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_OrgSendDate</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.OrgSendDate, new { @id = "txtOrgSendDate", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-2 text-right">@Lang.csfs_InstitutionName</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.OrgInstitutionName, new { @id = "txtOrgInstitutionName", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_CaseNbr</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.ResponseCaseNbr1, new { @id = "txtResponseCaseNbr1", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_SenderInstitutionClerk</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.SenderInstitutionClerk, new { @id = "txtSenderInstitutionClerk", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-2 text-right">@Lang.csfs_receiver</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.ReceiverInstitutionName, new { @id = "txtReceiverInstitutionName", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_currency</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.ReceiverInstitutionEctypeName, new { @id = "txtReceiverInstitutionEctypeName", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right"></td>
+                                            <td class="col-md-2"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-2 text-right">@Lang.csfs_CloseDate</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.CloseDate, new { @id = "txtCloseDate", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_sendword1</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.ResponseCaseNbr, new { @id = "txtResponseCaseNbr", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_ResponseEmp</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.ResponseEmp, new { @id = "txtResponseEmp", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-1 text-right">@Lang.csfs_SendRemark</td>
+                                            <td colspan="5" style="padding-left:14px;padding-right:20px;">
+                                                @Html.TextAreaFor(m => item.ResponseComment, new { @id = "Description", @rows = "5", @class = "col-xs-12 no-padding" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-2 text-right">@Lang.csfs_CustomerId</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.AccountID, new { @id = "txtAccountID", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_CustomerName</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.AccountName, new { @id = "txtAccountName", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_branchId</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.BranchName, new { @id = "txtBranchName", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-2 text-right">@Lang.csfs_PMStatus</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.PMStatus, new { @id = "txtPMStatus", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_PMReturnKey</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.PMReturnKey, new { @id = "txtPMReturnKey", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_PMBranchNbr</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.PMBranchNbr, new { @id = "txtPMReturnKey", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-2 text-right">@Lang.csfs_OperationMoney</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.OperationMoney, new { @id = "txtOperationMoney", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right">@Lang.csfs_DataProvider</td>
+                                            <td class="col-md-2">
+                                                @Html.TextBoxFor(m => item.DataProvider, new { @id = "txtDataProvider", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                            <td class="col-md-2 text-right"></td>
+                                            <td class="col-md-2">
+                                        </tr>
+                                        <tr>
+                                            <td class="col-md-2 text-right">@Lang.csfs_ResponseContent</td>
+                                            <td class="col-md-2" colspan="5">
+                                                @Html.TextBoxFor(m => item.ResponseContent, new { @id = "txtResponseContent", style = "width:200px;", @disabled = "true" })
+                                            </td>
+                                        </tr>
+                                        <tr><td colspan="15" style="border-bottom: 1px dashed #987cb9;" width="100%"></td></tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+   

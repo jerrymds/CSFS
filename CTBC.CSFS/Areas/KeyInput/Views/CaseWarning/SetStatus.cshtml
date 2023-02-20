@@ -1,0 +1,111 @@
+﻿@model CTBC.CSFS.Models.WarningState
+
+@{
+    ViewBag.Title = Lang.csfs_create;
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+
+<div class="margin">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="glyphicon glyphicon-search"></i>
+            <h3 class="box-title">@Lang.csfs_warnstates</h3>
+        </div>
+        <!-- form start -->
+        @using (Html.BeginForm("SetStatus", "CaseWarning", new { area = "KeyInput" }, FormMethod.Post, new { id = "frmEdit", @class = "form-horizontal" }))
+        {
+            <div class="box-body ">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_warn_source</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.NotificationSource, new { @readonly = "readonly" })
+                            </td>
+                            <td class="col-md-1 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">@Lang.csfs_165warn</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.No_165, new { @id = "txtNo_165", @MaxLength = "20" })
+                            </td>
+                            <td class="col-md-4 text-right" style="white-space: nowrap;padding-right: 10px;padding-left: 10px;">(若有值不執行TX9091解除)</td>
+                            @*<td class="col-md-1 text-right"></td>
+        <td class="col-md-5"></td>*@
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_warn_relieve</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.RelieveDate, new { data_datepicker = "true", @id = "txtRelieveDate" }) 
+                            </td>
+                            <td class="col-md-1 text-right">
+                                解除時間
+                            </td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.RelieveDateTimeForHour, new { @id = "txtRelieveDateTimeForHour",  maxlength = 5, onblur = "formatTime(this);" })
+                                <span id="ErrorSpan" style="color:#F00">
+                                </span>
+                            </td>
+                            <td class="col-md-1">
+                                解除:
+                                @if (Model.Flag_Release == "Y" || Model.Flag_Release == "1")
+                                {
+                                    @Html.TextBoxFor(m => m.text_Release, new { @id = "textRelease"  , style = "width:20px;", @readonly = "true" })
+                                }
+                                else
+                                {
+                                    @Html.TextBoxFor(m => m.text_Release, new { @id = "textRelease"  , style = "width:20px;", @readonly = "true" })
+                                }
+                                @Html.HiddenFor(m => m.Flag_Release, new { @id = "Flag_Release" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_relieve_reason</td>
+                            <td class="col-md-5">
+                                @Html.DropDownListFor(m => m.RelieveReason, (IEnumerable<SelectListItem>)ViewBag.RelieveReasonList, new { @id = "ddlRelieveReason", })
+                            </td>
+                            <td class="col-md-1 text-right"></td>
+                            <td class="col-md-5"></td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">外來文編號</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.EtabsNo, new { @id = "txtEtabsNo" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_other_reason</td>
+                            <td class="col-md-5" colspan="12">
+                                @Html.TextAreaFor(m => m.OtherReason, new { @id = "txtOtherReason", @rows = "5", @class = "col-xs-12 no-padding", })
+                            </td>
+                        </tr>
+                        @Html.HiddenFor(m => m.DocNo, new { @id = "DocNo" })
+                        @Html.HiddenFor(m => m.EtabsTrnNum, new { @id = "txtEtabsTrnNum" })
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer text-center">
+                <button id="btnCancelRemove" type="button" class="btn btn-primary btn-xs">取消解除</button>
+                <button id="btnRemove" type="button" class="btn btn-primary btn-xs">解除</button>
+                <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+                <button id="btnSaveStatus" type="button" class="btn btn-primary btn-xs">儲存</button>
+                @*<button id="btnReleaseChenHe" type="button" class="btn btn-primary btn-xs">呈核</button>*@
+            </div>
+        }
+    </div>
+</div>
+
+@Html.Hidden("NowPage", "SetStatus")
+@Html.Hidden("EditSuccessMsg", Lang.csfs_edit_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_edit_fail)
+@Html.Hidden("EndDocNo", Lang.csfs_edit_ok )
+@*@Html.Hidden("EndDocNo", Lang.csfs_edit_ok + Lang.csfs_endDocno)*@
+
+
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("NametxtRelieveDate", Lang.csfs_warn_relieve)
+@Html.Hidden("CancelRemoveUrl", Url.Action("WarningCancelRemove", "CaseWarning", new { area = "KeyInput" }))
+@Html.Hidden("RemoveUrl", Url.Action("WarningRemove", "CaseWarning", new { area = "KeyInput" }))
+@Html.Hidden("ReleaseChenHeUrl", Url.Action("WarningReleaseChenHe", "CaseWarning", new { area = "KeyInput" }))
+
+@section scripts{
+    @Scripts.Render("~/Scripts/KeyInput/CaseWarning.js")
+}

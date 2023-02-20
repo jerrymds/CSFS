@@ -1,0 +1,73 @@
+﻿@model CTBC.CSFS.ViewModels.TransactionRecordsViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfoDetail", new { area = "Common", CaseId = ViewBag.CaseId })">@Lang.csfs_agent_document_info</a></li>
+        @if (Html.GetBackControllerName() != "DebtPersonQuery")
+        {
+            <li class=""><a href="@Url.Action("Index", "AgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })">帳務資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentMeetInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })">會辦資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })">正本備查</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccessDetail", new { area = "Common", caseId = ViewBag.CaseId })">資訊部調閱</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })">發文資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseHistoryDetail", new { area = "Common", caseId = ViewBag.CaseId })">流程紀錄</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseCalculatorDetail", new { area = "Common", caseId = ViewBag.CaseId })">利息計算</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseMemoDetail", new { area = "Common", caseId = ViewBag.CaseId })">內部註記</a></li>
+        }
+        <li class="active"><a href="@Url.Action("Index", "AgentTransactionRecordsDetail", new { area = "Common", caseId = ViewBag.CaseId })">@Lang.csfs_agent_transrecord_info</a></li>
+        @Html.GetBackButtonInTab()
+    </ul>
+</div>
+<div class="margin">
+    <div class="box box-primary">
+        <div id="querytablediv" class="box-body">
+            <table class="table table-bordered table-striped text-black sort">
+                <tbody>
+                    <tr>
+                        <td width="25%">@Lang.csfs_agent_tab_name</td>
+                        <td width="25%">@Model.TransRecords.TabName</td>
+                        <td width="25%">@Lang.csfs_event</td>
+                        <td width="25%">@Model.TransRecords.TXType</td>
+                    </tr>
+                    <tr>
+                        <td colspan="1">@Lang.csfs_agent_date_time</td>
+                        <td colspan="3">@Model.TransRecords.TXDateTime</td>
+                    </tr>
+                </tbody>
+            </table>
+            <table id="query_table" class="table table-bordered table-striped text-black sort">
+                <thead>
+                    <tr class="alert-success text-center ">
+                        <th width="25%">@Lang.csfs_column_name</th>
+                        <th width="37.5%">@Lang.csfs_agent_modify_before</th>
+                        <th width="37.5%">@Lang.csfs_agent_modify_later</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.TransRecordsDetail != null && Model.TransRecordsDetail.Any())
+                    {
+                        foreach (var item in Model.TransRecordsDetail)
+                        {
+                            <tr>
+                                <td width="25%">@item.ColumnName</td>
+                                <td width="37.5%">@item.ColumnValueBefore</td>
+                                <td width="37.5%">@item.ColumnValueAfter</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr class="gridrow"><td colspan="4"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div style="text-align:center; width:100%;height:100%;margin:0px; ">
+    <button id="btnReturn" type="button" class="btn btn-primary btn-xs" onclick="javascript: history.back(-1);">@Lang.csfs_return_send</button>
+</div>

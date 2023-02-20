@@ -1,0 +1,131 @@
+﻿@model CTBC.CSFS.Models.WarningImportQueryData
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_warningimportquery;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "WarningImportQuery", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-1 text-right">ID</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.COL_PID, new { @id = "txtCOL_PID", @MaxLength = "200" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">帳號</td>
+                        <td class="col-md-5">@Html.TextBoxFor(m => m.COL_ACCOUNT2, new { @MaxLength = "100" })</td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">工單編號</td>
+                        <td class="col-md-5">@Html.TextBoxFor(m => m.COL_ID, new { @MaxLength = "100" })</td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">165案號</td>
+                        <td class="col-md-5">@Html.TextBoxFor(m => m.COL_165CASE, new { @MaxLength = "100" })</td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">執行日期</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.ExecutedDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.ExecutedDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td class="col-md-1 text-right">重覆</td>
+                        <td class="col-md-5">
+                            <select name="Added">
+                                <option selected="selected" value="">全部</option>
+                                <option value="Y">Y</option>
+                                <option value="N">N</option>
+                            </select>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" id="pageNum" name="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+
+        </div>
+    }
+</div>
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "WarningImportQueryQuery", new { area = "QueryAndExport" })">
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+
+@Html.Hidden("NowPage", "WarningImportQuery")
+
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("GovDateText", Lang.csfs_gov_date)
+@Html.Hidden("CreatedDateText", Lang.csfs_excutedate)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("CheckCount", "選取案件不能超過10筆")
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+
+
+@section scripts {
+    @Scripts.Render("~/Scripts/bootstrap-typeahead.js")
+    @Scripts.Render("~/Scripts/common.uploadlist.js")
+
+<script type="text/javascript">
+    $("#btnQuery").click(function () { return btnQueryclick(); });
+
+    //* 查詢
+    function btnQueryclick() {
+        trimAllInput();
+        if (!ajaxValidateQuery()) {
+            return false;
+        } else {
+            $.ajax({
+                url: $("#frmQuery").attr("action"),
+                type: "Post",
+                cache: false,
+                data: $("#frmQuery").serialize(),
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    $("#divResult").html(data).show();
+                    $.unblockUI();
+                }
+            });
+        }
+        return false;
+    }
+
+    //* 驗證
+    function ajaxValidateQuery() {
+        var newLine = "<br/>";
+        var msg = "";
+        if (!checkIsValidDate($("#ExecutedDateS").val())) {
+            msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#CreatedDateText").val()) + newLine;
+        }
+        if (!checkIsValidDate($("#ExecutedDateE").val())) {
+            msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#CreatedDateText").val()) + newLine;
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+        return true;
+    }
+</script>
+}
+

@@ -1,0 +1,197 @@
+﻿@using CTBC.FrameWork.Util
+@model HistoryCancelSeizureViewModel
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-th"></i>
+        <h3 class="box-title">@Lang.csfs_this_case</h3>
+    </div>
+    <div class="box-body">
+        <table id="" class="table table-bordered table-striped text-black">
+            <thead>
+            <tr class="alert-success text-center">
+                <th>@Lang.csfs_case_no</th>
+                <th>@Lang.csfs_gov_date</th>
+                <th>@Lang.csfs_gov_no</th>
+                <th>@Lang.csfs_gov_unit</th>
+                <th>@Lang.csfs_id_1</th>
+                <th>@Lang.csfs_name</th>
+                <th>@Lang.csfs_case_unit</th>
+                <th>@Lang.csfs_bank_name</th>
+                <th>@Lang.csfs_deposit_account</th>
+                <th>@Lang.csfs_currency_1</th>
+                <th class="col-xs-1">@Lang.csfs_balance</th>
+                <th class="col-xs-1">@Lang.csfs_cal_caseamount</th>
+                <th class="col-xs-1">已撤銷金額</th>
+            </tr>
+            </thead>
+            <tbody id="savedBody">
+            @if (Model != null && Model.ListSaved != null && Model.ListSaved.Any())
+            {
+                for (int i = 0; i < Model.ListSaved.Count; i++)
+                {
+                    <tr data-seizureid="@Model.ListSaved[i].SeizureId">
+                        <td>@Model.ListSaved[i].CaseNo</td>
+                        @if (Model.ListSaved[i].CaseNo.Length < 11)
+                        {
+                            <td>
+                                扣押補建
+                            </td>
+                        }
+                        else
+                        {
+                            <td>@Model.ListSaved[i].GovDate</td>
+                        }
+                        <td>@Model.ListSaved[i].GovNo</td>
+                        <td>@Model.ListSaved[i].GovUnit</td>
+                        <td>@Model.ListSaved[i].CustId</td>
+                        <td>@Model.ListSaved[i].CustName</td>
+                        <td>@Model.ListSaved[i].BranchNo</td>
+                        <td>@Model.ListSaved[i].BranchName</td>
+                        <td>@Model.ListSaved[i].Account</td>
+                        <td>@Model.ListSaved[i].Currency</td>
+                        <td class="text-right">@UtlString.FormatCurrency(Model.ListSaved[i].Balance, 2)</td>
+                        <td class="text-right">
+                           @UtlString.FormatCurrency(Model.ListSaved[i].SeizureAmount,2)
+                        </td>
+                        <td class="text-right">
+                            @if (Model.ListSaved[i].CancelAmountflag == "true" || Model.ListSaved[i].TxtStatus == "1")
+                            {
+                                @Html.TextBoxFor(m => m.ListSaved[i].CancelAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "CancelAmount" + i, @style = "color:red", @disabled = "disabled" })
+                            }
+                            else
+                            {
+                                @Html.TextBoxFor(m => m.ListSaved[i].CancelAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "CancelAmount" + i, @disabled = "disabled" })
+                            }
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="gridrow"><td colspan="13"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+@*<div class="box box-primary">
+        <div class="box-header">
+            <i class="glyphicon glyphicon-search"></i>
+            <h3 class="box-title">@Lang.csfs_query</h3>
+        </div>
+        @using (Html.BeginForm("_SeizureCancelTable", "AgentAccountInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmSeizureCancelQuery", @class = "form-horizontal" }))
+        {
+            <div class="box-body ">
+                <table class="table-noborder">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-3 text-right">@Lang.csfs_clientID</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.CustId, new { @MaxLength = "100", @class = "col-md-12 no-padding" })
+                            </td>
+                            <td class="col-md-3 text-right">@Lang.csfs_clientName</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.CustName, new { @MaxLength = "100", @class = "col-md-12 no-padding" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-3 text-right">@Lang.csfs_usr_id</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.Account, new { @MaxLength = "100", @class = "col-md-12 no-padding" })
+                            </td>
+                            <td class="col-md-3 text-right">@Lang.csfs_gov_unit</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.CustName, new { @MaxLength = "100", @class = "col-md-12 no-padding" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer text-center">
+                <button id="btnSeizureCancelQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            </div>
+        }
+    </div>*@
+
+@*<div id="divSeizureCancelResult" class="table-wrap" data-target-url="@Url.Action("_SeizureCancelTable", "AgentAccountInfo", new {area = "Agent"})">
+
+</div>*@
+@Html.Hidden("CancelConfirmMsg", Lang.csfs_confirm_cancel)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("SeizureCancelCaseId", Model == null ? "" : Convert.ToString(Model.CaseId))
+@Html.Hidden("SaveSeizureCancelUrl", Url.Action("DoSaveSeizureCancel", "HistoryAgentAccountInfo", new{area="Agent"}))
+
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $("#btnSeizureCancelQuery").click(function () { return btnSeizureCancelQueryClick(); });
+        
+    });
+
+    function btnSeizureCancelQueryClick() {
+        $("#divSeizureCancelResult").html("");
+        $.blockUI();
+        $.ajax({
+            url: $("#frmSeizureCancelQuery").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmSeizureCancelQuery").serialize(),
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                $("#divSeizureCancelResult").html(data).show();
+                $.unblockUI();
+                bindGird();
+            }
+        });
+        return false;
+    }
+    function bindGird() {
+        $("#divSeizureCancelResult #btnSaveSeizureCancel").click(function () { return btnSaveSeizureCancelClick(); });
+    }
+    function btnSaveSeizureCancelClick() {
+        var arySeizureId = new Array();
+        $("#divSeizureCancelResult .checkboxCancel:checked").each(function () {
+            arySeizureId.push($(this).val());//向数组中添加元素  
+        });
+        var strSeizureId = arySeizureId.join(',');
+        if (strSeizureId.length <= 0) {
+            jAlertError($("#SelectOneMsg").val());
+            return;
+        }
+        jConfirm($("#CancelConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+            if (bFlag === true) {
+                $.blockUI();
+                //* click confirm ok
+                $.ajax({
+                    type: "POST",
+                    traditional: true,
+                    url: $("#SaveSeizureCancelUrl").val(),
+                    async: false,
+                    data: { caseId: $("#SeizureCancelCaseId").val() , seizureList: strSeizureId },
+                    error: function () {
+                        jAlertError($("#LoadErrorMsg").val());
+                        $.unblockUI();
+                    },
+                    success: function (data) {
+                        if (data.ReturnCode === "1") {
+                            jAlertSuccess(data.ReturnMsg, function () {
+                                location.reload();
+                            });
+                        } else {
+                            jAlertError(data.ReturnMsg);
+                            $.unblockUI();
+                        }
+                    }
+                });
+            }
+        });
+    }
+</Script> 
+
+

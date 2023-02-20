@@ -1,0 +1,77 @@
+﻿@using CTBC.FrameWork.Util
+@model CTBC.CSFS.Models.WarningUnionQuery
+@{
+    ViewBag.Title = "聯防案件編輯及查詢";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_menu_tit_warningunionquery</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "WarningUnionQuery", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right">165案號</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.COL_165CASE, new { @id = "txtCOL_165CASE" })
+                        </td>
+                        <td class="col-md-1 text-right">被聯防帳號</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.COL_ACCOUNT2, new { @MaxLength = "20", @id = "txtCOL_ACCOUNT2" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">工單編號</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.COL_C1003CASE, new { @id = "txtCOL_C1003CASE", @MaxLength = "20" })
+                        </td>
+                        <td class="col-md-2 text-right">通報單位</td>
+                        <td class="col-md-4">
+                            @Html.DropDownListFor(m => m.Unit, (IEnumerable<SelectListItem>)ViewBag.Unit, new { @id = "ddlUnit", onchange = "changeUnitName(this)" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">建檔日期</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.ModifyDateS, new { data_datepicker = "true", @id = "txtModifyDateS" })
+                            ～
+                            @Html.TextBoxFor(m => m.ModifyDateE, new { data_datepicker = "true", @id = "txtModifyDateE" })
+                        </td>
+                        <td class="col-md-2 text-right">銀行別</td>
+                        <td class="col-md-4">
+                            @Html.DropDownListFor(m => m.COL_OTHERBANKID, (IEnumerable<SelectListItem>)ViewBag.BankID, new { @id = "ddlCOL_OTHERBANKID", onchange = "changeCOL_OTHERBANKIDName(this)" })
+                            @*@Html.TextBoxFor(m => m.WarningMaster.BankName, new { @id = "txtBankName", @readonly = "readonly" })*@
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <a href="@Url.Action("CreateWarn", "WarningUnionQuery", new { area = "QueryAndExport", DocNo = ViewBag.DocNo, @radom = DateTime.Now.ToString(),Currency=ViewBag.Currency })" class="btn btn-primary btn-xs fancy900_455">@Lang.csfs_warn_add</a>
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnExcel" type="button" class="btn btn-default btn-xs">匯出</button>
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "WarningUnionQuery", new { area = "QueryAndExport" })">
+
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("NowPage", "WarningUnionQuery")
+@Html.Hidden("ExcelUrl", Url.Action("Excel", "WarningUnionQuery", new { area = "Agent" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select)
+@Html.Hidden("NameOneQuery", Lang.csfs_inputOneQuery)
+@Html.Hidden("GetBranchNameUrl", Url.Action("GetBranchName", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("ApproveUrl", Url.Action("ReturnClose", "WarningUnionQuery", new { area = "Agent" }))
+
+
+@section scripts {
+    @Scripts.Render("~/Scripts/QueryAndExport/WarningUnionQuery.js")
+}

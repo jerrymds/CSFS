@@ -1,0 +1,56 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>@Lang.csfs_sysname</title>
+    <link rel="Shortcut Icon" href="@Url.Content("~/Content/img/favicon.ico")" />
+    <link href="@Url.Content("~/Content/Login.css")" rel="stylesheet" type="text/css" />
+    <script type="text/javascript">
+        function getRootURL() { return '@Url.Content("~/")'; }</script>
+</head>
+<body>
+    <div class="logon-box">
+        <div class="logon-area">
+            <form id="f1" name="f1" method="post" action="@Url.Action("Index", "Login")">
+                <div class="ap-div"><span class="logon-ap">@Lang.csfs_sysname</span></div>
+                <div class="note-div"><span class="note"><a id="btnEditPwd" href="#">@Lang.csfs_edit_pwd</a> | <a id="btnLogonDesc" href="#">@Lang.csfs_logon_desc</a></span></div>
+                <div class="title-div"><span>@Lang.csfs_usr_id:</span></div>
+                <div class="tx-div"><input type="text" id="username" name="username" value="" class="tx" /></div>
+                <div class="title-div"><span>@Lang.csfs_usr_pwd:</span></div>
+                <div class="tx-div"><input type="password" id="password" name="password" value="" class="tx" /></div>
+                <!--Legend 2017/10/25 添加 [徵信人員使用]區塊 start-->
+                <fieldset style="width:80%;margin-top:8px;">
+                    <!--20180622 RC 線上投單CR修正 宏祥 update start-->
+                    <!--<legend>FOR 徵信人員使用</legend>-->
+                    <!--20180622 RC 線上投單CR修正 宏祥 update end-->@*class="tx2"*@
+                    <span class="err-msg-div"><span id="err-msg" style="color:red;font-size:16px;">*執行扣押，警示類作業，登入RACF資訊。</span></span>
+                    <div class="title-div"><label>RACF帳號:</label><label>RACF密碼:</label></div>
+                    <div class="tx-div"><input type="text" id="usrRCAF" name="usrRCAF" class="tx2" />&nbsp;&nbsp;<input type="password" id="psRCAF" name="psRCAF" class="tx2" /></div>
+                    <div class="title-div"><label class="title-lbl">RACF分行:</label></div>
+                    <div class="tx-div">@Html.DropDownList("brhRCAF", (IEnumerable<SelectListItem>)ViewBag.codeList, @Lang.csfs_select, new { @id = "brhRCAF", @class = "tx3" })</div>
+                </fieldset>
+                <!--Legend 2017/10/25 添加 [徵信人員使用]區塊 end-->
+                <div class="btn-div">
+                    <input type="submit" id="btnSubmit" value="@Lang.csfs_confim" class="btn" />&nbsp;&nbsp;<input type="reset" id="btnReset" value="@Lang.csfs_reset" class="btn" />
+                    <span class="err-msg-div"><span id="err-msg" class="err-msg">@ViewBag.ErrorMessage </span></span>
+                </div>
+                <input type="hidden" id="hid_brhRCAF" name="hid_brhRCAF" value="" />
+            </form>
+        </div>
+        <div class="copyright">@Lang.csfs_copyright {{CSFS_VERSION}}</div>
+    </div>
+
+    @Html.Hidden("MSG_LOGONID", Lang.csfs_logon_id)
+    @Html.Hidden("MSG_LOGONPWD", Lang.csfs_logon_pwd)
+    @Html.Hidden("MSG_LOGON_ERR_IDPWD", Lang.csfs_logon_err_idpwd)
+    @Html.Hidden("MSG_LOGON_ERR_FORMAT1", Lang.csfs_logon_err_format1)
+    @Html.Hidden("MSG_LOGON_ERR_FORMAT2", Lang.csfs_logon_err_format2)
+    @Html.Hidden("MSG_LOGON_RESET_PWD", Lang.csfs_logon_reset_pwd)
+    @Html.Hidden("MSG_LOGON_ONAUTH", Lang.csfs_logon_onauth)
+    <script src="@Url.Content("~/Scripts/jquery-2.1.3.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Login.js")" type="text/javascript"></script>
+</body>
+</html>

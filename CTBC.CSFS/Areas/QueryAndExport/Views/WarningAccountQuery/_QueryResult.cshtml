@@ -1,0 +1,139 @@
+﻿@using CTBC.FrameWork.Util
+@model CTBC.CSFS.ViewModels.WarningAccountQueryViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.WarningAccountQueryList != null)
+                {
+                    if (Model.WarningAccountQueryList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.WarningAccountQuery.PageSize, Model.WarningAccountQuery.CurrentPage, Model.WarningAccountQuery.TotalItemCount, Model.WarningAccountQuery, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Get" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.WarningAccountQuery.SortExpression, Model.WarningAccountQuery.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        @if (Model.WarningAccountQuery != null && Model.WarningAccountQuery.Other == "1")
+                        { 
+                            <tr class="alert-success text-center ">
+                                <th>@Lang.csfs_seqnum</th>
+                                <th>@Lang.csfs_case_no</th>
+                                <th>@Lang.csfs_bankID</th>
+                                <th>@Lang.csfs_warningnum</th>
+                                <th>@Lang.csfs_warn_id</th>
+                                <th>金額區間</th>
+                                <th>通報時餘額</th>
+                                <th>VD/MD</th>
+                                <th>掛帳日期</th>
+                                <th>掛帳金額</th>
+                                <th>還款日期</th>
+                                <th>還款金額</th>
+                                <th>目前餘額</th>
+                                <th>G/L 餘額</th>
+                                <th>通報內容</th>
+                                <th>掛帳G/L</th>
+                                <th>狀態</th>
+                                <th>最後付息日</th>
+                                <th>解除日期</th>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr class="alert-success text-center ">
+                                <th>帳號</th>
+                                <th>戶名</th>
+                                <th>餘額</th>
+                             </tr>
+                        }
+                    </thead>
+                    <tbody>
+                        @if (Model.WarningAccountQuery != null && Model.WarningAccountQuery.Other == "1")
+                        {
+                            foreach (var item in Model.WarningAccountQueryList)
+                            {
+
+                                <tr>
+                                    <td>@item.SerialID</td>
+                                    <td>@item.DocNo</td>
+                                    <td>@item.BankID</td>
+                                    <td>@item.CustAccount</td>
+                                    <td>@item.CustId</td>
+                                    <td>@item.HangAmountlist</td>
+                                    <td>@item.NotifyBal</td>
+                                    <td>@item.VDMD</td>
+                                    <td>
+                                        @if (item.HangAmount.Trim() != "0")
+                                        {
+                                            <text>@UtlString.FormatDateTw(item.TRAN_Date)</text>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.HangAmount.Trim() != "0")
+                                        {
+                                             <text>@item.HangAmount</text>
+                                        }
+                                    </td>
+                                    <td>
+                                        @if (item.Amount.Trim() != "0")
+                                        {
+                                            <text>@UtlString.FormatDateTw(item.TRAN_Date)</text>
+                                        }
+                                    </td>
+                                    <td>@item.Amount</td>
+                                    <td>@item.Balance</td>
+                                    <td>@item.Balance450</td>
+                                    <td>@item.NotificationSource</td>
+                                    <td>@item.ACCT_NO</td>
+                                    <td>
+                                        @if (item.AccountStatus == "1")
+                                        {
+                                            <text>未結清</text>
+                                        }
+                                        else
+                                        {
+                                            <text>已結清</text>
+                                        }
+                                    </td>
+                                    <td>@item.ACCT_DATE</td>
+                                    <td>@item.RelieveDate</td>
+                                  </tr>
+                            }
+                        }
+                        else
+                        {
+                            foreach (var item in Model.WarningAccountQueryList)
+                            {
+
+                                <tr>
+                                    <td>@item.ACCOUNT</td>
+                                    <td>
+                                    @if (item.ACCOUNT == "0000880010090712")
+                                    {
+                                        <text>其他應付警示帳戶剩餘款電話詐財</text>
+                                     }
+                                    else
+                                    {
+                                        <text>其他應付警示帳戶剩餘款非電話詐財</text>
+                                    }
+                                    </td>
+                                    <td>@item.Balance</td>
+                                </tr>
+                             }
+                        }
+                    </tbody>
+                </table>                
+            </div>
+        </div>
+    </div>
+</div>

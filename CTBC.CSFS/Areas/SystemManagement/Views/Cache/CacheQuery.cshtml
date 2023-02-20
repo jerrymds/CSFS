@@ -1,0 +1,25 @@
+﻿@model dynamic
+@{
+    ViewBag.Title = @Lang.csfs_menu_tit_cachemanagement;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="headline">
+    @Lang.csfs_menu_tit_cachemanagement
+</div>
+<p></p>
+<input type="button" onclick="SyncCache()" value="@Lang.csfs_UpdateAllCache" />
+<script type="text/javascript">
+    function SyncCache() {
+        $.ajax({
+            url: '@Url.Action("SyncCache","Cache")',
+            cache: false,
+            type: "POST",
+            async: false,
+            dataType: "html",
+            success: function (data) { jAlertSuccess(data); },
+            error: function (data) { jAlertError(data); }
+        });
+    }
+</script>
+

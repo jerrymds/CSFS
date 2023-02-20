@@ -1,0 +1,152 @@
+﻿@using System.Web.Mvc.Ajax
+@using System.Web.Mvc.Html
+@using CTBC.CSFS.Models;
+@model CTBC.CSFS.ViewModels.NewCaseCustViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                <button id="btnFileData" button" class="btn btn-primary btn-xs" style="margin-top:8px;" onclick="ReturnsView();">回文資料</button>
+                <button id="btnAuditFinish" type="button" class="btn btn-primary btn-xs" style="margin-top:8px;" onclick="AuditFinish();">審核完成</button>
+                <button id="btnUpload" onclick="Upload();" type="button" class="btn btn-primary btn-xs" style="margin-top:8px;">上傳</button>
+                <button id="btnEndCase" onclick="EndCase();" type="button" class="btn btn-primary btn-xs" style="margin-top:8px;">強制結案</button>
+
+                @if (Model.NewCaseCustQueryList != null)
+                {
+                    if (Model.NewCaseCustQueryList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.NewCaseCustCondition.PageSize, Model.NewCaseCustCondition.CurrentPage, Model.NewCaseCustCondition.TotalItemCount, Model.NewCaseCustCondition, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.NewCaseCustCondition.SortExpression, Model.NewCaseCustCondition.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th nowrap width="5%">
+                                <input type="checkbox" id="check01" onClick="ChkAll();" />
+                            </th>
+                            <th nowrap width="5%">
+                                序號
+                            </th>
+                            <th nowrap width="10%">
+                                案件編號
+                            </th>
+                            <th nowrap width="10%">
+                                來文字號
+                            </th>
+                            <th nowrap width="10%">
+                                來文機關
+                            </th>
+                            <th nowrap width="10%">
+                                回文字號
+                            </th>
+                            <th nowrap width="10%">
+                                統編
+                            </th>
+                            <th nowrap width="10%">
+                                帳號
+                            </th>
+                            <th nowrap width="10%">
+                                查詢項目
+                            </th>
+                            <th nowrap width="10%">
+                                拋查結果
+                            </th>
+                            <th nowrap width="10%">
+                                審核狀態
+                            </th>
+                            <th nowrap width="10%">
+                                限辦日期(T+10)
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.NewCaseCustQueryList != null && Model.NewCaseCustQueryList.Any())
+                        {
+                            // 記錄上筆主檔的主鍵
+                            Guid srtNewID = Guid.Empty;
+
+                            // 序號
+                            int pNum = 0;
+
+                            foreach (var item in Model.NewCaseCustQueryList)
+                            {
+                                // T+5<=系統當前時間時,tr以藍色顯示
+                                string tdStyle = item.RecvDate5 == "1" ? "text-blue" : "";
+
+                                // 獲取該案件下[義(債)務人統編]個數
+                                int rowSpanCount = 0;
+                                if (srtNewID != item.NewID)
+                                {
+                                    // 利用主檔主鍵篩選該案件編號下[義(債)務人統編]個數
+                                    IList<CaseCustMaster> listGroup = Model.NewCaseCustQueryList.Where(x => x.NewID == item.NewID).ToList();
+
+                                    // [義(債)務人統編]個數
+                                    rowSpanCount = listGroup != null && listGroup.Count > 0 ? listGroup.Count : 1;
+
+                                    // 序號自增
+                                    pNum++;
+                                }
+                                <tr>
+                                    @if (rowSpanCount > 0)
+                                    {
+                                        string strDocNo = item.Version != 0 ? item.DocNo + "-" + item.Version.ToString() : item.DocNo;
+                                        <td class="text-center @tdStyle" rowspan="@rowSpanCount">
+                                            <input name="chkChild" type="checkbox" class="checkfile" id="checkbox_@pNum" onclick="ChildItem();" value="@item.NewID" data-Status="@item.CaseStatus" data-AuditStatus="@item.AuditStatus" data-NewID="@item.NewID" data-DocNo="@item.DocNo" />
+                                        </td>
+                                        <td class="text-center @tdStyle" rowspan="@rowSpanCount">
+                                            @pNum
+                                        </td>
+                                        <td class="text-center @tdStyle" rowspan="@rowSpanCount">
+                                            @Html.ActionLink(strDocNo, "Index", "NewCaseCustManagerDetail", new { area = "NewCaseCust", strKey = item.NewID, pageFrom = Model.NewCaseCustCondition.CurrentPage, Flag = "1" }, new { })
+                                        </td>
+                                        <td class="text-left @tdStyle" rowspan="@rowSpanCount"> @item.FileNo</td>
+                                        <td class="text-left @tdStyle" rowspan="@rowSpanCount"> @item.Govement</td>
+                                        <td class="text-left @tdStyle" rowspan="@rowSpanCount"> @item.GoFileNo</td>
+                                    }
+                                    <td class="text-left @tdStyle">
+                                        @item.CustIdNo
+                                    </td>
+                                    <td class="text-left @tdStyle">
+                                        @item.CustAccount
+                                    </td>
+                                    <td class="text-left @tdStyle">
+                                        @Html.Raw(item.SearchProgram)
+                                    </td>
+                                    @if (rowSpanCount > 0)
+                                    {
+                                        <td class="text-left @tdStyle" rowspan="@rowSpanCount">
+                                            @item.Result
+                                        </td>
+                                        <td class="text-center @tdStyle" rowspan="@rowSpanCount">
+                                            @item.AuditStatus
+                                        </td>
+                                        <td class="text-center @tdStyle" rowspan="@rowSpanCount">
+                                            @item.LimitDate
+                                        </td>
+                                    }
+                                </tr>
+
+                                srtNewID = item.NewID;
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>

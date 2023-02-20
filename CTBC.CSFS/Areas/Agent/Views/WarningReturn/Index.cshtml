@@ -1,0 +1,95 @@
+﻿@using CTBC.FrameWork.Util
+@model CTBC.CSFS.Models.WarningReturn
+@{
+    ViewBag.Title = "警示案件退件區";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "WarningReturn", new { area = "Agent" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right">類別</td>
+                        <td class="col-md-5">
+                            @Html.DropDownListFor(m => m.Kind, (IEnumerable<SelectListItem>)ViewBag.KindList, new { @id = "txtKind" })
+                        </td>
+                        <td class="col-md-2 text-right"></td>
+                        <td class="col-md-5">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_warn_id</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CustId, new { @id = "txtCustId", @MaxLength = "20" })
+                        </td>
+                        <td class="col-md-2 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.DocNo, new { @id = "txtDocNo" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">165案號</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.No_165, new { @id = "txtNo_165" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_warningnum</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.CustAccount, new { @MaxLength = "20", @id = "txtCustAccount" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_warn_dates</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.ForCDateS, new { data_datepicker = "true", @id = "txtForCDateS" })
+                            ～
+                            @Html.TextBoxFor(m => m.ForCDateE, new { data_datepicker = "true", @id = "txtForCDateE" })
+                        </td>
+                        <td class="col-md-2 text-right">衍生</td>
+                        <td class="col-md-5">@Html.DropDownListFor(m => m.Set, (IEnumerable<SelectListItem>)ViewBag.SetList, new { @id = "txtSet" })</td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">解除日期</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.RelieveDateS, new { data_datepicker = "true", @id = "txtRelieveDateS" })
+                            ～
+                            @Html.TextBoxFor(m => m.RelieveDateE, new { data_datepicker = "true", @id = "txtRelieveDateE" })
+                        </td>
+                        <td class="col-md-2 text-right">正本</td>
+                        <td class="col-md-5">@Html.DropDownListFor(m => m.Original, (IEnumerable<SelectListItem>)ViewBag.OriginalList, new { @id = "txtOriginal" })</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <!--<button id="btnReturnClose" type="button" class="btn btn-primary btn-xs">簽收</button>-->
+            @*@if (ViewBag.CanExport == "1")
+                {*@
+            <!--<button id="btnExcel" type="button" class="btn btn-default btn-xs">@Lang.csfs_debtexcel</button>-->
+            @*}*@
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "WarningReturn", new { area = "Agent" })">
+
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("NowPage", "WarningReturn")
+@Html.Hidden("ExcelUrl", Url.Action("Excel", "WarningReturn", new { area = "Agent" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select)
+@Html.Hidden("NameOneQuery", Lang.csfs_inputOneQuery)
+@Html.Hidden("ApproveUrl", Url.Action("ReturnClose", "WarningReturn", new { area = "Agent" }))
+
+
+@section scripts {
+    @Scripts.Render("~/Scripts/Agent/WarningReturn.js")
+}

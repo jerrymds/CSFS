@@ -1,0 +1,121 @@
+﻿@model CTBC.CSFS.Models.PARMWorkingDayVO
+
+@{
+    ViewBag.Title = "_Calendar";
+    Layout = null;
+}
+
+<div id="querytablediv" class="box-body">
+    <table class="table table-bordered table-striped text-black sort" id="WKCalendar">
+        <thead>
+            <tr id="wkday" class="alert-success text-center ">
+                <th colspan="7">
+                    <a href="#" class="link" title=@Lang.csfs_last_month onclick="choice('@Model.CurrentDate.AddMonths(-1).ToString("yyyy-MM-dd")')"><< @Lang.csfs_last_month</a>
+                    @Model.CurrentDate.Year @Lang.csfs_year @Model.CurrentDate.Month @Lang.csfs_month1
+                    <a href="#" class="link" title=@Lang.csfs_next_month onclick="choice('@Model.CurrentDate.AddMonths(1).ToString("yyyy-MM-dd")')">@Lang.csfs_next_month >></a>
+                </th>
+            </tr>
+        </thead>
+        <tr class="alert-success text-center ">
+            <th class="col-md-1">@Lang.csfs_sunday</th>
+            <th class="col-md-2">@Lang.csfs_monday</th>
+            <th class="col-md-2">@Lang.csfs_tuesday</th>
+            <th class="col-md-2">@Lang.csfs_wednesday</th>
+            <th class="col-md-2">@Lang.csfs_thursday</th>
+            <th class="col-md-2">@Lang.csfs_friday</th>
+            <th class="col-md-1">@Lang.csfs_saturday</th>
+        </tr>
+        @{int i = 0; }
+        @foreach (var item in Model.WKList)
+                    {
+                        if (i < Model.OneCalendarTotDay)
+                        {
+                            if (i % 7 == 0)
+                            {
+                                if (i > 0)
+                                {@Html.Raw("</tr>");
+                                }
+                                else
+                                {<text>
+                        <tr>
+                                </text>}
+                            }
+                            if (item == null)
+                            {
+                            @Html.Raw("<td>&nbsp;</td>");
+                            }
+                            else
+                            {
+                            <td>
+                                @{
+                                var ckm = "";
+                                if (!item.Flag)
+                                { ckm = "checked='checked'"; }
+                                else
+                                { ckm = ""; }
+                                var ckOver = "";
+                                if (item.Date < DateTime.Now)
+                                { ckOver = "disabled='disabled'"; }
+                                else { ckOver = ""; }
+                                }
+                                <input type="checkbox" class="simple" id="CkBox" name="CkBox" value="@item.Date.ToString("yyyy-MM-dd")" @ckm @ckOver />
+                                <span id="day_@item.Date.Day">@item.Date.Day</span>
+                            </td>
+                            }
+                        } i++;
+                    }
+    </tr>
+</table>
+</div><!-- /.box-body -->
+
+<input type="hidden" id="CurrentDate" name="CurrentDate" value="@Model.CurrentDate" />
+@Html.Hidden("CalendarUrl", Url.Action("_Calendar", "WorkingDay", new { area = "SystemManagement" }))
+
+@Html.Hidden("ModifySuccessMsg", Lang.csfs_edit_ok)
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    function choice(dte) {
+        $.ajax({
+            url: $("#CalendarUrl").val(),
+            type: "POST",
+            async: true,
+            data: { dte: dte },
+            dataType: "text",
+            success: function (data) {
+                $("#calendar").html("");
+                $("#calendar").html(data);
+            },
+            error: function () { displayError(); }
+        })
+    }
+
+    function displaySuccess(rtnMsg) {
+        jAlertSuccess($("#ModifySuccessMsg").val(), function () { location.href = location.href; })
+    }
+</script>
+<script type="text/javascript">
+    //$("#wkday").find("a.link").css({ color: '#000000', fontSize: '23px', textDecoration: 'none' });
+    //$("td").css({ color: '#000000', fontSize: '23px' });
+    //$("th").css({ color: '#000000', fontSize: '23px' });
+    //chkClick();
+    //function chkClick() {
+    //    $("input:checked + span").css({ color: '#FF0000' });
+    //    $("input:not(:checked) + span").css({ color: '#000000' });
+    //    ShowDefSunSatFontColor()
+    //}
+    //$("input").click(chkClick);
+
+    ShowDefSunSatFontColor();
+    //預設星期六日為非營業日,顯示紅色字
+    function ShowDefSunSatFontColor() {
+        var dte;
+        $("#WKCalendar").find("input:checkbox").each(function () {
+            dte = new Date($(this).val().replace(/-/g, "/"));
+            if (dte.getDay() == 0 || dte.getDay() == 6) {
+                $("#day_" + dte.getDate()).css({ color: '#FF0000' });
+            }
+        });
+    }
+
+</script>
+

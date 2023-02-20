@@ -1,0 +1,188 @@
+﻿@model  CTBC.CSFS.Models.CaseMeetMaster
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("DoSaveMeetInfo", "AgentMeetInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal" }))
+{
+    <div class="nav-tabs-custom">
+        <!-- Tabs within a box -->
+        <ul class="nav nav-tabs" style="cursor: move;">
+            <li class=""><a href="@Url.Action("Index", "AgentDocumentInfoDetail", new { area = "Common", CaseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_document_info</a></li>
+            @if (Html.GetBackControllerName() != "DebtPersonQuery")
+            {
+                <li class=""><a href="@Url.Action("Index", "AgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">帳務資訊</a></li>
+                <li class="active"><a href="@Url.Action("Index", "AgentMeetInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">會辦資訊</a></li>
+                <li class=""><a href="@Url.Action("Index", "AgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">正本備查</a></li>
+                <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccessDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">資訊部調閱</a></li>
+                <li class=""><a href="@Url.Action("Index", "AgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">發文資訊</a></li>
+                <li class=""><a href="@Url.Action("Index", "AgentCaseHistoryDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">流程紀錄</a></li>
+                <li class=""><a href="@Url.Action("Index", "AgentCaseCalculatorDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">利息計算</a></li>
+                <li class=""><a href="@Url.Action("Index", "AgentCaseMemoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">內部註記</a></li>
+                <li class=""><a href="@Url.Action("Index", "AgentTransactionRecordsDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">資訊異動記錄</a></li>
+            }
+            @Html.GetBackButtonInTab()
+        </ul>
+        <div class="tab-content ">
+            <div class="tab-pane active" id="panel1">
+                <div style="width:100%">
+                    <table style="width:100%">
+                        <tr>
+                            <th class="text-right col-xs-2">@Lang.csfs_benchmark_date</th>
+                            <td class="col-xs-10 no-padding">
+                                @Html.TextBoxFor(m => m.StandardDateS, new { @id = "txtStartDate", @MaxLength = "10", @disabled = "true" })
+                                @Html.TextBoxFor(m => m.StandardDateE, new { @id = "txtEndDate", @MaxLength = "10", @disabled = "true" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-xs-2">@Lang.csfs_bank</th>
+                            <td>
+                                @Lang.csfs_Pay <input type="text" name="BranchPaySave" id="BranchPaySave" value="@Model.BranchPaySave" maxlength="20" disabled="disabled" />
+                                @Lang.csfs_vip <input type="checkbox" checked="@Model.BranchVip" name="BranchVip" id="BranchVip" value="true" />
+                                @Html.TextBoxFor(m => Model.BranchViptext, new { @length = "50", @MaxLength = "20", @disabled = "true" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-xs-2">
+                                RM @Html.HiddenFor(m => m.CaseId, new { @disabled = "true" })
+                            </th>
+                            <td>
+                                @Lang.csfs_notice <input type="text" name="RmNotice" id="RmNotice" value="@Model.RmNotice" maxlength="20" disabled="disabled" />
+                                @Lang.csfs_Notice_offset_claims <input type="text" name="RmNoticeAndConfirm" id="RmNoticeAndConfirm" value="@Model.RmNoticeAndConfirm" maxlength="20" disabled="disabled" />
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-xs-2" valign="top">@Lang.csfs_The_unit_will_do</th>
+                            <td>
+                                <div>
+                                    <table class="table table-bordered table-striped text-black sort" style="width:100%" id="query_table">
+                                        <thead>
+                                            <tr class="alert-success text-center ">
+                                                <th>@Lang.csfs_selectd</th>
+                                                <th>@Lang.csfs_Demand</th>
+                                                <th>@Lang.csfs_Unit</th>
+                                                <th>@Lang.csfs_results_of_the_query</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if (Model != null && Model.ListDetails != null && Model.ListDetails.Any())
+                                            {
+
+                                                for (int i = 0; i < Model.ListDetails.Count; i++)
+                                                {
+                                                    <tr>
+                                                        <td class="col-xs-1">
+                                                            @Html.CheckBoxFor(m => Model.ListDetails[i].IsSelected, new { @value = "true" })
+                                                        </td>
+                                                        <td class="col-xs-3">@Model.ListDetails[i].MeetKind</td>
+                                                        <td class="col-xs-3">@Model.ListDetails[i].MeetUnit</td>
+                                                        <td class="col-xs-5">
+                                                            @Html.TextBoxFor(m => Model.ListDetails[i].Result, new { @Style = "width:100%", @MaxLength = "50", @disabled = "true" })
+                                                            @Html.HiddenFor(m => Model.ListDetails[i].CaseId, new { @id = "MCaseId" + i })
+                                                            @Html.HiddenFor(m => Model.ListDetails[i].SortOrder, new { @id = "SortOrder" + i })
+                                                            @Html.HiddenFor(m => Model.ListDetails[i].MeetKind, new { @id = "MeetKind" + i })
+                                                            @Html.HiddenFor(m => Model.ListDetails[i].MeetUnit, new { @id = "MeetUnit" + i })
+                                                        </td>
+
+                                                    </tr>
+                                                }
+
+                                            }
+                                            else
+                                            {
+                                                <tr><td colspan="4"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="text-right col-xs-2">@Lang.csfs_memo</th>
+                            <td>@Html.TextBoxFor(m => m.MeetMemo, new { @class = "col-xs-12 no-padding", @MaxLength = "50", @disabled = "true" })</td>
+                        </tr>
+                    </table>
+                </div>
+                <div style="text-align:center">
+                    @*<button id="btnAccountSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+                        <button id="btnAccountCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>*@
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@Html.Hidden("NametxtStartDate", Lang.csfs_cal_start1_ok) @*起始日*@
+@Html.Hidden("NametxtEndDate", Lang.csfs_cal_end1_ok) @*截止日*@
+@Html.Hidden("StartDateText", Lang.csfs_cal_start)
+@Html.Hidden("EndDateText", Lang.csfs_cal_end)
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("NameDate", Lang.csfs_cal_startoend_ok)
+@Html.Hidden("EditSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_save_fail)
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnAccountSave").click(function () { return btnAccountSaveClick(); });
+    });
+    function btnAccountSaveClick() {
+        var txtStartDate = $("#txtStartDate").val();           //*起始日
+        var txtEndDate = $("#txtEndDate").val();              //*截止日
+
+        var newLine = "<br/>";
+        var msg = "";
+        if ($("#txtStartDate").val().length <= 0) {
+            msg = msg + $.validator.format($("#PlzInput").val(), $("#StartDateText").val()) + newLine;
+        } else if (!checkIsValidDate($("#txtStartDate").val())) {
+            msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#StartDateText").val()) + newLine;
+        }
+
+        if ($("#txtEndDate").val().length <= 0) {
+            msg = msg + $.validator.format($("#PlzInput").val(), $("#EndDateText").val()) + newLine;
+        } else if (!checkIsValidDate($("#txtEndDate").val())) {
+            msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#EndDateText").val()) + newLine;
+        }
+
+        if (dateCompare(txtStartDate, txtEndDate) == 1) {
+            msg = msg + $("#NameDate").val() + newLine;
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+        $.blockUI();
+        $.ajax({
+            url: $("#frmCreate").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmCreate").serialize(),
+            dataType: "json",
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess($("#EditSuccessMsg").val(), function () { location.href = location.href; });
+                } else {
+                    jAlertError($("#EditFailMsg").val());
+                    $.unblockUI();
+                }
+            }
+        });
+
+    }
+    function dateCompare(date1, date2) {
+        date1 = date1.replace(/\-/gi, "/");
+        date2 = date2.replace(/\-/gi, "/");
+        var time1 = new Date(date1).getTime();
+        var time2 = new Date(date2).getTime();
+        if (time1 > time2) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+</script>

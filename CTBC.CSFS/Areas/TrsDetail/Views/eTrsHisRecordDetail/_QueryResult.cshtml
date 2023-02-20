@@ -1,0 +1,153 @@
+﻿@using System.Web.Mvc.Ajax
+@using System.Web.Mvc.Html
+@using CTBC.CSFS.Models;
+@model CTBC.CSFS.ViewModels.CaseTrsDetailViewModel
+
+@{
+    ViewBag.Title = "歷史交易紀錄明細";
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.CaseTrsQueryVersionList != null)
+                {
+                   if (Model.CaseTrsQueryVersionList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                               @Ajax.Pager(Model.CaseHisCondition.PageSize, Model.CaseHisCondition.CurrentPage, Model.CaseHisCondition.TotalItemCount, Model.CaseHisCondition, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CaseHisCondition.SortExpression, Model.CaseHisCondition.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th nowrap width="5%">
+                                序號
+                            </th>
+                            <th nowrap width="15%">
+                                義(債)務人統編
+                            </th>
+                            <th nowrap width="15%">
+                                義(債)務人帳號
+                            </th>
+                            <th nowrap width="8%">
+                                案件狀態
+                            </th>
+                            <th nowrap width="10%">
+                                查詢期間(起)
+                            </th>
+                            <th nowrap width="10%">
+                                查詢期間(迄)
+                            </th>
+                            <th nowrap width="15%">
+                                失敗原因
+                            </th>
+
+                            <th nowrap width="10%">
+                                開戶日
+                            </th>
+                            <th nowrap width="10%">
+                                最後交易日
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                            @if (Model != null && Model.CaseTrsQueryVersionList != null && Model.CaseTrsQueryVersionList.Any())
+                        {
+                            int pNum = 0;
+
+                            // 記錄上筆主檔的主鍵
+                            string  srtCustIdNo = "";
+
+                            foreach (var item in Model.CaseTrsQueryVersionList)
+                            {
+                                // 獲取該案件下[義(債)務人統編]個數
+                                int rowSpanCount = 0;
+
+                                if (srtCustIdNo != item.CustID)
+                                {
+                                    // 利用主檔主鍵篩選該案件編號下[義(債)務人統編]個數
+                                    IList<CaseTrsQueryVersion> listGroup = Model.CaseTrsQueryVersionList.Where(x => x.CustID == item.CustID).ToList();
+
+                                    // [義(債)務人統編]個數
+                                    rowSpanCount = listGroup != null && listGroup.Count > 0 ? listGroup.Count : 1;
+
+                                    // 序號自增
+                                    pNum++;
+                                }
+
+                                <tr>
+                                    @if (rowSpanCount > 0)
+                                    {
+                                    <td class="text-center" rowspan="@rowSpanCount">
+                                        @item.RowNum
+                                    </td>
+                                    <td class="text-left"  rowspan="@rowSpanCount">
+                                        @item.CustID
+                                    </td>
+                                    }
+                                    <td class="text-center">
+                                        @if (@item.GoFileNo != null && @item.GoFileNo != "")
+                                        {
+                                            @item.GoFileNo
+                                        }
+                                        else
+                                        {
+                                            @item.CustAccount
+                                        }
+                                    </td>
+                                    <td class="text-left">
+                                        @if (@item.CaseStatusName == "拋查中"  )
+                                        {
+                                            @Html.Raw("拋查中")
+                                        } 
+                                        @if (@item.CaseStatusName == "未處理")
+                                        {
+                                            @Html.Raw("未處理")
+                                        }
+                                                                             
+                                        @if ((@item.CaseStatusName == "成功" || @item.CaseStatusName == "失敗") && @item.RFDMQryMessage != "" && @item.RFDMQryMessage != " ")
+                                        {
+                                            @Html.Raw("失敗")
+                                        }
+                                        @if ((@item.CaseStatusName == "成功" || @item.CaseStatusName == "失敗") && (@item.RFDMQryMessage == "" || @item.RFDMQryMessage == " "))
+                                        {
+                                            @Html.Raw("成功")
+                                        }
+                                    </td>
+                                    <!--@item.CaseStatusName-->
+                                    <td class="text-center" >@item.QDateS</td>
+                                  <td class="text-center" >@item.QDateE</td>
+                                  <td class="text-left" >
+                                      @if (@item.CaseStatusName == "拋查中" || @item.CaseStatusName == "未處理")
+                                      {
+                                        @Html.Raw("")
+                                      }
+                                      else
+                                      {
+                                        @Html.Raw(@item.RFDMQryMessage)
+                                      }
+                                  </td>
+                                    <td class="text-center">@item.OpenDate</td>
+                                    <td class="text-center">@item.LastDate</td>
+                                </tr>                              
+                                srtCustIdNo = item.CustID;
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">查無資料！</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>

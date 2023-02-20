@@ -1,0 +1,74 @@
+﻿@model CTBC.CSFS.Models.SendNoSetting
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_sendnosetting;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_create</h3>
+    </div>
+    @using (Html.BeginForm("Create", "SendNoSetting", new { area = "SystemManagement" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_year1</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.SendNoYear, new { @id = "txtSendNoYear", @MaxLength = "4" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_CheckNoStart</td>
+                        <td class="col-md-2">
+                            @*20170630 緊急 RQ-2015-019666-0?? 發文字號擴碼 宏祥 update start*@
+                            @*@Html.TextBoxFor(m => m.SendNoStart, new { @id = "txtSendNoStart", @MaxLength = "14" })*@
+                            @Html.TextBoxFor(m => m.SendNoStart, new { @id = "txtSendNoStart", @MaxLength = "15" })
+                            @*20170630 緊急 RQ-2015-019666-0?? 發文字號擴碼 宏祥 update end*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_CheckNoEnd</td>
+                        <td class="col-md-2">
+                            @*20170630 緊急 RQ-2015-019666-0?? 發文字號擴碼 宏祥 update start*@
+                            @*@Html.TextBoxFor(m => m.SendNoEnd, new { @id = "txtSendNoEnd", @MaxLength = "14" })*@
+                            @Html.TextBoxFor(m => m.SendNoEnd, new { @id = "txtSendNoEnd", @MaxLength = "15" })
+                            @*20170630 緊急 RQ-2015-019666-0?? 發文字號擴碼 宏祥 update end*@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_CheckNoNow</td>
+                        <td class="col-md-2">
+                            @*20170630 緊急 RQ-2015-019666-0?? 發文字號擴碼 宏祥 update start*@
+                            @*@Html.TextBoxFor(m => m.SendNoNow, new { @id = "txtSendNoNow", @MaxLength = "14" })*@
+                            @Html.TextBoxFor(m => m.SendNoNow, new { @id = "txtSendNoNow", @MaxLength = "15" })
+                            @*20170630 緊急 RQ-2015-019666-0?? 發文字號擴碼 宏祥 update end*@
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Index", "SendNoSetting", new { area = "SystemManagement" })">@Lang.csfs_cancel</a>
+        </div>
+    }
+</div>
+
+@Html.Hidden("NowPage", "NowCreate")
+@Html.Hidden("CancelUrl", @Url.Action("Index", "SendNoSetting", new { area = "SystemManagement" }))
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_add_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_add_fail)
+@Html.Hidden("YearNotNull", Lang.csfs_YearNotNull)
+@Html.Hidden("StartNotNull", Lang.csfs_StartNotNull1)
+@Html.Hidden("EndNotNull", Lang.csfs_EndNotNull1)
+@Html.Hidden("NowNotNull", Lang.csfs_NowNotNull1)
+@Html.Hidden("TextIsNumber", Lang.csfs_enter_number)
+@Html.Hidden("EndThanStart", Lang.csfs_EndThanStart)
+@Html.Hidden("NowThanStart", Lang.csfs_NowThanStart)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/SystemManagement/SendNoSetting.js")
+}

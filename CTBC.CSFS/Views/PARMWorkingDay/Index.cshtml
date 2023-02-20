@@ -1,0 +1,21 @@
+﻿@model CTBC.CSFS.Models.PARMWorkingDayVO
+
+@{
+    ViewBag.Title = "Index";
+}
+<div class="headline">
+    @Lang.csfs_workingday
+</div><br />
+<div id="msg" style="color:Red;height:20px;"></div><br />
+  @using (Ajax.BeginForm("Index", new AjaxOptions() { HttpMethod = "post",OnSuccess = "displaySuccess",OnFailure = "displayError" }))
+{ 
+<div style="text-align:left;"><button type="submit" style="width:50px;">@Lang.csfs_save </button>&nbsp;&nbsp;<span>@Lang.csfs_wkday_chk</span></div>
+    if (Model != null)
+     { 
+        if (Model.WKList.Any())
+        {
+            <div id="calendar">@Html.Partial("_Calendar") </div>
+        }
+     }
+  }
+

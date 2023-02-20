@@ -1,0 +1,341 @@
+﻿@model CTBC.CSFS.Models.CaseQuery
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_20dayspay;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "The20DaysPay", new {area = "QueryAndExport"}, FormMethod.Post, new {id = "frmQuery", @class = "form-horizontal"}))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                <tr>
+                    @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                    <td class="col-md-1 text-right">@Lang.csfs_pay_date</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.Date, new { data_datepicker = "true", @Maxlength = "9" })
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" id="pageNum" name="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnNuclear" type="button" class="btn btn-primary btn-xs">@Lang.csfs_nuclear</button>
+            <button id="btnReportSelected" type="button" class="btn btn-primary btn-xs">@Lang.csfs_print</button>
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "The20DaysPay", new { area = "QueryAndExport" })">
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@* 逾期原因*@
+<div class="modal fade" id="modalOver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Over"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_nuclear</h4>
+            </div>
+            <div class="modal-body">
+                @Lang.csfs_over_memo:
+                @Html.TextAreaFor(m => m.OverDueMemo, new { @id = "txtOverDueMemo", @rows = "15", @class = "col-xs-12 no-padding", @MaxLength = "50" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnOverSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("GovDateText", Lang.csfs_gov_date)
+@Html.Hidden("CreatedDateText", Lang.csfs_keyin_date)
+@Html.Hidden("GetCaseKind2Url", Url.Action("ChangCaseKind1", "AgentToHandle", new { area = "Agent" }))
+@*@Html.Hidden("GetGovUnitUrl", Url.Action("ChangGovUnit", "CollectionToAssignment", new { area = "Collection" }))*@
+@Html.Hidden("CaseQueryRemittancer", Url.Action("BuildSimpleExcel", "CaseQuery", new { area = "QueryAndExport" }))
+@Html.Hidden("AssignChengHe", Url.Action("ChengHe", "The20DaysPay", new { area = "QueryAndExport" }))
+@Html.Hidden("OverDueInfoUrl", Url.Action("OverDueForChengHe", "The20DaysPay", new { area = "QueryAndExport" }))
+@*@Html.Hidden("NuclearConfirmMsg", Lang.csfs_confirm_export)*@
+@Html.Hidden("NuclearFaileMsg", Lang.csfs_nuclear_fail)
+@Html.Hidden("ReturnfirmMsg", Lang.csfs_confirm_approve)
+@Html.Hidden("ReturnFaileMsg", Lang.csfs_approve_fail)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("TextNotNull", Lang.csfs_text_notnull)
+@* 呈核 *@
+@Html.Hidden("NuclearConfirmMsg1", Lang.csfs_confirm_nuclear)
+@Html.Hidden("NuclearOkMsg", Lang.csfs_nuclear_success)
+@Html.Hidden("NuclearFaileMsg", Lang.csfs_nuclear_fail)
+@Html.Hidden("AddDay", (Int32)ViewBag.AddDay)
+@Html.Hidden("ReportUrl", Url.Action("Report", "Common", new { area = "Common" }))
+
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+@section scripts {
+    <script src="~/Scripts/bootstrap-typeahead.js"></script>
+    @Html.Hidden("GetGovNameUrl", Url.Action("GetGovNameByGoveKind", "Home", new { area = "" }))
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $.CSFS.bindGovKindAndUnit("ddlGOV_KIND", "txtGovUnit");
+            $("#ddlCaseKind").change(function () { changeCaseKind(); });
+            $("#btnQuery").click(function () { return btnQueryclick(); });
+            //$("#btnRemittancer").click(function () { return btnRemittancerSubmit("1") });
+            //$("#btnExportlist").click(function () { return btnRemittancerSubmit("2") });
+            //* 點選列印
+            $("#btnReportSelected").click(function () { return btnReportSelected(); });
+            //* 點擊呈核
+            $("#btnNuclear").click(function () { return btnOverClick(); });
+            $("#btnOverSubmit").click(function () { return btnOverSubmit(); });
+        });
+
+        if ($("#isQuery").val() == "1") {
+            $("#pageNum").val(parseInt($("#CurrentPage").val()));
+            btnQueryclick();
+        }
+
+        //* 查詢
+        function btnQueryclick() {
+            $("#divResult").html("");
+            trimAllInput();
+            //if (!ajaxValidateQuery()) {
+            //    return false;
+            //} else {
+                $.blockUI();
+                $.ajax({
+                    url: $("#divResult").attr("data-target-url"),
+                    type: "Post",
+                    cache: false,
+                    data: $("#frmQuery").serialize(),
+                    error: function () {
+                        jAlertError($("#LoadErrorMsg").val());
+                        $.unblockUI();
+                    },
+                    success: function (data) {
+                        $("#divResult").html(data).show();
+                        $("#querystring").val($("#frmQuery").serialize());
+                        $.unblockUI();
+                    }
+                });
+            //}
+        }
+        //* 20日查詢
+        function changeCaseKind() {
+            try {
+                var selectedValue = $("#ddlCaseKind option:selected").val();
+                if (selectedValue === "") {
+                    $("#ddlGovUnit").attr("disabled", "true");
+                    $("#ddlCaseKind2").empty();
+                    $("#ddlCaseKind2").append($("<option></option>").val("").text($("#PleaseSelect").val()));
+                } else {
+                    if ($.trim(selectedValue).length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: $("#GetCaseKind2Url").val(),
+                            data: { caseKind: selectedValue },
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    $("#ddlCaseKind2").removeAttr("disabled");
+                                    $("#ddlCaseKind2").empty();
+                                    $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                    $.each(data, function (i, item) {
+                                        $("#ddlCaseKind2").append($("<option></option>").val(item.Value).text(item.Value));
+                                    });
+                                } else {
+                                    $("#ddlCaseKind2").attr("disabled", "true");
+                                    $("#ddlCaseKind2").empty();
+                                    $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            catch (e) {
+            }
+        }
+
+        //*點擊呈核
+        function btnOverClick() {
+            var arylimitDate = new Array();
+            var arylimit = new Array();
+            $(".checkfile:checked").each(function () {
+                arylimitDate.push($(this).attr("data-limitDate").replace("/", "").replace("/", ""));//向数组中添加元素
+            });
+            var strlimitDate = arylimitDate.sort().join(',');
+            var strNowDate = GetDateStr(parseInt($("#AddDay").val()));
+
+            //if (strlimitDate < strNowDate) {
+            //    var iLen = 0;
+            //    var strKey = "";
+            //    $(".checkfile").each(function () {
+            //        if ($(this).prop("checked") === true) {
+            //            iLen = iLen + 1;
+            //            strKey = strKey + $(this).val() + ",";
+            //        }
+            //    });
+            //    if (iLen <= 0) {
+            //        jAlertError($("#SelectOneMsg").val());
+            //        return;
+            //    }
+            //    $("#txtOverDueMemo").val();
+            //    $("#modalOver").modal();
+            //}
+            //else {
+                var caseIdArr = new Array();
+                $(".checkfile:checked").each(function () {
+                    caseIdArr.push($(this).val());//向数组中添加元素
+                });
+                var strCaseId = caseIdArr.join(',');
+
+                if (strCaseId.length <= 0) {
+                    jAlertError($("#SelectOneMsg").val());
+                    return;
+                }
+                jConfirm($("#NuclearConfirmMsg1").val(), $("#j_confirm_header").val(), function (bFlag) {
+                    if (bFlag === true) {
+                        $.blockUI();
+                        $.ajax({
+                            type: "POST",
+                            traditional: true,
+                            url: $("#AssignChengHe").val(),
+                            async: false,
+                            data: { CaseIdarr: strCaseId },
+                            error: function () {
+                                jAlertError($("#LoadErrorMsg").val());
+                                $.unblockUI();
+                            },
+                            success: function (data) {
+                                if (data.ReturnCode === "1") {
+                                    jAlertSuccess($("#NuclearOkMsg").val(), function () {
+                                        btnQueryclick();
+                                    });
+                                } else {
+                                    jAlertError($("#NuclearFaileMsg").val());
+                                    $.unblockUI();
+                                }
+                            }
+                        });
+                    }
+                });
+            //}
+        }
+
+        function btnOverSubmit() {
+            var aryCaseId = new Array();
+            $(".checkfile:checked").each(function () {
+                aryCaseId.push($(this).val());//向数组中添加元素
+            });
+            var strCaseId = aryCaseId.join(',');
+            if (strCaseId.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+            if (!ajaxValidateOver()) {
+                return false;
+            }
+            jConfirm($("#NuclearConfirmMsg1").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    //* click confirm ok
+                    $.ajax({
+                        type: "POST",
+                        url: $("#OverDueInfoUrl").val(),
+                        data: { strIds: strCaseId, OverDueMemo: $("#txtOverDueMemo").val() },
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#NuclearOkMsg").val(), function () {
+                                    $("#modalOver").modal("hide");
+                                    btnQueryclick();
+                                });
+                            } else {
+                                jAlertError($("#NuclearFaileMsg").val());
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function GetDateStr(addDayCount) {
+            var dd = new Date();
+            dd.setDate(dd.getDate() + addDayCount);//获取AddDayCount天后的日期
+            var y = dd.getFullYear();
+            var m = dd.getMonth() + 1;//获取当前月份的日期
+            var d = dd.getDate();
+            return y + "" + (m < 10 ? "0" + m : m) + "" + (d < 10 ? "0" + d : d);
+        }
+
+        function ajaxValidateOver() {
+            if ($.trim($("#txtOverDueMemo").val()) === "") {
+                jAlertError($("#TextNotNull").val());
+                return false;
+            }
+            return true;
+        }
+
+        //* 報表
+        function btnReportSelected() {
+            var aryCaseId = new Array();
+            $(".checkfile:checked").each(function () {
+                aryCaseId.push($(this).val());//向数组中添加元素
+            });
+            var strCaseId = aryCaseId.join(',');
+            if (strCaseId.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return false;
+            }
+
+            if (aryCaseId.length > 100) {
+                jAlertError($("#CheckCount").val());
+            }
+            var strCon="Pay";
+            var actionUrl = $("#ReportUrl").val() + "?caseIdList=" + strCaseId + "&Con=" + strCon;
+            $("#frmForReport").attr("src", actionUrl);
+            return false;
+        }
+
+
+        function ajaxValidateQuery() {
+            var NewLine = "<br/>";
+            var Msg = "";
+            if (!checkIsValidDate($("#GovDateS").val())) {
+                Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#GovDateText").val()) + NewLine;
+            }
+            if (!checkIsValidDate($("#GovDateE").val())) {
+                Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#GovDateText").val()) + NewLine;
+            }
+            if (!checkIsValidDate($("#CreatedDateS").val())) {
+                Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#CreatedDateText").val()) + NewLine;
+            }
+            if (!checkIsValidDate($("#CreatedDateE").val())) {
+                Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#CreatedDateText").val()) + NewLine;
+            }
+            if (Msg.length > 0) {
+                jAlertError(Msg);
+                return false;
+            }
+            return true;
+        }
+        function trimAllInput() {
+            $(":input[type='text']").each(function () {
+                $(this).val($.trim($(this).val()));
+            });
+        }
+    </script>
+
+}

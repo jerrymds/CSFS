@@ -1,0 +1,89 @@
+﻿@model CTBC.CSFS.ViewModels.CSFSLogViewModel
+@{
+    Layout = null;
+}
+<script language="javascript" type="text/javascript">
+    $(document).ready(function () {
+        //間隔行不同顏色
+        $("#detail tr:odd").addClass("gridrow");
+        $("#detail tr:even").addClass("gridrow_alternate");
+    });
+</script>
+<div class="con_title2">
+    @Lang.csfs_result_area
+</div>
+<div>
+    <table id="detail" width="100" border="1" cellpadding="3" cellspacing="0" class="query_table">
+        <thead>
+            <tr>
+                <th>
+                    @Lang.csfs_seq
+                </th>
+                <th>
+                    @Lang.csfs_log_num
+                </th>
+                <th>
+                    @Lang.csfs_log_time
+                </th>
+                <th>
+                    @Lang.csfs_log_title
+                </th>
+                <th>
+                    @Lang.csfs_log_msg
+                </th>
+                <th>
+                    @Lang.csfs_usr_empid
+                </th>
+                <th>
+                    @Lang.csfs_fun_num
+                </th>
+                <th>
+                    URL
+                </th>
+                <th>
+                    IP
+                </th>
+                <th>
+                    @Lang.csfs_usr_pc_name
+                </th>
+            </tr>
+        </thead>
+
+        @if (Model != null)
+        {
+            if (Model.CSFSLogList.Any())
+            {
+                foreach (var item in Model.CSFSLogList)
+                {        
+                <tr>
+                    <td>@item.RowNum</td>
+                    <td>@item.LogID</td>
+                    <td>@item.Timestamp</td>
+                    <td>@item.Title</td>
+                    <td>@item.Message</td>
+                    <td>@item.UserId</td>
+                    <td>@item.FunctionId</td>
+                    <td>@item.URL</td>
+                    <td>@item.IP</td>
+                    <td>@item.MachineName</td>
+                </tr>
+                }
+            }
+            else {
+            <tr class="gridrow"><td colspan="10"><span style="color:red">@Lang.csfs_no_data</span></td></tr>}
+        }
+        else {
+        <tr class="gridrow"><td colspan="10"><span style="color:red">@Lang.csfs_no_data</span></td></tr>}
+    </table>
+    @if (Model.CSFSLogList != null)
+    {
+        if (Model.CSFSLogList.Any())
+        {    
+        <div class="pager" id="Div1">
+            @Ajax.Pager(Model.CSFSLogVO.PageSize, Model.CSFSLogVO.CurrentPage, Model.CSFSLogVO.TotalItemCount, Model.CSFSLogVO, new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "Post" }, Lang.csfs_prev_page, Lang.csfs_first_page, Lang.csfs_last_page, Lang.csfs_next_page, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record)
+        </div>    
+        }
+    }
+    
+</div>
+

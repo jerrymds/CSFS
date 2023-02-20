@@ -1,0 +1,129 @@
+﻿@using CTBC.FrameWork.Paging
+@model CheckNoSettingViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.CheckNoSettingList != null)
+                {
+                    if (Model.CheckNoSettingList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CheckNoSetting.PageSize, Model.CheckNoSetting.CurrentPage, Model.CheckNoSetting.TotalItemCount, Model.CheckNoSetting, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CheckNoSetting.SortExpression, Model.CheckNoSetting.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th class="col-md-1">@Lang.csfs_CheckIntervalID </th>
+                            <th class="col-md-2">@Lang.csfs_check_no</th>
+                            <th class="col-md-1">@Lang.csfs_use_kind</th>
+                            <th class="col-md-1">@Lang.csfs_IsUsed</th>
+                            <th class="col-md-2">@Lang.csfs_IsPreserve</th>
+                            <th class="col-md-1">@Lang.csfs_settings</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CheckNoSettingList != null && Model.CheckNoSettingList.Any())
+                        {
+                            foreach (var item in Model.CheckNoSettingList)
+                            {
+                                <tr>
+                                    <td class="text-center" style="width: 60px">
+                                        @item.CheckIntervalID
+                                    </td>
+                                    <td class="text-center">@item.CheckNo</td>
+                                    <td class="text-center">
+                                        @item.Kind
+                                    </td>
+                                    <td class="text-center">
+                                        @if (item.IsUsed == 0)
+                                        {@Lang.csfs_no1}
+                                        else
+                                        {@Lang.csfs_yes }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (item.IsPreserve == 0)
+                                        {@Lang.csfs_no1}
+                                        else
+                                        {@Lang.csfs_yes }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (item.Kind == Lang.csfs_Pay)
+                                        {
+                                            if (item.IsUsed == 0 && item.IsPreserve == 0)
+                                            {
+                                                <a class="btn btn-primary btn-xs" title="@Lang.csfs_invalid" href="#" data-href="@Url.Action("Invalid", "CheckNoSetting", new { area = "SystemManagement", CheckNo = item.CheckNo, item.CheckIntervalID })" data-invalidlink="true">
+                                                    @Lang.csfs_invalid
+                                                </a>
+                                                <a class="btn btn-primary btn-xs" title="@Lang.csfs_others" href="#" data-href="@Url.Action("Others", "CheckNoSetting", new { area = "SystemManagement", CheckNo = item.CheckNo, item.CheckIntervalID })" data-otherslink="true">
+                                                    @Lang.csfs_others
+                                                </a>
+                              
+                                            }
+                                        }
+                                        else if(item.Kind==Lang.csfs_invalid)
+                                        {
+                                            <a class="btn btn-primary btn-xs" title="@Lang.csfs_Pay" href="#" data-href="@Url.Action("Pay", "CheckNoSetting", new { area = "SystemManagement", CheckNo = item.CheckNo, item.CheckIntervalID })" data-paylink="true">
+                                                    @Lang.csfs_Pay
+                                                </a>
+                                                <a class="btn btn-primary btn-xs" title="@Lang.csfs_others" href="#" data-href="@Url.Action("Others", "CheckNoSetting", new { area = "SystemManagement", CheckNo = item.CheckNo, item.CheckIntervalID })" data-otherslink="true">
+                                                    @Lang.csfs_others
+                                                </a>
+                                        }
+                                        else if (item.Kind == Lang.csfs_others)
+                                        {
+                                            <a class="btn btn-primary btn-xs" title="@Lang.csfs_Pay" href="#" data-href="@Url.Action("Pay", "CheckNoSetting", new { area = "SystemManagement", CheckNo = item.CheckNo, item.CheckIntervalID })" data-paylink="true">
+                                                    @Lang.csfs_Pay
+                                                </a>
+                                            <a class="btn btn-primary btn-xs" title="@Lang.csfs_invalid" href="#" data-href="@Url.Action("Invalid", "CheckNoSetting", new { area = "SystemManagement", CheckNo = item.CheckNo, item.CheckIntervalID })" data-invalidlink="true">
+                                                    @Lang.csfs_invalid
+                                                </a>
+                                        }
+
+                                        @if (item.IsUsed == 1 && item.IsPreserve == 0)
+                                        {
+                                                <a class="btn btn-primary btn-xs" title="@Lang.csfs_modify" href="#" data-href="@Url.Action("Edit", "CheckNoSetting", new { area = "SystemManagement", CheckNo = item.CheckNo, item.CheckIntervalID })" data-otherslink="true">
+                                                    @Lang.csfs_modify
+                                                </a>
+                                        }
+
+                                        @if (item.IsPreserve == 1)
+                                        {
+                                                <a class="btn btn-primary btn-xs" title="@Lang.csfs_modify" href="#" data-href="@Url.Action("Edit", "CheckNoSetting", new { area = "SystemManagement", CheckNo = item.CheckNo, item.CheckIntervalID })" data-otherslink="true">
+                                                    @Lang.csfs_modify
+                                                </a>
+                                        }
+
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.CheckNoSetting.CheckIntervalID)
+                @Html.Hidden("defaultSortColumn", Model.CheckNoSetting.SortExpression)
+                @Html.Hidden("defaultSort", Model.CheckNoSetting.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        //$.custPagination.sort($("#divResult"));
+        $.CheckNoSetting.bindDetail();
+    });
+</script>

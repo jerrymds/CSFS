@@ -1,0 +1,71 @@
+﻿@model CTBC.CSFS.ViewModels.AgentOriginalInfoViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfo", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_document_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentAccountInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_account_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentMeetInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_meet_info</a></li>
+        <li class="active"><a href="@Url.Action("Index", "AgentOriginalInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_original_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccess", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_department_access</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentSendSettingInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_sendsetting_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseHistory", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_history</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseCalculator", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_calculator</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseMemo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_memo</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentTransactionRecords", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_transrecord_info</a></li>
+        @Html.GetBackButtonInTab()
+     </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel1">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs" style="cursor: move;">
+                    <li class="active"><a href="@Url.Action("Index", "AgentOriginalInfo", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_original_reading</a></li>
+                    <li class=""><a href="@Url.Action("LendIndex", "AgentOriginalInfo", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_original_return</a></li>
+                </ul>
+                <div class="tab-content ">
+                    <div class="tab-pane active" id="panel1_1">
+                        @using (Html.BeginForm("_QueryResult", "AgentOriginalInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+                        {
+                            @Html.HiddenFor(m => m.LendDataInfo.CaseId, new { @id = "hidLendCaseId" })
+                            @Html.HiddenFor(m => m.LendDataInfo.LendID, new { @id = "hidLendId" })
+                        }
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-primary">
+                                    <div class="box-header">
+                                        <i class="glyphicon glyphicon-th"></i>
+                                        <h3 class="box-title">@Lang.csfs_result_area</h3>
+                                    </div>
+                                    <div id="querytablediv" class="box-body">
+
+                                        <div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "AgentOriginalInfo", new {area = "Agent"})">
+
+                                        </div>
+                                    </div><!-- /.box-body -->
+                                    <div class="box-footer text-center">
+                                        <a href="@Url.Action("Create", "AgentOriginalInfo", new { area = "Agent", CaseID = ViewBag.CaseId, @radom = DateTime.Now.ToString() })" class="fancy800_310 btn btn-default btn-xs">@Lang.csfs_create_lend</a>
+                                    </div>
+                                </div><!-- /.box -->
+                            </div>
+                        </div>
+                        <iframe id="upload_frame" name="upload_frame" src="" class="hidden"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("hidCaseid", (System.Guid)ViewBag.CaseId)
+@Html.Hidden("NowPage", "AgentOriginalInfoQuery")
+@Html.Hidden("EditInfoUrl", Url.Action("Edit", "AgentOriginalInfo", new { area = "Agent" }))
+@Html.Hidden("DeleteLendUrl", Url.Action("DeleteLend", "AgentOriginalInfo", new { area = "Agent" }))
+@Html.Hidden("DeleteSucMsgUrl", Lang.csfs_del_ok)
+@Html.Hidden("ReturnFailMsg", Lang.csfs_del_fail)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/Agent/AgentOriginalInfo.js")
+}

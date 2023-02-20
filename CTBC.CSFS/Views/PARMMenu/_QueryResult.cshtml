@@ -1,0 +1,117 @@
+﻿@model CTBC.CSFS.ViewModels.PARMMenuViewModel
+@{
+    Layout = null;
+}
+<script language="javascript" type="text/javascript">
+    function ScheduleDelete(id) {
+        if (confirm("@Lang.csfs_menu_is_del")) {
+            //-------------------------------------------------------------------
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: '@Url.Action("Delete","PARMMenu")',
+                async: false,
+                data: { id: id },
+                success: function (data) {
+                    if (data == "1") {
+                        alert("@Lang.csfs_del_ok");
+                        location.href = '@Url.Action("Query","PARMMenu")';
+                    } else {
+                        alert("@Lang.csfs_del_fail");
+                    }
+                },
+                error: function (xhr) {
+                    displayError(xhr);
+                }
+            });
+            //-------------------------------------------------------------------
+        }
+    }
+
+    $(document).ready(function () {
+        $("#detail tr:odd").addClass("gridrow");
+        $("#detail tr:even").addClass("gridrow_alternate");
+    });
+</script>
+<div class="con_title2">
+    @Lang.csfs_result_area
+</div>
+<div>
+    <table id="detail" width="100" border="1" cellpadding="3" cellspacing="0" class="query_table">
+        <thead>
+            <tr>
+                <th>
+                    @Lang.csfs_seqnum
+                </th>
+                <th>
+                    @Lang.csfs_menu_id
+                </th>
+                <th>
+                    @Lang.csfs_menu_type
+                </th>
+                <th>
+                    @Lang.csfs_menu_level
+                </th>
+                <th>
+                    @Lang.csfs_menu_parent
+                </th>
+                <th>
+                    @Lang.csfs_menu_name
+                </th>
+                <th>
+                    @Lang.csfs_menu_funcid
+                </th>
+                <th>
+                    @Lang.csfs_menu_url
+                </th>
+                <th>
+                    @Lang.nume_menu_sort
+                </th>
+                <th>
+                </th>
+            </tr>
+        </thead>
+
+        @if (Model != null)
+        {
+            if (Model.PARMMenuVOList.Any())
+            {
+                foreach (var item in Model.PARMMenuVOList)
+                {
+        
+                    <tr>
+                        <td>@item.RowNum</td>
+                        <td>@item.ID</td>
+                        <td>@item.MenuType</td>
+                        <td>@item.MenuLevel</td>
+                        <td>@item.Parent</td>
+                        <td>@Lang.ResourceManager.GetString(item.TITLE.Trim())</td>
+                        <td>@item.md_FuncID</td>
+                        <td>@item.md_URL</td>
+                        <td>@item.MenuSort</td>
+                        <td>
+                            <img src="@Url.Content("~/Content/img/u299.png")" alt="" onclick="location.href = '@Url.Action("Edit","PARMMenu",new {id = item.ID})';" />
+                            @*<img src="@Url.Content("~/Content/img/u299.png")" alt="" onclick="$.post(getRootURL() +'PARMMenu/Edit?id='+ '@item.ID');" />*@
+                            &nbsp;&nbsp;<img src="@Url.Content("~/Content/img/u38.gif")" alt="" onclick="ScheduleDelete('@item.ID');" />
+                        </td>
+                    </tr>
+                }
+            }
+            else {
+                <tr class="gridrow"><td colspan="10"><span style="color:red">@Lang.csfs_query_nodata</span></td></tr>
+            }
+        }
+        else { 
+            <tr class="gridrow"><td colspan="10"><span style="color:red">@Lang.csfs_query_nodata</span></td></tr>
+        }        
+    </table>
+    @if (Model.PARMMenuVOList != null)
+    {
+        if (Model.PARMMenuVOList.Any())
+        {   
+            <div class="pager" id="pager">
+                @Ajax.Pager(Model.PARMMenuVO.PageSize, Model.PARMMenuVO.CurrentPage, Model.PARMMenuVO.TotalItemCount, Model.PARMMenuVO, new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "Get" },Lang.csfs_prev_page, Lang.csfs_first_page, Lang.csfs_last_page, Lang.csfs_next_page, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record)
+            </div>    
+        }
+    }    
+</div>

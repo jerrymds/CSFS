@@ -1,0 +1,19 @@
+﻿@{
+    Layout = null;
+}
+<div class="header"></div>
+<div class="logout">[<a href="javascript:;" onclick="Logout()" style="color:#FFFFFF;font-size:15px;">@Lang.csfs_logoff</a>]</div>
+
+<script language="javascript" type="text/javascript">
+    @*function ChangeCulture(lang, url) {
+        $.post('@Url.Action("ChangeCulture")', { lang: lang, returnUrl: '@this.Request.RawUrl' }, function (date) {
+            if (@Session["Culture"] =null' == 'True') {
+                parent.location.reload();
+            }
+        });
+    }*@
+
+    function Logout() {
+        $.post('@Url.Action("Logout")', {}, function (data) { parent.location.href = "@Url.Content('~' + @CTBC.CSFS.Pattern.Config.CUF_UserLogoutURL)"; });
+    }
+</script>

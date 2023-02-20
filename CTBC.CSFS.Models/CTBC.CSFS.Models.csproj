@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{DE6758E5-4029-466B-841B-69C5DEEBB530}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CTBC.CSFS.Models</RootNamespace>
+    <AssemblyName>CTBC.CSFS.Models</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=5.0.414.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AgentDepartmentAccess.cs" />
+    <Compile Include="AgentSetting.cs" />
+    <Compile Include="BatchControl.cs" />
+    <Compile Include="BatchQueue.cs" />
+    <Compile Include="CaseClosedQuery.cs" />
+    <Compile Include="CaseCustModels.cs" />
+    <Compile Include="CaseCustNewRFDMRecv.cs" />
+    <Compile Include="CaseCustNewRFDMSend.cs" />
+    <Compile Include="CaseCustOutputF1.cs" />
+    <Compile Include="CaseCustOutputF2.cs" />
+    <Compile Include="CaseCustOutputF3.cs" />
+    <Compile Include="CaseCustQuery.cs" />
+    <Compile Include="CaseCustRFDMRecv.cs" />
+    <Compile Include="CaseCustRFDMSend.cs" />
+    <Compile Include="CaseDataLog.cs" />
+    <Compile Include="CaseDeadDetail.cs" />
+    <Compile Include="CaseDeadQuery.cs" />
+    <Compile Include="CaseDeathDeposit.cs" />
+    <Compile Include="CaseDeathInvestment.cs" />
+    <Compile Include="CaseDeathLoan.cs" />
+    <Compile Include="CaseEdocFile.cs" />
+    <Compile Include="CaseMeetDetails.cs" />
+    <Compile Include="CaseMeetMaster.cs" />
+    <Compile Include="CaseQuery.cs" />
+    <Compile Include="CaseReturn.cs" />
+    <Compile Include="CaseSendSetting.cs" />
+    <Compile Include="CasePayeeSetting.cs" />
+    <Compile Include="AgentHandleDetail.cs" />
+    <Compile Include="AgentToHandle.cs" />
+    <Compile Include="AuthZ.cs" />
+    <Compile Include="CaseAccountExternal.cs" />
+    <Compile Include="CaseAssignTable.cs" />
+    <Compile Include="CaseAttachment.cs" />
+    <Compile Include="CaseCalculatorDetails.cs" />
+    <Compile Include="CaseCalculatorMain.cs" />
+    <Compile Include="CaseHistory.cs" />
+    <Compile Include="CaseMaster.cs" />
+    <Compile Include="CaseMemo.cs" />
+    <Compile Include="CaseNoTable.cs" />
+    <Compile Include="CaseObligor.cs" />
+    <Compile Include="CaseSeizure.cs" />
+    <Compile Include="CaseSendSettingDetails.cs" />
+    <Compile Include="CaseTrsQuery.cs" />
+    <Compile Include="CaseTrsQueryHistory.cs" />
+    <Compile Include="CheckQueryAndPrint.cs" />
+    <Compile Include="CheckUse.cs" />
+    <Compile Include="CollectionToAgent.cs" />
+    <Compile Include="CollectionToSign.cs" />
+    <Compile Include="CSFSBU.cs" />
+    <Compile Include="CSFSBUMaster.cs" />
+    <Compile Include="CSFSBUToEmployee.cs" />
+    <Compile Include="CustomerInfo.cs" />
+    <Compile Include="DeptAccessQuery.cs" />
+    <Compile Include="DirectorCooperative.cs" />
+    <Compile Include="DirectorToApprove.cs" />
+    <Compile Include="EDocTXT1.cs" />
+    <Compile Include="EDocTXT1_Detail.cs" />
+    <Compile Include="EDocTXT2.cs" />
+    <Compile Include="EDocTXT2_Detail.cs" />
+    <Compile Include="EDocTXT3.cs" />
+    <Compile Include="EDocTXT3_Detail.cs" />
+    <Compile Include="Email_Notice.cs" />
+    <Compile Include="Entity.cs" />
+    <Compile Include="CSFSExportDataVO.cs" />
+    <Compile Include="EnumDef.cs" />
+    <Compile Include="FeeChargeOffs.cs" />
+    <Compile Include="GovAddress.cs" />
+    <Compile Include="GssDoc.cs" />
+    <Compile Include="GssDoc_Detail.cs" />
+    <Compile Include="HistoryAgentHandleDetail.cs" />
+    <Compile Include="HistoryBatchQueue.cs" />
+    <Compile Include="HistoryCaseAccountExternal.cs" />
+    <Compile Include="HistoryCaseAttachment.cs" />
+    <Compile Include="HistoryCaseDataLog.cs" />
+    <Compile Include="HistoryCaseEdocFile.cs" />
+    <Compile Include="HistoryCaseHistory.cs" />
+    <Compile Include="HistoryCaseMaster.cs" />
+    <Compile Include="HistoryCaseMemo.cs" />
+    <Compile Include="HistoryCaseNoTable.cs" />
+    <Compile Include="HistoryCaseObligor.cs" />
+    <Compile Include="HistoryCasePayeeSetting.cs" />
+    <Compile Include="HistoryCaseSeizure.cs" />
+    <Compile Include="HistoryCaseSendSetting.cs" />
+    <Compile Include="HistoryCaseSendSettingDetails.cs" />
+    <Compile Include="HistoryCheckNoSetting.cs" />
+    <Compile Include="HistoryCheckUse.cs" />
+    <Compile Include="HistoryLendAttachment.cs" />
+    <Compile Include="HistoryLendData.cs" />
+    <Compile Include="HistoryQuery.cs" />
+    <Compile Include="HistorySendSettingRef.cs" />
+    <Compile Include="HistoryTX_00450.cs" />
+    <Compile Include="HistoryTX_33401.cs" />
+    <Compile Include="HistoryTX_60491_Detl.cs" />
+    <Compile Include="HistoryTX_60491_Grp.cs" />
+    <Compile Include="HistoryTX_60629.cs" />
+    <Compile Include="HistoryTX_67002.cs" />
+    <Compile Include="HistoryTX_67072_Detl.cs" />
+    <Compile Include="HistoryTX_67072_Grp.cs" />
+    <Compile Include="HistoryTX_67100.cs" />
+    <Compile Include="HostMsgDetl.cs" />
+    <Compile Include="HostMsgGrp.cs" />
+    <Compile Include="ImportEdocData.cs" />
+    <Compile Include="LDAPDepartment.cs" />
+    <Compile Include="LDAPEmployee.cs" />
+    <Compile Include="LDAPManager.cs" />
+    <Compile Include="LendAttachment.cs" />
+    <Compile Include="LendData.cs" />
+    <Compile Include="MeetingResult.cs" />
+    <Compile Include="MeetingResultDetail.cs" />
+    <Compile Include="MeetingSummaryList.cs" />
+    <Compile Include="MultiKeyValue.cs" />
+    <Compile Include="ParameterSetting.cs" />
+    <Compile Include="PARMWorkingDay.cs" />
+    <Compile Include="PARMWorkingDayVO.cs" />
+    <Compile Include="CSFSEmployee.cs" />
+    <Compile Include="CSFSLogVO.cs" />
+    <Compile Include="CSFSRole.cs" />
+    <Compile Include="PARMCode.cs" />
+    <Compile Include="PARMMenuVO.cs" />
+    <Compile Include="PARMMenuXML.cs" />
+    <Compile Include="PARMMenuXMLNode.cs" />
+    <Compile Include="PARMScheduleSettingVO.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CheckNoSetting.cs" />
+    <Compile Include="ExternalOldQuery.cs" />
+    <Compile Include="ExternalOldDetails.cs" />
+    <Compile Include="RemitSeizure.cs" />
+    <Compile Include="SeizureOldDetails3.cs" />
+    <Compile Include="SeizureOldDetails2.cs" />
+    <Compile Include="SeizureOldDetails1.cs" />
+    <Compile Include="SeizureOldQuery.cs" />
+    <Compile Include="SeizureQuery.cs" />
+    <Compile Include="SendNoSetting.cs" />
+    <Compile Include="SendSettingRef.cs" />
+    <Compile Include="SendTimeSection.cs" />
+    <Compile Include="TransactionDetail.cs" />
+    <Compile Include="TX_09093.cs" />
+    <Compile Include="TX_33401.cs" />
+    <Compile Include="TX_00450.cs" />
+    <Compile Include="TX_60491_Detl.cs" />
+    <Compile Include="TX_60491_Grp.cs" />
+    <Compile Include="TX_60629.cs" />
+    <Compile Include="TX_67002.cs" />
+    <Compile Include="TX_67072_Detl.cs" />
+    <Compile Include="TX_67072_Grp.cs" />
+    <Compile Include="TX_67100.cs" />
+    <Compile Include="WarningAccountQuery.cs" />
+    <Compile Include="WarningAttachment.cs" />
+    <Compile Include="WarningGenAcct.cs" />
+    <Compile Include="WarningImportQueryData.cs" />
+    <Compile Include="WarningQuery.cs" />
+    <Compile Include="WarningDetails.cs" />
+    <Compile Include="WarningMaster.cs" />
+    <Compile Include="WarningQueryHistory.cs" />
+    <Compile Include="WarningReturn.cs" />
+    <Compile Include="WarningState.cs" />
+    <Compile Include="WarningToApprove.cs" />
+    <Compile Include="WarningUnionQuery.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CTBC.Framework.Platform\CTBC.Framework.Platform.csproj">
+      <Project>{c6fe88d5-936d-449f-a24c-ce006ebe3474}</Project>
+      <Name>CTBC.Framework.Platform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.CSFS.Pattern\CTBC.CSFS.Pattern.csproj">
+      <Project>{0e078a06-8e4b-40a8-8f0b-625e854452ad}</Project>
+      <Name>CTBC.CSFS.Pattern</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.CSFS.Resource\CTBC.CSFS.Resource.csproj">
+      <Project>{b26fc559-ff34-42fe-bb98-2bff855b3a2c}</Project>
+      <Name>CTBC.CSFS.Resource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.Framework.Util\CTBC.Framework.Util.csproj">
+      <Project>{36a819bb-7f0a-408c-9e36-9bfefdfd2278}</Project>
+      <Name>CTBC.Framework.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

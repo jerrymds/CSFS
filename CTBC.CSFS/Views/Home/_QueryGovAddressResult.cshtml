@@ -1,0 +1,52 @@
+﻿@model List<CTBC.CSFS.Models.GovAddress>
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div id="querytablediv" class="box-body">
+            <table id="tableList" class="table table-bordered table-striped text-black">
+                <thead>
+                    <tr class="alert-success text-center ">
+                        <th class="col-xs-1">刪除</th>
+                        <th class="col-xs-3">欄位名稱</th>
+                        <th class="col-xs-6">地址</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <button type="button" class="btn btn-default btn-xs js-add" data-govname="@item.GovName" data-govaddr="@item.GovAddr">
+                                        <i class="glyphicon glyphicon-plus"></i>
+                                    </button>
+                                </td>
+                                <td class="text-center">@item.GovName</td>
+                                <td class="text-center">@item.GovAddr</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $("button.js-add").click(function () {
+            var govName = $(this).attr("data-govname");
+            var govAddr = $(this).attr("data-govaddr");
+            //* 呼叫父頁面的addTr方法
+            parent.addTr(govName, govAddr);
+            parent.$.colorbox.close();
+        });
+    });
+</script>

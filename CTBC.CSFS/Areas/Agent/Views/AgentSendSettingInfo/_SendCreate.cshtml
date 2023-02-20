@@ -1,0 +1,514 @@
+﻿@using CTBC.CSFS.ViewModels
+@model CaseSendSettingCreateViewModel
+
+@if (ViewBag.AccountInfoFlag != null)
+{
+    ViewBag.Title = "開啟發文內容";
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+else
+{
+    ViewBag.Title = Lang.csfs_send_setting;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*@{
+    ViewBag.Title = Lang.csfs_send_setting;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}*@
+<div class="nav-tabs-custom">
+    @if (ViewBag.AccountInfoFlag == null)
+    {
+        <!-- Tabs within a box -->
+        <ul class="nav nav-tabs" style="cursor: move;">
+            <li class=""><a href="@Url.Action("Index", "AgentDocumentInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_document_info</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentAccountInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_account_info</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentMeetInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_meet_info</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentOriginalInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_original_info</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccess", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_department_access</a></li>
+            <li class="active"><a href="@Url.Action("Index", "AgentSendSettingInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_sendsetting_info</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseHistory", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_case_history</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseCalculator", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_case_calculator</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseMemo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_case_memo</a></li>
+            @Html.GetBackButtonInTab()
+        </ul>
+    }
+    
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel1">
+            <div class="box box-primary">
+                <div class="box-header">
+                    @if (ViewBag.AccountInfoFlag != null)
+                    {
+                        <h3 class="box-title">發文內容預覽</h3>
+                    }
+                    else
+                    {
+                        <i class="fa fa-edit"></i>
+                        <h3 class="box-title">@Lang.csfs_create</h3>
+                    }
+                    
+                </div>
+                @using (Html.BeginForm("_SendCreate", "AgentSendSettingInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmSendCreate", @class = "form-horizontal" }))
+                {
+                    <div class="box-body">
+                        <table class="table text-black no-border">
+                            <tbody>
+                                <tr>
+                                    <td>@Lang.csfs_model</td>
+                                    <td colspan="5">
+                                        @Html.DropDownListFor(m => m.Template, (IEnumerable<SelectListItem>)ViewBag.TemplateList, new { @id = "ddlTemplate" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Lang.csfs_senddate</td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.SendDate, new { data_datepicker = "true", @id = "SendDate", @Value = Model.SendDate.ToString("yyy/MM/dd") })
+                                    </td>
+                                    <td>@Lang.csfs_sendword1</td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.SendWord, new { @MaxLength = "60", @id = "SendWord", @Value = Model.SendWord, @readonly = "true" })
+                                        @*@Html.TextBoxFor(m => m.SendWord, new { @MaxLength = "60", @id = "SendWord", @Value = Lang.csfs_ctci_bank, @readonly = "true" })*@
+                                        @Lang.csfs_send_word1 @Html.TextBoxFor(m => m.SendNo, new { @id = "SendNo", @MaxLength = "60", @readonly = "true" })@Lang.csfs_send_word2
+                                    </td>
+                                    <td>@Lang.csfs_sendkind</td>
+                                    <td>
+                                        @*@if ((Model.ReceiveKind == "電子公文" && Model.Template == "支付") || (Model.ReceiveKind == "電子公文" && Model.Template == "支付電子回文"))*@
+                                        @if ((Model.ReceiveKind == "電子公文" ))
+                                        {
+                                            @Html.DropDownListFor(m => m.SendKind, (IEnumerable<SelectListItem>)ViewBag.SendKindList, Lang.csfs_select, new { @id = "ddlSendKind", @style = "width:65%" })
+                                        }
+
+                                        @*@if (Model.ReceiveKind == "電子公文" && Model.Template != "支付" && Model.Template != "支付電子回文")
+                                        {
+                                            @Html.DropDownListFor(m => m.SendKind, (IEnumerable<SelectListItem>)ViewBag.SendKindList, Lang.csfs_select, new { @id = "ddlSendKind", @disabled = "true" })
+                                        }*@
+                                        @if (Model.ReceiveKind != "電子公文")
+                                        {
+                                            @Html.DropDownListFor(m => m.SendKind, (IEnumerable<SelectListItem>)ViewBag.SendKindList, Lang.csfs_select, new { @id = "ddlSendKind", @disabled = "true" })
+                                        }
+                                        @*@if (Model.ReceiveKind == "電子公文")
+                                        {
+                                            @Html.DropDownListFor(m => m.SendKind, (IEnumerable<SelectListItem>)ViewBag.SendKindList, Lang.csfs_select, new { @id = "ddlSendKind", onchange = "changeSendKind()", @disabled = "false" })
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownListFor(m => m.SendKind, (IEnumerable<SelectListItem>)ViewBag.SendKindList, Lang.csfs_select, new { @id = "ddlSendKind", onchange = "changeSendKind()", @disabled = "true" })
+                                        }*@
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>@Lang.csfs_case_speed</td>
+                                    <td>
+                                        @Html.DropDownListFor(m => m.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, Lang.csfs_select, new { @id = "ddlSpeed" })
+
+                                    </td>
+                                    <td>@Lang.csfs_isophcnic</td>
+                                    <td>@Html.DropDownListFor(m => m.Security, (IEnumerable<SelectListItem>)ViewBag.SecurityList, Lang.csfs_select, new { @id = "ddlSecurity" })</td>
+                                    <td colspan ="2"></td>
+                                </tr>
+                                <tr>
+                                    <td>@Lang.csfs_case_attachment</td>
+                                    <td colspan="5">
+                                        @Html.TextAreaFor(m => m.Attachment, new { @id = "Attachment", @rows = "1", @class = "col-xs-12 no-padding" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    @if (ViewBag.AccountInfoFlag != null)
+                                    {
+                                        <td>@Lang.csfs_gist</td>
+                                        <td colspan="5">
+                                            @Html.TextAreaFor(m => m.Subject, new { @id = "Subject", @rows = "1", @class = "col-xs-12 no-padding", @readonly = "true" })
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>@Lang.csfs_gist</td>
+                                        <td colspan="5">
+                                            @Html.TextAreaFor(m => m.Subject, new { @id = "Subject", @rows = "1", @class = "col-xs-12 no-padding" })
+                                        </td>
+                                    }
+                                </tr>
+                                <tr>
+                                    @if (ViewBag.AccountInfoFlag != null)
+                                    {
+                                        <td>@Lang.csfs_logon_desc</td>
+                                        <td colspan="5">
+                                            @Html.TextAreaFor(m => m.Description, new { @id = "Description", @rows = "15", @class = "col-xs-12 no-padding", @readonly = "true" })
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>@Lang.csfs_logon_desc</td>
+                                        <td colspan="5">
+                                            @Html.TextAreaFor(m => m.Description, new { @id = "Description", @rows = "15", @class = "col-xs-12 no-padding" })
+                                        </td>
+                                    }
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Lang.csfs_original
+                                        <a href="@Url.Action("QueryGovAddress", "Home", new {area = "", CaseId = ViewBag.CaseId, @radom = DateTime.Now.ToString()})"
+                                           class="fancy800_600 btn btn-default btn-xs">
+                                            <li id="aQueryReceiver" class="fa fa-search"></li>
+                                        </a>
+                                        <button type="button" class="btn btn-default btn-xs" id="btnAddReceiver"><i class="glyphicon glyphicon-plus"></i></button>
+                                    </td>
+                                    <td colspan="5">
+                                        <table class="table table-bordered table-striped text-black">
+                                            <thead>
+                                                <tr class="alert-success text-center ">
+                                                    <th class="col-xs-1">@Lang.csfs_delete</th>
+                                                    <th class="col-xs-3">@Lang.csfs_original</th>
+                                                    <th class="col-xs-6">@Lang.csfs_address</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="ReceiveTbody">
+                                                @if (Model != null && Model.ReceiveList != null && Model.ReceiveList.Any())
+                                                {
+                                                    for (int i = 0; i < Model.ReceiveList.Count; i++)
+                                                    {
+                                                        <tr data-seizureid="@Model.ReceiveList[i].SerialID">
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                                                            </td>
+                                                            <td>
+                                                                @if (Model.ReceiveKind == "電子公文" && Model.CaseKind2 != "支付" ) {
+                                                                    @Html.TextBoxFor(m => m.ReceiveList[i].GovName, new { @id = "GovName" + i, @Value = Model.ReceiveList[i].GovName + "(執)"})
+                                                                }
+                                                                else { 
+                                                                    @Html.TextBoxFor(m => m.ReceiveList[i].GovName, new { @id = "GovName" + i, @Value = Model.ReceiveList[i].GovName })
+                                                                }
+                                                            </td>
+                                                            <td>
+                                                                @Html.TextBoxFor(m => m.ReceiveList[i].GovAddr, new { @id = "GovAddr" + i })
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Lang.csfs_currency
+                                        <a href="@Url.Action("QueryGovAddress", "Home", new {area = "", CaseId = ViewBag.CaseId, @radom = DateTime.Now.ToString()})"
+                                           class="fancy800_600 btn btn-default btn-xs">
+                                            <li class="fa fa-search" id="aQueryCc"></li>
+                                        </a>
+                                        <button type="button" class="btn btn-default btn-xs" id="btnAddCC"><i class="glyphicon glyphicon-plus"></i></button>
+                                    </td>
+                                    <td colspan="5">
+                                        <table class="table table-bordered table-striped text-black">
+                                            <thead>
+                                                <tr class="alert-success text-center ">
+                                                    <th class="col-xs-1">@Lang.csfs_delete</th>
+                                                    <th class="col-xs-3">@Lang.csfs_currency</th>
+                                                    <th class="col-xs-6">@Lang.csfs_address</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="CcTbody">
+                                                @if (Model != null && Model.CcList != null && Model.CcList.Any())
+                                                {
+                                                    for (int i = 0; i < Model.CcList.Count; i++)
+                                                    {
+                                                        <tr data-seizureid="@Model.CcList[i].SerialID">
+                                                            <td class="text-center">
+                                                                <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                                                            </td>
+                                                            <td>
+                                                                @Html.TextBoxFor(m => m.CcList[i].GovName, new { @id = "GovName" + i })
+                                                            </td>
+                                                            <td>
+                                                                @Html.TextBoxFor(m => m.CcList[i].GovAddr, new { @id = "GovAddr" + i })
+                                                            </td>
+                                                        </tr>
+                                                    }
+                                                }
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                                @Html.HiddenFor(m => m.SerialId)
+                                @Html.HiddenFor(m => m.CaseId)
+                                @Html.HiddenFor(m => m.SendNoId)
+                                @Html.HiddenFor(m => m.SendNoStart)
+                                @Html.HiddenFor(m => m.CaseKind2)
+                                @Html.Hidden("flag","")
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer text-center">
+                        <button id="btnSendSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+                        @if (ViewBag.AccountInfoFlag != null)
+                        {
+                            <a class="btn btn-default btn-xs" href="javascript:window.opener=null;window.close();">@Lang.csfs_return_send</a>
+                        }
+                        else
+                        {
+                            <a class="btn btn-default btn-xs" href="@Url.Action("Index", "AgentSendSettingInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_return_send</a>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("OpenContent", (string)ViewBag.AccountInfoFlag)
+@Html.Hidden("description1", Lang.csfs_description1)
+@Html.Hidden("description2", Lang.csfs_description2)
+@Html.Hidden("description3", Lang.csfs_description3)
+@Html.Hidden("SendKind", Lang.csfs_sendkind)
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_add_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_add_fail)
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("SendDateText", Lang.csfs_senddate)
+@Html.Hidden("SendWordText", Lang.csfs_sendword)
+@Html.Hidden("SendNoMax", "發文號已到最大值！")
+@Html.Hidden("SpeedText", Lang.csfs_case_speed)
+@Html.Hidden("SecurityText", Lang.csfs_isophcnic)
+@Html.Hidden("SubjectText", Lang.csfs_gist)
+@Html.Hidden("OriginalText", Lang.csfs_original)
+@Html.Hidden("CCText", Lang.csfs_currency)
+@Html.Hidden("OriginalAddrText", Lang.csfs_original + Lang.csfs_address)
+@Html.Hidden("CCAddrText", Lang.csfs_currency + Lang.csfs_address)
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("SendUrl", Url.Action("Index", "AgentSendSettingInfo", new { area = "Agent", caseId = ViewBag.CaseId }))
+@Html.Hidden("GetSubjectUrl", Url.Action("GetSubjectAndDescription", "AgentSendSettingInfo", new { area = "Agent" }))
+<script src="~/Scripts/jquery-2.1.3.min.js"></script>
+
+<script type="text/javascript">
+
+    var nowTbody = "ReceiveTbody";
+    jQuery(document).ready(function () {
+        $("#btnSendSave").click(function () { return btnSendSaveClick(); });
+        $("#aQueryReceiver").click(function () { nowTbody = "ReceiveTbody"; });
+        $("#aQueryCc").click(function () { nowTbody = "CcTbody"; });
+        $("#ddlTemplate").change(function () { ddlTemplateChange(); });
+        $("#ddlSendKind").change(function () { changeSendKind(); });
+
+        $("#btnAddReceiver").click(function () { nowTbody = "ReceiveTbody"; addTr("", ""); });
+        $("#btnAddCC").click(function () { nowTbody = "CcTbody"; addTr("", ""); });
+        ddlTemplateChange();
+        if ("@Model.ReceiveKind" == "電子公文") {
+            $("#ddlSendKind").val("電子發文");
+        }
+        else if ("@Model.ReceiveKind" == "紙本") {
+            $("#ddlSendKind").val("紙本發文");
+        }
+        changeSendKind();
+    });
+    //* 新增
+    function btnSendSaveClick() {
+        trimAllInput();
+        if (!ajaxValidate()) {
+            return false;
+        }
+        if ($("#OpenContent").val() == "true")
+        {
+            $("#flag").val("AgentAccountInfo");
+        }
+        $.blockUI();
+        $.ajax({
+            url: $("#frmSendCreate").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmSendCreate").serialize(),
+            dataType: "json",
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+
+                if (!window.console) {
+                    window.console = { log: function () { return; } };
+                }
+                console.log(XMLHttpRequest.textStatus);
+                console.log(XMLHttpRequest.readyState);
+                console.log(textStatus);
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    $("#SendNo").val(data.ReturnMsg);
+                    jAlertSuccess($("#CreateSuccessMsg").val(), $("#OpenContent").val() == "true" ?
+                        function () { window.opener.location.href = window.opener.location.href; window.close(); } : function () { location.href = $("#SendUrl").val(); });
+                } else if (data.ReturnCode === "0") {
+                    jAlertError($("#CreateFailMsg").val());
+                    $.unblockUI();
+                }
+                else {
+                    jAlertError(data.ReturnMsg);
+                    $.unblockUI();
+                }
+            }
+        });
+        return false;
+    }
+    function ajaxValidate() {
+        var NewLine = "<br/>";
+        var Msg = "";
+        if ($("#SendDate").val().length <= 0) {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#SendDateText").val()) + NewLine;
+        } else if (!checkIsValidDate($("#SendDate").val())) {
+            Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#SendDateText").val()) + NewLine;
+        }
+        if ($("#SendWord").val().length <= 0) {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#SendWordText").val()) + NewLine;
+        }
+        //if ($("#SendNo").val().length <= 0) {
+        //    Msg = Msg + $.validator.format($("#SendNoMax").val(), $("#SendNoMax").val()) + NewLine;
+        //}
+        if ($("#ddlSpeed").val().length <= 0) {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#SpeedText").val()) + NewLine;
+        }
+        if ($("#SecurityText").val().length <= 0) {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#SecurityText").val()) + NewLine;
+        }
+        if ($("#Subject").val().length <= 0) {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#SubjectText").val()) + NewLine;
+        }
+        if ($("#ddlSendKind").val().length <= 0)
+        {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#SendKind").val()) + NewLine;
+        }
+        else if ($("#ddlSendKind").val() == "電子發文")
+        {
+            var description = $("#Description").val();
+            //var d2 = description.substring(description.indexOf("二、"), description.indexOf("三、")).replace("二、", "").replace(/[\n\s]*/g, "");
+            var d2 = description.indexOf("三、") == -1 ? description.substring(description.indexOf("二、")).replace("二、", "").replace(/[\n]*/g, "") : description.substring(description.indexOf("二、"), description.indexOf("三、")).replace("二、", "").replace(/[\n]*/g, "");
+            //var d3 = description.substring(description.indexOf("三、"), description.indexOf("備註")).replace("三、", "").replace(/[\n\s]*/g, "");
+            //var d3 = description.substring(description.indexOf("三、"), description.indexOf("備註")).replace("三、", "").replace(/[\n]*/g, "");
+            var d3 = description.indexOf("三、") == -1 ? "" : description.substring(description.indexOf("三、")).replace("三、", "").replace(/[\n]*/g, "");
+            //if (d2.length > 240)
+            if (d2.replace(/[^\x00-\xff]/g, "**").length > 470)
+            {
+                Msg = Msg + $("#description2").val() + NewLine;
+            }
+            //if (d3.length > 240) {
+            if (d3.replace(/[^\x00-\xff]/g, "**").length > 470) {
+                Msg = Msg + $("#description3").val() + NewLine;
+            }
+            if (new RegExp(/[四五六七八九十]、|[一二三四五六七八九十零百千萬億]{2，}、/g).test(description))
+            {
+                Msg = Msg + $("#description1").val() + NewLine;
+            }
+        }
+
+        //* 20150618
+        $("#ReceiveTbody").find("[id^=GovName]").each(function (i) {
+            if ($(this).val().length <= 0) {
+                Msg = Msg + $.validator.format($("#PlzInput").val(), $("#OriginalText").val()) + NewLine;
+            }
+        });
+        $("#ReceiveTbody").find("[id^=GovAddr]").each(function (i) {
+            if ($(this).val().length <= 0) {
+                Msg = Msg + $.validator.format($("#PlzInput").val(), $("#OriginalAddrText").val()) + NewLine;
+            }
+        });
+        $("#CcTbody").find("[id^=GovName]").each(function (i) {
+            if ($(this).val().length <= 0) {
+                Msg = Msg + $.validator.format($("#PlzInput").val(), $("#CCText").val()) + NewLine;
+            }
+        });
+        $("#CcTbody").find("[id^=GovAddr]").each(function (i) {
+            if ($(this).val().length <= 0) {
+                Msg = Msg + $.validator.format($("#PlzInput").val(), $("#CCAddrText").val()) + NewLine;
+            }
+        });
+        //* end 20150618
+        if (Msg.length > 0) {
+            jAlertError(Msg);
+            return false;
+        }
+        return true;
+    }
+    function trimAllInput() {
+        $(":input[type='text']").each(function () {
+            $(this).val($.trim($(this).val()));
+        });
+    }
+    function addTr(govName, govAddr) {
+        var str = '<tr><td class="text-center"><button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button></td>'
+            + '<td><input id="GovName{2}" name="ReceiveList[{2}].GovName" type="text" value="{0}" maxlength="200"></td>'
+            + '<td><input id="GovAddr{2}" name="ReceiveList[{2}].GovAddr" type="text" value="{1}" maxlength="200"></td></tr>';
+        var tr = $($.validator.format(str, new Array(govName, govAddr, $("#" + nowTbody + " tr").length)));
+        tr.appendTo("#" + nowTbody);
+        Rebind();
+    }
+    function Rebind() {
+        $("#ReceiveTbody").find("[id^=GovName]").each(function (i) {
+            $(this).attr("name", "ReceiveList[" + i + "].GovName");
+        });
+        //* 重新給Id編號
+        $("#ReceiveTbody").find("[id^=GovAddr]").each(function (i) {
+            $(this).attr("name", "ReceiveList[" + i + "].GovAddr");
+        });
+        $("#CcTbody").find("[id^=GovName]").each(function (i) {
+            $(this).attr("name", "CcList[" + i + "].GovName");
+        });
+        //* 重新給Id編號
+        $("#CcTbody").find("[id^=GovAddr]").each(function (i) {
+            $(this).attr("name", "CcList[" + i + "].GovAddr");
+        });
+
+        //* 已選擇中的移除
+        $("#ReceiveTbody .js-delete").unbind("click").click(function () { return btnRemoveClick(this); });
+        $("#CcTbody .js-delete").unbind("click").click(function () { return btnRemoveClick(this); });
+
+    }
+    function btnRemoveClick(obj) {
+        $(obj).parent().parent().remove();
+        Rebind();
+    }
+
+    function ddlTemplateChange() {
+        var caseId = $("#CaseId").val();
+        var template = $("#ddlTemplate").val();
+        var sendKind = $("#ddlSendKind").val();
+        $.blockUI();
+        $.ajax({
+            url: $("#GetSubjectUrl").val(),
+            type: "Post",
+            cache: false,
+            data: { "caseId": caseId, "template": template, "sendKind": sendKind, "serialId": 0},
+            dataType: "json",
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data != null) {
+                    $("#Subject").val(data.Subject);
+                    $("#Description").val(data.Description);
+                }
+                $.unblockUI();
+            }
+        });
+    }
+
+    function changeSendKind()
+    {
+        if ($("#ddlSendKind").val() == "紙本發文" && $("#CaseKind2").val() == "支付")
+        {
+            $("#ddlTemplate").val("支付");
+            $("#SendWord").val("@ViewBag.SendGovName");
+            var govName = $("#GovName0").val();
+        }
+        else if ($("#ddlSendKind").val() == "電子發文" && $("#CaseKind2").val() == "支付")
+        {
+            $("#ddlTemplate").val("支付電子回文");
+            $("#SendWord").val("@ViewBag.eSendGovName");
+            var govName = $("#GovName0").val();
+        }
+        if ($("#ddlSendKind").val() == "紙本發文" && $("#CaseKind2").val() != "支付") {
+            $("#SendWord").val("@ViewBag.SendGovName");
+            var govName = $("#GovName0").val();
+        }
+        else if ($("#ddlSendKind").val() == "電子發文" && $("#CaseKind2").val() != "支付") {
+            $("#SendWord").val("@ViewBag.eSendGovName");
+            var govName = $("#GovName0").val();
+        }
+
+        ddlTemplateChange();
+    }
+</script>

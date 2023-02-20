@@ -1,0 +1,97 @@
+﻿@model List<CTBC.CSFS.Models.CaseSeizure>
+@using CTBC.FrameWork.Util;
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div id="querytablediv" class="box-body">
+            <table id="query_table" class="table table-bordered table-striped text-black sort ">
+                <thead>
+                    <tr class="alert-success text-center ">
+                        <th>@Lang.csfs_edit</th>
+                        <th>@Lang.csfs_delete</th>
+                        <th>@Lang.csfs_case_no</th>
+                        <th>@Lang.csfs_id_1</th>
+                        <th>@Lang.csfs_name</th>
+                        <th>@Lang.csfs_case_unit</th>
+                        <th>@Lang.csfs_bank_name</th>
+                        <th>@Lang.csfs_deposit_account</th>
+                        <th>@Lang.csfs_currency_1</th>
+                        <th>@Lang.csfs_Amount</th>
+                        <th>@Lang.csfs_rate</th>
+                        <th>@Lang.csfs_t_amt</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        foreach (var item in Model)
+                        {
+                            <tr>
+                                <td class="text-center">
+                                    <a href="@Url.Action("SeizureMaintainEdit", "AgentAccountInfo", new { area = "Agent", seizureId = item.SeizureId, caseid = ViewBag.caseId, @radom = DateTime.Now.ToString() })" class=" glyphicon glyphicon-edit fancy800_350"></a>
+                                </td>
+                                <td class="text-center">
+                                    <a class="glyphicon glyphicon-remove" role="menuitem" tabindex="-1" onclick="DeleteSeizureMaintain('@item.SeizureId','@item.CaseId','@item.CaseNo')"></a>
+                                </td>
+                                <td>@item.CaseNo</td>
+                                <td>@item.CustId</td>
+                                <td>@item.CustName</td>
+                                <td>@item.BranchNo</td>
+                                <td>@item.BranchName</td>
+                                <td>@item.Account</td>
+                                <td>@item.Currency</td>
+                                <td class="text-right">@UtlString.FormatCurrency(item.SeizureAmount,2)</td>
+                                <td class="text-right">@UtlString.FormatCurrency(item.ExchangeRate,2)</td>
+                                <td class="text-right">@UtlString.FormatCurrency(item.SeizureAmountNtd,2)</td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                    }
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+    </div>
+</div>
+@Html.Hidden("ConfirmDelMsg", Lang.csfs_confirm_delete)
+@Html.Hidden("DeleteSucMsgUrl", Lang.csfs_del_ok)
+@Html.Hidden("ReturnFailMsg", Lang.csfs_del_fail)
+@Html.Hidden("DeleteUrl", Url.Action("Delete", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("RedictToUrl", Url.Action("SeizureMaintainQuery", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("hidCaseId", (Guid)ViewBag.CaseId)
+
+
+<script language="javascript">
+    function DeleteSeizureMaintain(seizureId, caseId,caseno) {
+        jConfirm($("#ConfirmDelMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+            if (bFlag === true) {
+                $.blockUI();
+                $.ajax({
+                    url: $("#DeleteUrl").val(),
+                    type: "Post",
+                    cache: false,
+                    data: { seizureId: seizureId, caseId: caseId, caseno: caseno },
+                    error: function () {
+                        jAlertError($("#LoadErrorMsg").val());
+                        $.unblockUI();
+                    },
+                    success: function (data) {
+                        if (data) {
+                            jAlertSuccess($("#DeleteSucMsgUrl").val(), function () {
+                                location.href = $("#RedictToUrl").val() + "?caseId=" + $("#hidCaseId").val();
+                            });
+                        } else {
+                            jAlertError($("#ReturnFailMsg").val());
+                            $.unblockUI();
+                        }
+                    }
+                });
+            }
+        })
+    }
+</script>

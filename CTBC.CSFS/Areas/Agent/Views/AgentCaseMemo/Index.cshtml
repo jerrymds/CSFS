@@ -1,0 +1,127 @@
+﻿@using CTBC.CSFS.Models
+@model CTBC.CSFS.ViewModels.CaseMemoViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfo", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_document_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentAccountInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_account_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentMeetInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_meet_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentOriginalInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_original_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccess", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_department_access</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentSendSettingInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_sendsetting_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseHistory", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_history</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseCalculator", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_calculator</a></li>
+        <li class="active"><a href="@Url.Action("Index", "AgentCaseMemo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_memo</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentTransactionRecords", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_transrecord_info</a></li>
+        @Html.GetBackButtonInTab()
+    </ul>
+
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel9">
+            <div class="box box-primary">
+                <div id="querytablediv" class="box-body">
+                    <table id="query_table" class="table table-bordered table-striped text-black sort">
+                        <thead>
+                            <tr class="alert-success text-center ">
+                                <th class="col-xs-4">@Lang.csfs_content</th>
+                                <th class="col-xs-1">@Lang.csfs_event_time</th>
+                                <th class="col-xs-1">@Lang.csfs_memo_person</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.CaseMemoList != null && Model.CaseMemoList.Any())
+                            {
+                                foreach (var item in Model.CaseMemoList)
+                                {
+
+                                    <tr>
+                                        <td class="text-left">@item.Memo</td>
+                                        <td class="text-center">@item.MemoDate</td>
+                                        <td class="text-center">@item.MemoUser</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                @using (Html.BeginForm("CreateMemo", "AgentCaseMemo", new { area = "Agent" }, FormMethod.Post, new { id = "frmCreateMemo", @class = "form-horizontal" }))
+                {
+                    <div class="box-body ">
+                        @Html.TextAreaFor(m => m.CaseMemo.Memo, new { @id = "Memo", @rows = "10", @class = "col-xs-12 no-padding", @maxlength = "200" })
+                    </div>
+                    <div class="box-footer text-center">
+                        <button id="btnSaveMemo" type="button" class="btn btn-primary btn-xs">@Lang.csfs_meetSave</button>
+                    </div>
+                    @Html.HiddenFor(m => m.CaseMemo.CaseId)
+                    @Html.HiddenFor(m => m.CaseMemo.MemoType)
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("NowPage", "MenuMemo")
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_save_fail)
+@Html.Hidden("TextNotNull", Lang.csfs_pleaseinputcontent)
+@section scripts {
+    <script type="text/javascript">
+        $("#Memo").val("");
+        $("#btnSaveMemo").click(function () { return btnSaveMemoClick(); });
+        //* 新增修改
+        function btnSaveMemoClick() {
+            trimAllInput();
+            if (!ajaxValidate()) {
+                return false;
+            }
+
+            $.blockUI();
+            $.ajax({
+                url: $("#frmCreateMemo").attr("action"),
+                type: "Post",
+                cache: false,
+                data: $("#frmCreateMemo").serialize(),
+                dataType: "json",
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess($("#CreateSuccessMsg").val(), function () { $("#Memo").val(""); location.href = location.href; });
+                    } else {
+                        jAlertError($("#CreateFailMsg").val());
+                        $.unblockUI();
+                    }
+
+                }
+            });
+            return false;
+        }
+
+        function ajaxValidate() {
+            if ($.trim($("#Memo").val()) === "") {
+                jAlertError($("#TextNotNull").val());
+                return false;
+            }
+            return true;
+        }
+
+        function trimAllInput() {
+            $(":input[type='text']").each(function () {
+                $(this).val($.trim($(this).val()));
+            });
+        }
+    </script>
+}
+
+

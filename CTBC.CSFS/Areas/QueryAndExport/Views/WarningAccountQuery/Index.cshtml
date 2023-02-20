@@ -1,0 +1,65 @@
+﻿@model CTBC.CSFS.Models.WarningAccountQuery
+
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_warningAccountQuery;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "WarningAccountQuery", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right">金額區間</td>
+                        <td class="col-md-6">@Html.DropDownListFor(m => m.HangAmount, (IEnumerable<SelectListItem>)ViewBag.HangAmountList, new { @id = "txtHangAmount" })</td>
+                        <td class="col-md-3 text-right">通報內容</td>
+                        <td class="col-md-5">@Html.DropDownListFor(m => m.NotificationSource, (IEnumerable<SelectListItem>)ViewBag.NotificationSourceList, new { @id = "txtNotificationSource" })</td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">項目</td>
+                        <td class="col-md-6">@Html.DropDownListFor(m => m.ItemType, (IEnumerable<SelectListItem>)ViewBag.ItemList, new { @id = "txtItem" })</td>
+                        <td class="col-md-3 text-right">帳戶狀態</td>
+                        <td class="col-md-5">@Html.DropDownListFor(m => m.AccountStatus, (IEnumerable<SelectListItem>)ViewBag.AccountStatuslist, new { @id = "txtAccountStatus" })</td>
+                    </tr>
+                    <tr>             
+                        <td class="col-md-2 text-right">區間</td>
+                        <td class="col-md-6">
+                            @Html.TextBoxFor(m => m.ForCDateS, new { data_datepicker = "true", @id = "txtForCDateS" })
+                            ～
+                            @Html.TextBoxFor(m => m.ForCDateE, new { data_datepicker = "true", @id = "txtForCDateE" })
+                        </td>
+                        <td class="col-md-3 text-right">其他應付款-警示帳戶剩餘額</td>
+                        <td class="col-md-5">@Html.DropDownListFor(m => m.Other, (IEnumerable<SelectListItem>)ViewBag.OtherList, new { @id = "txtOther" })</td>
+                    </tr>  
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            @*@if (ViewBag.CanExport == "1")
+            {*@
+                <button id="btnExcel" type="button" class="btn btn-default btn-xs">@Lang.csfs_debtexcel</button>
+            @*}*@
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "WarningAccountQuery", new { area = "QueryAndExport" })">
+
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("NowPage", "WarningAccountQuery")
+@Html.Hidden("ExcelUrl", Url.Action("Excel", "WarningAccountQuery", new { area = "QueryAndExport" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select)
+@Html.Hidden("NameOneQuery", Lang.csfs_inputOneQuery)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/QueryAndExport/WarningAccountQuery.js")
+}

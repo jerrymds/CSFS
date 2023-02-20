@@ -1,0 +1,423 @@
+﻿@model IList<CaseSendSettingQueryResultViewModel>
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div id="divReFlash" class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfo", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_document_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentAccountInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_account_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentMeetInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_meet_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentOriginalInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_original_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccess", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_department_access</a></li>
+        <li class="active"><a id="btnreload" href="@Url.Action("Index", "AgentSendSettingInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_sendsetting_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseHistory", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_history</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseCalculator", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_calculator</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseMemo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_memo</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentTransactionRecords", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_transrecord_info</a></li>
+        @Html.GetBackButtonInTab()
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel1">
+            <div class="box box-primary">
+                <div id="querytablediv" class="box-body">
+                    <table id="query_table" class="table table-bordered table-striped text-black sort">
+                        <thead>
+                            <tr class="alert-success text-center ">
+                                <th class="col-xs-1">@Lang.csfs_editdelete</th>
+                                <th class="col-xs-1">@Lang.csfs_case_no</th>
+                                <th class="col-xs-1">@Lang.csfs_senddate</th>
+                                <th class="col-xs-1">@Lang.csfs_sendword1</th>
+                                <th class="col-xs-3">@Lang.csfs_original</th>
+                                <th class="col-xs-3">@Lang.csfs_currency</th>
+                                <th class="col-xs-1">@Lang.csfs_closeddate</th>
+                            </tr>
+                        </thead>
+                        <tbody>                            
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <a class="btn btn-default btn-xs" title="@Lang.csfs_edit" href="@Url.Action("_SendEdit", "AgentSendSettingInfo", new {area = "Agent", item.SerialId, item.CaseId})">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay && ViewBag.AfterSeizureApproved == 1 && item.Template == "扣押")
+                                            {
+                                                //* 不能修改刪除
+                                            }
+                                            else
+                                            {
+                                                <a role="menuitem" tabindex="-1" onclick="_SendDeleteClick(@item.SerialId) " class=" btn btn-default btn-xs" title="@Lang.csfs_delete">
+                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                </a>
+                                            }
+                                        </td >
+                                        <td class="text-center">@item.CaseNo</td>
+                                        <td class="text-center">@item.SendDate.ToString("yyyy/MM/dd")</td>
+                                        <td class="text-center">@item.SendNo</td>
+                                        <td class="text-center">@item.Receiver</td>
+                                        <td class="text-center">@item.Cc</td>
+                                        <td class="text-center">@item.ApproveDate</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer  text-center">                    
+                    @*@if (ViewBag.CaseKind2 != CTBC.CSFS.Models.CaseKind2.CasePay && ViewBag.AfterSeizureApproved != 1 && ViewBag.CaseKind2 != "國稅局死亡")*@
+                    @if ( ViewBag.AfterSeizureApproved != 1 && ViewBag.CaseKind2 != "國稅局死亡")
+                        {
+                        <a class="btn btn-primary btn-xs" href="@Url.Action("_SendCreate", "AgentSendSettingInfo", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_new_send</a>
+                    }
+                    @if (ViewBag.CaseKind2 == "國稅局死亡")
+                    {
+                        <a>
+                            <input type="file" class="col-sm-12 no-padding" name="fileAttNames" id="fileAtt1" />
+                        </a>
+                        <button id="btnUpload" type="button" class="btn btn-primary btn-xs" onclick="Upload();">新增整批死亡發文</button>
+                        @*<a class="btn btn-primary btn-xs" href="@Url.Action("_SendCreateByDead", "AgentSendSettingInfo", new { area = "Agent", caseId = ViewBag.CaseId })" >新增整批死亡發文</a>*@
+                    }
+                    @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay && ViewBag.AfterSeizureApproved == 1)
+                    {
+                        <a class="btn btn-primary btn-xs" href="@Url.Action("Report", "Common", new { area = "Common", caseIdList = ViewBag.CaseId, fileName = ViewBag.CaseNo, Con = "Pay" })" target="frmForReport">@Lang.csfs_print</a>
+                    }
+                    else
+                    {
+                        <a class="btn btn-primary btn-xs" href="@Url.Action("Report", "Common", new {area = "Common", caseIdList = ViewBag.CaseId, fileName = ViewBag.CaseNo})" target="frmForReport">@Lang.csfs_print</a>
+                    }
+
+                    <button id="btnNuclear" type="button" class="btn btn-primary btn-xs">@Lang.csfs_nuclear</button>               
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* 逾期原因*@
+<div class="modal fade" id="modalOver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Over"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_nuclear</h4>
+            </div>
+            <div class="modal-body">
+                @Lang.csfs_over_memo:
+                <textarea id="OverDueMemo" rows="15" class="col-xs-12 no-padding" maxlength="50"></textarea>
+                @*@Html.TextAreaFor(m => m.OverDueMemo, new { @id = "OverDueMemo", @rows = "15", @class = "col-xs-12 no-padding", @MaxLength = "50" })*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnOverSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<iframe id="frmForReport" name="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+
+@Html.Hidden("DeleteConfirmMsg", Lang.csfs_del_confirm)
+@Html.Hidden("DeleteFailMsg", Lang.csfs_del_fail)
+@Html.Hidden("DeleteSuccessMsg", Lang.csfs_del_ok)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("ReportUrl", Url.Action("Report", "Common", new { area = "Common" }))
+@Html.Hidden("SendDeleteUrl", Url.Action("_SendDelete", "AgentSendSettingInfo", new { area = "Agent" }))
+@Html.Hidden("OverDueUrl", Url.Action("OverDue", "AgentSendSettingInfo", new { area = "Agent" }))
+@Html.Hidden("AssignChenHe", Url.Action("ChenHe", "AgentSendSettingInfo", new { area = "Agent" }))
+@*@Html.Hidden("AgentUrl", Url.Action("Index", "AgentToHandle", new { area = "Agent" }))*@
+@Html.Hidden("AgentUrl",  Html.GetBackUrl())
+@Html.Hidden("UploadDeadUrl", Url.Action("_SendCreateByDead", "AgentSendSettingInfo", new { area = "Agent", enctype = "multipart/form-data", target = "upload_frame" }))
+@Html.Hidden("ReUploadDeadUrl", Url.Action("Index", "AgentSendSettingInfo", new {area = "Agent", caseId = ViewBag.CaseId }))
+    @Html.Hidden("AddDay", (Int32)ViewBag.AddDay)
+    @Html.Hidden("HidCaseId", (Guid)ViewBag.CaseId)
+    @Html.Hidden("LimiteDate", (string)ViewBag.LimiteDate)
+
+    @* 20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add start *@
+    @Html.Hidden("IsBranchAgent", (string)ViewBag.IsBranchAgent)
+    @* 20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add end *@
+
+    @* 呈核 *@
+    @Html.Hidden("NuclearConfirmMsg", Lang.csfs_confirm_nuclear)
+    @Html.Hidden("NuclearOkMsg", Lang.csfs_nuclear_success)
+    @Html.Hidden("NuclearFaileMsg", Lang.csfs_nuclear_fail)
+
+    @Html.Hidden("HidAfterSeizureApproved", ViewData["AfterSeizureApproved2"])
+
+    @section scripts {
+        <script type="text/javascript">
+            $("#btnNuclear").click(function () { return btnOverClick(); });
+            $("#btnOverSubmit").click(function () { return btnOverSubmit(); });
+            //20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add start
+            if ($("#IsBranchAgent").val() == "1") {
+                $("#panel1").hide();
+            }
+
+            (function ($) {
+                $.UrlParam = function (name) {
+                    //宣告正規表達式
+                    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+                    /*
+                     * window.location.search 獲取URL ?之後的參數(包含問號)
+                     * substr(1) 獲取第一個字以後的字串(就是去除掉?號)
+                     * match(reg) 用正規表達式檢查是否符合要查詢的參數
+                    */
+                    var r = window.location.search.substr(1).match(reg);
+                    //如果取出的參數存在則取出參數的值否則回穿null
+                    if (r != null) return unescape(r[2]); return null;
+                }
+            })(jQuery);
+            //20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add end
+
+            function Upload() {
+                //當前登錄者是否可以新增死亡發文
+                //if ($("#hidIsEnable").val() != "Y") {
+                //    alert("當前登錄者沒有啟動發查權限");
+                //    return;
+                //}
+                var fileData = new FormData();
+                var pMsg = "";
+                var ReTry = "";
+                var caseid = "";
+                var chkResult = 0;
+                caseid = $.UrlParam("caseId");
+                var fileUpload = $("#fileAtt1").get(0);
+                var files = fileUpload.files;
+                if (files.length < 1) {
+                    alert("請先上傳死亡名單結果檔 !!");
+                    return;
+                }
+                for (var i = 0; i < files.length; i++) {
+                    fileData.append(files[i].name, files[i]);
+                }
+              
+                // Adding one more key to FormData object
+                fileData.append('caseid', caseid);
+                //fileData.append('ReTry', ReTry);
+                //jConfirm("確定要啟動嗎?", $("#j_confirm_header").val(), function (bFlag)
+                //{
+                if (true) {
+                    $.blockUI();
+                    // 啟動
+                    $.ajax({
+                        url: $("#UploadDeadUrl").val(),
+                        type: "Post",
+                        cache: false,
+                        contentType: false, // Not to set any content header
+                        processData: false, // Not to process data
+                        data: fileData,
+                        error: function () {
+                            alert("新增死亡發文失敗!!");
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            $.unblockUI();
+                            if (data.ReturnCode == "1") {
+                                alert("新增死亡發文成功!");
+                                QueryData();
+                            } else if (data.ReturnCode == "0") {
+                                alert("新增死亡發文失敗!!");
+                                QueryData();
+                            } else {
+                                jConfirm(data.ReturnCode, $("#j_confirm_header").val(), function (bFlag) {
+                                    if (bFlag === true) {
+                                        $.blockUI();
+                                        // 啟動
+                                        $.ajax({
+                                            url: $("#UploadTrsUrl").val(),
+                                            type: "Post",
+                                            cache: false,
+                                            contentType: false, // Not to set any content header
+                                            processData: false, // Not to process data
+                                            data: fileData,
+                                            error: function () {
+                                                alert("啟動失敗!!");
+                                                $.unblockUI();
+                                            },
+                                            success: function (data) {
+                                                $.unblockUI();
+                                                if (data.ReturnCode == "1") {
+                                                    alert("新增死亡發文成功!");
+                                                    QueryData();
+                                                } else if (data.ReturnCode == "0") {
+                                                    alert("新增死亡發文失敗!!");
+                                                    QueryData();
+                                                } else {
+                                                    alert("新增死亡發文失敗!!");
+                                                    QueryData();
+                                                }
+                                            }
+                                        });
+                                    }
+                                }
+                                )
+                            }
+                        }
+                    });
+                }
+            }
+            //* 點擊刪除
+            function _SendDeleteClick(serialId) {
+                jConfirm($("#DeleteConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                    if (bFlag === true) {
+                        $.blockUI();
+                        $.ajax({
+                            url: $("#SendDeleteUrl").val(),
+                            type: "Post",
+                            cache: false,
+                            data: { SerialID: serialId },
+                            error: function () {
+                                jAlertError("已開支票,請先取消票號!!");
+                                $.unblockUI();
+                            },
+                            success: function (data) {
+                                if (data == "已刪除!!") {
+                                    jAlertSuccess(data, function () { location.href = location.href });
+                                } else {
+                                    jAlertError(data);
+                                    $.unblockUI();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+            //*點擊呈核
+            function GetDateStr(AddDayCount) {
+                var dd = new Date();
+                dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
+                var y = dd.getFullYear();
+                var m = dd.getMonth() + 1;//获取当前月份的日期
+                var d = dd.getDate();
+                return y + "" + (m < 10 ? "0" + m : m) + "" + (d < 10 ? "0" + d : d);
+            }
+
+            function btnOverClick() {
+                var strlimitDate = $("#LimiteDate").val().replace("/", "").replace("/", "");
+                var strNowDate = GetDateStr(parseInt($("#AddDay").val()));
+
+                if ($("#HidAfterSeizureApproved").val() != "1" && strlimitDate < strNowDate) {
+                    $("#OverDueMemo").val("");
+                    $("#modalOver").modal();
+                }
+                else {
+
+                    var CaseIDArr = new Array();
+                    CaseIDArr.push($("#HidCaseId").val());//向数组中添加元素
+                    var strCaseId = CaseIDArr.join(',');
+
+                    jConfirm($("#NuclearConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                        if (bFlag === true) {
+                            $.blockUI();
+                            $.ajax({
+                                type: "POST",
+                                traditional: true,
+                                url: $("#AssignChenHe").val(),
+                                async: false,
+                                data: { CaseIdarr: strCaseId },
+                                error: function () {
+                                    jAlertError($("#LoadErrorMsg").val());
+                                    $.unblockUI();
+                                },
+                                success: function (data) {
+                                    if (data.ReturnCode === "1") {
+                                        jAlertSuccess($("#NuclearOkMsg").val(), function () {
+                                            location.href = $("#AgentUrl").val();
+                                        });
+                                    } else {
+                                        jAlertError($("#NuclearFaileMsg").val());
+                                        $.unblockUI();
+                                    }
+                                }
+                            });
+                        }
+                    });
+                }
+            }
+
+            function btnOverSubmit() {
+                var aryCaseId = new Array();
+                aryCaseId.push($("#HidCaseId").val());//向数组中添加元素
+
+                var strCaseId = aryCaseId.join(',');
+
+                if (strCaseId.length <= 0) {
+                    jAlertError($("#SelectOneMsg").val());
+                    return;
+                }
+
+                if (!ajaxValidateOver()) {
+                    return false;
+                }
+                jConfirm($("#NuclearConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                    if (bFlag === true) {
+                        $.blockUI();
+                        //* click confirm ok
+                        $.ajax({
+                            type: "POST",
+                            traditional: true,
+                            url: $("#OverDueUrl").val(),
+                            async: false,
+                            data: { strIds: strCaseId, OverDueMemo: $("#OverDueMemo").val() },
+                            error: function () {
+                                jAlertError($("#LoadErrorMsg").val());
+                                $.unblockUI();
+                            },
+                            success: function (data) {
+                                if (data.ReturnCode === "1") {
+                                    jAlertSuccess($("#NuclearOkMsg").val(), function () {
+                                        $("#modalOver").modal("hide");
+                                        $("#OverDueMemo").val("");
+                                        location.href = $("#AgentUrl").val();
+                                    });
+                                } else {
+                                    jAlertError($("#NuclearFaileMsg").val());
+                                    $.unblockUI();
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+
+
+            // 查詢
+            function QueryData() {
+                location.reload();
+                return true;
+                //var caseid = "";
+                //var chkResult = 0;
+                //caseid = $.UrlParam("caseId");
+                //if (true) {
+                //    $("#divReFlash").html("");
+                //    $.ajax({
+                //        url: $("#ReUploadDeadUrl").val(),
+                //        type: "Post",
+                //        cache: false,
+                //        data: {},
+                //        success: function (data) {
+                //            $("#divReFlash").html(data).show();
+                //        }
+                //    });
+                //    return false;
+                //}
+            }
+
+
+            function ajaxValidateOver() {
+                if ($.trim($("#OverDueMemo").val()) === "") {
+                    jAlertError($("#TextNotNull").val());
+                    return false;
+                }
+                return true;
+            }
+        </script>
+    }

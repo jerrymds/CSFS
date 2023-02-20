@@ -1,0 +1,216 @@
+﻿@model CTBC.CSFS.ViewModels.CheckQueryAndPrintViewModel
+@using CTBC.CSFS.Models;
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.CheckQueryAndPrintlist != null)
+                {
+                    if (Model.CheckQueryAndPrintlist.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CheckQueryAndPrint.PageSize, Model.CheckQueryAndPrint.CurrentPage, Model.CheckQueryAndPrint.TotalItemCount, Model.CheckQueryAndPrint, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CheckQueryAndPrint.SortExpression, Model.CheckQueryAndPrint.SortDirection)
+                        </div> 
+                    }
+                }
+            </div>
+            <div>
+                @if (Model.CheckQueryAndPrintlist != null && Model.CheckQueryAndPrintlist.Any() && Model.CheckQueryAndPrint.Type == "1")
+                {
+                    <span>解扣總金額:</span><span>@Model.CheckQueryAndPrint.TotalSeizureAmount</span><span>支付總金額:</span><span>@Model.CheckQueryAndPrint.TotalPayment</span>
+                    <span>手續費總金額:</span><span>@Model.CheckQueryAndPrint.TotalFee</span>
+                }
+                @if (Model.CheckQueryAndPrintlist != null && Model.CheckQueryAndPrintlist.Any() && Model.CheckQueryAndPrint.Type == "2")
+                {
+                    <span>ID總筆數:</span><span>@Model.CheckQueryAndPrint.TotalID</span>
+                    <span>解扣總金額:</span><span>@Model.CheckQueryAndPrint.TotalSeizureAmount</span><span>支付總金額:</span><span>@Model.CheckQueryAndPrint.TotalPayment</span>
+                    <span>手續費總金額:</span><span>@Model.CheckQueryAndPrint.TotalFee</span>
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        @if (Model != null && (Model.CheckQueryAndPrint.Type == "1" || Model.CheckQueryAndPrint.Type == "3" || Model.CheckQueryAndPrint.Type == "4" || Model.CheckQueryAndPrint.Type == "5"))
+                        {
+                            <tr class="alert-success text-center ">
+                                <th><input type="checkbox" id="CheckAll"></th>
+                                <th>@Lang.csfs_menu_sort</th>
+                                <th>@Lang.csfs_check_no</th>
+                                <th>@Lang.csfs_case_no</th>
+                                <th>@Lang.csfs_sendword1</th> @*data-sortcolumn="SendNo"*@
+                                <th>@Lang.csfs_pay_date</th>
+                                <th>受款人</th>
+                                <th>解扣金額</th>
+                                <th>支付金額</th>
+                                <th>@Lang.csfs_fee</th>
+                                <th>@Lang.csfs_gov_no</th>
+                                <th>@Lang.csfs_case_kind2</th>
+                                <th>@Lang.csfs_agnet</th>
+                                <th>@Lang.csfs_function</th>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr class="alert-success text-center ">
+                                @*<th><input type="checkbox" id="CheckAll"></th>*@
+                                <th class="col-md-1">@Lang.csfs_menu_sort</th>
+                                <th class="col-md-1">@Lang.csfs_case_no</th>
+                                <th class="col-md-1">@Lang.csfs_keyin_date</th>
+                                <th class="col-md-1">@Lang.csfs_usr_id</th>
+                                <th class="col-md-1">產品別</th>
+                                <th class="col-md-1">幣別</th>
+                                <th class="col-md-1">@Lang.csfs_client_id</th>
+                                <th class="col-md-2">@Lang.csfs_client_name</th>
+                                <th class="col-md-1">@Lang.csfs_pay_amt</th>
+                                <th class="col-md-1">手續費</th>
+                                <th class="col-md-1">@Lang.csfs_sum1</th>
+                                <th class="col-md-1">@Lang.csfs_gov_no</th>
+                                <th class="col-md-1">@Lang.csfs_case_kind2</th>
+                                <th class="col-md-1">@Lang.csfs_agnet</th>
+                            </tr>
+                        }
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CheckQueryAndPrintlist != null && Model.CheckQueryAndPrintlist.Any())
+                        {
+                            foreach (var item in Model.CheckQueryAndPrintlist)
+                            {
+                                if (Model.CheckQueryAndPrint.Type == "1" || Model.CheckQueryAndPrint.Type == "3" || Model.CheckQueryAndPrint.Type == "4" || Model.CheckQueryAndPrint.Type == "5")
+                                {
+                                    <tr>
+                                        <td class="text-center">
+											<input type="checkbox" name="r2" class="checkfile" value="@item.PayeeId" />
+                                        </td>
+                                        <td class="text-center">@item.num</td>
+                                        <td class="text-center">@item.CheckNo</td>
+                                        @if (item.Status != CaseStatus.InputCancelClose && item.Status != CaseStatus.DirectorApprove)
+                                        {
+                                            <td class="text-center">
+                                                @Html.ActionLink(Convert.ToString(item.CaseNo) + " ", "Index", "AgentDocumentInfo", new { area = "Agent", item.CaseId }, new { })
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">
+                                                @Html.ActionLink(Convert.ToString(item.CaseNo) + " ", "Index", "AgentDocumentInfoDetail", new { area = "Common", item.CaseId }, new { })
+                                            </td>
+                                        }
+
+                                        <td class="text-center">@item.SendNo</td>
+                                        <td class="text-center">@item.CheckDate</td>
+                                        <td class="text-center">@item.ReceivePerson</td>
+                                        <td class="text-right">
+                                            @if (!string.IsNullOrEmpty(item.SeizureAmountSUB))
+                                            {
+                                                <text>@string.Format("{0:N0}", Convert.ToDecimal(item.SeizureAmountSUB))</text>
+                                            }
+                                        </td>
+                                        <td class="text-right">
+                                            @if (!string.IsNullOrEmpty(item.Money))
+                                            {
+                                                <text>@string.Format("{0:N0}", Convert.ToDecimal(item.Money))</text>
+                                            }
+                                        </td>
+                                        <td class="text-right">
+                                            @if (!string.IsNullOrEmpty(item.Fee))
+                                            {
+                                                <text>@string.Format("{0:N0}", Convert.ToDecimal(item.Fee))</text>
+                                            }
+                                        </td>
+                                        <td class="text-center">@item.GovNo</td>
+                                        <td class="text-center">@item.CaseKind2</td>
+                                        <td class="text-center">@item.AgentUser</td>
+                                        @if (item.Status != CaseStatus.InputCancelClose && item.Status != CaseStatus.DirectorApprove)
+                                        {
+                                            if (Model.CheckQueryAndPrint.Type == "1" )
+                                            {
+                                            <td class="text-center">
+                                                <button class="btn btn-default btn-xs" onclick="UpdateCheck(@item.PayeeId)">
+                                                    @Lang.csfs_othersCheckNo
+                                                </button>
+                                            </td>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center"></td>
+                                        }
+
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        @*<td class="text-center">
+                                                <input type="checkbox" name="r2" class="checkfile" value="@item.CaseId" />
+                                            </td>*@
+                                        <td class="text-center">@item.num</td>
+                                        @if (item.Status != CaseStatus.InputCancelClose && item.Status != CaseStatus.DirectorApprove)
+                                        {
+                                            <td class="text-center">
+                                                @Html.ActionLink(Convert.ToString(item.CaseNo) + " ", "Index", "AgentDocumentInfo", new { area = "Agent", item.CaseId }, new { })
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">
+                                                @Html.ActionLink(Convert.ToString(item.CaseNo) + " ", "Index", "AgentDocumentInfoDetail", new { area = "Common", item.CaseId }, new { })
+                                            </td>
+                                        }
+                                        <td class="text-center">@item.CreatedDate</td>
+                                        <td class="text-center">@item.Account</td>
+                                        <td class="text-center">@item.ProdCode</td>
+                                        <td class="text-center">@item.Currency</td>
+                                        <td class="text-center">@item.CustId</td>
+                                        <td class="text-center">@item.CustName</td>
+                                        <td class="text-center">
+                                            @if (!string.IsNullOrEmpty(item.PayAmount))
+                                            {
+                                                <text>@string.Format("{0:N0}", Convert.ToDecimal(item.PayAmount))</text>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            @if (!string.IsNullOrEmpty(item.Fee))
+                                            {
+                                                <text>@string.Format("{0:N0}", Convert.ToDecimal(item.Fee))</text>
+                                            }
+                                        </td>
+                                        <td class="text-center">
+                                            @if (!string.IsNullOrEmpty(item.sum1))
+                                            {
+                                                <text>@string.Format("{0:N0}", Convert.ToDecimal(item.sum1))</text>
+                                            }
+                                        </td>
+                                        <td class="text-center">@item.GovNo</td>
+                                        <td class="text-center">@item.CaseKind2</td>
+                                        <td class="text-center">@item.AgentUser</td>
+                                    </tr>
+                                }
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="14"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.CheckQueryAndPrint.CheckDate)
+                @Html.Hidden("querystring", Model.CheckQueryAndPrint.Type)
+                @Html.Hidden("defaultSortColumn", Model.CheckQueryAndPrint.SortExpression)
+                @Html.Hidden("defaultSort", Model.CheckQueryAndPrint.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.BindCheckBox();
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

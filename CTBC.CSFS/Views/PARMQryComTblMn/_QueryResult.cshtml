@@ -1,0 +1,55 @@
+﻿@model CTBC.CSFS.ViewModels.PARMQryComTblMnViewModel
+@{
+    Layout = null;
+}
+<div class="con_title2">
+    QueryResult
+</div>
+<div>
+    @if (Model.ResultList != null && Model.ResultList.Rows.Count > 0)
+    {
+    
+    <table id="detail" border="1" width="100%" class="query_table">
+        <thead>
+            <tr>
+                <th>Num</th>
+                @{var _columns = Model.ResultList.Columns.Count;
+                    }                
+                @for (int i = 0; i < _columns; i++)//列名
+                {                
+                <th class="query_table_tdCenter">
+                    @Model.ResultList.Columns[i].ColumnName
+                </th>
+                } 
+            </tr>
+        </thead>
+        @{var _rows = Model.ResultList.Rows.Count;
+          var rS = 0;        }
+        @for (int r = 0; r < _rows; r++)//foreach row
+        {
+            rS = r + 1;        
+        <tr>
+            <td>@rS</td>                        
+            @for (int c = 0; c < _columns; c++)//foreach column
+            {            
+            <td>
+                @Model.ResultList.Rows[r][c].ToString()
+            </td>
+            } 
+        </tr>
+        } 
+    </table>    
+    }
+    else
+    {    
+    <div class="f_word_left">
+        @Model.QryResult
+    </div>
+    
+    }
+    
+</div>
+<script type="text/javascript">
+    $("#detail tr:odd").addClass("gridrow");
+    $("#detail tr:even").addClass("gridrow_alternate");
+</script>

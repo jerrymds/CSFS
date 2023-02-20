@@ -1,0 +1,207 @@
+﻿@model CTBC.CSFS.Models.CaseClosedQuery
+
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_caseclosedquery;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("CaseMasterExcel", "CaseClosedQuery", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                        <td class="col-md-11" colspan="3">
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, Lang.csfs_select, new { @id = "ddlCaseKind" })
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                            @Lang.csfs_sendkind
+                            @Html.DropDownListFor(m => m.SendKind, (IEnumerable<SelectListItem>)ViewBag.SendKindList, Lang.csfs_select, new { @id = "ddlSendKind" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_receivedata</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.ReceiveDateStart, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.ReceiveDateEnd, new { data_datepicker = "true" })
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_senddate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.SendDateStart, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.SendDateEnd, new { data_datepicker = "true" })
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    @*<tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_closeddate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CloseDateStart, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.CloseDateEnd, new { data_datepicker = "true" })
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>*@
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_approveDate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.ApproveDateStart, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.ApproveDateEnd, new { data_datepicker = "true" })
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_agent_depart</td>
+                        <td class="col-md-5">
+                            @Html.DropDownListFor(m => m.Depart, (IEnumerable<SelectListItem>)ViewBag.DepartList, new { @id = "ddlDepart", @style = "width:40%" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_accountkind</td>
+                        <td class="col-md-5">
+                            @Html.DropDownListFor(m => m.AccountKind, (IEnumerable<SelectListItem>)ViewBag.AccountKindList, new { @id = "ddlAccountKind", @style = "width:40%" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_sendupdate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.SendUpDateStart, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.SendUpDateEnd, new { data_datepicker = "true" })
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confim</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+
+@Html.Hidden("GetCaseKind2Url", Url.Action("ChangCaseKind1", "Common", new { area = "Common" }))
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("ReceiveDateText", Lang.csfs_receivedata)
+@Html.Hidden("SendDateText", Lang.csfs_senddate)
+@Html.Hidden("CloseDateText", Lang.csfs_closeddate)
+
+@section scripts {
+    <script type="text/javascript">
+        $(document).ready(function () {
+            
+        });
+        $("#btnQuery").click(function () {
+            var NewLine = "<br/>";
+            var Msg = "";
+            if (!checkIsValidDate($("#ReceiveDateStart").val())) {
+                Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#ReceiveDateText").val()) + NewLine;
+            }
+            if (!checkIsValidDate($("#ReceiveDateEnd").val())) {
+                Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#ReceiveDateText").val()) + NewLine;
+            }
+            if (!checkIsValidDate($("#SendDateStart").val())) {
+                Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#SendDateText").val()) + NewLine;
+            }
+            if (!checkIsValidDate($("#SendDateEnd").val())) {
+                Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#SendDateText").val()) + NewLine;
+            }
+            //if (!checkIsValidDate($("#CloseDateStart").val())) {
+            //    Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#CloseDateText").val()) + NewLine;
+            //}
+            //if (!checkIsValidDate($("#CloseDateEnd").val())) {
+            //    Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#CloseDateText").val()) + NewLine;
+            //}
+            if (Msg.length > 0) {
+                jAlertError(Msg);
+                return false;
+            }
+            $("#frmQuery").submit();
+
+        })
+        //二級連動
+        $('#ddlCaseKind2').attr("disabled", "true");
+        //點擊來文機關選擇
+        $("#ddlCaseKind").change(function () { changeCaseKind(); });
+        //$("#ddlCaseKind2").change(function () { endQuery(); });
+        //function endQuery()
+        //{
+        //    if ($("#ddlCaseKind2 option:selected").val() == "撤銷") {
+        //        $("#btnQuery").prop("disabled", "disabled");
+        //    }
+        //    else {
+        //        $("#btnQuery").prop("disabled", "");
+        //    }
+        //}
+
+        function changeCaseKind() {
+            try {
+                var selectedValue = $("#ddlCaseKind option:selected").val();
+                if (selectedValue === "") {
+                    $("#ddlCaseKind2").attr("disabled", "true");
+                    $("#ddlCaseKind2").empty();
+                    $("#ddlCaseKind2").append($("<option></option>").val("").text($("#PleaseSelect").val()));
+                } else {
+                    if ($.trim(selectedValue).length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: $("#GetCaseKind2Url").val(),
+                            data: { caseKind: selectedValue },
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    $("#ddlCaseKind2").removeAttr("disabled");
+                                    $("#ddlCaseKind2").empty();
+                                    $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                    $.each(data, function (i, item) {
+                                        $("#ddlCaseKind2").append($("<option></option>").val(item.Value).text(item.Value));
+                                    });
+                                } else {
+                                    $("#ddlCaseKind2").attr("disabled", "true");
+                                    $("#ddlCaseKind2").empty();
+                                    $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            catch (e) {
+            }
+        }
+
+        //$("#btnQuery").click(function () {
+        //    $.ajax({
+        //        url: $("#frmQuery").attr("action"),
+        //        type: "Post",
+        //        cache: false,
+        //        data: $("#frmQuery").serialize(),
+        //        error: function () {
+        //            jAlertError($("#LoadErrorMsg").val());
+        //            $.unblockUI();
+        //        },
+        //        success: function (data) {
+        //            $("#divResult").html(data).show();
+        //            $.unblockUI();
+        //            $("#querystring").val($("#frmQuery").serialize());
+        //        }
+        //    });
+        //})
+    </script>
+}
+

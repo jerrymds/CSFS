@@ -1,0 +1,87 @@
+﻿@model CTBC.CSFS.ViewModels.HistoryAgentOriginalInfoViewModel
+@{
+    ViewBag.Title = "Create";
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+
+<div class="margin">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="glyphicon glyphicon-search"></i>
+            <h3 class="box-title">@Lang.csfs_create</h3>
+        </div>
+        <!-- form start -->
+        @using (Html.BeginForm("Create", "AgentOriginalInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal", enctype = "multipart/form-data" }))
+        {
+        <div class="box-body ">
+            <table class="table-noborder col-md-12">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_clientID</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.LendDataInfo.ClientID, new { @id = "txtClientID" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_clientName</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.LendDataInfo.Name, new { @id = "txtClientName" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_bankID</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.LendDataInfo.BankID, new { @id = "txtBankID" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_bank</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.LendDataInfo.Bank, new { @id = "txtBank" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_account</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.LendDataInfo.Account, new { @id = "txtAccount" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_phone</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.LendDataInfo.Phone, new { @id = "txtPhone" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_attachment</td>
+                        <td class="col-md-5">
+                            @***** 上傳部分開始 ******@
+                            <div id="divUploadList" style="Margin-left: 15px;">
+                                <div class="row">
+                                    <input type="file" class="col-sm-10" name="fileAttNames" id="fileAtt1" />
+                                </div>
+                            </div>
+                            @***** 上傳部分結束 ******@
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_memo</td>
+                        <td class="col-md-11" colspan="5">
+                            @Html.TextAreaFor(m => m.LendDataInfo.Memo, new { @id = "txtMemo",@maxlength="100", @class = "col-sm-10" })
+                        </td>
+                    </tr>
+                    @Html.HiddenFor(m => m.LendDataInfo.CaseId, new { @id = "hidCaseIdCreate" })
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnSaveLend" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+        }
+    </div>
+</div>
+@Html.Hidden("NowPage", "AgentOriginalInfoCreate")
+@Html.Hidden("NametxtClientIDLendEdit", Lang.csfs_ClientID_ok)
+@Html.Hidden("NametxtClientNameLendEdit", Lang.csfs_ClientName_ok)
+@Html.Hidden("NametxtBankIDLendEdit", Lang.csfs_BankID_ok)
+@Html.Hidden("NametxtBankLendEdit", Lang.csfs_Bank_ok)
+@Html.Hidden("NametxtAccountLendEdit", Lang.csfs_Account_ok)
+@Html.Hidden("NametxtPhone", Lang.csfs_Phone_ok)
+@section scripts{
+@Scripts.Render("~/Scripts/Agent/AgentOriginalInfo.js")
+}

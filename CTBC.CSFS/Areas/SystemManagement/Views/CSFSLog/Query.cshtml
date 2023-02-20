@@ -1,0 +1,109 @@
+﻿@model CTBC.CSFS.Models.CSFSLogVO
+
+@{
+    ViewBag.Title = @Lang.csfs_log_qry;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Ajax.BeginForm("_QueryResult", new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "post", OnBegin = "ajaxValidate", OnFailure = "displayError" }))
+    {
+        <div class="box-body ">
+
+            <table class="table-noborder">
+                <tr>
+                    <td class="col-md-1 text-right">
+                        @Lang.csfs_log_time
+                    </td>
+                    <td class="col-md-5" nowrap>
+                        @Html.TextBoxFor(m => m.StartTime, new { @MaxLength = "9", @Value = string.Format("{0:yyy/MM/dd}", Model.StartTime) ,data_datepicker = "true"})
+                        ~
+                        @Html.TextBoxFor(m => m.EndTime, new { @MaxLength = "9", @Value = string.Format("{0:yyy/MM/dd}", Model.EndTime), data_datepicker = "true" })
+                        
+                    </td>
+                    <td class="col-md-1 text-right">@Lang.csfs_log_title</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.Title, new { @MaxLength = "20" })@*<span class="text-red">＊</span>*@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-1 text-right">@Lang.csfs_log_msg</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.Message, new { @MaxLength = "500" })@*<span class="text-red">＊</span>*@
+                    </td>
+                    <td class="col-md-1 text-right">@Lang.csfs_usr_empid</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.UserId, new { @MaxLength = "20" })@*<span class="text-red">＊</span>*@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-1 text-right">@Lang.csfs_fun_num</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.FunctionId, new { @MaxLength = "100" })@*<span class="text-red">＊</span>*@
+                    </td>
+                    <td class="col-md-1 text-right">URL</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.URL, new { @MaxLength = "100" })@*<span class="text-red">＊</span>*@
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-1 text-right">IP</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.IP, new { @MaxLength = "50" })@*<span class="text-red">＊</span>*@
+                    </td>
+                    <td class="col-md-1 text-right">@Lang.csfs_usr_pc_name</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.MachineName, new { @MaxLength = "50" })@*<span class="text-red">＊</span>*@
+                    </td>
+                </tr>
+            </table>
+
+        </div><!-- /.box-body -->
+        <div class="box-footer text-center">
+            <button type="submit" id="Inquiry" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button type="button" id="btnCancel" name="btnCancel" onclick="Cancel()" class="btn btn-primary btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+
+@*<span>@Lang.csfs_log_qry_memo1 &nbsp;<span class="text-red">＊</span>&nbsp;@Lang.csfs_log_qry_memo2</span>*@
+
+<div id="result" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "CSFSLog", new { area = "SystemManagement" })"></div>
+@section scripts {
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            //查詢資料
+            //$("#Inquiry").click();
+        });
+
+        function ajaxValidate() {
+            trimAllInput();
+            return true;
+        }
+        function Cancel() {
+            $("#TITLE").val('');
+            $("#Message").val('');
+            $("#UserId").val('');
+            $("#FunctionId").val('');
+            $("#URL").val('');
+            $("#IP").val('');
+            $("#MachineName").val('');
+        }
+        function displayError() {
+            jAlertError($("#LoadErrorMsg").val());
+        }
+    </script>
+
+}
+
+
+
+
+
+

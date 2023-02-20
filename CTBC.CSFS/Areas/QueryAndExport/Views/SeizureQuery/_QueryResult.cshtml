@@ -1,0 +1,110 @@
+﻿@model CTBC.CSFS.ViewModels.SeizureQueryViewModel
+@using CTBC.FrameWork.Util;
+
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.SeizureQueryList != null)
+                {
+                    if (Model.SeizureQueryList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.SeizureQuery.PageSize, Model.SeizureQuery.CurrentPage, Model.SeizureQuery.TotalItemCount, Model.SeizureQuery, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.SeizureQuery.SortExpression, Model.SeizureQuery.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th style="width:4%">@Lang.csfs_seqnum</th>
+                            <th data-sortcolumn="CaseNo">@Lang.csfs_case_no</th>
+                            <th data-sortcolumn="CustId">@Lang.csfs_id_1</th>
+                            <th data-sortcolumn="CustName">@Lang.csfs_name</th>
+                            <th data-sortcolumn="BranchNo">@Lang.csfs_case_unit</th>
+                            <th data-sortcolumn="BranchName">@Lang.csfs_bank_name</th>
+                            <th data-sortcolumn="Account">@Lang.csfs_deposit_account</th>
+                            <th data-sortcolumn="Currency">@Lang.csfs_currency_1</th>
+                            <th data-sortcolumn="Balance">@Lang.csfs_balance1</th>
+                            <th data-sortcolumn="SeizureAmount">@Lang.csfs_cal_caseamount</th>
+                            <th data-sortcolumn="ExchangeRate">@Lang.csfs_rate</th>
+                            <th data-sortcolumn="SeizureAmountNtd">@Lang.csfs_t_amt</th>
+                            <th data-sortcolumn="CaseKind">@Lang.csfs_close_kind</th>
+                            <th data-sortcolumn="PayCaseNo">@Lang.csfs_close_caseno</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.SeizureQueryList != null && Model.SeizureQueryList.Any())
+                        {
+                            int a = 0;
+                            foreach (var item in Model.SeizureQueryList)
+                            {
+                                a = a + 1;
+                                <tr>
+                                    <td class="text-center">@a</td>
+                                    <td class="text-center">
+                                        @Html.ActionLink(Convert.ToString(item.CaseNo + " "), "Index", "AgentDocumentInfoDetail", new { area = "Common", CaseId = item.CaseId}, new { })
+                                    </td>
+                                    <td class="text-center">@item.CustId</td>
+                                    <td class="text-center">@item.CustName</td>
+                                    <td class="text-center">@item.BranchNo</td>
+                                    <td class="text-center">@item.BranchName</td>
+                                    <td class="text-center">@item.Account</td>
+                                    <td class="text-center">@item.Currency</td>
+                                    <td class="text-right">@UtlString.FormatCurrency(item.Balance,2)</td>
+                                    <td class="text-right">@UtlString.FormatCurrency(item.SeizureAmount,2)</td>
+                                    <td class="text-right">@UtlString.FormatCurrency(item.ExchangeRate,2)</td>
+                                    <td class="text-right">@UtlString.FormatCurrency(item.SeizureAmountNtd,0)</td>
+                                    <td class="text-center">@item.CaseKind2</td>
+                                    <td class="text-center">@item.PayCaseNo</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="13"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.SeizureQuery.CaseKind)
+                @Html.Hidden("querystring", Model.SeizureQuery.CaseKind2)
+                @Html.Hidden("querystring", Model.SeizureQuery.GovKind)
+                @Html.Hidden("querystring", Model.SeizureQuery.GovUnit)
+                @Html.Hidden("querystring", Model.SeizureQuery.CaseNo)
+                @Html.Hidden("querystring", Model.SeizureQuery.GovDateS)
+                @Html.Hidden("querystring", Model.SeizureQuery.GovDateE)
+                @Html.Hidden("querystring", Model.SeizureQuery.Speed)
+                @Html.Hidden("querystring", Model.SeizureQuery.ReceiveKind)
+                @Html.Hidden("querystring", Model.SeizureQuery.GovNo)
+                @Html.Hidden("querystring", Model.SeizureQuery.CreatedDateS)
+                @Html.Hidden("querystring", Model.SeizureQuery.CreatedDateE)
+                @Html.Hidden("querystring", Model.SeizureQuery.BranchNo)
+                @Html.Hidden("querystring", Model.SeizureQuery.CreateUser)
+                @Html.Hidden("querystring", Model.SeizureQuery.CustId)
+                @Html.Hidden("querystring", Model.SeizureQuery.CustName)
+                @Html.Hidden("querystring", Model.SeizureQuery.SendDateS)
+                @Html.Hidden("querystring", Model.SeizureQuery.SendDateE)
+                @Html.Hidden("querystring", Model.SeizureQuery.SendNo)
+                @Html.Hidden("querystring", Model.SeizureQuery.OverDateS)
+                @Html.Hidden("querystring", Model.SeizureQuery.OverDateE)
+                @Html.Hidden("querystring", Model.SeizureQuery.Status)
+                @Html.Hidden("querystring", Model.SeizureQuery.Account)
+                @Html.Hidden("querystring", Model.SeizureQuery.AgentUser)
+                @Html.Hidden("defaultSortColumn", Model.SeizureQuery.SortExpression)
+                @Html.Hidden("defaultSort", Model.SeizureQuery.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

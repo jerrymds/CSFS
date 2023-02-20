@@ -1,0 +1,71 @@
+﻿@model CTBC.CSFS.Models.PARMMenuVO
+
+<table width="100" border="1" cellpadding="3" cellspacing="0" class="query_table">
+    @if (ViewBag.EditMode == "Edit")
+    { 
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_menu_id
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Model.ID 
+        </td>
+    </tr>
+    } 
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_menu_type
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.MenuType, new { @class = "input_word", @MaxLength = "1" })<span>@Lang.csfs_menu_edittmp_note1</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_menu_level
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.MenuLevel, new { @class = "input_word", @MaxLength = "3" })<span>@Lang.csfs_menu_edittmp_note2</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_menu_parent
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.Parent, new { @class = "input_word", @MaxLength = "9" })<span>@Lang.csfs_menu_edittmp_note3</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_menu_name
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.TITLE, new { @class = "input_word", @MaxLength = "100", @style = "width:400px;" })
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_menu_funcid
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.md_FuncID, new { @class = "input_word", @MaxLength = "100", @style = "width:400px;" })<span>@Lang.csfs_menu_edittmp_note4</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_menu_url
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.md_URL, new { @class = "input_word", @MaxLength = "100", @style = "width:400px;" })<span>@Lang.csfs_menu_edittmp_note5</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.nume_menu_sort
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.MenuSort, new { @class = "input_word", @MaxLength = "3" })<span>@Lang.csfs_menu_edittmp_note6</span>
+        </td>
+    </tr>
+</table>

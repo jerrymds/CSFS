@@ -1,0 +1,86 @@
+﻿@using CTBC.FrameWork.Paging
+@model PARMMenuViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.PARMMenuVOList != null)
+                {
+                    if (Model.PARMMenuVOList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.PARMMenuVO.PageSize, Model.PARMMenuVO.CurrentPage, Model.PARMMenuVO.TotalItemCount, Model.PARMMenuVO, new AjaxOptions() {UpdateTargetId = "divResult", HttpMethod = "Post"}, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.PARMMenuVO.SortExpression, Model.PARMMenuVO.SortDirection)
+                        </div>
+                    }
+                }
+            </div><!-- /.box-header -->
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            @*<th><input type="checkbox" id="CheckAll"></th>*@
+                            <th class="col-xs-1" data-sortcolumn="ID">@Lang.csfs_menu_id</th>
+                            <th class="col-xs-1" data-sortcolumn="MenuType"> @Lang.csfs_menu_type</th>
+                            <th class="col-xs-1" data-sortcolumn="MenuLevel"> @Lang.csfs_menu_level</th>
+                            <th class="col-xs-1" data-sortcolumn="Parent">@Lang.csfs_menu_parent</th>
+                            <th class="col-xs-2" data-sortcolumn="TITLE"> @Lang.csfs_menu_name</th>
+                            <th class="col-xs-2" data-sortcolumn="md_FuncID"> @Lang.csfs_menu_funcid</th>
+                            <th class="col-xs-2" data-sortcolumn="md_URL"> @Lang.csfs_menu_url</th>
+                            <th class="col-xs-1" data-sortcolumn="MenuSort"> @Lang.csfs_menu_sort</th>
+                            <th class="col-xs-1">@Lang.csfs_editdelete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.PARMMenuVOList != null && Model.PARMMenuVOList.Any())
+                        {
+                            foreach (var item in Model.PARMMenuVOList)
+                            {
+                                <tr>
+                                    @*<td>
+                                        <input type="checkbox" name="r2" class="checkfile" value="@item.ID" />
+                                    </td>*@
+                                    <td class="text-right">@item.ID</td>
+                                    <td>@item.MenuType</td>
+                                    <td>@item.MenuLevel</td>
+                                    <td class="text-right">@item.Parent</td>
+                                    <td class="text-left">@Lang.ResourceManager.GetString(item.TITLE.Trim())</td>
+                                    <td class="text-left">@item.md_FuncID</td>
+                                    <td class="text-left">@item.md_URL</td>
+                                    <td class="text-right">@item.MenuSort</td>
+                                    <td class="text-center">
+                                        <a class="btn btn-default btn-xs" title="@Lang.csfs_edit" href="@Url.Action("Edit", "PARMMenu", new {area = "SystemManagement", id = item.ID})">
+                                            <i class="fa fa-edit"></i>
+                                        </a>
+                                        <a class="btn btn-default btn-xs" title="@Lang.csfs_delete" href="#" data-href="@Url.Action("Delete", "PARMMenu", new {area = "SystemManagement", id = item.ID})" data-deletelink="true">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="10"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.PARMMenuVO.QuickSearchCon)
+                @Html.Hidden("defaultSortColumn", Model.PARMMenuVO.SortExpression)
+                @Html.Hidden("defaultSort", Model.PARMMenuVO.SortDirection)
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.BindCheckBox();
+        $.custPagination.sort($("#divResult"));
+        $.MenuMaintenance.bindGrid();
+    });
+</script>

@@ -1,0 +1,144 @@
+﻿@model CTBC.CSFS.ViewModels.HistoryQueryViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.HistoryQueryList != null)
+                {
+                    if (Model.HistoryQueryList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.HistoryQuery.PageSize, Model.HistoryQuery.CurrentPage, Model.HistoryQuery.TotalItemCount, Model.HistoryQuery, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.HistoryQuery.SortExpression, Model.HistoryQuery.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th><input type="checkbox" id="CheckAll"></th>
+                            <th style="width:4%">@Lang.csfs_seqnum</th>
+                            <th class="col-md-1">@Lang.csfs_case_no</th>
+                            <th class="col-md-1">@Lang.csfs_case_kind</th>
+                            <th class="col-md-1">@Lang.csfs_case_kind2</th>
+                            <th style="width:7%">@Lang.csfs_case_speed</th>
+                            <th class="col-md-2">@Lang.csfs_gov_unit</th>
+                            <th style="width:6%">@Lang.csfs_gov_no</th>
+                            <th class="col-md-1">@Lang.csfs_gov_date</th>
+                            <th class="col-md-1">@Lang.csfs_case_limited_date</th>
+                            <th class="col-md-1">@Lang.csfs_agnet</th>
+                            <th class="col-md-1">@Lang.csfs_closeddate</th>
+                            <th class="col-md-1">@Lang.csfs_case_status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.HistoryQueryList != null && Model.HistoryQueryList.Any())
+                        {
+                            int a = 0;
+                            foreach (var item in Model.HistoryQueryList)
+                            {
+                                a = a + 1;
+                                string className = "";
+                                if (item.CloseDate != null && item.CloseDate != "")
+                                {
+                                    if (Convert.ToInt32(item.CloseDate.Replace("/", "")) > Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                    {
+                                        className = "text-red";
+                                    }
+                                    if (Convert.ToInt32(item.CloseDate.Replace("/", "")) == Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                    {
+                                        className = "text-light-blue";
+                                    }
+                                }
+                                else if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) > Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                {
+                                    className = "text-red";
+                                }
+                                else if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) == Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                {
+                                    className = "text-light-blue";
+                                }
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="r2" class="checkfile" value="@item.CaseId" />
+                                    </td>
+                                    <td class="text-center @className">@a</td>
+                                    <td class="text-center @className">
+                                        @Html.ActionLink(Convert.ToString(item.CaseNo + " "), "Index", "HistoryAgentDocumentInfoDetail", new { area = "Common", CaseId = item.CaseId }, new { })
+                                    </td>
+                                    <td class="text-center @className">@item.CaseKind</td>
+                                    <td class="text-center @className">@item.CaseKind2</td>
+                                    <td class="text-center @className">@item.Speed</td>
+                                    <td class="text-center @className">@item.GovUnit</td>
+                                    <td class="@className">@item.GovNo</td>
+                                    @if (item.GovDate == "2001/01/01")
+                                    {
+                                        <td class="@className">扣押補建</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="@className">@item.GovDate</td>
+                                    }
+
+                                    @if (item.LimitDate == "2001/01/01")
+                                    {
+                                        <td class="@className">扣押補建</td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center @className">@item.LimitDate</td>
+                                    }
+
+                                    <td class="text-center @className">@item.AgentUser</td>
+                                    <td class="text-center @className">@item.CloseDate</td>
+                                    <td class="text-center @className">@item.StatusShow</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="13"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.HistoryQuery.CaseKind)
+                @Html.Hidden("querystring", Model.HistoryQuery.CaseKind2)
+                @Html.Hidden("querystring", Model.HistoryQuery.GovKind)
+                @Html.Hidden("querystring", Model.HistoryQuery.GovUnit)
+                @Html.Hidden("querystring", Model.HistoryQuery.CaseNo)
+                @Html.Hidden("querystring", Model.HistoryQuery.GovDateS)
+                @Html.Hidden("querystring", Model.HistoryQuery.GovDateE)
+                @Html.Hidden("querystring", Model.HistoryQuery.Speed)
+                @Html.Hidden("querystring", Model.HistoryQuery.ReceiveKind)
+                @Html.Hidden("querystring", Model.HistoryQuery.GovNo)
+                @Html.Hidden("querystring", Model.HistoryQuery.CreatedDateS)
+                @Html.Hidden("querystring", Model.HistoryQuery.CreatedDateE)
+                @Html.Hidden("querystring", Model.HistoryQuery.Unit)
+                @Html.Hidden("querystring", Model.HistoryQuery.CreateUser)
+                @Html.Hidden("querystring", Model.HistoryQuery.ObligorNo)
+                @Html.Hidden("querystring", Model.HistoryQuery.ObligorName)
+                @Html.Hidden("querystring", Model.HistoryQuery.SendDateS)
+                @Html.Hidden("querystring", Model.HistoryQuery.SendDateE)
+                @Html.Hidden("querystring", Model.HistoryQuery.SendNo)
+                @Html.Hidden("querystring", Model.HistoryQuery.OverDateS)
+                @Html.Hidden("querystring", Model.HistoryQuery.OverDateE)
+                @Html.Hidden("querystring", Model.HistoryQuery.Status)
+                @Html.Hidden("querystring", Model.HistoryQuery.AgentUser)
+                @Html.Hidden("defaultSortColumn", Model.HistoryQuery.SortExpression)
+                @Html.Hidden("defaultSort", Model.HistoryQuery.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.BindCheckBox();
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

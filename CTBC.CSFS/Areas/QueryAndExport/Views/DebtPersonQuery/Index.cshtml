@@ -1,0 +1,151 @@
+﻿@model CTBC.CSFS.Models.CaseMaster
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_debtpersonquery;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("_QueryResult", "DebtPersonQuery", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal", enctype = "multipart/form-data", target = "upload_frame" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder  col-md-12">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                        <td class="col-md-11">
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, Lang.csfs_select, new { @id = "ddlCaseKind" })
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_clientID</td>
+                        <td class="col-md-11">
+                            @Html.TextBoxFor(m => m.ObligorNo, new { @MaxLength = "100", @id = "txtObligorNo" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_no</td>
+                        <td class="col-md-11">
+                            @Html.TextBoxFor(m => m.GovNo, new { @MaxLength = "100", @id = "txtGovNo" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_date</td>
+                        <td class="col-md-11">
+                            @Html.TextBoxFor(m => m.CreatedDateStart, new { data_datepicker = "true", @id = "txtStart" })
+                            ~
+                            @Html.TextBoxFor(m => m.CreatedDateEnd, new { data_datepicker = "true", @id = "txtEnd" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+        <input type="hidden" id="pageNum" name="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnExcel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_debtexcel</button>
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "DebtPersonQuery", new { area = "QueryAndExport" })">
+
+</div>
+@Html.Hidden("excelUrl", Url.Action("CaseObligorExcel", "DebtPersonQuery", new { area = "QueryAndExport" }))
+@Html.Hidden("GetCaseKind2Url", Url.Action("ChangCaseKind1", "AgentToHandle", new { area = "Agent" }))
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("ReceiveDateText", Lang.csfs_keyin_date)
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("CaseSeizure", Lang.csfs_menu_tit_caseseizure)
+@Html.Hidden("Seizure", Lang.csfs_seizure)
+@Html.Hidden("Pay", Lang.csfs_Pay)
+@Html.Hidden("Repeal", Lang.csfs_repeal)
+@Html.Hidden("SeizureandPay", Lang.csfs_seizureandpay)
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+@Html.Hidden("CaseKind2Query", (string)ViewBag.CaseKind2Query)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+
+@section scripts {
+    <script type="text/javascript">
+        //$("#ddlCaseKind2").attr("disabled", "true");
+        $("#ddlCaseKind").change(function () { ChangeCaseKind(); });
+        $(function () {
+            ChangeCaseKind();
+        });
+
+        function ChangeCaseKind() {
+            var casekind = $("#ddlCaseKind option:selected").val();
+            if (casekind.trim().length == 0) {
+                $("#ddlCaseKind2").empty();
+                $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+            }
+            else if (casekind == $("#CaseSeizure").val()) {
+                $("#ddlCaseKind2").empty();
+                $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#Seizure").val()).text($("#Seizure").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#Pay").val()).text($("#Pay").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#Repeal").val()).text($("#Repeal").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#SeizureandPay").val()).text($("#SeizureandPay").val()));
+            }
+            else {
+                $("#ddlCaseKind2").empty();
+                $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+            }
+        }
+
+        if ($("#isQuery").val() == "1") {
+            ChangeCaseKind();
+            $("#pageNum").val(parseInt($("#CurrentPage").val()));
+            $("#ddlCaseKind2").val($("#CaseKind2Query").val());
+            btnQueryClick();
+        }
+
+        $("#btnQuery").click(function () { return btnQueryClick(); })
+
+        function btnQueryClick() {
+            var NewLine = "<br/>";
+            var Msg = "";
+            if (!checkIsValidDate($("#txtStart").val())) {
+                Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#ReceiveDateText").val()) + NewLine;
+            }
+            if (!checkIsValidDate($("#txtEnd").val())) {
+                Msg = Msg + $.validator.format($("#PlzCorrectFormat").val(), $("#ReceiveDateText").val()) + NewLine;
+            }
+            if (Msg.length > 0) {
+                jAlertError(Msg);
+                return false;
+            }
+
+            $.blockUI();
+            $.ajax({
+                url: $("#frmQuery").attr("action"),
+                type: "Post",
+                cache: false,
+                data: $("#frmQuery").serialize(),
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    $("#divResult").html(data).show();
+                    $.unblockUI();
+                    $("#querystring").val($("#frmQuery").serialize());
+                }
+            });
+        }
+
+        $("#btnExcel").click(function () {
+            location.href = $("#excelUrl").val();
+        })
+    </script>
+}
+
+
+
+

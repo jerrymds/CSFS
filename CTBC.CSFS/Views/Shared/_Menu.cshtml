@@ -1,0 +1,291 @@
+﻿@using System.Configuration
+@using System.Text
+@using System.Xml
+@using CTBC.FrameWork.Platform
+@{
+    Layout = null;
+}
+@* =============== 神奇的菜單開始了 by Ge.Song =============== *@
+@functions{
+    //所有Menu授權資料
+    string _appAuthZ = "";
+    //應用系統LDAP DN
+    readonly string _ldapServiceDn = (ConfigurationManager.AppSettings["LDAPServiceDN"] ?? "CSFS");
+    //該User的被授權角色
+    List<string> _usrCurrRoles = new List<string>();
+    List<User.RoleInfo> _tUsrCurrRoles = new List<User.RoleInfo>();
+    //MenuTree字串
+    StringBuilder _sb = new StringBuilder();
+
+    public string GetMenuTree()
+    {
+        try
+        {
+            XmlDocument authZ = new XmlDocument();
+
+            //取得所有Menu授權資料
+            _appAuthZ = AppCache.InCache("AppAuthZ") ? (string) AppCache.Get("AppAuthZ") : "";
+
+            //取得該User的被授權角色
+            if (HttpContext.Current.Session != null && HttpContext.Current.Session["LogonUser"] != null)
+            {
+                //* 當前登入者所有的role
+                _tUsrCurrRoles = ((User)HttpContext.Current.Session["LogonUser"]).Roles;
+                foreach (User.RoleInfo r in _tUsrCurrRoles)
+                {
+                    _usrCurrRoles.Add(r.RoleLDAPId);
+                }
+            }
+
+            //如果有Menu授權資料 + 且User有被授權至少一個角色
+            if (!string.IsNullOrEmpty(_appAuthZ) && _usrCurrRoles.Count > 0)
+            {
+                //<li class="treeview">
+                //    <a href="#">
+                //        <i class="fa fa-folder-o"></i>
+                //        <span>建檔作業</span>
+                //        <i class="fa fa-angle-left pull-right"></i>
+                //    </a>
+                //    <ul class="treeview-menu">
+                //        <li><a href="#"><i class="fa fa-file-o"></i>扣押案件</a></li>
+                //        <li><a href="#"><i class="fa fa-file-o"></i>一般案件</a></li>
+                //        <li><a href="#"><i class="fa fa-file-o"></i>警示通報</a></li>
+                //        <li><a href="#"><i class="fa fa-file-o"></i>退件待簽收</a></li>
+                //    </ul>
+                //</li>
+                
+                //Load Menu授權資料,並且只讀取Menu這個項目所有節點資料
+                authZ.LoadXml(_appAuthZ);
+                if (authZ.DocumentElement == null) return "";
+                XmlNodeList loNodelist = authZ.DocumentElement.SelectNodes("//*[@md_FuncID='Menu']");
+                if (loNodelist != null && loNodelist.Count > 0)
+                {
+                    for (int i = 0; i < loNodelist.Count; i++)
+                    {
+                        XmlNode loNode = loNodelist[i];
+                        if (loNode == null || loNode.Attributes == null) continue;
+                        var oneMenuRoles = GetOneMenuRoles(HttpUtility.UrlDecode(loNode.Attributes["md_AuthZ"].Value));
+                        if (!IsAuthorized(oneMenuRoles, _usrCurrRoles)) continue;
+                        
+                        string strTitle = loNode.Attributes["TITLE"] != null ? loNode.Attributes["TITLE"].Value : "";
+                        strTitle = Lang.ResourceManager.GetString(strTitle.Trim());
+                        string strUrl = loNode.Attributes["md_URL"] != null && !string.IsNullOrEmpty(loNode.Attributes["md_URL"].Value) ? Url.Content("~/") + loNode.Attributes["md_URL"].Value : "#";
+                        
+                        _sb.Append("<li class=\"treeview\">");
+                        _sb.Append("<a href=\"" + strUrl + "\"><i class=\"fa fa-folder-o\"></i> <span>" + strTitle + "</span><i class=\"fa fa-angle-left pull-right\"></i></a>");
+                        
+                        //ReadSubNode
+                        XmlNodeList nodelist = loNode.ChildNodes;
+                        if (nodelist.Count > 0)
+                        {
+                            GetSubNode(nodelist);
+                        }
+                        _sb.Append("</li>");
+                    }
+                }
+            }
+            return _sb.ToString();
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    //讀取子節點
+    private void GetSubNode(XmlNodeList nodelist)
+    {
+        //    <ul class="treeview-menu">
+        //        <li><a href="#"><i class="fa fa-file-o"></i>扣押案件</a></li>
+        //        <li><a href="#"><i class="fa fa-file-o"></i>一般案件</a></li>
+        //        <li><a href="#"><i class="fa fa-file-o"></i>警示通報</a></li>
+        //        <li><a href="#"><i class="fa fa-file-o"></i>退件待簽收</a></li>
+        //    </ul>
+        
+        int nodeListCnt = nodelist.Count;
+        if (nodeListCnt > 0)
+            _sb.Append("<ul class=\"treeview-menu\">");
+
+        //取得該節點項下所有子節點,並組成Menu Html
+        foreach (XmlNode item in nodelist)
+        {
+            
+            if (item.Attributes == null) continue;
+            if (item.Attributes["md_AuthZ"] != null)
+            {
+                //取得本項Menu被授權的Role清單
+                var oneMenuRoles = GetOneMenuRoles(HttpUtility.UrlDecode(item.Attributes["md_AuthZ"].Value));
+
+                //比較目前使用者被授權的角色(usrCurrRoles)是否有權看到此Menu(usrCurrRoles是否存在oneMenuRoles內)
+                //該Menu被授權,顯示此一Menu
+                if (!IsAuthorized(oneMenuRoles, _usrCurrRoles)) continue;
+                
+                string strTitle = item.Attributes["TITLE"] != null ? item.Attributes["TITLE"].Value : "";
+                strTitle = Lang.ResourceManager.GetString(strTitle.Trim());
+                string strUrl = item.Attributes["md_URL"] != null ? Url.Content("~/") + item.Attributes["md_URL"].Value : "#";
+                _sb.Append("<li><a href=\"" + strUrl + "\"><i class=\"fa fa-file-o\"></i>" + strTitle + "</a></li>");
+
+            }
+        }
+
+        if (nodeListCnt > 0)
+            _sb.Append("</ul>");
+    }
+
+    //取得本項Menu被授權的Role清單
+    private List<string> GetOneMenuRoles(string authZString)
+    {
+        List<string> roles = new List<string>();
+        XmlDocument lo_DOM = new XmlDocument();
+        lo_DOM.LoadXml(authZString);
+        XmlNode role_Node = lo_DOM.DocumentElement.SelectSingleNode("/Data");
+
+        XmlNodeList nodelist = role_Node.ChildNodes;
+        foreach (XmlNode item in nodelist)
+        {
+            roles.Add(item.ChildNodes[0].InnerText.Replace("cn=", "").Replace("," + _ldapServiceDn, ""));
+        }
+        return roles;
+    }
+
+    //此項Menu是否被授權
+    private bool IsAuthorized(List<string> oneMenuRoles, List<string> usrCurrRoles)
+    {
+        bool isAuth = false;
+        foreach (string item in usrCurrRoles)
+        {
+            //如果此項Menu中的角色
+            if (!oneMenuRoles.Contains(item)) continue;
+            isAuth = true;
+            break;
+        }
+        return isAuth;
+    }
+
+}
+@* =============== 神奇的菜單結束了 by Ge.Song =============== *@
+
+<!-- Left side column. contains the logo and sidebar -->
+<aside class="left-side sidebar-offcanvas">
+    <!-- sidebar: style can be found in sidebar.less -->
+    <section class="sidebar">
+        <!-- Sidebar user panel -->
+        <div class="user-panel">
+            <div class="pull-left info">
+                <span> @Lang.csfs_sysname </span>
+            </div>
+        </div>
+        <!-- sidebar menu: : style can be found in sidebar.less -->
+
+        <ul class="sidebar-menu">
+            @*想要DB的菜單嗎.就把下面的註解解開*@
+            @Html.Raw(GetMenuTree())
+
+            @*<li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder-o"></i> 
+                    <span>建檔作業</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-file-o"></i>扣押案件</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>一般案件</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>警示通報</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>退件待簽收</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder-o"></i>
+                    <span>集作收件</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-file-o"></i>待簽收</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>待分文</a></li>
+                </ul>
+            </li>
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder-o"></i>
+                    <span>經辦人員</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-file-o"></i>待簽收</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>待辦理</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder-o"></i>
+                    <span>主管作業</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-file-o"></i>待簽收</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>協同作業</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>待核決</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>待發文</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder-o"></i>
+                    <span>系統管理</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="@Url.Action("Index", "MenuToPage", new {area = "SystemManagement"})"><i class="fa fa-file-o"></i>功能設定</a></li>
+                    <li><a href="@Url.Action("Index", "PageToAction", new {area = "SystemManagement"})"><i class="fa fa-file-o"></i>權限設定</a></li>
+                    <li><a href="@Url.Action("Index", "ParmMenu", new {area = "SystemManagement"})"><i class="fa fa-file-o"></i>menu設定</a></li>
+                    <li><a href="@Url.Action("Index", "MenuToRole", new {area = "SystemManagement"})"><i class="fa fa-file-o"></i>角色設定</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>經辦設定</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>人員設定</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>發文機關設定</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>回文版型維護</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>參數設定</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder-o"></i>
+                    <span>查詢匯出作業</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-file-o"></i>案件查詢</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>集作收文清單</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>會辦彙總送件</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>會辦結果上傳及查詢</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>聯行調閱查詢送件</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>資訊調閱查詢送件及歸檔</a></li>
+                </ul>
+            </li>
+
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa fa-folder-o"></i>
+                    <span>報表作業</span>
+                    <i class="fa fa-angle-left pull-right"></i>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="#"><i class="fa fa-file-o"></i>日結查詢及列印</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>發文列印</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>二次回文列印</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>地址條列印</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>支票套印</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>用印簿</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>掛號單</a></li>
+                    <li><a href="#"><i class="fa fa-file-o"></i>時效管制表</a></li>
+                </ul>
+            </li>*@
+
+        </ul>
+    </section>
+    <!-- /.sidebar -->
+</aside>

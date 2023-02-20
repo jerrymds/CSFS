@@ -1,0 +1,225 @@
+﻿@model CTBC.CSFS.Models.HistoryCasePayeeSetting
+@{
+    ViewBag.Title = "_PayeeEdit";
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+<div class="margin">
+    <div class="nav-tabs-custom">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="fa fa-edit"></i>
+                <h3 class="box-title">@Lang.csfs_modify</h3>
+            </div>
+            @using (Html.BeginForm("_PayeeEdit", "HistoryAgentAccountInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmEditCPS", @class = "form-horizontal" }))
+        {
+                <div class="box-body">
+                    <table id="query_table" class="table text-black no-border">
+                        <tbody>
+                            <tr>
+                                <td class="col-md-1">@Lang.csfs_receive_person</td>
+                                <td class="col-md-2">
+                                    @Html.TextBoxFor(m => m.ReceivePerson, new { @MaxLength = "10" })
+                                    <a href="@Url.Action("QueryGovAddress", "Home", new {area = "", CaseId = ViewBag.CaseId, @radom = DateTime.Now.ToString()})"
+                                       class="fancy800_600 btn btn-default btn-xs">
+                                        <li class="fa fa-search" id="aQueryPerson"></li>
+                                    </a>
+                                </td>
+                                <td class="col-md-1"></td>
+                                <td class="col-md-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1">@Lang.csfs_receiver</td>
+                                <td class="col-md-2">
+                                    @Html.TextBoxFor(m => m.Receiver, new { @MaxLength = "10" })
+                                    <a href="@Url.Action("QueryGovAddress", "Home", new {area = "", CaseId = ViewBag.CaseId, @radom = DateTime.Now.ToString()})"
+                                       class="fancy800_600 btn btn-default btn-xs">
+                                        <li class="fa fa-search" id="aQueryReceiver"></li>
+                                    </a>
+                                </td>
+                                <td class="col-md-1">@Lang.csfs_address</td>
+                                <td class="col-md-2">
+                                    @Html.TextBoxFor(m => m.Address, new { @MaxLength = "100" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1">@Lang.csfs_currency</td>
+                                <td class="col-md-2">
+                                    @Html.TextBoxFor(m => m.Currency, new { @MaxLength = "10" })
+                                    <a href="@Url.Action("QueryGovAddress", "Home", new {area = "", CaseId = ViewBag.CaseId, @radom = DateTime.Now.ToString()})"
+                                       class="fancy800_600 btn btn-default btn-xs">
+                                        <li class="fa fa-search" id="aQueryCc"></li>
+                                    </a>
+                                </td>
+                                <td class="col-md-1">@Lang.csfs_ccreceiver</td>
+                                <td class="col-md-2">
+                                    @Html.TextBoxFor(m => m.CCReceiver, new { @MaxLength = "100" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1">@Lang.csfs_pay_amt</td>
+                                <td class="col-md-2">
+                                    @Html.TextBoxFor(m => m.Money, new { @MaxLength = "50" })
+                                </td>
+                                <td class="col-md-1">@Lang.csfs_fee</td>
+                                <td class="col-md-2">
+                                    @Html.TextBoxFor(m => m.Fee, new { @MaxLength = "50" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1">@Lang.csfs_check_no</td>
+                                <td class="col-md-2">
+                                    @Html.TextBoxFor(m => m.CheckNo, new { @MaxLength = "10" })
+                                </td>
+                                <td class="col-md-1"></td>
+                                <td class="col-md-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1">@Lang.csfs_case_unit</td>
+                                <td class="col-md-5" colspan="3">
+                                    @Html.TextBoxFor(m => m.BankID, new { @id = "BankID", @MaxLength = "100" })
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1">@Lang.csfs_case_type</td>
+                                <td class="col-md-2">
+                                    @Html.TextBoxFor(m => m.CaseKind, new { @id = "CaseKind", @MaxLength = "10", @disabled = "true" })
+                                </td>
+                                <td class="col-md-1"></td>
+                                <td class="col-md-2"></td>
+                            </tr>
+                            <tr>
+                                <td class="col-md-1">@Lang.csfs_memo</td>
+                                <td class="col-md-2">
+                                    @Html.TextBoxFor(m => m.Memo, new { @MaxLength = "100" })
+                                </td>
+                                <td class="col-md-1"></td>
+                                <td class="col-md-2"></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    @Html.HiddenFor(m => m.PayeeId)
+                </div>
+                <div class="box-footer text-center">
+                    <button id="btnSaveEdit" type="button" class="btn btn-primary btn-xs">存檔</button>
+                    <button id="btnCancelEdit" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+                </div>
+        }
+        </div>
+    </div>
+</div>
+@Html.Hidden("EditSuccessMsg", Lang.csfs_edit_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_edit_fail)
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("MoneyIsNumber", Lang.csfs_money_is_number)
+@Html.Hidden("PersonNotNull", Lang.csfs_receive_person)
+@Html.Hidden("ReceiverNotNull", Lang.csfs_receiver)
+@Html.Hidden("AddressNotNull", Lang.csfs_address)
+@Html.Hidden("CurrencyNotNull", Lang.csfs_currency)
+@Html.Hidden("CCReceiverNotNull", Lang.csfs_ccreceiver)
+
+<script src="~/Scripts/jquery-2.1.3.min.js"></script>
+
+@Html.Hidden("GetGovNameUrl", Url.Action("GetGovNameByGoveKind", "Home", new { area = "" }))
+
+<script type="text/javascript">
+    var queryAddrType = "PERSON";
+    $("#aQueryPerson").click(function () { queryAddrType = "PERSON"; });
+    $("#aQueryReceiver").click(function () { queryAddrType = "RECEIVER"; });
+    $("#aQueryCc").click(function () { queryAddrType = "CC"; });
+
+    $("#btnSaveEdit").click(function () { return btnSaveEditClick(); });
+    $("#btnCancelEdit").click(function () { return btnCancelEditClick(); })
+
+    jQuery(document).ready(function () {
+        $.CSFS.bindGovKindAndUnit("ddlReceiver", "TxAddress");
+    });
+    //* 修改
+    function btnSaveEditClick() {
+        trimAllInput();
+        if (!ajaxValidate()) {
+            return false;
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmEditCPS").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmEditCPS").serialize(),
+            dataType: "json",
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess($("#EditSuccessMsg").val(), function () {
+                        parent.$.colorbox.close();
+                        parent.location.reload();
+                    })
+                } else {
+                    jAlertError($("#EditFailMsg").val());
+                    $.unblockUI();
+                }
+
+            }
+        });
+        return false;
+    }
+
+    //* 點擊取消
+    function btnCancelEditClick() {
+        parent.$.colorbox.close();
+    }
+
+    function ajaxValidate() {
+        var NewLine = "<br/>";
+        var Msg = "";
+        if ($("#ReceivePerson").val().length <= 0) {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#PersonNotNull").val()) + NewLine;
+        }
+        if ($("#Receiver").val().length <= 0) {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#ReceiverNotNull").val()) + NewLine;
+        }
+        if ($("#Address").val().length <= 0) {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#AddressNotNull").val()) + NewLine;
+        }
+        if ($("#Currency").val().length <= 0) {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#CurrencyNotNull").val()) + NewLine;
+        }
+        if ($("#CCReceiver").val().length <= 0) {
+            Msg = Msg + $.validator.format($("#PlzInput").val(), $("#CCReceiverNotNull").val()) + NewLine;
+        }
+        var Filter = /^([0-9.]+)$/;
+        if (!Filter.test($("#Money").val()) || !Filter.test($("#Fee").val())) {
+            Msg = Msg + $("#MoneyIsNumber").val() + NewLine;
+        }
+        if (Msg.length > 0) {
+            jAlertError(Msg);
+            return false;
+        }
+        return true;
+    }
+
+    function addTr(govName, govAddr) {
+        if (queryAddrType == "PERSON") {
+            $("#ReceivePerson").val(govName);
+            $("#Receiver").val(govName);
+            $("#Address").val(govAddr);
+        }
+        if (queryAddrType == "RECEIVER") {
+            $("#Receiver").val(govName);
+            $("#Address").val(govAddr);
+        }
+        if (queryAddrType == "CC") {
+            $("#Currency").val(govName);
+            $("#CCReceiver").val(govAddr);
+        }
+    }
+
+    function trimAllInput() {
+        $(":input[type='text']").each(function () {
+            $(this).val($.trim($(this).val()));
+        });
+    }
+</script>

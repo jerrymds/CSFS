@@ -1,0 +1,132 @@
+﻿@using CTBC.FrameWork.Paging
+@model CollectionToSignViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">結果區</h3>
+                @if (Model.CollectionToSignList != null)
+                {
+                    if (Model.CollectionToSignList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CollectionToSign.PageSize, Model.CollectionToSign.CurrentPage, Model.CollectionToSign.TotalItemCount, Model.CollectionToSign, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Get" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CollectionToSign.SortExpression, Model.CollectionToSign.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th><input type="checkbox" id="CheckAll"></th>
+                            <th class="col-md-1" data-sortcolumn="ReceiverNo">公文文號</th>
+                            <th class="col-md-1" data-sortcolumn="CaseKind">類別</th>
+                            <th class="col-md-1" data-sortcolumn="CaseNo">案件編號</th>
+                            <th class="col-md-1" data-sortcolumn="Speed">速別</th>
+                            <th class="col-md-1" data-sortcolumn="GovUnit">來文機關</th>
+                            <th class="col-md-1" data-sortcolumn="GovNo">來文文號</th>
+                            <th class="col-md-1" data-sortcolumn="GovDate">來文日期</th>
+                            <th class="col-md-1" data-sortcolumn="LimitDate">限辨日期</th>
+                            <th class="col-md-1" data-sortcolumn="Unit">分行別</th>
+                            <th class="col-md-1" data-sortcolumn="Person">建檔人員</th>
+                            <th class="col-md-1" data-sortcolumn="Status">狀態</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CollectionToSignList != null && Model.CollectionToSignList.Any())
+                        {
+                            foreach (var item in Model.CollectionToSignList)
+                            {
+                                if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) > Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <input type="checkbox" name="r2" class="checkfile" value="@item.CaseId" />
+                                        </td>
+                                        <td class="text-center" style="color:red">@item.ReceiverNo</td>
+                                        <td class="text-center" style="color:red">@item.CaseKind</td>
+                                        <td class="text-center" style="color:red">@item.CaseNo</td>
+                                        <td class="text-center" style="color:red">@item.Speed</td>
+                                        <td style="color:red">@item.GovUnit</td>
+                                        <td style="color:red">@item.GovNo</td>
+                                        <td class="text-center" style="color:red">@item.GovDate</td>
+                                        <td class="text-center" style="color:red">@item.LimitDate</td>
+                                        <td class="text-center" style="color:red">@item.Unit</td>
+                                        <td class="text-center" style="color:red">@item.Person</td>
+                                        <td style="color:red">@item.Status</td>
+                                    </tr>
+                                }
+                                if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) == Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <input type="checkbox" name="r2" class="checkfile" value="@item.CaseId" />
+                                        </td>
+                                        <td class="text-center" style="color: blue">@item.ReceiverNo</td>
+                                        <td class="text-center" style="color: blue">@item.CaseKind</td>
+                                        <td class="text-center" style="color: blue">@item.CaseNo</td>
+                                        <td class="text-center" style="color: blue">@item.Speed</td>
+                                        <td style="color: blue">@item.GovUnit</td>
+                                        <td style="color: blue">@item.GovNo</td>
+                                        <td class="text-center" style="color: blue">@item.GovDate</td>
+                                        <td class="text-center" style="color: blue">@item.LimitDate</td>
+                                        <td class="text-center" style="color: blue">@item.Unit</td>
+                                        <td class="text-center" style="color: blue">@item.Person</td>
+                                        <td style="color: blue">@item.Status</td>
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="text-center">
+                                            <input type="checkbox" name="r2" class="checkfile" value="@item.CaseId" />
+                                        </td>
+                                        <td class="text-center">@item.ReceiverNo</td>
+                                        <td class="text-center">@item.CaseKind</td>
+                                        <td class="text-center">@item.CaseNo</td>
+                                        <td class="text-center">@item.Speed</td>
+                                        <td>@item.GovUnit</td>
+                                        <td>@item.GovNo</td>
+                                        <td class="text-center">@item.GovDate</td>
+                                        <td class="text-center">@item.LimitDate</td>
+                                        <td class="text-center">@item.Unit</td>
+                                        <td class="text-center">@item.Person</td>
+                                        <td>@item.Status</td>
+                                    </tr>
+                                }
+
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.CollectionToSign.GovUnit)
+                @Html.Hidden("querystring", Model.CollectionToSign.GovNo)
+                @Html.Hidden("querystring", Model.CollectionToSign.Person)
+                @Html.Hidden("querystring", Model.CollectionToSign.Speed)
+                @Html.Hidden("querystring", Model.CollectionToSign.ReceiveKind)
+                @Html.Hidden("querystring", Model.CollectionToSign.GovDateS)
+                @Html.Hidden("querystring", Model.CollectionToSign.GovDateE)
+                @Html.Hidden("querystring", Model.CollectionToSign.CaseKind)
+                @Html.Hidden("querystring", Model.CollectionToSign.CaseKind2)
+                @Html.Hidden("defaultSortColumn", Model.CollectionToSign.SortExpression)
+                @Html.Hidden("defaultSort", Model.CollectionToSign.SortDirection)
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.BindCheckBox();
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

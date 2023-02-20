@@ -1,0 +1,278 @@
+﻿@model CTBC.CSFS.ViewModels.SeizureOldQueryViewModel
+@using CTBC.CSFS.Models
+@using CTBC.FrameWork.Util
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+   
+    <div class="nav-tabs-custom">
+        <!-- Tabs within a box -->
+        <ul class="nav nav-tabs" style="cursor: move;">
+            <li class="active"><a>@Lang.csfs_agent_document_info</a></li>
+            @Html.GetBackButtonInTab()
+        </ul>
+    </div>
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-edit"></i>
+                <h3 class="box-title">@Lang.csfs_seizuretype</h3>
+            </div>
+            <div class="box-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        @if (Model != null && Model.SeizureOldDetails1List != null && Model.SeizureOldDetails1List.Any())
+                        {
+                            foreach (var item in Model.SeizureOldDetails1List)
+                            {
+                                <tr>
+                                    @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                                    <td class="col-md-1 text-right">@Lang.csfs_ReceiptSeq</td>
+                                    <td class="col-md-2">
+                                        @item.ReceiptSeq
+                                    </td>
+                                    <td class="col-md-1 text-right">@Lang.csfs_CaseProcessStatus</td>
+                                    <td class="col-md-2">
+                                        @item.CaseProcessStatus
+                                    </td>
+                                    <td class="col-md-1 text-right">@Lang.csfs_branchId</td>
+                                    <td class="col-md-2">
+                                        @item.BranchName
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 text-right">@Lang.csfs_InstitutionName</td>
+                                    <td class="col-md-2">
+                                        @item.InstitutionName
+                                    </td>
+                                    <td class="col-md-2 text-right">@Lang.csfs_address</td>
+                                    <td class="col-md-2">
+                                        @item.InstitutionAddress
+                                    </td>
+                                    <td class="col-md-1 text-right"></td>
+                                    <td class="col-md-3"></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 text-right">@Lang.csfs_InsDeptDispatchId</td>
+                                    <td class="col-md-2">
+                                        @item.InsDeptDispatchId
+                                    </td>
+                                    <td class="col-md-2 text-right">@Lang.csfs_InsDispatchDate</td>
+                                    <td class="col-md-2">
+                                        @item.InsDispatchDate
+                                    </td>
+                                    <td class="col-md-1 text-right"></td>
+                                    <td class="col-md-3"></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 text-right">@Lang.csfs_EndCaseRemark</td>
+                                    <td colspan="5">
+                                        @item.EndCaseRemark
+                                    </td>
+                                </tr>
+                                @*<tr>
+                                    <td class="col-md-2 text-right">@Lang.csfs_sendword1</td>
+                                    <td class="col-md-2">
+                                        @item.SendSeq
+                                    </td>
+                                    <td class="col-md-2 text-right">@Lang.csfs_senddate</td>
+                                    <td class="col-md-2">
+                                        @item.SendDate
+                                    </td>
+                                    <td class="col-md-1 text-right">@Lang.csfs_Clerk</td>
+                                    <td class="col-md-2">
+                                        @item.Clerk
+                                    </td>
+                                </tr>*@
+                                <tr><td colspan="15" style="border-bottom: 1px dashed #987cb9;" width="100%"></td></tr>
+                            }
+                            if (Model != null && Model.SeizureOldDetails1_1List != null && Model.SeizureOldDetails1_1List.Any())
+                                        {
+                                                foreach (var item1 in Model.SeizureOldDetails1_1List)
+                                                {
+                                                    <tr>
+                                                        <td class="col-md-2 text-right">@Lang.csfs_sendword1</td>
+                                                        <td class="col-md-2">
+                                                            @item1.SendSeq
+                                                        </td>
+                                                        <td class="col-md-2 text-right">@Lang.csfs_senddate</td>
+                                                        <td class="col-md-2">
+                                                            @item1.SendDate
+                                                        </td>
+                                                        <td class="col-md-2">@Lang.csfs_Clerk</td>
+                                                        <td class="col-md-2">
+                                                            @item1.Clerk
+                                                        </td>
+                                                    </tr>
+                            <tr><td colspan="6" style="border-bottom: 1px dashed #987cb9;" width="100%"></td></tr>
+                                                }
+                                        }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @* 扣押及撤銷 *@
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-edit"></i>
+                <h3 class="box-title">扣押及撤銷</h3>
+            </div>
+            <div class="box-body ">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        @if (Model != null && Model.SeizureOldDetails2_1List != null && Model.SeizureOldDetails2_1List.Any())
+                        {
+                            <tr>
+                                <td class="col-md-2">@Lang.csfs_ObligorAccountName</td>
+                                <td class="col-md-2">@Lang.csfs_ObligorCompanyId</td>
+                                <td class="col-md-2">@Lang.csfs_BranchNameAndSeizureSum</td>
+                            </tr>
+                            foreach (var item1 in Model.SeizureOldDetails2_1List)
+                            {
+                                <tr>
+                                    <td class="col-md-2">
+                                        @item1.ObligorAccountName
+                                    </td>
+                                    
+                                    <td class="col-md-2">
+                                        @item1.ObligorCompanyId
+                                    </td>
+                                    <td>
+                                        @if (Model != null && Model.SeizureOldDetails2_2List != null && Model.SeizureOldDetails2_2List.Any())
+                                        {
+                                            <table>
+                                                    <tr>
+                                                        <td class ="col-md-2">@Lang.csfs_BranchName</td>
+                                                        <td class ="col-md-2">@Lang.csfs_Amount</td>
+                                                        <td class="col-md-2">@Lang.csfs_sendword1</td>
+                                                    </tr>
+                                                    @foreach (var item2 in Model.SeizureOldDetails2_2List)
+                                                    {
+                                                        if(item1.ObligorAccountName == item2.ObligorAccountName)
+                                                        { 
+                                                            <tr>
+                                                                <td class="col-md-2">
+                                                                   @item2.BranchName
+                                                                </td>
+                                                                <td class="col-md-2">
+                                                                    @item2.SeizureSum
+                                                                </td>
+                                                                <td class="col-md-2">
+                                                                    @item2.SendSeq
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                            </table>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2">@Lang.csfs_SendRemark</td>
+                                    <td colspan="14">
+                                        @item1.SendRemark
+                                    </td>
+                                </tr>
+                                <tr><td colspan="15" style="border-bottom: 1px dashed #987cb9;" width="100%"></td></tr>
+                            }
+                        }
+                        else
+                        {
+                        <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    @* 支付 *@
+    <div class="row">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-edit"></i>
+                <h3 class="box-title">支付</h3>
+            </div>
+            <div class="box-body ">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        @if (Model != null && Model.SeizureOldDetails3List != null && Model.SeizureOldDetails3List.Any())
+                        {
+                            foreach (var item in Model.SeizureOldDetails3List)
+                            {
+                                <tr>
+                                    @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                                    <td class="col-md-2 text-right">@Lang.csfs_receive_person</td>
+                                    <td class="col-md-2">
+                                        @item.MoneyReceiverPay
+                                    </td>
+                                    <td class="col-md-2 text-right"></td>
+                                    <td class="col-md-2">
+                                    </td>
+                                    <td class="col-md-2 text-right"></td>
+                                    <td class="col-md-3">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 text-right">@Lang.csfs_CBChequeNumPay</td>
+                                    <td class="col-md-2">
+                                        @item.CBChequeNumPay
+                                    </td>
+                                    <td class="col-md-2 text-right">@Lang.csfs_ChargeSumPay</td>
+                                    <td class="col-md-2">
+                                        @item.ChargeSumPay
+                                    </td>
+                                    <td class="col-md-1 text-right"></td>
+                                    <td class="col-md-2"></td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 text-right">@Lang.csfs_receiver</td>
+                                    <td class="col-md-2">
+                                        @item.SendReceiver
+                                    </td>
+                                    <td class="col-md-2 text-right">@Lang.csfs_address</td>
+                                    <td class="col-md-2">
+                                        @item.ReceiverAddress
+                                    </td>
+                                    <td class="col-md-2 text-right"></td>
+                                    <td class="col-md-2"></td>
+                                </tr>
+                              <tr>
+                                    <td class="col-md-2 text-right">@Lang.csfs_currency</td>
+                                    <td class="col-md-2">
+                                        @item.CCReceiver
+                                    </td>
+                                    <td class="col-md-2 text-right">@Lang.csfs_address</td>
+                                    <td class="col-md-2">
+                                        @item.CCAddress
+                                    </td>
+                                    <td class="col-md-2 text-right"></td>
+                                    <td class="col-md-2"></td>
+                                </tr>
+                             <tr>
+                                    <td class="col-md-2 text-right">@Lang.csfs_logon_desc</td>
+                                 <td colspan="4" class="col-md-2">
+                                     @item.SendRemark
+                                 </td>
+                                </tr>
+                                <tr><td colspan="15" style="border-bottom: 1px dashed #987cb9;" width="100%"></td></tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>

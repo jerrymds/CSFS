@@ -1,0 +1,417 @@
+﻿@model IList<CTBC.CSFS.Models.CaseSeizure>
+
+@{
+    ViewBag.Title = Lang.csfs_seizuremaintain;
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+
+@using (Html.BeginForm("DoSaveSeizureMaintain", "AgentAccountInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal" }))
+{
+    <div class="margin">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-edit"></i>
+                <h3 class="box-title">@Lang.csfs_seizuremaintain</h3>
+            </div>
+            <div class="box-body">
+                <table id="seizureTable" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th style="width: 31px;" width="31">&nbsp;</th>
+                            <th class="col-md-1">@Lang.csfs_case_no</th>
+                            <th class="col-md-2">@Lang.csfs_id_1</th>
+                            <th class="col-md-1">@Lang.csfs_name</th>
+                            <th class="col-md-1">@Lang.csfs_case_unit</th>
+                            <th class="col-md-1">@Lang.csfs_bank_name</th>
+                            <th class="col-md-2">@Lang.csfs_deposit_account</th>
+                            <th class="col-md-1">@Lang.csfs_currency_1</th>
+                            <th class="col-md-1">@Lang.csfs_Amount</th>
+                            <th class="col-md-1">@Lang.csfs_rate</th>
+                            <th class="col-md-1">@Lang.csfs_t_amt</th>
+                        </tr>
+                    </thead>
+                    <tbody id="SeizureSettingtbody">
+                        @if (Model != null && Model.Any())
+                        {
+                            for (int i = 0; i < Model.Count; i++)
+                            {
+                                <tr>
+                                    <td style="width: 31px;">
+                                        @if (!Model[i].PayCaseId.HasValue && !Model[i].CancelCaseId.HasValue)
+                                        {
+                                            <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                                        }
+                                    </td>
+                                    <td>
+                                        @Model[i].CaseNo
+                                        @Html.HiddenFor(m => m[i].SeizureId, new { @id = "SeizureId" + i })
+                                        @Html.HiddenFor(m => m[i].CaseId, new { @id = "CaseId" + i })
+                                        @Html.HiddenFor(m => m[i].CaseNo, new { @id = "CaseNo" + i })
+                                    </td>
+                                    <td>
+                                        @Html.ActionLink(Model[i].CustId, "CustomerInfo", "AgentAccountInfo", new { area = "Agent", custId = Model[i].CustId,caseId = Model[i].CaseId }, new { @class = "fancy800_600" })
+                                        @Html.HiddenFor(m => m[i].CustId, new { @id = "CustId" + i })
+                                    </td>
+                                    <td>
+                                        @Model[i].CustName
+                                        @Html.HiddenFor(m => m[i].CustName, new { @id = "CustName" + i })
+                                    </td>
+                                    <td>
+                                        @Model[i].BranchNo
+                                        @Html.HiddenFor(m => m[i].BranchNo, new { @id = "BranchNo" + i })
+                                    </td>
+                                    <td>
+                                        @Model[i].BranchName
+                                        @Html.HiddenFor(m => m[i].BranchName, new { @id = "BranchName" + i })
+                                    </td>
+                                    <td>
+                                        @Model[i].Account
+                                        @Html.HiddenFor(m => m[i].Account, new { @id = "AccountNum" + i })
+                                    </td>
+                                    @*<td>
+                                @Model[i].AccountStatus
+                                @Html.HiddenFor(m => m[i].AccountStatus, new { @id = "AccountStatus" + i })
+                            </td>*@
+                                    <td>
+                                        @Model[i].Currency
+                                        @Html.HiddenFor(m => m[i].Currency, new { @id = "Currency" + i })
+                                    </td>
+                                    @*<td>
+                                @Model[i].Balance
+                                @Html.HiddenFor(m => m[i].Balance, new { @id = "Balance" + i })
+                            </td>*@
+                                    <td>
+                                        @Html.TextBoxFor(m => m[i].SeizureAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "SeizureAmountReal" + i })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m[i].ExchangeRate, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "ExchangeRate" + i, style = "width: 50px;" })
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m[i].SeizureAmountNtd, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @readonly = "true", @id = "SeizureAmountNtd" + i })
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer text-center">
+                <button id="btnAccountSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+                <button id="btnAccountCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+                <button id="btnAddSeizureSettingtbodyTr" type="button" class="btn btn-default btn-xs">@Lang.csfs_new_one</button>
+            </div>
+
+            <table class="hidden">
+                <tbody id="tbodysample">
+                    <tr>
+                        <td>
+                            <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                        </td>
+                        <td>
+                            <input id="CaseNo{0}" name="[{0}].CaseNo" maxlength="10" style="width:80px;" />
+                            <input id="SeizureId{0}" name="[{0}].SeizureId" type="hidden" value="">
+                        </td>
+                        <td>
+                            <select id="CustId{0}" name="[{0}].CustId" class="col-xs-12 no-padding" onchange="changeCustId(this)">
+                                <option value=""></option>
+                                @{
+                        var listsObligor = (IEnumerable<SelectListItem>)ViewBag.ObligorNoList;
+                        if (listsObligor != null && listsObligor.Any())
+                        {
+                            foreach (var items in listsObligor)
+                            {
+                                <option value="@items.Value">@items.Text</option>
+                            }
+                        }
+                                }
+                            </select>
+
+                        </td>
+                        <td>
+                            <input id="CustName{0}" name="[{0}].CustName" type="text" value="" class="col-xs-12 no-padding" maxlength="60" readonly="readonly">
+                        </td>
+                        <td>
+                            <select id="BranchNo{0}" name="[{0}].BranchNo" class="col-xs-12 no-padding" onchange="changeBranchName(this)">
+                                @{
+                        var lists = (IEnumerable<SelectListItem>)ViewBag.BranchNoList;
+                        if (lists != null)
+                        {
+                            foreach (var items in lists)
+                            {
+                                <option value="@items.Value">@items.Value</option>
+                            }
+                        }
+                                }
+                            </select>
+                        </td>
+                        <td>
+                            <input id="BranchName{0}" name="[{0}].BranchName" type="text" value="@ViewBag.BranchName" class="col-xs-12 no-padding" maxlength="200" readonly="readonly">
+                        </td>
+                        <td><input id="AccountNum{0}" name="[{0}].Account" type="text" value="" class="col-xs-12 no-padding" maxlength="17"></td>
+                        @*<td style="display:none;">
+                                <select id="AccountStatus{0}" name="[{0}].AccountStatus" class="col-xs-12 no-padding">
+                                    <option value=""></option>
+                                </select>
+                            </td>*@
+                        <td>
+                            <select id="Currency{0}" name="[{0}].Currency" class="col-xs-12 no-padding" onchange="change(this)">
+                                @{
+                        var lst = (IEnumerable<SelectListItem>)ViewBag.CurrencyList;
+                        if (lst != null)
+                        {
+                            foreach (var item in lst)
+                            {
+                                <option value="@item.Value">@item.Value</option>
+                            }
+                        }
+                                }
+                            </select>
+                        </td>
+                        @*<td style="display:none;">
+                            <input id="Balance{0}" name="[{0}].Balance" type="text" value="" class="col-xs-12 no-padding" maxlength="17" >
+                            </td>*@
+                        <td><input id="SeizureAmountReal{0}" name="[{0}].SeizureAmount" type="text" value="" maxlength="10" class="col-xs-12 no-padding j_numonly"></td>
+                        <td><input id="ExchangeRate{0}" name="[{0}].ExchangeRate" type="text" value="1" readonly maxlength="6" class="col-xs-12 no-padding j_numonly" style="width: 50px;"></td>
+                        <td><input id="SeizureAmountNtd{0}" name="[{0}].SeizureAmountNtd" type="text" value="" readonly maxlength="10" class="col-xs-12 no-padding j_numonly"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+
+@Html.Hidden("EditSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("EditSuccessMsg1", Lang.csfs_caseno_notok)
+@Html.Hidden("EditFailMsg", Lang.csfs_save_fail)
+@*@Html.Hidden("SeizureSettingCaseId", (Guid)ViewBag.CaseId)*@
+@Html.Hidden("SeizureSettingCaseNo", (string)ViewBag.CaseNo)
+@Html.Hidden("hidMemo", (string)ViewBag.Memo)
+@Html.Hidden("GetBranchNameUrl", Url.Action("GetBranchName", "AgentAccountInfo", new { area = "Agent" }))
+
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $("#memo").text($("#hidMemo").val());
+
+        //* 點選儲存
+        $("#btnAccountSave").click(function () { return btnAccountSaveClick(); });
+
+        //* 點選新增一列
+        $("#btnAddSeizureSettingtbodyTr").unbind("click").click(function () { btnAddSeizureSettingtbodyTrClick(this); });
+        $("#SeizureSettingtbody .js-delete").unbind("click").click(function () { return btnRemoveSeizureSettingtbodyTrClick(this); });
+
+        //* 最後3欄位數字only
+        $("#SeizureSettingtbody input.j_numonly").unbind("keypress").keypress(function () { keyPress(this); });
+        $("#SeizureSettingtbody input.j_numonly").unbind("keyup").keyup(function () { keyUp(this); });
+        $("#SeizureSettingtbody input.j_numonly").unbind("blur").blur(function () { onBlur(this); var obj = $(this).parent().parent(); obj.find("[id^=SeizureAmountNtd]").val(obj.find("[id^=SeizureAmountReal]").val() * obj.find("[id^=ExchangeRate]").val()); });
+    });
+
+    function changeCustId(obj) {
+        var text = $(obj).find("option:selected").text();
+        if (text == "") {
+            $(obj).parents("tr").children("td").eq(3).children("input").val("");
+            return;
+        }
+        var name = text.split("-")[1];
+        $(obj).parents("tr").children("td").eq(3).children("input").val(name);
+    }
+
+    function changeBranchName(obj) {
+        var td = $(obj).parents("tr").children("td").eq(5);
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: $("#GetBranchNameUrl").val(),
+            data: { codeNo: $(obj).val() },
+            success: function (data) {
+                td.children("input").val(data);
+            }
+        });
+    }
+
+
+    function btnAddSeizureSettingtbodyTrClick(obj) {
+
+        //var strTr = '<tr>' +
+        //    '<td><button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button></td>' +
+        //    '<td>{2}' +
+        //    '    <input id="SeizureId{0}" name="[{0}].SeizureId" type="hidden" value="">' +
+        //    '    <input id="CaseId{0}" name="[{0}].CaseId" type="hidden" value="{1}">' +
+        //    '    <input id="CaseNo{0}" name="[{0}].CaseNo" type="hidden" value="{2}">' +
+        //    '</td>' +
+        //    '<td><input id="CustId{0}" name="[{0}].CustId" type="text" value="" class="col-xs-12 no-padding" maxlength="14"></td>' +
+        //    '<td><input id="CustName{0}" name="[{0}].CustName" type="text" value="" class="col-xs-12 no-padding" maxlength="60"></td>' +
+        //    '<td><input id="BranchNo{0}" name="[{0}].BranchNo" type="text" value="" class="col-xs-12 no-padding" maxlength="4"></td>' +
+        //    '<td><input id="BranchName{0}" name="[{0}].BranchName" type="text" value="" class="col-xs-12 no-padding" maxlength="200"></td>' +
+        //    '<td><input id="AccountNum{0}" name="[{0}].Account" type="text" value="" class="col-xs-12 no-padding" maxlength="17"></td>' +
+        //    '<td><input id="AccountStatus{0}" name="[{0}].AccountStatus" type="text" value="正常" class="col-xs-12 no-padding" maxlength="6"></td>' +
+        //    '<td id="Currency"></td>' +
+        //    '<td><input id="Balance{0}" name="[{0}].Balance" type="text" value="" class="col-xs-12 no-padding" maxlength="17"></td>' +
+        //    '<td><input id="SeizureAmountReal{0}" name="[{0}].SeizureAmount" type="text" value="" maxlength="10" class="col-xs-12 no-padding j_numonly"></td>' +
+        //    '<td><input id="ExchangeRate{0}" name="[{0}].ExchangeRate" type="text" value="1" readonly maxlength="10" class="col-xs-12 no-padding j_numonly"></td>' +
+        //    '<td><input id="SeizureAmountNtd{0}" name="[{0}].SeizureAmountNtd" type="text" value="" readonly maxlength="10" class="col-xs-12 no-padding j_numonly"></td>' +
+        //    '</tr>';
+        //var html = $.validator.format(strTr, new Array($("#SeizureSettingtbody tr").length, $("#SeizureSettingCaseId").val(), $("#SeizureSettingCaseNo").val()));
+        var objtrclone = $("#tbodysample tr").clone();
+        var no = $("#SeizureSettingtbody tr").length;
+        objtrclone.html(objtrclone.html().replace('{0}', no));
+        objtrclone.appendTo("#SeizureSettingtbody");
+        RenameSeizureSettingtbodyTr();
+    }
+
+    function change(obj) {
+        var td = $(obj).parents("tr").children("td").eq(9);
+        if ($(obj).val() == "TWD") {
+            td.children("input").val("1").attr("readonly", "readonly");
+        } else {
+            td.children("input").val("1").removeAttr("readonly");
+        }
+        var obj2 = $(obj).parent().parent();
+        obj2.find("[id^=SeizureAmountNtd]").val(obj2.find("[id^=SeizureAmountReal]").val() * obj2.find("[id^=ExchangeRate]").val());
+    }
+
+    function btnRemoveSeizureSettingtbodyTrClick(obj) {
+        var objtr = $(obj).parent().parent();
+        objtr.remove();
+        RenameSeizureSettingtbodyTr();
+    }
+
+    function RenameSeizureSettingtbodyTr() {
+        $("#SeizureSettingtbody").find("[id^=SeizureId]").each(function (i) { $(this).attr("name", "[" + i + "].SeizureId"); $(this).attr("id", "SeizureId" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=CaseId]").each(function (i) { $(this).attr("name", "[" + i + "].CaseId"); $(this).attr("id", "CaseId" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=CaseNo]").each(function (i) { $(this).attr("name", "[" + i + "].CaseNo"); $(this).attr("id", "CaseNo" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=CustId]").each(function (i) { $(this).attr("name", "[" + i + "].CustId"); $(this).attr("id", "CustId" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=CustName]").each(function (i) { $(this).attr("name", "[" + i + "].CustName"); $(this).attr("id", "CustName" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=BranchNo]").each(function (i) { $(this).attr("name", "[" + i + "].BranchNo"); $(this).attr("id", "BranchNo" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=BranchName]").each(function (i) { $(this).attr("name", "[" + i + "].BranchName"); $(this).attr("id", "BranchName" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=AccountNum]").each(function (i) { $(this).attr("name", "[" + i + "].Account"); $(this).attr("id", "AccountNum" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=AccountStatus]").each(function (i) { $(this).attr("name", "[" + i + "].AccountStatus"); $(this).attr("id", "AccountStatus" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=Currency]").each(function (i) { $(this).attr("name", "[" + i + "].Currency"); $(this).attr("id", "Currency" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=Balance]").each(function (i) { $(this).attr("name", "[" + i + "].Balance"); $(this).attr("id", "Balance" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=SeizureAmountReal]").each(function (i) { $(this).attr("name", "[" + i + "].SeizureAmount"); $(this).attr("id", "SeizureAmountReal" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=ExchangeRate]").each(function (i) { $(this).attr("name", "[" + i + "].ExchangeRate"); $(this).attr("id", "ExchangeRate" + i + ""); });
+        $("#SeizureSettingtbody").find("[id^=SeizureAmountNtd]").each(function (i) { $(this).attr("name", "[" + i + "].SeizureAmountNtd"); $(this).attr("id", "SeizureAmountNtd" + i + ""); });
+
+        $("#SeizureSettingtbody .js-delete").unbind("click").click(function () { return btnRemoveSeizureSettingtbodyTrClick(this); });
+
+        $("#SeizureSettingtbody input.j_numonly").unbind("keypress").keypress(function () { keyPress(this); });
+        $("#SeizureSettingtbody input.j_numonly").unbind("keyup").keyup(function () { keyUp(this); });
+        $("#SeizureSettingtbody input.j_numonly").unbind("blur").blur(function () { onBlur(this); var obj = $(this).parent().parent(); obj.find("[id^=SeizureAmountNtd]").val(obj.find("[id^=SeizureAmount]").val() * obj.find("[id^=ExchangeRate]").val()); });
+    }
+
+    function keyPress(ob) {
+        if (!ob.value.match(/^[\+\-]?\d*?\.?\d*?$/))
+            ob.value = ob.t_value;
+        else
+            ob.t_value = ob.value;
+        if (ob.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))
+            ob.o_value = ob.value;
+    }
+
+    function keyUp(ob) {
+        if (!ob.value.match(/^[\+\-]?\d*?\.?\d*?$/))
+            ob.value = ob.t_value;
+        else
+            ob.t_value = ob.value;
+        if (ob.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))
+            ob.o_value = ob.value;
+    }
+
+    function onBlur(ob) {
+        var obj = $(ob).parent().parent();
+        var Digit = {};
+        Digit.round = function (digit, length) {
+            length = length ? parseInt(length) : 0;
+            if (length <= 0) return Math.round(digit);
+            digit = Math.round(digit * Math.pow(10, length)) / Math.pow(10, length);
+            return digit;
+        };
+        var rate = obj.find("[id^=ExchangeRate]").val();
+        obj.find("[id^=ExchangeRate]").val(Digit.round(rate, 3));
+        if (!ob.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))
+            ob.value = ob.o_value;
+        else {
+            if (ob.value.match(/^\.\d+$/))
+                ob.value = 0 + ob.value;
+            if (ob.value.match(/^\.$/))
+                ob.value = 0;
+            ob.o_value = ob.value;
+        };
+    }
+
+    function btnAccountSaveClick() {
+        var msg = "";
+        var newline = "<br/>";
+        var Filter = /^([0-9.]+)$/;
+        var Filters = /^[a-zA-Z0-9_]+$/;
+        for (var i = 0; i < $("#seizureTable tbody tr").length; i++) {
+            @*if ($("#CaseId" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen CaseId" + newline; }*@
+            if ($("#CaseNo" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_case_no" + newline; }
+            if ($("#CustId" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_id_1" + newline; }
+            if ($("#CustName" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_name" + newline; }
+            if ($("#BranchNo" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_case_unit" + newline; }
+            if ($("#BranchName" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_bank_name" + newline; }
+            if ($("#AccountNum" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_deposit_account" + newline; }
+            @*if ($("#AccountStatus" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_case_status" + newline; }*@
+            if ($("#Currency" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_currency_1" + newline; }
+            @*if ($("#Balance" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_balance" + newline; }
+            if ($("#ExchangeRate" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_rate" + newline; }*@
+            if ($("#SeizureAmountReal" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_Amount" + newline; }
+            if (isNaN($("#SeizureAmountReal" + i).val())) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_Amount" + newline; }
+            @*if (isNaN($("#ExchangeRate" + i).val())) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_rate" + newline; }
+            if (isNaN($("#SeizureAmountNtd" + i).val())) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_t_amt" + newline; }*@
+            if ($("#CustId" + i).val() != "" && Filters.test($("#CustId" + i).val()) == false) {
+                msg = msg + "@Lang.csfs_Article" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_clientID" + " @Lang.csfs_eng_no" + newline;;
+            }
+            @*if ($("#BranchNo" + i).val() != "" && Filter.test($("#BranchNo" + i).val()) == false) {
+                msg = msg + "@Lang.csfs_Article" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_case_unit" + " @Lang.csfs_enter_number" + newline;;
+            }
+            if ($("#AccountNum" + i).val() != "" && Filter.test($("#AccountNum" + i).val()) == false) {
+                msg = msg + "@Lang.csfs_Article" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_deposit_account" + " @Lang.csfs_enter_number" + newline;;
+            }
+            if ($("#Balance" + i).val() != "" && Filter.test($("#Balance" + i).val()) == false) {
+                msg = msg + "@Lang.csfs_Article" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_balance" + " @Lang.csfs_enter_number" + newline;;
+            }*@
+            @*if (parseInt($("#SeizureAmountReal" + i).val()) > $("#Balance" + i).val()) {
+                msg = msg + "@Lang.csfs_Article" + (i + 1) + "@Lang.csfs_seizureSetting" + newline;
+            }*@
+        }
+        @*if ($("#seizureTable tbody tr").length == 0) {
+            msg = msg + "@Lang.csfs_noInfo" + newline;;
+        }*@
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmCreate").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmCreate").serialize(),
+            dataType: "json",
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess($("#EditSuccessMsg").val(), function () {
+                        parent.$.colorbox.close();
+                        parent.location.href = parent.location.href;
+                    });
+                } else if (data.ReturnCode === "2") {
+                    jAlertError($("#EditSuccessMsg1").val());
+                    $.unblockUI();
+                } else {
+                    jAlertError($("#EditFailMsg").val());
+                    $.unblockUI();
+                }
+
+            }
+        });
+        return false;
+    }
+</script>

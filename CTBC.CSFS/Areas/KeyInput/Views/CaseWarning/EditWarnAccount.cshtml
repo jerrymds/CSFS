@@ -1,0 +1,89 @@
+﻿@model CTBC.CSFS.Models.WarningGenAcct
+
+@{
+    ViewBag.Title = Lang.csfs_edit;
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+
+<div class="margin">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="glyphicon glyphicon-search"></i>
+            <h3 class="box-title">@Lang.csfs_edit</h3>
+        </div>
+        <!-- form start -->
+        @using (Html.BeginForm("EditWarnAccount", "CaseWarning", new { area = "KeyInput" }, FormMethod.Post, new { id = "frmEdit", @class = "form-horizontal" }))
+        {
+            <div class="box-body ">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-3 text-right">交易日</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.TRAN_DATE, new { @id = "txtTRAN_DATE", @MaxLength = "30", @readonly = "readonly" })
+                            </td>
+                            <td class="col-md-3 text-right">掛帳金額</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.HangAmount, new { @id = "txtHangAmount", @MaxLength = "30", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-3 text-right">還款金額</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.AMOUNT, new { @id = "txtAmount", @MaxLength = "20", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-3 text-right">餘額</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.Balance, new { @id = "txtBalance", @MaxLength = "20", @readonly = "readonly" })
+                            </td>
+                         </tr>
+                        <tr>
+                            <td class="col-md-3 text-right">eTabs</td>
+                            <td class="col-md-3">
+                                 @Html.TextBoxFor(m => m.eTabs, new { @id = "txteTabs", @MaxLength = "20", @readonly = "readonly" })
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td class="col-md-3 text-right">備註</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.Memo, new { @id = "txtMemo", @MaxLength = "30" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-3 text-right">時程Log</td>
+                            <td class="col-md-3">
+                                @Html.TextBoxFor(m => m.TimeLog, new { @id = "txtTimeLog", @MaxLength = "30", @readonly = "readonly" })
+                            </td>
+                         </tr>
+                        @Html.HiddenFor(m => m.DocNo, new { @id = "txtDocNo" })                 
+                    </tbody>
+                </table>
+                @Html.HiddenFor(m=>m.id)
+            </div>
+            <div class="box-footer text-center">
+                <button id="btnSaveEditWarnAccount" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+                <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            </div>
+        }
+    </div>
+</div>
+
+@Html.Hidden("NowPage", "EditWarnAccount")
+@Html.Hidden("EditSuccessMsg", Lang.csfs_edit_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_edit_fail)
+
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("NametxtTRAN_DATE", "交易日期")
+@Html.Hidden("NametxtHangAmount", "掛帳金額")
+@Html.Hidden("NametxtAmount", "還款金額")
+@Html.Hidden("NametxtBalance", "餘額")
+@Html.Hidden("NametxteTabs", "eTabs")
+@Html.Hidden("NametxtMemo", "Memo")
+@Html.Hidden("NametxtTimeLog", "TimeLog")
+@section scripts{
+    @Scripts.Render("~/Scripts/KeyInput/CaseWarning.js")
+}

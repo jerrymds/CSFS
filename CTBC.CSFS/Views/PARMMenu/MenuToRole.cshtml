@@ -1,0 +1,113 @@
+﻿@model CTBC.CSFS.ViewModels.PARMMenuViewModel
+
+<style type="text/css">
+    .menu_lev_2 {
+        width: 20px;
+        display: inline-block;
+    }
+
+    .menu_lev_3 {
+        width: 40px;
+        display: inline-block;
+    }
+
+    .menu_lev_4 {
+        width: 60px;
+        display: inline-block;
+    }
+</style>
+<div class="headline">
+    @Lang.csfs_menu_auth
+</div><br />
+<div style="text-align:left;height:25px;"><button type="button" id="syncBtn" onclick="SyncAuthZ();">@Lang.csfs_syncauth_setting</button></div>
+<div>
+    <table id="detail" class="query_table" align="center" border="1" cellpadding="3" cellspacing="0">
+        <thead>
+            <tr>
+                <th style="width:10%">
+                    @Lang.csfs_fun_num
+                </th>
+                <th style="width:20%">
+                    @Lang.csfs_menu_name
+                </th>
+                <th style="width:55%">
+                    @Lang.csfs_auth_role
+                </th>
+                <th style="width:15%">
+                    @Lang.csfs_auth_main
+                </th>
+            </tr>
+        </thead>
+        @if (Model.PARMMenuXMLNodeList.Any())
+        { 
+            foreach (var item in Model.PARMMenuXMLNodeList)
+            { 
+            <tr>
+                <td>@item.ID</td>
+                <td style="text-align:left;">
+                    @if (item.MenuLevel == 2)
+                    {<label class="menu_lev_2"></label>} 
+                    @if (item.MenuLevel == 3)
+                    {<label class="menu_lev_3"></label>} 
+                    @if (item.MenuLevel == 4)
+                    {<label class="menu_lev_4"></label>} 
+                    @Lang.ResourceManager.GetString(item.TITLE.Trim())
+                </td>
+                <td style="text-align:left;">
+                    @if (item.md_AuthZ.Trim().Length == 0)
+                    {
+                        <text>** @Lang.csfs_notyet_auth ** </text>
+                    }else{ 
+                    @item.md_AuthZ.Replace(",", "、")
+                    } 
+                </td>
+                <td><img src="@Url.Content("~/Content/img/u299.png")" alt="" style="cursor:pointer;" onclick="EditMenuToRole('@item.ID');" /></td>
+            </tr>
+            }
+        }
+        else
+        {
+        <tr><td colspan="3" style="text-align:center;">@Lang.csfs_no_data</td></tr>
+        } 
+    </table><br />
+    <div style="text-align:left;">
+        @Lang.csfs_menu_note1<br />
+        @Lang.csfs_menu_note2<span style="color:Blue;">&nbsp;@Lang.csfs_syncauth_setting&nbsp;</span>@Lang.csfs_menu_note2_1<br />
+        @Lang.csfs_menu_note3
+    </div>
+</div>
+<script type="text/javascript">
+    $("#detail tr:odd").addClass("gridrow");
+    $("#detail tr:even").addClass("gridrow_alternate");
+
+    function EditMenuToRole(menuID) {
+        location.href = '@Url.Action("EditMenuToRole","PARMMenu")?menuID=' + menuID;
+    }
+
+    function SyncAuthZ() {
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("SyncAuthZ","PARMMenu")',
+            async: false,
+            dataType: "text",
+            success: function (data) {
+                if (data == null) {
+                    alert("@Lang.csfs_sync_fail");
+                } else if (data == "Y") {
+                    alert("@Lang.csfs_sync_success");
+                } else {
+                    alert("@Lang.csfs_sync_fail");
+                }
+            },
+            error: function (xhr) {
+                displayError(xhr);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        alert('@Lang.csfs_menu_note4');
+    });
+</script>
+
+

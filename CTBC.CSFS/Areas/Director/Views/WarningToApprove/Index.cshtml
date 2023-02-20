@@ -1,0 +1,116 @@
+﻿@using CTBC.FrameWork.Util
+@model CTBC.CSFS.Models.WarningToApprove
+@{
+    ViewBag.Title = "警示待核決";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "WarningToApprove", new { area = "Director" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right">類別</td>
+                        <td class="col-md-5">
+                            @Html.DropDownListFor(m => m.Kind, (IEnumerable<SelectListItem>)ViewBag.KindList, new { @id = "txtKind" })
+                        </td>
+                        <td class="col-md-2 text-right"></td>
+                        <td class="col-md-5">                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_warn_id</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CustId, new { @id = "txtCustId", @MaxLength = "20" })
+                        </td>
+                        <td class="col-md-2 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.DocNo, new { @id = "txtDocNo" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">165案號</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.No_165, new { @id = "txtNo_165" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_warningnum</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.CustAccount, new { @MaxLength = "20", @id = "txtCustAccount" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_warn_dates</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.ForCDateS, new { data_datepicker = "true", @id = "txtForCDateS" })
+                            ～
+                            @Html.TextBoxFor(m => m.ForCDateE, new { data_datepicker = "true", @id = "txtForCDateE" })
+                        </td>
+                        <td class="col-md-2 text-right">衍生</td>
+                        <td class="col-md-5">@Html.DropDownListFor(m => m.Set, (IEnumerable<SelectListItem>)ViewBag.SetList, new { @id = "txtSet" })</td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">解除日期</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.RelieveDateS, new { data_datepicker = "true", @id = "txtRelieveDateS" })
+                            ～
+                            @Html.TextBoxFor(m => m.RelieveDateE, new { data_datepicker = "true", @id = "txtRelieveDateE" })
+                        </td>
+                        <td class="col-md-2 text-right">正本</td>
+                        <td class="col-md-5">@Html.DropDownListFor(m => m.Original, (IEnumerable<SelectListItem>)ViewBag.OriginalList, new { @id = "txtOriginal" })</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnReturn" type="button" class="btn btn-primary btn-xs">@Lang.csfs_return</button>
+            <button id="btnApprove" type="button" class="btn btn-primary btn-xs">@Lang.csfs_approve</button>
+            @*@if (ViewBag.CanExport == "1")
+                {*@
+            @*<button id="btnExcel" type="button" class="btn btn-default btn-xs">@Lang.csfs_debtexcel</button>*@
+            @*}*@
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "WarningToApprove", new { area = "Director" })">
+
+</div>
+@* 退件畫面*@
+<div class="modal fade" id="modalClose" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_return</h4>
+            </div>
+            <!--<div class="modal-body">
+                @Lang.csfs_return1:
+                @Html.DropDownListFor(m => m.CloseReason, (IEnumerable<SelectListItem>)ViewBag.ReturnReasonList, Lang.csfs_select, new { @id = "CloseReason" })-->
+                @*@Html.TextAreaFor(m => m.CloseReason, new { @id = "CloseReason", @rows = "15", @class = "col-xs-12 no-padding", @MaxLength = "200" })*@
+            <!--</div>-->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnCloseSubmit">確定</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("NowPage", "WarningToApprove")
+@Html.Hidden("ExcelUrl", Url.Action("Excel", "WarningToApprove", new { area = "Director" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select)
+@Html.Hidden("NameOneQuery", Lang.csfs_inputOneQuery)
+@Html.Hidden("ApproveUrl", Url.Action("FangXing", "WarningToApprove", new { area = "Director" }))
+@Html.Hidden("ReturnUrl", Url.Action("Return", "WarningToApprove", new { area = "Director" }))
+
+@section scripts {
+    @Scripts.Render("~/Scripts/Director/WarningToApprove.js")
+}

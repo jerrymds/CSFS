@@ -1,0 +1,42 @@
+﻿@model CTBC.CSFS.ViewModels.CaseCalculatorViewModel
+
+@using CTBC.FrameWork.Util;
+@{
+    ViewBag.Title = "CalResult";
+    Layout = null;
+}
+
+
+<table class="table-noborder col-md-12">
+    <thead>
+        <tr class="alert-success text-center ">
+            <th class="text-right">@Lang.csfs_cal_amount</th>
+            <th class="text-right">@Lang.csfs_cal_intrest</th>
+            <th class="text-center">@Lang.csfs_cal_days</th>
+            <th class="text-center">@Lang.csfs_cal_start</th>
+            <th class="text-center">@Lang.csfs_cal_end</th>
+            <th class="text-right">@Lang.csfs_cal_interests</th>
+            <th class="text-right">@Lang.csfs_cal_interests1</th>
+            <th class="text-center">@Lang.csfs_delete</th>
+        </tr>
+    </thead>
+    <tbody id="tbResult">
+        @for (int i = 0; i < Model.CaseCalculatorDetailsList.Count; i++)
+        {
+            <tr>
+                <td class="text-right">@UtlString.FormatCurrency(Model.CaseCalculatorDetailsList[i].Amount,0)</td>
+                <td class="text-right">@UtlString.FormatCurrency(Model.CaseCalculatorDetailsList[i].InterestRate,3)</td>
+                <td class="text-center">@Model.CaseCalculatorDetailsList[i].InterestDays</td>
+                <td class="text-center">@Model.CaseCalculatorDetailsList[i].StartDate</td>
+                <td class="text-center">@Model.CaseCalculatorDetailsList[i].EndDate</td>
+                <td class="text-right">@UtlString.FormatCurrency(Model.CaseCalculatorDetailsList[i].Interest,2)</td>
+                <td class="text-right">@UtlString.FormatCurrency(Model.CaseCalculatorDetailsList[i].InterestReal,0)</td>
+                <td class="text-center">
+                    <a class="btn btn-default btn-xs js-CleanLine" title="@Lang.csfs_delete" href="#" onclick="DeleteCal(@Model.CaseCalculatorDetailsList[i].CalcDId);">
+                        <i class="glyphicon glyphicon-remove"></i>
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,87 @@
+﻿@model CTBC.CSFS.ViewModels.PARMMenuViewModel
+
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_menutopage;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_menu_tit_menutopage</h3>
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped">
+                    <thead>
+                        <tr class="alert-success text-center">
+                            <th class="col-md-2">@Lang.csfs_fun_num</th>
+                            <th class="col-md-4">@Lang.csfs_menu_name</th>
+                            <th class="col-md-5">@Lang.csfs_auth_page</th>
+                            <th>@Lang.csfs_auth_main</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.PARMMenuXMLNodeList != null && Model.PARMMenuXMLNodeList.Any())
+                        {
+                            foreach (var item in Model.PARMMenuXMLNodeList)
+                            {
+                                <tr>
+                                    <td>@item.ID</td>
+                                    <td class="text-left">
+                                        @if (item.MenuLevel == 2)
+                                        {<label class="menu_lev_2"></label>}
+                                        @if (item.MenuLevel == 3)
+                                        {<label class="menu_lev_3"></label>}
+                                        @if (item.MenuLevel == 4)
+                                        {<label class="menu_lev_4"></label>}
+                                        @Lang.ResourceManager.GetString(item.TITLE.Trim())
+                                    </td>
+                                    <td class="text-left">
+                                        @if (item.md_AuthZ.Trim().Length == 0)
+                                        {
+                                            @Lang.csfs_notyet_asignpage
+                                        }
+                                        else
+                                        {
+                                            string fAuZ = "";
+                                            string[] arymdAuthZ = item.md_AuthZ.Split(',');
+                                            foreach (string p in arymdAuthZ)
+                                            {
+                                                fAuZ = fAuZ + Lang.ResourceManager.GetString(p) + "、";
+                                            }
+                                            fAuZ = fAuZ.TrimEnd('、');
+                                            @fAuZ
+                                            ;
+                                        }
+                                    </td>
+
+                                    <td class="text-center">
+                                        <a href="@Url.Action("Edit", "MenuToPage", new { ID = item.ID, TITLE = item.TITLE, FuncID = item.md_FuncID })" class="btn btn-default btn-xs"><i class="fa fa-edit"></i></a>
+                                        @*<input type="checkbox" name="r2" class="checkfile" value="@item.ID,@item.TITLE,@item.md_FuncID" />*@
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="10"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+
+
+@Html.Hidden("NowPage", "MenuToPageQuery")
+@Html.Hidden("SyncAuthUrl", Url.Action("SyncAuthZ", "MenuToPage", new { area = "SystemManagement" }))
+@Html.Hidden("SyncFailMsg", Lang.csfs_sync_fail)
+@Html.Hidden("SyncOkMsg", Lang.csfs_sync_success)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/SystemManagement/MenuToPageole.js")
+}
+

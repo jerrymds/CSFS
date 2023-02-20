@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewBag.Title = "Edit";
+}
+@model CTBC.CSFS.Models.PARMScheduleSettingVO
+@using CTBC.CSFS.Resource;
+
+<script type="text/javascript">
+    function CloseWindow() {
+        location.href = '@Url.Action("Query","PARMScheduleSetting")';
+    }
+</script>
+<div class="headline">
+    @Lang.csfs_schedule_edit
+</div>
+    @using (Ajax.BeginForm("Edit", new AjaxOptions() { HttpMethod = "post", OnBegin = "ajaxValidate", OnFailure = "displayError" }))
+      {
+   
+    @Html.HiddenFor(m => m.ID)
+<table width="100" border="1" cellpadding="3" cellspacing="0" class="query_table">
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_schedule_name
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.Name, new {@class = "input_word", @MaxLength = "50" ,@style="width:400px;"})
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_schedule_path
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.Path, new { @class = "input_word", @MaxLength = "100", @style = "width:400px;" })
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_schedule_param
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.Arguments, new {@class = "input_word", @MaxLength = "50" })
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_enable_ornot
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.Enabled, new {@class = "input_word", @MaxLength = "1" })@Lang.csfs_y_or_n
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_schedule_status
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.Status, new {@class = "input_word", @MaxLength = "1" })
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            OneTime @Lang.csfs_schedule_status
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.OneTime, new {@class = "input_word", @MaxLength = "19" })<span>@Lang.csfs_schedule_memo1</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_schedule_fix_hh
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.RegularHour, new {@class = "input_word", @MaxLength = "2" })<span>@Lang.csfs_schedule_memo2</span>
+        </td>
+    </tr>
+    <tr>
+        <td class="query_table_td" width="15%" nowrap="nowrap">
+            @Lang.csfs_schedule_fix_mm
+        </td>
+        <td class="f_word_left" colspan="3" style="width: 85%">
+            @Html.TextBoxFor(m => m.RegularMinute, new {@class = "input_word", @MaxLength = "2" })<span>@Lang.csfs_schedule_memo3</span>
+        </td>
+    </tr>
+</table>
+<div>
+    <button type="submit" id="btnSubmit">
+        @Lang.csfs_save
+    </button>
+    &nbsp; &nbsp;
+    <button type="button" onclick="CloseWindow();">
+        @Lang.csfs_quit
+    </button>
+</div>
+    }
+<script type="text/javascript">
+    function ajaxValidate() {
+        if ($.trim($("#Name").val()) == '' || $.trim($("#Path").val()) == '') {
+            alert("@Lang.csfs_schedule_msg1");
+            return false;
+        }
+        else { return true; }
+    }
+</script>

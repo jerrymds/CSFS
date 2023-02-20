@@ -1,0 +1,3174 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="csfs_codetype_underline" xml:space="preserve">
+    <value>或 可輸入底線符號</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal11_1" xml:space="preserve">
+    <value>請輸入10碼整數1位小數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal12_2" xml:space="preserve">
+    <value>請輸入10碼整數2位小數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal12_4" xml:space="preserve">
+    <value>請輸入8碼整數4位小數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal3_0" xml:space="preserve">
+    <value>請輸入3碼整數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal3_1" xml:space="preserve">
+    <value>請輸入2碼整數1位小數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal4_0" xml:space="preserve">
+    <value>請輸入4碼整數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal4_1" xml:space="preserve">
+    <value>請輸入3碼整數1位小數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal4_2" xml:space="preserve">
+    <value>請輸入3碼整數2位小數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal6_0" xml:space="preserve">
+    <value>請輸入6碼整數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal8_0" xml:space="preserve">
+    <value>請輸入8碼整數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal8_1" xml:space="preserve">
+    <value>請輸入7碼整數1位小數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal8_2" xml:space="preserve">
+    <value>請輸入6碼整數2位小數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_decimal8_4" xml:space="preserve">
+    <value>請輸入4碼整數4位小數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_enter_correctdate" xml:space="preserve">
+    <value>請輸入正確的日期格式（yyyy/mm/dd）!</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_enter_correct_format" xml:space="preserve">
+    <value>{0} 請輸入正確格式!</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_enter_email" xml:space="preserve">
+    <value>請輸入正確的E-mail格式</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_enter_greaterthanzero" xml:space="preserve">
+    <value>請輸入大於0的整數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_enter_letter" xml:space="preserve">
+    <value>請輸入英文字母</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_enter_letterornum" xml:space="preserve">
+    <value>請輸入英文或數字</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_enter_number" xml:space="preserve">
+    <value>請輸入數字!</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_enter_parm0" xml:space="preserve">
+    <value>請輸入{0}!</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_enter_positiveint" xml:space="preserve">
+    <value>請輸入正整數!</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_enter_salerempno" xml:space="preserve">
+    <value>請輸入10碼英數字且首字母大寫</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_err_empty_pwd" xml:space="preserve">
+    <value>密碼不得為空值</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_num1_100" xml:space="preserve">
+    <value>請輸入1到100之間的數</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_plusdecima11_4" xml:space="preserve">
+    <value>請輸入數字格式正整數7位小數4位</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_plusdecima12_4" xml:space="preserve">
+    <value>請輸入數字格式正整數8位小數4位</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_plusdecima5_2" xml:space="preserve">
+    <value>請輸入數字格式正整數3位小數2位</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_plusdecima7_1" xml:space="preserve">
+    <value>請輸入數字格式正整數6位小數1位</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_plusdecima7_4" xml:space="preserve">
+    <value>請輸入數字格式正整數3位小數4位</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_plusdecima8_1" xml:space="preserve">
+    <value>請輸入數字格式正整數7位小數1位</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_plusdecima8_4" xml:space="preserve">
+    <value>請輸入數字格式正整數4位小數4位</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_plusdecima9_2" xml:space="preserve">
+    <value>請輸入數字格式正整數7位小數2位</value>
+    <comment>底層驗證</comment>
+  </data>
+  <data name="csfs_pm_codetype" xml:space="preserve">
+    <value>參數類別(CodeType)</value>
+    <comment>參數表</comment>
+  </data>
+  <data name="csfs_pm_codetypedesc" xml:space="preserve">
+    <value>參數類別名稱(CodeTypeDesc)</value>
+    <comment>參數表</comment>
+  </data>
+  <data name="csfs_pm_detail_code" xml:space="preserve">
+    <value>參數細項代碼(CodeNo)</value>
+    <comment>參數表</comment>
+  </data>
+  <data name="csfs_pm_detail_name" xml:space="preserve">
+    <value>參數細項名稱(CodeDesc)</value>
+    <comment>參數表</comment>
+  </data>
+  <data name="csfs_pm_detail_order" xml:space="preserve">
+    <value>參數細項順序(SortOrder)</value>
+    <comment>參數表</comment>
+  </data>
+  <data name="csfs_err_detail" xml:space="preserve">
+    <value>詳細錯誤資訊</value>
+  </data>
+  <data name="csfs_err_info_admin" xml:space="preserve">
+    <value>請通知系統管理人員處理</value>
+  </data>
+  <data name="csfs_err_noright_sys" xml:space="preserve">
+    <value>您無權限使用本系統!</value>
+  </data>
+  <data name="csfs_err_rpt" xml:space="preserve">
+    <value>處理錯誤報告</value>
+  </data>
+  <data name="csfs_err_short" xml:space="preserve">
+    <value>錯誤摘要</value>
+  </data>
+  <data name="csfs_err_time" xml:space="preserve">
+    <value>錯誤發生時間</value>
+  </data>
+  <data name="csfs_overlength" xml:space="preserve">
+    <value>使用者Request 的資料量超過系統限制</value>
+  </data>
+  <data name="csfs_sysname" xml:space="preserve">
+    <value>新外來文系統</value>
+  </data>
+  <data name="csfs_dpc_usr1" xml:space="preserve">
+    <value>已經將在</value>
+  </data>
+  <data name="csfs_dpc_usr2" xml:space="preserve">
+    <value>的相同使用者</value>
+  </data>
+  <data name="csfs_dpc_usr3" xml:space="preserve">
+    <value>自線上使用者清單中移除了</value>
+  </data>
+  <data name="csfs_logon_err_idpwd" xml:space="preserve">
+    <value>帳號或密碼錯誤!</value>
+  </data>
+  <data name="csfs_online_usr_netexist" xml:space="preserve">
+    <value>OnlineUserList不存在!</value>
+  </data>
+  <data name="csfs_ID" xml:space="preserve">
+    <value>身份證字號</value>
+  </data>
+  <data name="csfs_id_error" xml:space="preserve">
+    <value>身分證第1碼不為英文</value>
+  </data>
+  <data name="csfs_id_error2" xml:space="preserve">
+    <value>身分證第2-10碼不全為數字</value>
+  </data>
+  <data name="csfs_id_error3" xml:space="preserve">
+    <value>身分證邏輯不符</value>
+  </data>
+  <data name="csfs_id_foreigner_error" xml:space="preserve">
+    <value>外籍人士前碼不為有效日期</value>
+  </data>
+  <data name="csfs_id_foreigner_error2" xml:space="preserve">
+    <value>外籍人士後碼需為英文</value>
+  </data>
+  <data name="csfs_id_sex_error" xml:space="preserve">
+    <value>身分證性別碼有誤</value>
+  </data>
+  <data name="csfs_length_error" xml:space="preserve">
+    <value>長度錯誤</value>
+  </data>
+  <data name="csfs_err" xml:space="preserve">
+    <value>錯誤</value>
+  </data>
+  <data name="csfs_err_your_req" xml:space="preserve">
+    <value>處理您的要求時發生錯誤</value>
+  </data>
+  <data name="csfs_confim" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="csfs_copyright" xml:space="preserve">
+    <value>中國信託銀行 版權所有  ©  All Rights Reserved.</value>
+  </data>
+  <data name="csfs_copyright_version" xml:space="preserve">
+    <value>瀏覽器 IE 9/ Chrome 30/ FireFox 26以上(.NET.4.5.1 + MVC 5 + jQuery 1.10.x + EL 5.0)</value>
+  </data>
+  <data name="csfs_edit_pwd" xml:space="preserve">
+    <value>密碼修改</value>
+  </data>
+  <data name="csfs_logon_desc" xml:space="preserve">
+    <value>說明</value>
+  </data>
+  <data name="csfs_logon_err_format1" xml:space="preserve">
+    <value>格式錯誤</value>
+  </data>
+  <data name="csfs_logon_err_format2" xml:space="preserve">
+    <value>格式錯誤或未選擇</value>
+  </data>
+  <data name="csfs_logon_id" xml:space="preserve">
+    <value>[帳號]</value>
+  </data>
+  <data name="csfs_logon_onauth" xml:space="preserve">
+    <value>登入認證中...</value>
+  </data>
+  <data name="csfs_logon_pwd" xml:space="preserve">
+    <value>[密碼]</value>
+  </data>
+  <data name="csfs_logon_reset_pwd" xml:space="preserve">
+    <value>1.密碼重設-請洽資管部資安科.\n2.授權問題-請洽外來文系統管理單位.</value>
+  </data>
+  <data name="csfs_reset" xml:space="preserve">
+    <value>重設</value>
+  </data>
+  <data name="csfs_usr_id" xml:space="preserve">
+    <value>帳號</value>
+  </data>
+  <data name="csfs_usr_pwd" xml:space="preserve">
+    <value>密碼</value>
+  </data>
+  <data name="csfs_auth_page" xml:space="preserve">
+    <value>目前已授權Page</value>
+  </data>
+  <data name="csfs_detail" xml:space="preserve">
+    <value>明細</value>
+  </data>
+  <data name="csfs_ReceiptSeq" xml:space="preserve">
+    <value>本行收文序號</value>
+  </data>
+  <data name="csfs_seizuretype" xml:space="preserve">
+    <value>類型</value>
+  </data>
+  <data name="csfs_BranchName" xml:space="preserve">
+    <value>存款分行</value>
+  </data>
+  <data name="csfs_fun_num" xml:space="preserve">
+    <value>功能編號</value>
+  </data>
+  <data name="csfs_menu_name" xml:space="preserve">
+    <value>Menu名稱</value>
+  </data>
+  <data name="csfs_notyet_asignpage" xml:space="preserve">
+    <value>** 目前尚未指派Page **</value>
+  </data>
+  <data name="csfs_no_data" xml:space="preserve">
+    <value>無資料</value>
+  </data>
+  <data name="csfs_query" xml:space="preserve">
+    <value>查詢</value>
+  </data>
+  <data name="csfs_cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="csfs_create" xml:space="preserve">
+    <value>新增</value>
+  </data>
+  <data name="csfs_menu_funcid" xml:space="preserve">
+    <value>功能ID(md_func)</value>
+  </data>
+  <data name="csfs_menu_help1" xml:space="preserve">
+    <value>如排程管理,Online等描述</value>
+  </data>
+  <data name="csfs_add_fail" xml:space="preserve">
+    <value>新增失敗！</value>
+  </data>
+  <data name="csfs_add_ok" xml:space="preserve">
+    <value>新增成功！</value>
+  </data>
+  <data name="csfs_edit" xml:space="preserve">
+    <value>編輯</value>
+  </data>
+  <data name="csfs_edit_fail" xml:space="preserve">
+    <value>修改失敗!</value>
+  </data>
+  <data name="csfs_edit_ok" xml:space="preserve">
+    <value>修改成功!</value>
+  </data>
+  <data name="csfs_menu_help2" xml:space="preserve">
+    <value>如Acion.PARMCode.Query,Edit等描述</value>
+  </data>
+  <data name="csfs_select_one" xml:space="preserve">
+    <value>請選擇一筆資料！</value>
+  </data>
+  <data name="csfs_common" xml:space="preserve">
+    <value>第0頁</value>
+  </data>
+  <data name="csfs_delete" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="csfs_del_fail" xml:space="preserve">
+    <value>刪除失敗!</value>
+  </data>
+  <data name="csfs_del_ok" xml:space="preserve">
+    <value>刪除成功!</value>
+  </data>
+  <data name="csfs_load_error" xml:space="preserve">
+    <value>Ajax請求失敗</value>
+  </data>
+  <data name="csfs_menu_id" xml:space="preserve">
+    <value>MenuID</value>
+  </data>
+  <data name="csfs_menu_is_del" xml:space="preserve">
+    <value>是否確定刪除此筆Menu設定</value>
+  </data>
+  <data name="csfs_menu_level" xml:space="preserve">
+    <value>Menu層級</value>
+  </data>
+  <data name="csfs_menu_parent" xml:space="preserve">
+    <value>父層Menu</value>
+  </data>
+  <data name="csfs_menu_sort" xml:space="preserve">
+    <value>順序</value>
+  </data>
+  <data name="csfs_menu_type" xml:space="preserve">
+    <value>Menu型態</value>
+  </data>
+  <data name="csfs_menu_url" xml:space="preserve">
+    <value>URL</value>
+  </data>
+  <data name="csfs_page" xml:space="preserve">
+    <value>共0頁</value>
+  </data>
+  <data name="csfs_query_nodata" xml:space="preserve">
+    <value>查無資料</value>
+  </data>
+  <data name="csfs_record" xml:space="preserve">
+    <value>共0筆</value>
+  </data>
+  <data name="csfs_seqnum" xml:space="preserve">
+    <value>序號</value>
+  </data>
+  <data name="csfs_menu_edittmp_note1" xml:space="preserve">
+    <value>(M=Menu/P=MainPage/C=Controller/A=Action)</value>
+  </data>
+  <data name="csfs_menu_edittmp_note2" xml:space="preserve">
+    <value>(請輸入正整數,Menu與Controller根目錄=1,第一層如初審模組=2 或 PSRNController=2,第二層如LFA案件鍵檔=3 或Action: Create=3,依此類推; MainPage不用輸入)</value>
+  </data>
+  <data name="csfs_menu_edittmp_note3" xml:space="preserve">
+    <value>(請輸入正整數,請先查詢後輸入父層MenuID, MainPage不用輸入)</value>
+  </data>
+  <data name="csfs_menu_edittmp_note4" xml:space="preserve">
+    <value>(ex：Menu.QRYCsfsNormal或Controller.QRYCsfsNormal或Action.CSFSCustomer.Query, MainPage不用輸入)</value>
+  </data>
+  <data name="csfs_menu_edittmp_note5" xml:space="preserve">
+    <value>(ex：CSFSCustomer/Query, MainPage與Controller與Action不用輸入)</value>
+  </data>
+  <data name="csfs_menu_edittmp_note6" xml:space="preserve">
+    <value>(請輸入正整數,MainPage與Controller與Action不用輸入)</value>
+  </data>
+  <data name="csfs_save" xml:space="preserve">
+    <value>儲存</value>
+  </data>
+  <data name="csfs_input_funcid" xml:space="preserve">
+    <value>請輸入FuncID</value>
+  </data>
+  <data name="csfs_input_menulevel" xml:space="preserve">
+    <value>請輸入MenuLevel</value>
+  </data>
+  <data name="csfs_input_menusort" xml:space="preserve">
+    <value>請輸入MenuSort</value>
+  </data>
+  <data name="csfs_input_menutype" xml:space="preserve">
+    <value>請輸入正確的MenuType</value>
+  </data>
+  <data name="csfs_input_parent" xml:space="preserve">
+    <value>請輸入Parent</value>
+  </data>
+  <data name="csfs_input_title" xml:space="preserve">
+    <value>請輸入TITLE</value>
+  </data>
+  <data name="csfs_menulevel_up3int" xml:space="preserve">
+    <value>MenuLevel請輸入最多3位正整數</value>
+  </data>
+  <data name="csfs_menusrot_up3int" xml:space="preserve">
+    <value>MenuSort請輸入最多3位正整數</value>
+  </data>
+  <data name="csfs_menu_enter_menutype" xml:space="preserve">
+    <value>請輸入MenuType</value>
+  </data>
+  <data name="csfs_parentid_nint" xml:space="preserve">
+    <value>ParentID請輸入正整數</value>
+  </data>
+  <data name="csfs_btnconfirmCancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="csfs_btnconfirmOk" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="csfs_confirmHeader" xml:space="preserve">
+    <value>確認提交修改?</value>
+  </data>
+  <data name="csfs_confirmToSubmit" xml:space="preserve">
+    <value>確認信息</value>
+  </data>
+  <data name="csfs_del_confirm" xml:space="preserve">
+    <value>您確定刪除嗎?</value>
+  </data>
+  <data name="csfs_auth_main" xml:space="preserve">
+    <value>授權維護</value>
+  </data>
+  <data name="csfs_menu_mainpage_name" xml:space="preserve">
+    <value>MainPage名稱</value>
+  </data>
+  <data name="csfs_menu_page_num" xml:space="preserve">
+    <value>Page編號</value>
+  </data>
+  <data name="csfs_all_cancel" xml:space="preserve">
+    <value>全部取消</value>
+  </data>
+  <data name="csfs_all_checked" xml:space="preserve">
+    <value>全部勾選</value>
+  </data>
+  <data name="csfs_fuc_id" xml:space="preserve">
+    <value>Menu FuncID</value>
+  </data>
+  <data name="csfs_page_to_action" xml:space="preserve">
+    <value>權限設定</value>
+  </data>
+  <data name="csfs_menu_msg4" xml:space="preserve">
+    <value>更新Page</value>
+  </data>
+  <data name="csfs_menu_msg5" xml:space="preserve">
+    <value>授權Controller/Action資料成功!</value>
+  </data>
+  <data name="csfs_menu_tit_menutopage" xml:space="preserve">
+    <value>功能設定</value>
+  </data>
+  <data name="csfs_menu_tit_menutorole" xml:space="preserve">
+    <value>角色設定</value>
+  </data>
+  <data name="csfs_menu_tit_pagetoaction" xml:space="preserve">
+    <value>權限設定</value>
+  </data>
+  <data name="csfs_menu_tit_parmmenu" xml:space="preserve">
+    <value>Menu設定</value>
+  </data>
+  <data name="csfs_menu_tit_systemmanagement" xml:space="preserve">
+    <value>系統管理</value>
+  </data>
+  <data name="csfs_notyet_auth" xml:space="preserve">
+    <value>目前尚未授權</value>
+  </data>
+  <data name="csfs_syncauth_setting" xml:space="preserve">
+    <value>立即同步功能授權設定</value>
+  </data>
+  <data name="csfs_menu_msg3" xml:space="preserve">
+    <value>至少需勾選[系統管理者]角色 {0}</value>
+  </data>
+  <data name="csfs_sync_fail" xml:space="preserve">
+    <value>同步失敗!</value>
+  </data>
+  <data name="csfs_sync_success" xml:space="preserve">
+    <value>同步成功!</value>
+  </data>
+  <data name="csfs_logoff" xml:space="preserve">
+    <value>登出</value>
+  </data>
+  <data name="csfs_menu_msg" xml:space="preserve">
+    <value>更新Menu</value>
+  </data>
+  <data name="csfs_menu_msg1" xml:space="preserve">
+    <value>授權Page資料成功!</value>
+  </data>
+  <data name="csfs_menu_tit_agent" xml:space="preserve">
+    <value>經辦作業</value>
+  </data>
+  <data name="csfs_menu_tit_agenttohandle" xml:space="preserve">
+    <value>待辦理</value>
+  </data>
+  <data name="csfs_menu_tit_agenttosign" xml:space="preserve">
+    <value>待簽收</value>
+  </data>
+  <data name="csfs_menu_tit_casegeneral" xml:space="preserve">
+    <value>外來文案件</value>
+  </data>
+  <data name="csfs_menu_tit_casereturn" xml:space="preserve">
+    <value>退件待辦理</value>
+  </data>
+  <data name="csfs_menu_tit_caseseizure" xml:space="preserve">
+    <value>扣押案件</value>
+  </data>
+  <data name="csfs_menu_tit_casewarning" xml:space="preserve">
+    <value>警示通報</value>
+  </data>
+  <data name="csfs_menu_tit_collection" xml:space="preserve">
+    <value>收發作業</value>
+  </data>
+  <data name="csfs_menu_tit_collectiontoassignment" xml:space="preserve">
+    <value>待辦理</value>
+  </data>
+  <data name="csfs_menu_tit_collectiontosign" xml:space="preserve">
+    <value>待簽收</value>
+  </data>
+  <data name="csfs_menu_tit_director" xml:space="preserve">
+    <value>主管作業</value>
+  </data>
+  <data name="csfs_menu_tit_directorcooperative" xml:space="preserve">
+    <value>協同作業</value>
+  </data>
+  <data name="csfs_menu_tit_directortoapprove" xml:space="preserve">
+    <value>待核決</value>
+  </data>
+  <data name="csfs_menu_tit_directortosend" xml:space="preserve">
+    <value>待發文</value>
+  </data>
+  <data name="csfs_menu_tit_directortosign" xml:space="preserve">
+    <value>待簽收</value>
+  </data>
+  <data name="csfs_menu_tit_keyinput" xml:space="preserve">
+    <value>建檔作業</value>
+  </data>
+  <data name="csfs_page_tit_agenttohandle" xml:space="preserve">
+    <value>經辦人員 - 待辦理</value>
+  </data>
+  <data name="csfs_page_tit_agenttosign" xml:space="preserve">
+    <value>經辦人員 - 待簽收</value>
+  </data>
+  <data name="csfs_page_tit_casegeneral" xml:space="preserve">
+    <value>建檔作業 - 一般案件 </value>
+  </data>
+  <data name="csfs_page_tit_casereturn" xml:space="preserve">
+    <value>建檔作業 - 退件待簽收</value>
+  </data>
+  <data name="csfs_page_tit_caseseizure" xml:space="preserve">
+    <value>建檔作業 - 扣押案件</value>
+  </data>
+  <data name="csfs_page_tit_casewarning" xml:space="preserve">
+    <value>建檔作業 - 警示通報 </value>
+  </data>
+  <data name="csfs_page_tit_collectiontoassignment" xml:space="preserve">
+    <value>集作收件 - 待分文 </value>
+  </data>
+  <data name="csfs_page_tit_collectiontosign" xml:space="preserve">
+    <value>集作收件 - 待簽收</value>
+  </data>
+  <data name="csfs_page_tit_directorcooperative" xml:space="preserve">
+    <value>主管作業 - 協同作業</value>
+  </data>
+  <data name="csfs_page_tit_directortoapprove" xml:space="preserve">
+    <value>主管作業 - 待核決</value>
+  </data>
+  <data name="csfs_page_tit_directortosend" xml:space="preserve">
+    <value>主管作業 - 待發文</value>
+  </data>
+  <data name="csfs_page_tit_directortosign" xml:space="preserve">
+    <value>主管作業 - 待簽收</value>
+  </data>
+  <data name="csfs_page_tit_err_msg" xml:space="preserve">
+    <value>錯誤訊息顯示</value>
+  </data>
+  <data name="csfs_page_tit_home_def" xml:space="preserve">
+    <value>首頁預設</value>
+  </data>
+  <data name="csfs_page_tit_menutopage" xml:space="preserve">
+    <value>系統管理 - menu設定</value>
+  </data>
+  <data name="csfs_page_tit_menutorole" xml:space="preserve">
+    <value>系統管理 - 功能設定</value>
+  </data>
+  <data name="csfs_page_tit_pagetoaction" xml:space="preserve">
+    <value>系統管理 - 權限設定</value>
+  </data>
+  <data name="csfs_page_tit_parmmenu" xml:space="preserve">
+    <value>系統管理 - 角色設定</value>
+  </data>
+  <data name="csfs_page_tit_sys_def" xml:space="preserve">
+    <value>系統登入預設</value>
+  </data>
+  <data name="csfs_page_tit_agent" xml:space="preserve">
+    <value>集作人員-承辦作業</value>
+  </data>
+  <data name="csfs_page_tit_branch" xml:space="preserve">
+    <value>分行人員</value>
+  </data>
+  <data name="csfs_page_tit_collection" xml:space="preserve">
+    <value>集作人員-收文建檔</value>
+  </data>
+  <data name="csfs_page_tit_director" xml:space="preserve">
+    <value>集作人員-主管作業</value>
+  </data>
+  <data name="csfs_page_tit_headquarters" xml:space="preserve">
+    <value>總務部人員-總行</value>
+  </data>
+  <data name="csfs_page_tit_keyinput" xml:space="preserve">
+    <value>集作人員-單位登記</value>
+  </data>
+  <data name="csfs_page_tit_systemmanger" xml:space="preserve">
+    <value>系統管理員</value>
+  </data>
+  <data name="csfs_page_tit_yongji" xml:space="preserve">
+    <value>總務部人員-永吉</value>
+  </data>
+  <data name="csfs_return_confirm" xml:space="preserve">
+    <value>您確定退回嗎?</value>
+  </data>
+  <data name="csfs_return_fail" xml:space="preserve">
+    <value>退回失敗!</value>
+  </data>
+  <data name="csfs_return_ok" xml:space="preserve">
+    <value>退回成功!</value>
+  </data>
+  <data name="csfs_sign_confirm" xml:space="preserve">
+    <value>您確定簽收嗎?</value>
+  </data>
+  <data name="csfs_sign_fail" xml:space="preserve">
+    <value>簽收失敗!</value>
+  </data>
+  <data name="csfs_sign_ok" xml:space="preserve">
+    <value>簽收成功!</value>
+  </data>
+  <data name="csfs_return" xml:space="preserve">
+    <value>退回</value>
+  </data>
+  <data name="csfs_sign" xml:space="preserve">
+    <value>簽收</value>
+  </data>
+  <data name="csfs_select" xml:space="preserve">
+    <value>--請選擇--</value>
+  </data>
+  <data name="csfs_editdelete" xml:space="preserve">
+    <value>編輯/刪除</value>
+  </data>
+  <data name="csfs_pleaseinput_0" xml:space="preserve">
+    <value>請輸入 {0}</value>
+  </data>
+  <data name="csfs_auth_role" xml:space="preserve">
+    <value>目前已授權角色</value>
+  </data>
+  <data name="csfs_assign_confirm" xml:space="preserve">
+    <value>確定分派?</value>
+  </data>
+  <data name="csfs_assign_fail" xml:space="preserve">
+    <value>分派失敗</value>
+  </data>
+  <data name="csfs_assign_success" xml:space="preserve">
+    <value>分派成功</value>
+  </data>
+  <data name="csfs_plz_obligor_no" xml:space="preserve">
+    <value>請至少輸入一個義務人資料!</value>
+  </data>
+  <data name="csfs_case_attachment" xml:space="preserve">
+    <value>附件</value>
+  </data>
+  <data name="csfs_case_create_success0" xml:space="preserve">
+    <value>案件編號:{0} ，文件請傳真給個金集中作業部。</value>
+  </data>
+  <data name="csfs_case_end_msg" xml:space="preserve">
+    <value>已超過鍵檔時間，請洽個金集中作業部處理。</value>
+  </data>
+  <data name="csfs_case_end_soon_msg" xml:space="preserve">
+    <value>鍵檔功能即將關閉，請於{0}前鍵檔完成!</value>
+  </data>
+  <data name="csfs_case_kind" xml:space="preserve">
+    <value>類別</value>
+  </data>
+  <data name="csfs_case_limited_date" xml:space="preserve">
+    <value>經辦限辦日期</value>
+  </data>
+  <data name="csfs_case_speed" xml:space="preserve">
+    <value>速別</value>
+  </data>
+  <data name="csfs_case_unit" xml:space="preserve">
+    <value>分行別</value>
+  </data>
+  <data name="csfs_gov_date" xml:space="preserve">
+    <value>來文日期</value>
+  </data>
+  <data name="csfs_receive_date" xml:space="preserve">
+    <value>收文日期</value>
+  </data>
+  <data name="csfs_gov_no" xml:space="preserve">
+    <value>來文字號</value>
+  </data>
+  <data name="csfs_gov_no_exist_confirmmsg" xml:space="preserve">
+    <value>來文字號已存在，請確認是否建檔?</value>
+  </data>
+  <data name="csfs_gov_unit" xml:space="preserve">
+    <value>來文機關</value>
+  </data>
+  <data name="csfs_keyin_person" xml:space="preserve">
+    <value>建檔人員</value>
+  </data>
+  <data name="csfs_obligor_name" xml:space="preserve">
+    <value>義(債)務人戶名</value>
+  </data>
+  <data name="csfs_obligor_no" xml:space="preserve">
+    <value>義(債)務人統編</value>
+  </data>
+  <data name="csfs_obligor_no_error_confirmmsg" xml:space="preserve">
+    <value>統編有誤確定要輸入</value>
+  </data>
+  <data name="csfs_receive_kind" xml:space="preserve">
+    <value>來文方式</value>
+  </data>
+  <data name="csfs_remove" xml:space="preserve">
+    <value>移除</value>
+  </data>
+  <data name="csfs_save_and_send" xml:space="preserve">
+    <value>存檔並送出</value>
+  </data>
+  <data name="csfs_assign" xml:space="preserve">
+    <value>派件</value>
+  </data>
+  <data name="csfs_bu_unit" xml:space="preserve">
+    <value>部門</value>
+  </data>
+  <data name="csfs_select_noline" xml:space="preserve">
+    <value>選擇</value>
+  </data>
+  <data name="csfs_agnet" xml:space="preserve">
+    <value>經辦人員</value>
+  </data>
+  <data name="csfs_case_no" xml:space="preserve">
+    <value>案件編號</value>
+  </data>
+  <data name="csfs_case_status" xml:space="preserve">
+    <value>狀態</value>
+  </data>
+  <data name="csfs_gongwen_no" xml:space="preserve">
+    <value>公文文號</value>
+  </data>
+  <data name="csfs_result_area" xml:space="preserve">
+    <value>結果區</value>
+  </data>
+  <data name="csfs_case_delete_success0" xml:space="preserve">
+    <value>案件編號:{0} ，修改成功！</value>
+  </data>
+  <data name="csfs_changeassign" xml:space="preserve">
+    <value>改派</value>
+  </data>
+  <data name="csfs_changeassign_fail" xml:space="preserve">
+    <value>改派失敗</value>
+  </data>
+  <data name="csfs_changeassign_success" xml:space="preserve">
+    <value>改派成功</value>
+  </data>
+  <data name="csfs_changeassign_confirm" xml:space="preserve">
+    <value>確定改派？</value>
+  </data>
+  <data name="csfs_returnclose" xml:space="preserve">
+    <value>退件結案</value>
+  </data>
+  <data name="csfs_returnclose_confirm" xml:space="preserve">
+    <value>確定結案?</value>
+  </data>
+  <data name="csfs_returnclose_fail" xml:space="preserve">
+    <value>結案失敗</value>
+  </data>
+  <data name="csfs_returnclose_ok" xml:space="preserve">
+    <value>結案成功</value>
+  </data>
+  <data name="csfs_save_fail" xml:space="preserve">
+    <value>儲存失敗!</value>
+  </data>
+  <data name="csfs_save_ok" xml:space="preserve">
+    <value>儲存成功!</value>
+  </data>
+  <data name="csfs_text_notnull" xml:space="preserve">
+    <value>該文本不能為空!</value>
+  </data>
+  <data name="csfs_notfind" xml:space="preserve">
+    <value>找無</value>
+  </data>
+  <data name="csfs_warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+  <data name="csfs_data" xml:space="preserve">
+    <value>資料</value>
+  </data>
+  <data name="csfs_disable" xml:space="preserve">
+    <value>停用</value>
+  </data>
+  <data name="csfs_enable" xml:space="preserve">
+    <value>啟用</value>
+  </data>
+  <data name="csfs_err_rcaf1" xml:space="preserve">
+    <value>訊息：RCAF 帳號登入異常,是否繼續登入NUMS系統?</value>
+  </data>
+  <data name="csfs_fail" xml:space="preserve">
+    <value>失敗</value>
+  </data>
+  <data name="csfs_menu_msg2" xml:space="preserve">
+    <value>授權角色資料成功!</value>
+  </data>
+  <data name="csfs_menu_msg6" xml:space="preserve">
+    <value>更新Menu</value>
+  </data>
+  <data name="csfs_menu_msg7" xml:space="preserve">
+    <value>授權Page資料成功!</value>
+  </data>
+  <data name="csfs_month" xml:space="preserve">
+    <value>月</value>
+  </data>
+  <data name="csfs_pm_data_repeat" xml:space="preserve">
+    <value>該代碼已存在，請重新輸入！</value>
+  </data>
+  <data name="csfs_settings" xml:space="preserve">
+    <value>設定</value>
+  </data>
+  <data name="csfs_sync_cache_ok" xml:space="preserve">
+    <value>更新全部資料至Cache成功</value>
+  </data>
+  <data name="csfs_wkday" xml:space="preserve">
+    <value>營業日</value>
+  </data>
+  <data name="csfs_year" xml:space="preserve">
+    <value>年</value>
+  </data>
+  <data name="csfs_account" xml:space="preserve">
+    <value>帳號</value>
+  </data>
+  <data name="csfs_bank" xml:space="preserve">
+    <value>分行</value>
+  </data>
+  <data name="csfs_bankID" xml:space="preserve">
+    <value>分行別</value>
+  </data>
+  <data name="csfs_clientID" xml:space="preserve">
+    <value>客戶ID</value>
+  </data>
+  <data name="csfs_clientName" xml:space="preserve">
+    <value>客戶姓名</value>
+  </data>
+  <data name="csfs_confirm" xml:space="preserve">
+    <value>確定</value>
+  </data>
+  <data name="csfs_memo" xml:space="preserve">
+    <value>備註</value>
+  </data>
+  <data name="csfs_phone" xml:space="preserve">
+    <value>來文機關電話</value>
+  </data>
+  <data name="csfs_Amount" xml:space="preserve">
+    <value>扣押金額</value>
+  </data>
+  <data name="csfs_charging_standard" xml:space="preserve">
+    <value>收費標準</value>
+  </data>
+  <data name="csfs_Fees_classification" xml:space="preserve">
+    <value>收費分類</value>
+  </data>
+  <data name="csfs_Fees_detile" xml:space="preserve">
+    <value>收費明細</value>
+  </data>
+  <data name="csfs_number" xml:space="preserve">
+    <value>數量</value>
+  </data>
+  <data name="csfs_UnitPrice" xml:space="preserve">
+    <value>單價</value>
+  </data>
+  <data name="csfs_Amount_field" xml:space="preserve">
+    <value>數量欄位</value>
+  </data>
+  <data name="csfs_Article" xml:space="preserve">
+    <value>第</value>
+  </data>
+  <data name="csfs_pen" xml:space="preserve">
+    <value>筆</value>
+  </data>
+  <data name="csfs_Please_enter" xml:space="preserve">
+    <value>請輸入第</value>
+  </data>
+  <data name="csfs_Total" xml:space="preserve">
+    <value>合計</value>
+  </data>
+  <data name="csfs_create_lend" xml:space="preserve">
+    <value>新增正本調閱</value>
+  </data>
+  <data name="csfs_money_is_number" xml:space="preserve">
+    <value>金額請輸入數字！</value>
+  </data>
+  <data name="csfs_english_data" xml:space="preserve">
+    <value>支票號碼請輸入英文大寫和數字！</value>
+  </data>
+  <data name="csfs_receive_person" xml:space="preserve">
+    <value>受款人</value>
+  </data>
+  <data name="csfs_BankReceiver" xml:space="preserve">
+    <value>分行收件者</value>
+  </data>
+  <data name="csfs_ReturnBankDate" xml:space="preserve">
+    <value>寄回分行日期</value>
+  </data>
+  <data name="csfs_ReturnDate" xml:space="preserve">
+    <value>正本歸還日期</value>
+  </data>
+  <data name="csfs_ReturnMemo" xml:space="preserve">
+    <value>回覆備註</value>
+  </data>
+  <data name="csfs_ReturnPostNo" xml:space="preserve">
+    <value>寄回掛號號碼</value>
+  </data>
+  <data name="csfs_Account_ok" xml:space="preserve">
+    <value>請輸入帳號!</value>
+  </data>
+  <data name="csfs_BankID_ok" xml:space="preserve">
+    <value>請輸入分行別!</value>
+  </data>
+  <data name="csfs_BankReceiver1_ok" xml:space="preserve">
+    <value>請輸入正確的寄回分行日期!</value>
+  </data>
+  <data name="csfs_BankReceiver_ok" xml:space="preserve">
+    <value>請輸入分行收件者!</value>
+  </data>
+  <data name="csfs_Bank_ok" xml:space="preserve">
+    <value>請輸入分行!</value>
+  </data>
+  <data name="csfs_ClientID_ok" xml:space="preserve">
+    <value>請輸入客戶ID!</value>
+  </data>
+  <data name="csfs_ClientName_ok" xml:space="preserve">
+    <value>請輸入客戶名稱!</value>
+  </data>
+  <data name="csfs_DocNo_ok" xml:space="preserve">
+    <value>請輸入案件編號!</value>
+  </data>
+  <data name="csfs_Phone_ok" xml:space="preserve">
+    <value>請輸入來文機關電話!</value>
+  </data>
+  <data name="csfs_ReturnBankDate_ok" xml:space="preserve">
+    <value>請輸入寄回分行日期!</value>
+  </data>
+  <data name="csfs_ReturnDate1_ok" xml:space="preserve">
+    <value>請輸入正確的正本歸還日期!</value>
+  </data>
+  <data name="csfs_ReturnDate_ok" xml:space="preserve">
+    <value>請輸入正本歸還日期!</value>
+  </data>
+  <data name="csfs_ReturnPostNo_ok" xml:space="preserve">
+    <value>請輸入寄回掛號號碼!</value>
+  </data>
+  <data name="csfs_gist" xml:space="preserve">
+    <value>主旨</value>
+  </data>
+  <data name="csfs_isophcnic" xml:space="preserve">
+    <value>密等</value>
+  </data>
+  <data name="csfs_original" xml:space="preserve">
+    <value>正本</value>
+  </data>
+  <data name="csfs_senddate" xml:space="preserve">
+    <value>發文日期</value>
+  </data>
+  <data name="csfs_senddate0" xml:space="preserve">
+    <value>發文日</value>
+  </data>
+  <data name="csfs_branchId" xml:space="preserve">
+    <value>收文分行</value>
+  </data>
+  <data name="csfs_SendRemark" xml:space="preserve">
+    <value>發文備註</value>
+  </data>
+  <data name="csfs_SeizureAndCancel" xml:space="preserve">
+    <value>扣押及撤銷</value>
+  </data>
+  <data name="csfs_sendno" xml:space="preserve">
+    <value>發文號已到最大值！</value>
+  </data>
+  <data name="csfs_sendword" xml:space="preserve">
+    <value>發文字</value>
+  </data>
+  <data name="csfs_LendStatus" xml:space="preserve">
+    <value>歸還狀態</value>
+  </data>
+  <data name="csfs_benchmark_date" xml:space="preserve">
+    <value>基準日(區間)</value>
+  </data>
+  <data name="csfs_Demand" xml:space="preserve">
+    <value>需求</value>
+  </data>
+  <data name="csfs_results_of_the_query" xml:space="preserve">
+    <value>查詢結果</value>
+  </data>
+  <data name="csfs_selectd" xml:space="preserve">
+    <value>選取</value>
+  </data>
+  <data name="csfs_The_unit_will_do" xml:space="preserve">
+    <value>會辦單位</value>
+  </data>
+  <data name="csfs_Unit" xml:space="preserve">
+    <value>單位</value>
+  </data>
+  <data name="and" xml:space="preserve">
+    <value>and</value>
+  </data>
+  <data name="csfs_receivedata" xml:space="preserve">
+    <value>收件日期</value>
+  </data>
+  <data name="csfs_others" xml:space="preserve">
+    <value>其他</value>
+  </data>
+  <data name="csfs_notice" xml:space="preserve">
+    <value>通知</value>
+  </data>
+  <data name="csfs_Notice_offset_claims" xml:space="preserve">
+    <value>通知-且需確認是否抵銷債權</value>
+  </data>
+  <data name="csfs_Pay" xml:space="preserve">
+    <value>支付</value>
+  </data>
+  <data name="csfs_vip" xml:space="preserve">
+    <value>VIP</value>
+  </data>
+  <data name="csfs_cal_amount" xml:space="preserve">
+    <value>計息金額</value>
+  </data>
+  <data name="csfs_cal_amount1_ok" xml:space="preserve">
+    <value>計息金額請輸入整數!</value>
+  </data>
+  <data name="csfs_cal_amount2_ok" xml:space="preserve">
+    <value>各項金額請輸入整數!</value>
+  </data>
+  <data name="csfs_cal_amount_ok" xml:space="preserve">
+    <value>請輸入計息金額!</value>
+  </data>
+  <data name="csfs_cal_caseamount" xml:space="preserve">
+    <value>扣押金額</value>
+  </data>
+  <data name="csfs_cal_casetotal" xml:space="preserve">
+    <value>扣押總計</value>
+  </data>
+  <data name="csfs_cal_days" xml:space="preserve">
+    <value>天數</value>
+  </data>
+  <data name="csfs_cal_dinterest" xml:space="preserve">
+    <value>日利率</value>
+  </data>
+  <data name="csfs_cal_end" xml:space="preserve">
+    <value>截止日</value>
+  </data>
+  <data name="csfs_cal_end1_ok" xml:space="preserve">
+    <value>請輸入正確的截止日!</value>
+  </data>
+  <data name="csfs_cal_end_ok" xml:space="preserve">
+    <value>請輸入截止日!</value>
+  </data>
+  <data name="csfs_cal_fail" xml:space="preserve">
+    <value>確認失敗</value>
+  </data>
+  <data name="csfs_cal_interests" xml:space="preserve">
+    <value>利息</value>
+  </data>
+  <data name="csfs_cal_interests1" xml:space="preserve">
+    <value>利息(取整)</value>
+  </data>
+  <data name="csfs_cal_interestype_ok" xml:space="preserve">
+    <value>請選擇利率類型!</value>
+  </data>
+  <data name="csfs_cal_interest_ok" xml:space="preserve">
+    <value>請輸入利率!</value>
+  </data>
+  <data name="csfs_cal_intrest" xml:space="preserve">
+    <value>利率</value>
+  </data>
+  <data name="csfs_cal_intresttotal" xml:space="preserve">
+    <value>計息合計</value>
+  </data>
+  <data name="csfs_cal_intresttype" xml:space="preserve">
+    <value>利率類型</value>
+  </data>
+  <data name="csfs_cal_ok" xml:space="preserve">
+    <value>確認成功</value>
+  </data>
+  <data name="csfs_cal_result" xml:space="preserve">
+    <value>利息結果</value>
+  </data>
+  <data name="csfs_cal_start" xml:space="preserve">
+    <value>起始日</value>
+  </data>
+  <data name="csfs_cal_start1_ok" xml:space="preserve">
+    <value>請輸入正確的起始日!</value>
+  </data>
+  <data name="csfs_cal_startoend_ok" xml:space="preserve">
+    <value>起始日不能大於截止日，請重新輸入!</value>
+  </data>
+  <data name="csfs_cal_start_ok" xml:space="preserve">
+    <value>請輸入起始日!</value>
+  </data>
+  <data name="csfs_cal_yinterest" xml:space="preserve">
+    <value>年利率</value>
+  </data>
+  <data name="csfs_keyin_date" xml:space="preserve">
+    <value>建檔日期</value>
+  </data>
+  <data name="csfs_case_kind2" xml:space="preserve">
+    <value>細分類</value>
+  </data>
+  <data name="csfs_address" xml:space="preserve">
+    <value>地址</value>
+  </data>
+  <data name="csfs_InsDeptDispatchId" xml:space="preserve">
+    <value>來函機關發文字號</value>
+  </data>
+  <data name="csfs_InsDispatchDate" xml:space="preserve">
+    <value>來函機關發文日期</value>
+  </data>
+  <data name="csfs_ccreceiver" xml:space="preserve">
+    <value>副本地址</value>
+  </data>
+  <data name="csfs_currency" xml:space="preserve">
+    <value>副本</value>
+  </data>
+  <data name="csfs_receiver" xml:space="preserve">
+    <value>受文者</value>
+  </data>
+  <data name="csfs_attach_delete" xml:space="preserve">
+    <value>確定要刪除該附件嗎？</value>
+  </data>
+  <data name="csfs_govdate" xml:space="preserve">
+    <value>發文機關維護</value>
+  </data>
+  <data name="csfs_gov_kind" xml:space="preserve">
+    <value>來文機關分類</value>
+  </data>
+  <data name="csfs_gov_name" xml:space="preserve">
+    <value>來文機關</value>
+  </data>
+  <data name="csfs_isenabled" xml:space="preserve">
+    <value>啟用狀態</value>
+  </data>
+  <data name="csfs_case_create_success2_0" xml:space="preserve">
+    <value>系統編號:{0}，文件請傳真給個金集中作業部。</value>
+  </data>
+  <data name="csfs_govaddr_ok" xml:space="preserve">
+    <value>請輸入地址</value>
+  </data>
+  <data name="csfs_govkind_ok" xml:space="preserve">
+    <value>請選擇來文機關類型</value>
+  </data>
+  <data name="csfs_govname_ok" xml:space="preserve">
+    <value>請輸入來文機關</value>
+  </data>
+  <data name="csfs_isenable_ok" xml:space="preserve">
+    <value>請選擇啟用狀態</value>
+  </data>
+  <data name="csfs_wkday_parm" xml:space="preserve">
+    <value>營業日設定</value>
+  </data>
+  <data name="csfs_menu_tit_agenthandlingquery" xml:space="preserve">
+    <value>收件處理統計表</value>
+  </data>
+  <data name="csfs_menu_tit_caseclosedquery" xml:space="preserve">
+    <value>查詢統計表</value>
+  </data>
+  <data name="csfs_menu_tit_casequery" xml:space="preserve">
+    <value>案件查詢</value>
+  </data>
+  <data name="csfs_menu_tit_checkqueryandprint" xml:space="preserve">
+    <value>支票查詢列印</value>
+  </data>
+  <data name="csfs_menu_tit_debtpersonquery" xml:space="preserve">
+    <value>扣押資訊會辦查詢</value>
+  </data>
+  <data name="csfs_menu_tit_feestable" xml:space="preserve">
+    <value>手續費查詢</value>
+  </data>
+  <data name="csfs_menu_tit_meetingresultupload" xml:space="preserve">
+    <value>會辦結果上傳及查詢</value>
+  </data>
+  <data name="csfs_menu_tit_meetingsummarylist" xml:space="preserve">
+    <value>會辦彙總送件</value>
+  </data>
+  <data name="csfs_menu_tit_originalinfoquery" xml:space="preserve">
+    <value>正本備查查詢</value>
+  </data>
+  <data name="csfs_menu_tit_queryandexport" xml:space="preserve">
+    <value>查詢匯出作業</value>
+  </data>
+  <data name="csfs_postdate" xml:space="preserve">
+    <value>郵寄日期</value>
+  </data>
+  <data name="csfs_postNo" xml:space="preserve">
+    <value>掛號號碼</value>
+  </data>
+  <data name="csfs_returncaseid" xml:space="preserve">
+    <value>歸還案號</value>
+  </data>
+  <data name="csfs_accountkind" xml:space="preserve">
+    <value>報表種類</value>
+  </data>
+  <data name="csfs_closeddate" xml:space="preserve">
+    <value>結案日期</value>
+  </data>
+  <data name="csfs_select_only_one" xml:space="preserve">
+    <value>只能選擇一筆</value>
+  </data>
+  <data name="csfs_menu_tit_deptaccessquery" xml:space="preserve">
+    <value>資訊部調閱查詢送件</value>
+  </data>
+  <data name="csfs_debtexcel" xml:space="preserve">
+    <value>匯出</value>
+  </data>
+  <data name="csfs_meetdate" xml:space="preserve">
+    <value>會辦日期</value>
+  </data>
+  <data name="csfs_meetfinish" xml:space="preserve">
+    <value>會辦完成</value>
+  </data>
+  <data name="csfs_meetSave" xml:space="preserve">
+    <value>存檔</value>
+  </data>
+  <data name="csfs_agent_depart" xml:space="preserve">
+    <value>科別</value>
+  </data>
+  <data name="csfs_menu_tit_agentsetting" xml:space="preserve">
+    <value>經辦人員設定</value>
+  </data>
+  <data name="csfs_menu_tit_checknosetting" xml:space="preserve">
+    <value>支票號碼使用設定</value>
+  </data>
+  <data name="csfs_menu_tit_collectiontoagent" xml:space="preserve">
+    <value>收發代辦</value>
+  </data>
+  <data name="csfs_menu_tit_parmcode" xml:space="preserve">
+    <value>參數設定</value>
+  </data>
+  <data name="csfs_menu_tit_sendnosetting" xml:space="preserve">
+    <value>發文文號設定</value>
+  </data>
+  <data name="csfs_menu_tit_sendsettingref" xml:space="preserve">
+    <value>回文版型內容維護</value>
+  </data>
+  <data name="csfs_codedesc" xml:space="preserve">
+    <value>參數細項名稱(CodeDesc)</value>
+  </data>
+  <data name="csfs_codetypedesc" xml:space="preserve">
+    <value>參數類別名稱(CodeTypeDesc)</value>
+  </data>
+  <data name="csfs_menu_tit_parmsetting" xml:space="preserve">
+    <value>參數設定</value>
+  </data>
+  <data name="csfs_codedesc_ok" xml:space="preserve">
+    <value>請輸入參數細項名稱(CodeDesc)!</value>
+  </data>
+  <data name="csfs_codeno_ok" xml:space="preserve">
+    <value>請輸入參數細項代碼(CodeNo)!</value>
+  </data>
+  <data name="csfs_codesort_ok" xml:space="preserve">
+    <value>請輸入順序!</value>
+  </data>
+  <data name="csfs_codetypedesc1_ok" xml:space="preserve">
+    <value>請輸入參數類別名稱(CodeTypeDesc)!</value>
+  </data>
+  <data name="csfs_codetypedesc_ok" xml:space="preserve">
+    <value>請選擇參數類別名稱(CodeTypeDesc)!</value>
+  </data>
+  <data name="csfs_codetype_ok" xml:space="preserve">
+    <value>請輸入參數類別(CodeType)!</value>
+  </data>
+  <data name="csfs_parmtag" xml:space="preserve">
+    <value>參數細項TAG(CodeTag)</value>
+  </data>
+  <data name="csfs_codesort_ok1" xml:space="preserve">
+    <value>請輸入正確的順序!</value>
+  </data>
+  <data name="csfs_menu_tit_sendmail" xml:space="preserve">
+    <value>發文郵寄</value>
+  </data>
+  <data name="csfs_posttype" xml:space="preserve">
+    <value>正副本</value>
+  </data>
+  <data name="csfs_senddate1" xml:space="preserve">
+    <value>掛號日期</value>
+  </data>
+  <data name="csfs_sendmailtype" xml:space="preserve">
+    <value>郵寄處理類別</value>
+  </data>
+  <data name="csfs_sendnum" xml:space="preserve">
+    <value>設定掛號號碼</value>
+  </data>
+  <data name="csfs_sendperson" xml:space="preserve">
+    <value>掛號人員</value>
+  </data>
+  <data name="csfs_sendword1" xml:space="preserve">
+    <value>發文字號</value>
+  </data>
+  <data name="csfs_EndCaseRemark" xml:space="preserve">
+    <value>結案備註</value>
+  </data>
+  <data name="csfs_cancelSetting" xml:space="preserve">
+    <value>取消號碼</value>
+  </data>
+  <data name="csfs_moneyNumber" xml:space="preserve">
+    <value>支票號碼</value>
+  </data>
+  <data name="csfa_NoMax" xml:space="preserve">
+    <value>已到最大值！</value>
+  </data>
+  <data name="csfs_sendnoformat" xml:space="preserve">
+    <value>{0}字{1}號</value>
+  </data>
+  <data name="csfs_plz_getticket" xml:space="preserve">
+    <value>請先取號！</value>
+  </data>
+  <data name="csfs_excelmailno" xml:space="preserve">
+    <value>匯出大宗掛號單</value>
+  </data>
+  <data name="csfs_affairs" xml:space="preserve">
+    <value>總務</value>
+  </data>
+  <data name="csfs_back_reason" xml:space="preserve">
+    <value>退件原因</value>
+  </data>
+  <data name="csfs_closed" xml:space="preserve">
+    <value>取消並結案</value>
+  </data>
+  <data name="csfs_fast" xml:space="preserve">
+    <value>最速件</value>
+  </data>
+  <data name="csfs_format" xml:space="preserve">
+    <value>格式</value>
+  </data>
+  <data name="csfs_receive_case" xml:space="preserve">
+    <value>外來文案件</value>
+  </data>
+  <data name="csfs_agent_account_info" xml:space="preserve">
+    <value>帳務資訊</value>
+  </data>
+  <data name="csfs_agent_case_calculator" xml:space="preserve">
+    <value>利息計算</value>
+  </data>
+  <data name="csfs_agent_case_history" xml:space="preserve">
+    <value>流程紀錄</value>
+  </data>
+  <data name="csfs_agent_case_memo" xml:space="preserve">
+    <value>內部註記</value>
+  </data>
+  <data name="csfs_agent_department_access" xml:space="preserve">
+    <value>資訊部調閱</value>
+  </data>
+  <data name="csfs_agent_document_info" xml:space="preserve">
+    <value>公文資訊</value>
+  </data>
+  <data name="csfs_agent_meet_info" xml:space="preserve">
+    <value>會辦資訊</value>
+  </data>
+  <data name="csfs_agent_original_info" xml:space="preserve">
+    <value>正本備查</value>
+  </data>
+  <data name="csfs_agent_sendsetting_info" xml:space="preserve">
+    <value>發文資訊</value>
+  </data>
+  <data name="csfs_at_least_select_one" xml:space="preserve">
+    <value>請至少選擇一筆資料</value>
+  </data>
+  <data name="csfs_balance" xml:space="preserve">
+    <value>可用餘額</value>
+  </data>
+  <data name="csfs_bank_name" xml:space="preserve">
+    <value>分行名稱</value>
+  </data>
+  <data name="csfs_cancel_set" xml:space="preserve">
+    <value>撤銷設定</value>
+  </data>
+  <data name="csfs_case_type" xml:space="preserve">
+    <value>案件類型</value>
+  </data>
+  <data name="csfs_check_amt" xml:space="preserve">
+    <value>支票金額</value>
+  </data>
+  <data name="csfs_check_no" xml:space="preserve">
+    <value>支票號碼</value>
+  </data>
+  <data name="csfs_confirm_cancel" xml:space="preserve">
+    <value>確認取消案件扣押?</value>
+  </data>
+  <data name="csfs_confirm_delete" xml:space="preserve">
+    <value>您確定要刪除嗎？</value>
+  </data>
+  <data name="csfs_confirm_send" xml:space="preserve">
+    <value>確認送經辦？</value>
+  </data>
+  <data name="csfs_content" xml:space="preserve">
+    <value>調閱內容</value>
+  </data>
+  <data name="csfs_create_date" xml:space="preserve">
+    <value>調閱日期</value>
+  </data>
+  <data name="csfs_create_user" xml:space="preserve">
+    <value>調閱人員</value>
+  </data>
+  <data name="csfs_currency_1" xml:space="preserve">
+    <value>幣別</value>
+  </data>
+  <data name="csfs_deposit_account" xml:space="preserve">
+    <value>存款帳號</value>
+  </data>
+  <data name="csfs_err_id" xml:space="preserve">
+    <value>扣押ID有誤</value>
+  </data>
+  <data name="csfs_event" xml:space="preserve">
+    <value>事件</value>
+  </data>
+  <data name="csfs_event_time" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="csfs_fee" xml:space="preserve">
+    <value>手續費</value>
+  </data>
+  <data name="csfs_from_folder" xml:space="preserve">
+    <value>前處理狀態</value>
+  </data>
+  <data name="csfs_from_role" xml:space="preserve">
+    <value>前處理角色</value>
+  </data>
+  <data name="csfs_from_user" xml:space="preserve">
+    <value>前處理人員</value>
+  </data>
+  <data name="csfs_id_1" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="csfs_input" xml:space="preserve">
+    <value>輸入</value>
+  </data>
+  <data name="csfs_input_content" xml:space="preserve">
+    <value>請輸入內容</value>
+  </data>
+  <data name="csfs_memo_person" xml:space="preserve">
+    <value>註記者</value>
+  </data>
+  <data name="csfs_modify" xml:space="preserve">
+    <value>修改</value>
+  </data>
+  <data name="csfs_name" xml:space="preserve">
+    <value>姓名</value>
+  </data>
+  <data name="csfs_new_one" xml:space="preserve">
+    <value>新增一行</value>
+  </data>
+  <data name="csfs_no" xml:space="preserve">
+    <value>編號</value>
+  </data>
+  <data name="csfs_no_list" xml:space="preserve">
+    <value>未結案扣押列表</value>
+  </data>
+  <data name="csfs_pay_amt" xml:space="preserve">
+    <value>支付金額</value>
+  </data>
+  <data name="csfs_pay_set" xml:space="preserve">
+    <value>支付設定</value>
+  </data>
+  <data name="csfs_rate" xml:space="preserve">
+    <value>匯率</value>
+  </data>
+  <data name="csfs_receive_set" xml:space="preserve">
+    <value>受款人設定</value>
+  </data>
+  <data name="csfs_seizure_set" xml:space="preserve">
+    <value>扣押設定</value>
+  </data>
+  <data name="csfs_send_agent" xml:space="preserve">
+    <value>送經辦</value>
+  </data>
+  <data name="csfs_send_fail" xml:space="preserve">
+    <value>送經辦失敗</value>
+  </data>
+  <data name="csfs_send_success" xml:space="preserve">
+    <value>送經辦成功</value>
+  </data>
+  <data name="csfs_this_case" xml:space="preserve">
+    <value>本案件</value>
+  </data>
+  <data name="csfs_to_folder" xml:space="preserve">
+    <value>目前處理狀態</value>
+  </data>
+  <data name="csfs_to_role" xml:space="preserve">
+    <value>目前處理角色</value>
+  </data>
+  <data name="csfs_to_user" xml:space="preserve">
+    <value>目前處理人員</value>
+  </data>
+  <data name="csfs_t_amt" xml:space="preserve">
+    <value>台幣金額</value>
+  </data>
+  <data name="csfs_165_reading" xml:space="preserve">
+    <value>165調閱</value>
+  </data>
+  <data name="csfs_AccountKind1" xml:space="preserve">
+    <value>科別派件統計表</value>
+  </data>
+  <data name="csfs_AccountKind2" xml:space="preserve">
+    <value>經辦收件統計表</value>
+  </data>
+  <data name="csfs_AccountKind3" xml:space="preserve">
+    <value>收發退件明細表</value>
+  </data>
+  <data name="csfs_AccountKind4" xml:space="preserve">
+    <value>用印簿</value>
+  </data>
+  <data name="csfs_AccountKind5" xml:space="preserve">
+    <value>經辦結案統計表</value>
+  </data>
+  <data name="csfs_AccountKind6" xml:space="preserve">
+    <value>品質時效統計表</value>
+  </data>
+  <data name="csfs_AccountKind7" xml:space="preserve">
+    <value>主管放行統計表</value>
+  </data>
+  <data name="csfs_AccountKind8" xml:space="preserve">
+    <value>經辦退件明細表</value>
+  </data>
+  <data name="csfs_AccountKind9" xml:space="preserve">
+    <value>逾期案件明細表</value>
+  </data>
+  <data name="csfs_agentsetting" xml:space="preserve">
+    <value>經辦設定</value>
+  </data>
+  <data name="csfs_AgentUser" xml:space="preserve">
+    <value>承辦人</value>
+  </data>
+  <data name="csfs_approve" xml:space="preserve">
+    <value>放行</value>
+  </data>
+  <data name="csfs_approve_fail" xml:space="preserve">
+    <value>放行失敗</value>
+  </data>
+  <data name="csfs_approve_success" xml:space="preserve">
+    <value>放行成功</value>
+  </data>
+  <data name="csfs_assign_agents" xml:space="preserve">
+    <value>收發代辦</value>
+  </data>
+  <data name="csfs_assign_agents_fail" xml:space="preserve">
+    <value>收發代辦失敗</value>
+  </data>
+  <data name="csfs_assign_agents_success" xml:space="preserve">
+    <value>收發代辦成功</value>
+  </data>
+  <data name="csfs_back" xml:space="preserve">
+    <value>退件</value>
+  </data>
+  <data name="csfs_back_fail" xml:space="preserve">
+    <value>退回失敗</value>
+  </data>
+  <data name="csfs_back_success" xml:space="preserve">
+    <value>退回成功</value>
+  </data>
+  <data name="csfs_CheckNoEnd" xml:space="preserve">
+    <value>結束號碼</value>
+  </data>
+  <data name="csfs_CheckNoNow" xml:space="preserve">
+    <value>目前已用至</value>
+  </data>
+  <data name="csfs_CheckNoStart" xml:space="preserve">
+    <value>起始號碼</value>
+  </data>
+  <data name="csfs_checkno_setting" xml:space="preserve">
+    <value>支票號碼設定</value>
+  </data>
+  <data name="csfs_check_count" xml:space="preserve">
+    <value>不能超過設定筆數</value>
+  </data>
+  <data name="csfs_check_print" xml:space="preserve">
+    <value>支票套印</value>
+  </data>
+  <data name="csfs_code_repeat" xml:space="preserve">
+    <value>代碼重複</value>
+  </data>
+  <data name="csfs_column_name" xml:space="preserve">
+    <value>欄位名稱</value>
+  </data>
+  <data name="csfs_confirm_approve" xml:space="preserve">
+    <value>確認放行？</value>
+  </data>
+  <data name="csfs_confirm_assign_agents" xml:space="preserve">
+    <value>確認收發代辦？</value>
+  </data>
+  <data name="csfs_confirm_back" xml:space="preserve">
+    <value>確認退回？</value>
+  </data>
+  <data name="csfs_confirm_export" xml:space="preserve">
+    <value>確認匯出？</value>
+  </data>
+  <data name="csfs_confirm_nuclear" xml:space="preserve">
+    <value>確認呈核？</value>
+  </data>
+  <data name="csfs_ctci_bank" xml:space="preserve">
+    <value>中信銀</value>
+  </data>
+  <data name="csfs_Depart1" xml:space="preserve">
+    <value>分行集作一科</value>
+  </data>
+  <data name="csfs_Depart2" xml:space="preserve">
+    <value>分行集作二科</value>
+  </data>
+  <data name="csfs_Depart3" xml:space="preserve">
+    <value>撥貸服務科</value>
+  </data>
+  <data name="csfs_Depart4" xml:space="preserve">
+    <value>資料處理科</value>
+  </data>
+  <data name="csfs_Depart5" xml:space="preserve">
+    <value>調扣服務科</value>
+  </data>
+  <data name="csfs_Depart6" xml:space="preserve">
+    <value>委外管理科</value>
+  </data>
+  <data name="csfs_Depart7" xml:space="preserve">
+    <value>設備管理科</value>
+  </data>
+  <data name="csfs_Depart8" xml:space="preserve">
+    <value>信用卡帳務科</value>
+  </data>
+  <data name="csfs_DocNo" xml:space="preserve">
+    <value>收文編號</value>
+  </data>
+  <data name="csfs_EndNotNull" xml:space="preserve">
+    <value>結束號碼請輸入九位數字!</value>
+  </data>
+  <data name="csfs_EndNotNull1" xml:space="preserve">
+    <value>結束號碼請輸入十四位數字!</value>
+  </data>
+  <data name="csfs_EndThanStart" xml:space="preserve">
+    <value>結束號碼不能小於起始號碼！</value>
+  </data>
+  <data name="csfs_export_filelist" xml:space="preserve">
+    <value>匯出文件清單</value>
+  </data>
+  <data name="csfs_export_receivelist" xml:space="preserve">
+    <value>匯出收文清單</value>
+  </data>
+  <data name="csfs_GovDate1" xml:space="preserve">
+    <value>收文日期</value>
+  </data>
+  <data name="csfs_GovNo" xml:space="preserve">
+    <value>公文號</value>
+  </data>
+  <data name="csfs_GovNoD" xml:space="preserve">
+    <value>收文序號</value>
+  </data>
+  <data name="csfs_ObligorAccountName" xml:space="preserve">
+    <value>義(債)務人戶名</value>
+  </data>
+  <data name="csfs_ObligorCompanyId" xml:space="preserve">
+    <value>義(債)務人統編</value>
+  </data>
+  <data name="csfs_BranchNameAndSeizureSum" xml:space="preserve">
+    <value>存款分行/扣押金額</value>
+  </data>
+  <data name="csfs_MoneyReceiverPay" xml:space="preserve">
+    <value>受款人</value>
+  </data>
+  <data name="csfs_CBChequeNumPay" xml:space="preserve">
+    <value>本行支票號碼</value>
+  </data>
+  <data name="csfs_ChargeSumPay" xml:space="preserve">
+    <value>收取金額</value>
+  </data>
+  <data name="csfs_SendReceiver" xml:space="preserve">
+    <value>受文者</value>
+  </data>
+  <data name="csfs_SeizureSum" xml:space="preserve">
+    <value>扣押金額</value>
+  </data>
+  <data name="csfs_CaseProcessStatus" xml:space="preserve">
+    <value>案件處理狀態</value>
+  </data>
+  <data name="csfs_CaseStatus" xml:space="preserve">
+    <value>案件狀態</value>
+  </data>
+  <data name="csfs_OrgSendDate" xml:space="preserve">
+    <value>來函日</value>
+  </data>
+  <data name="csfs_SenderInstitutionClerk" xml:space="preserve">
+    <value>發文單位承辦人</value>
+  </data>
+  <data name="csfs_ResponseEmp" xml:space="preserve">
+    <value>本行發文經辦</value>
+  </data>
+  <data name="csfs_CaseNbr" xml:space="preserve">
+    <value>函覆文號</value>
+  </data>
+  <data name="csfs_Clerk" xml:space="preserve">
+    <value>處理經辦</value>
+  </data>
+  <data name="csfs_InstitutionName" xml:space="preserve">
+    <value>來函機關</value>
+  </data>
+  <data name="csfs_CloseDate" xml:space="preserve">
+    <value>結案日</value>
+  </data>
+  <data name="csfs_gov_edate" xml:space="preserve">
+    <value>來文日期截止日</value>
+  </data>
+  <data name="csfs_gov_sdate" xml:space="preserve">
+    <value>來文日期起始日</value>
+  </data>
+  <data name="csfs_gov_type" xml:space="preserve">
+    <value>來文機關類型</value>
+  </data>
+  <data name="csfs_has_return" xml:space="preserve">
+    <value>已歸還</value>
+  </data>
+  <data name="csfs_info_type" xml:space="preserve">
+    <value>資料類型</value>
+  </data>
+  <data name="csfs_in_reading" xml:space="preserve">
+    <value>調閱中</value>
+  </data>
+  <data name="csfs_lend_date" xml:space="preserve">
+    <value>調閱日期</value>
+  </data>
+  <data name="csfs_meeting_summary_list" xml:space="preserve">
+    <value>會辦彙總送件清單</value>
+  </data>
+  <data name="csfs_model" xml:space="preserve">
+    <value>模版</value>
+  </data>
+  <data name="csfs_new_send" xml:space="preserve">
+    <value>新增發文</value>
+  </data>
+  <data name="csfs_not_165_reading" xml:space="preserve">
+    <value>非165調閱及財產申報</value>
+  </data>
+  <data name="csfs_not_caseseizure" xml:space="preserve">
+    <value>不是扣押案件</value>
+  </data>
+  <data name="csfs_not_return" xml:space="preserve">
+    <value>未歸還</value>
+  </data>
+  <data name="csfs_NowNotNull" xml:space="preserve">
+    <value>目前號碼請輸入九位數字!</value>
+  </data>
+  <data name="csfs_NowNotNull1" xml:space="preserve">
+    <value>目前號碼請輸入十四位數字!</value>
+  </data>
+  <data name="csfs_NowThanStart" xml:space="preserve">
+    <value>目前號碼不能小於起始號碼！</value>
+  </data>
+  <data name="csfs_nuclear" xml:space="preserve">
+    <value>呈核</value>
+  </data>
+  <data name="csfs_nuclear_fail" xml:space="preserve">
+    <value>呈核失敗</value>
+  </data>
+  <data name="csfs_nuclear_success" xml:space="preserve">
+    <value>呈核成功</value>
+  </data>
+  <data name="csfs_original_reading" xml:space="preserve">
+    <value>正本調閱</value>
+  </data>
+  <data name="csfs_original_return" xml:space="preserve">
+    <value>正本歸還</value>
+  </data>
+  <data name="csfs_other_desc" xml:space="preserve">
+    <value>下拉選擇[其他] ,則可新增參數類別 CodeType</value>
+  </data>
+  <data name="csfs_pay_date" xml:space="preserve">
+    <value>支付日期</value>
+  </data>
+  <data name="csfs_pay_date_format" xml:space="preserve">
+    <value>支付日期查詢欄位請輸入正確格式</value>
+  </data>
+  <data name="csfs_pay_detail" xml:space="preserve">
+    <value>支付明細</value>
+  </data>
+  <data name="csfs_PerfixNotNull" xml:space="preserve">
+    <value>類別請輸入英文大寫!</value>
+  </data>
+  <data name="csfs_query_fee" xml:space="preserve">
+    <value>手續費查詢</value>
+  </data>
+  <data name="csfs_query_send_list" xml:space="preserve">
+    <value>資訊部調閱查詢送件清單</value>
+  </data>
+  <data name="csfs_ReceivePerson" xml:space="preserve">
+    <value>受款人員</value>
+  </data>
+  <data name="csfs_right_time" xml:space="preserve">
+    <value>正確的時間區間</value>
+  </data>
+  <data name="csfs_security1" xml:space="preserve">
+    <value>密(收到即解密)</value>
+  </data>
+  <data name="csfs_seizure" xml:space="preserve">
+    <value>扣押</value>
+  </data>
+  <data name="csfs_seizureandpay" xml:space="preserve">
+    <value>扣押並支付</value>
+  </data>
+  <data name="csfs_seizure_case" xml:space="preserve">
+    <value>法扣案件</value>
+  </data>
+  <data name="csfs_seizureEdoc" xml:space="preserve">
+    <value>扣押電子回文</value>
+  </data>
+  <data name="csfs_send_setting" xml:space="preserve">
+    <value>發文設定</value>
+  </data>
+  <data name="csfs_send_word1" xml:space="preserve">
+    <value>字第</value>
+  </data>
+  <data name="csfs_send_word2" xml:space="preserve">
+    <value>號</value>
+  </data>
+  <data name="csfs_speed1" xml:space="preserve">
+    <value>速件</value>
+  </data>
+  <data name="csfs_StartNotNull" xml:space="preserve">
+    <value>起始號碼請輸入九位數字!</value>
+  </data>
+  <data name="csfs_StartNotNull1" xml:space="preserve">
+    <value>起始號碼請輸入十四位數字!</value>
+  </data>
+  <data name="csfs_test_print" xml:space="preserve">
+    <value>測試列印</value>
+  </data>
+  <data name="csfs_theme" xml:space="preserve">
+    <value>主題</value>
+  </data>
+  <data name="csfs_title_SendSettingRef" xml:space="preserve">
+    <value>回文版型維護</value>
+  </data>
+  <data name="csfs_type" xml:space="preserve">
+    <value>大類</value>
+  </data>
+  <data name="csfs_type1" xml:space="preserve">
+    <value>小類</value>
+  </data>
+  <data name="csfs_year1" xml:space="preserve">
+    <value>年度</value>
+  </data>
+  <data name="csfs_YearNotNull" xml:space="preserve">
+    <value>年度請輸入數字!</value>
+  </data>
+  <data name="csfs_client_account" xml:space="preserve">
+    <value>義(債)務人帳號</value>
+  </data>
+  <data name="csfs_client_id" xml:space="preserve">
+    <value>義(債)務人統編</value>
+  </data>
+  <data name="csfs_client_name" xml:space="preserve">
+    <value>義(債)務人戶名</value>
+  </data>
+  <data name="csfs_friday" xml:space="preserve">
+    <value>星期五</value>
+  </data>
+  <data name="csfs_last_month" xml:space="preserve">
+    <value>上個月</value>
+  </data>
+  <data name="csfs_monday" xml:space="preserve">
+    <value>星期一</value>
+  </data>
+  <data name="csfs_month1" xml:space="preserve">
+    <value>月份</value>
+  </data>
+  <data name="csfs_next_month" xml:space="preserve">
+    <value>下個月</value>
+  </data>
+  <data name="csfs_saturday" xml:space="preserve">
+    <value>星期六</value>
+  </data>
+  <data name="csfs_sunday" xml:space="preserve">
+    <value>星期日</value>
+  </data>
+  <data name="csfs_this_bankcode" xml:space="preserve">
+    <value>本行支票號碼</value>
+  </data>
+  <data name="csfs_thursday" xml:space="preserve">
+    <value>星期四</value>
+  </data>
+  <data name="csfs_tuesday" xml:space="preserve">
+    <value>星期二</value>
+  </data>
+  <data name="csfs_wednesday" xml:space="preserve">
+    <value>星期三</value>
+  </data>
+  <data name="csfs_CheckIntervalID" xml:space="preserve">
+    <value>支票本編號</value>
+  </data>
+  <data name="csfs_check_length" xml:space="preserve">
+    <value>請輸入九位數字!</value>
+  </data>
+  <data name="csfs_UseStatus" xml:space="preserve">
+    <value>使用狀態</value>
+  </data>
+  <data name="csfs_UseStatus1" xml:space="preserve">
+    <value>未使用</value>
+  </data>
+  <data name="csfs_UseStatus2" xml:space="preserve">
+    <value>已使用</value>
+  </data>
+  <data name="csfs_WeekTempAmount" xml:space="preserve">
+    <value>每週二支票預留數量</value>
+  </data>
+  <data name="csfs_active_confirm" xml:space="preserve">
+    <value>您確定要啟用嗎?</value>
+  </data>
+  <data name="csfs_active_fail" xml:space="preserve">
+    <value>啟用失敗!</value>
+  </data>
+  <data name="csfs_active_success" xml:space="preserve">
+    <value>啟用成功!</value>
+  </data>
+  <data name="csfs_check_detail" xml:space="preserve">
+    <value>支票明細</value>
+  </data>
+  <data name="csfs_confirm_setting" xml:space="preserve">
+    <value>您確認要設定嗎?</value>
+  </data>
+  <data name="csfs_invalid" xml:space="preserve">
+    <value>作廢</value>
+  </data>
+  <data name="csfs_IsPreserve" xml:space="preserve">
+    <value>是否為保留號碼</value>
+  </data>
+  <data name="csfs_IsUsed" xml:space="preserve">
+    <value>是否使用</value>
+  </data>
+  <data name="csfs_no1" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="csfs_setting_fail" xml:space="preserve">
+    <value>設定失敗!</value>
+  </data>
+  <data name="csfs_setting_success" xml:space="preserve">
+    <value>設定成功!</value>
+  </data>
+  <data name="csfs_use_kind" xml:space="preserve">
+    <value>使用種類</value>
+  </data>
+  <data name="csfs_yes" xml:space="preserve">
+    <value>是</value>
+  </data>
+  <data name="csfs_menu_tit_seizurequery" xml:space="preserve">
+    <value>扣押資訊查詢</value>
+  </data>
+  <data name="csfs_iscancel_ok" xml:space="preserve">
+    <value>您確定取消嗎？</value>
+  </data>
+  <data name="csfs_ismailnoend_ok" xml:space="preserve">
+    <value>請輸入正確的結束掛號號碼</value>
+  </data>
+  <data name="csfs_ismailnostart_ok" xml:space="preserve">
+    <value>請輸入正確的起始掛號號碼</value>
+  </data>
+  <data name="csfs_issave_ok" xml:space="preserve">
+    <value>您確定儲存嗎？</value>
+  </data>
+  <data name="csfs_close_caseno" xml:space="preserve">
+    <value>結案案件編號</value>
+  </data>
+  <data name="csfs_close_kind" xml:space="preserve">
+    <value>結案方式</value>
+  </data>
+  <data name="csfs_ismaildate_ok" xml:space="preserve">
+    <value>請輸入正確的掛號日期!</value>
+  </data>
+  <data name="csfs_noInfo" xml:space="preserve">
+    <value>請至少輸入一筆資料!</value>
+  </data>
+  <data name="csfs_Phone_ok1" xml:space="preserve">
+    <value>請輸入正確的來文機關電話!</value>
+  </data>
+  <data name="csfs_report" xml:space="preserve">
+    <value>列印函文</value>
+  </data>
+  <data name="csfs_normal" xml:space="preserve">
+    <value>正常</value>
+  </data>
+  <data name="csfs_no_normal" xml:space="preserve">
+    <value>不正常</value>
+  </data>
+  <data name="csfs_eng_no" xml:space="preserve">
+    <value>請輸入英文和數字！</value>
+  </data>
+  <data name="csfs_cancelticket" xml:space="preserve">
+    <value>取消票號</value>
+  </data>
+  <data name="csfs_getticket" xml:space="preserve">
+    <value>取票號</value>
+  </data>
+  <data name="csfs_cal_interest_ok1" xml:space="preserve">
+    <value>請輸入正確的利率!</value>
+  </data>
+  <data name="csfs_sum1" xml:space="preserve">
+    <value>小計(戶名)</value>
+  </data>
+  <data name="csfs_chareoff" xml:space="preserve">
+    <value>銷帳</value>
+  </data>
+  <data name="csfs_chargeAmount" xml:space="preserve">
+    <value>銷帳金額</value>
+  </data>
+  <data name="csfs_chargeDate" xml:space="preserve">
+    <value>銷帳日</value>
+  </data>
+  <data name="csfs_hangAmount" xml:space="preserve">
+    <value>掛帳金額</value>
+  </data>
+  <data name="csfs_hangDate" xml:space="preserve">
+    <value>掛帳日</value>
+  </data>
+  <data name="csfs_paypeople" xml:space="preserve">
+    <value>付款人</value>
+  </data>
+  <data name="csfs_page_tit_role_01" xml:space="preserve">
+    <value>系統維運員</value>
+  </data>
+  <data name="csfs_page_tit_role_02" xml:space="preserve">
+    <value>業務管理者</value>
+  </data>
+  <data name="csfs_page_tit_role_03" xml:space="preserve">
+    <value>會辦人員</value>
+  </data>
+  <data name="csfs_page_tit_role_04" xml:space="preserve">
+    <value>集作部主管</value>
+  </data>
+  <data name="csfs_page_tit_role_05" xml:space="preserve">
+    <value>集作科主管</value>
+  </data>
+  <data name="csfs_page_tit_role_06" xml:space="preserve">
+    <value>集作組主管</value>
+  </data>
+  <data name="csfs_page_tit_role_07" xml:space="preserve">
+    <value>集作二線主管</value>
+  </data>
+  <data name="csfs_page_tit_role_08" xml:space="preserve">
+    <value>集作經辦</value>
+  </data>
+  <data name="csfs_page_tit_role_09" xml:space="preserve">
+    <value>集作人派</value>
+  </data>
+  <data name="csfs_page_tit_role_10" xml:space="preserve">
+    <value>總務人員</value>
+  </data>
+  <data name="csfs_page_tit_role_11" xml:space="preserve">
+    <value>分行經辦</value>
+  </data>
+  <data name="csfs_payStatus" xml:space="preserve">
+    <value>銷帳狀態</value>
+  </data>
+  <data name="csfs_setHangingDate" xml:space="preserve">
+    <value>設定掛帳日</value>
+  </data>
+  <data name="csfs_property_declaration" xml:space="preserve">
+    <value>財產申報備註</value>
+  </data>
+  <data name="csfs_over_memo" xml:space="preserve">
+    <value>逾期原因</value>
+  </data>
+  <data name="csfs_CheckNoExist" xml:space="preserve">
+    <value>支票號碼已經存在</value>
+  </data>
+  <data name="csfs_closed1" xml:space="preserve">
+    <value>收發退回原因</value>
+  </data>
+  <data name="csfs_closed_notnull" xml:space="preserve">
+    <value>取消並結案原因不能為空!</value>
+  </data>
+  <data name="csfs_return1" xml:space="preserve">
+    <value>退回原因</value>
+  </data>
+  <data name="csfs_return_notnull" xml:space="preserve">
+    <value>退回原因不能為空!</value>
+  </data>
+  <data name="csfs_menu_tit_20dayspay" xml:space="preserve">
+    <value>20日支付</value>
+  </data>
+  <data name="csfs_create_depart" xml:space="preserve">
+    <value>新增資訊部調閱</value>
+  </data>
+  <data name="csfs_ismaildatenotnull_ok" xml:space="preserve">
+    <value>請輸入掛號日期!</value>
+  </data>
+  <data name="csfs_ismailnonull_ok" xml:space="preserve">
+    <value>請輸入起始掛號號碼!</value>
+  </data>
+  <data name="csfs_date1" xml:space="preserve">
+    <value>請輸入正確的起始收件日期!</value>
+  </data>
+  <data name="csfs_date2" xml:space="preserve">
+    <value>請輸入正確的結束收件日期!</value>
+  </data>
+  <data name="csfs_receiveddate" xml:space="preserve">
+    <value>收件日期</value>
+  </data>
+  <data name="csfs_date3" xml:space="preserve">
+    <value>請輸入正確的起始結案日期!</value>
+  </data>
+  <data name="csfs_date4" xml:space="preserve">
+    <value>請輸入正確的結束結案日期!</value>
+  </data>
+  <data name="csfs_date5" xml:space="preserve">
+    <value>請輸入正確的起始來文日期!</value>
+  </data>
+  <data name="csfs_date6" xml:space="preserve">
+    <value>請輸入正確的結束來文日期!</value>
+  </data>
+  <data name="csfs_meetdate_ok" xml:space="preserve">
+    <value>請輸入正確的會辦日期!</value>
+  </data>
+  <data name="csfs_checkno_max" xml:space="preserve">
+    <value>支票號碼取到最大!</value>
+  </data>
+  <data name="csfs_function" xml:space="preserve">
+    <value>功能</value>
+  </data>
+  <data name="csfs_ohtercheckno_ok" xml:space="preserve">
+    <value>您確定要另取支票號碼?</value>
+  </data>
+  <data name="csfs_othersCheckNo" xml:space="preserve">
+    <value>另取支票號</value>
+  </data>
+  <data name="csfs_Amount_max" xml:space="preserve">
+    <value>支付金額大於餘額</value>
+  </data>
+  <data name="csfs_seizureSetting" xml:space="preserve">
+    <value>行金額大於餘額</value>
+  </data>
+  <data name="csfs_money_more" xml:space="preserve">
+    <value>支付金額大於總金額!</value>
+  </data>
+  <data name="csfs_pay_save" xml:space="preserve">
+    <value>支存</value>
+  </data>
+  <data name="csfs_sys_no" xml:space="preserve">
+    <value>系統編號</value>
+  </data>
+  <data name="csfs_return_send" xml:space="preserve">
+    <value>返回</value>
+  </data>
+  <data name="csfs_receipt" xml:space="preserve">
+    <value>收據抬頭</value>
+  </data>
+  <data name="csfs_meetfinish_date" xml:space="preserve">
+    <value>會辦完成日期</value>
+  </data>
+  <data name="csfs_meetName" xml:space="preserve">
+    <value>檔案名稱</value>
+  </data>
+  <data name="csfs_meetTime" xml:space="preserve">
+    <value>上傳時間</value>
+  </data>
+  <data name="csfs_meetUser" xml:space="preserve">
+    <value>上傳人員</value>
+  </data>
+  <data name="csfs_pleaseinputcontent" xml:space="preserve">
+    <value>請先輸入內容！</value>
+  </data>
+  <data name="csfs_sendinfo" xml:space="preserve">
+    <value>發文內容</value>
+  </data>
+  <data name="csfs_seizurecontent" xml:space="preserve">
+    <value>內容</value>
+  </data>
+  <data name="csfs_confirm_nuclear_max" xml:space="preserve">
+    <value>該案件毋需再呈核!</value>
+  </data>
+  <data name="csfs_mail_status" xml:space="preserve">
+    <value>掛號狀態</value>
+  </data>
+  <data name="csfs_meetresultquery" xml:space="preserve">
+    <value>會辦結果查詢</value>
+  </data>
+  <data name="csfs_mailno_new" xml:space="preserve">
+    <value>選擇的資料中不能再重新設定掛號號碼,請重新選擇!</value>
+  </data>
+  <data name="csfs_balance1" xml:space="preserve">
+    <value>餘額</value>
+  </data>
+  <data name="csfs_checknotoomany" xml:space="preserve">
+    <value>支票本每次設定只允許5000筆,超過請分多次設定!!</value>
+  </data>
+  <data name="csfs_Amount1" xml:space="preserve">
+    <value>金額</value>
+  </data>
+  <data name="csfs_over_onebyone" xml:space="preserve">
+    <value>請逐筆輸入逾期原因!</value>
+  </data>
+  <data name="csfs_mailno_cancel" xml:space="preserve">
+    <value>選擇的資料中有不能取消掛號號碼,請重新選擇!</value>
+  </data>
+  <data name="csfs_select_returnReason" xml:space="preserve">
+    <value>請選擇退件原因!</value>
+  </data>
+  <data name="csfs_property_declaration1" xml:space="preserve">
+    <value>財產申報</value>
+  </data>
+  <data name="csfs_case_emploee_msg" xml:space="preserve">
+    <value>您沒有操作權限!</value>
+  </data>
+  <data name="csfs_BirthDt" xml:space="preserve">
+    <value>出生年月日</value>
+  </data>
+  <data name="csfs_CustomerId" xml:space="preserve">
+    <value>統一編號</value>
+  </data>
+  <data name="csfs_CustomerNo" xml:space="preserve">
+    <value>客戶編號</value>
+  </data>
+  <data name="csfs_CustType" xml:space="preserve">
+    <value>顧客屬性</value>
+  </data>
+  <data name="csfs_RMNum" xml:space="preserve">
+    <value>推廣員</value>
+  </data>
+  <data name="csfs_RspCode" xml:space="preserve">
+    <value>回覆碼</value>
+  </data>
+  <data name="csfs_SNO" xml:space="preserve">
+    <value>流水號</value>
+  </data>
+  <data name="csfs_TelDay" xml:space="preserve">
+    <value>日間電話</value>
+  </data>
+  <data name="csfs_TelDayExt" xml:space="preserve">
+    <value>日間電話分機</value>
+  </data>
+  <data name="csfs_TelNig" xml:space="preserve">
+    <value>夜間電話</value>
+  </data>
+  <data name="csfs_TrnNum" xml:space="preserve">
+    <value>交易序號</value>
+  </data>
+  <data name="csfs_Action" xml:space="preserve">
+    <value>功能別</value>
+  </data>
+  <data name="csfs_Addr" xml:space="preserve">
+    <value>客戶通訊地址</value>
+  </data>
+  <data name="csfs_Amt" xml:space="preserve">
+    <value>客戶貢獻金額</value>
+  </data>
+  <data name="csfs_AssetVar" xml:space="preserve">
+    <value>客戶投資組合風險值</value>
+  </data>
+  <data name="csfs_Bal" xml:space="preserve">
+    <value>餘額</value>
+  </data>
+  <data name="csfs_Branch" xml:space="preserve">
+    <value>分行別</value>
+  </data>
+  <data name="csfs_CardFlag" xml:space="preserve">
+    <value>是否有信用卡</value>
+  </data>
+  <data name="csfs_CardLimit" xml:space="preserve">
+    <value>信用卡額度</value>
+  </data>
+  <data name="csfs_Ccy" xml:space="preserve">
+    <value>幣別</value>
+  </data>
+  <data name="csfs_Contrib" xml:space="preserve">
+    <value>客戶貢獻等級</value>
+  </data>
+  <data name="csfs_CustomerName" xml:space="preserve">
+    <value>戶名</value>
+  </data>
+  <data name="csfs_PMStatus" xml:space="preserve">
+    <value>文件正本狀態</value>
+  </data>
+  <data name="csfs_PMReturnKey" xml:space="preserve">
+    <value>正本備查序號</value>
+  </data>
+  <data name="csfs_PMBranchNbr" xml:space="preserve">
+    <value>借出分行</value>
+  </data>
+  <data name="csfs_OperationMoney" xml:space="preserve">
+    <value>手續費金額</value>
+  </data>
+  <data name="csfs_DataProvider" xml:space="preserve">
+    <value>資料提供者</value>
+  </data>
+  <data name="csfs_ResponseContent" xml:space="preserve">
+    <value>回覆資料內容</value>
+  </data>
+  <data name="csfs_DepTot" xml:space="preserve">
+    <value>台幣存款總額</value>
+  </data>
+  <data name="csfs_Email" xml:space="preserve">
+    <value>電子郵件信箱</value>
+  </data>
+  <data name="csfs_EnqOpt" xml:space="preserve">
+    <value>60490選項</value>
+  </data>
+  <data name="csfs_FbAoBranch" xml:space="preserve">
+    <value>理財專員所屬分行</value>
+  </data>
+  <data name="csfs_FbTeller" xml:space="preserve">
+    <value>理財專員</value>
+  </data>
+  <data name="csfs_FundCif" xml:space="preserve">
+    <value>基金CIF</value>
+  </data>
+  <data name="csfs_HighContr" xml:space="preserve">
+    <value>高貢獻度</value>
+  </data>
+  <data name="csfs_HouseholdFlag" xml:space="preserve">
+    <value>關係戶</value>
+  </data>
+  <data name="csfs_KeepCurrency" xml:space="preserve">
+    <value>台幣存款總額</value>
+  </data>
+  <data name="csfs_KeepReadFlag" xml:space="preserve">
+    <value>下一頁</value>
+  </data>
+  <data name="csfs_KeepRecno" xml:space="preserve">
+    <value>4碼binary紀錄為同客戶的第幾筆資料,由01開始紀錄</value>
+  </data>
+  <data name="csfs_LgmbFlag" xml:space="preserve">
+    <value>個金重要人士</value>
+  </data>
+  <data name="csfs_Link" xml:space="preserve">
+    <value>關係</value>
+  </data>
+  <data name="csfs_LonTot" xml:space="preserve">
+    <value>放款總額</value>
+  </data>
+  <data name="csfs_MnthsSnc" xml:space="preserve">
+    <value>歸戶往來月數</value>
+  </data>
+  <data name="csfs_MobilNo" xml:space="preserve">
+    <value>手機號碼</value>
+  </data>
+  <data name="csfs_MutTot" xml:space="preserve">
+    <value>基金總額(折合台幣)</value>
+  </data>
+  <data name="csfs_NetAsset" xml:space="preserve">
+    <value>資產淨額</value>
+  </data>
+  <data name="csfs_NoOfCards" xml:space="preserve">
+    <value>信用卡數</value>
+  </data>
+  <data name="csfs_OcpnDesc" xml:space="preserve">
+    <value>雇主姓名</value>
+  </data>
+  <data name="csfs_OldFlag" xml:space="preserve">
+    <value>新舊制註記</value>
+  </data>
+  <data name="csfs_ProdCode" xml:space="preserve">
+    <value>產品型態</value>
+  </data>
+  <data name="csfs_ProdDesc" xml:space="preserve">
+    <value>產品描述</value>
+  </data>
+  <data name="csfs_Rank" xml:space="preserve">
+    <value>客戶貢獻等級</value>
+  </data>
+  <data name="csfs_RiskAttrib" xml:space="preserve">
+    <value>風險屬性</value>
+  </data>
+  <data name="csfs_SboxFlag" xml:space="preserve">
+    <value>是否有租用保管箱註記</value>
+  </data>
+  <data name="csfs_SegmentCode" xml:space="preserve">
+    <value>管理區分</value>
+  </data>
+  <data name="csfs_SelectNo" xml:space="preserve">
+    <value>選項</value>
+  </data>
+  <data name="csfs_ServiceCode1" xml:space="preserve">
+    <value>服務等級</value>
+  </data>
+  <data name="csfs_StsDesc" xml:space="preserve">
+    <value>狀態</value>
+  </data>
+  <data name="csfs_System" xml:space="preserve">
+    <value>系統別</value>
+  </data>
+  <data name="csfs_TelNigExt" xml:space="preserve">
+    <value>夜間電話分機</value>
+  </data>
+  <data name="csfs_TrustOneActual" xml:space="preserve">
+    <value>天生贏家</value>
+  </data>
+  <data name="csfs_TrustOneAppl" xml:space="preserve">
+    <value>讓售AMC</value>
+  </data>
+  <data name="csfs_VipCdH" xml:space="preserve">
+    <value>關係戶等級</value>
+  </data>
+  <data name="csfs_VipCdI" xml:space="preserve">
+    <value>個人客戶等級改為實際等級</value>
+  </data>
+  <data name="csfs_VipDegree" xml:space="preserve">
+    <value>個人會員</value>
+  </data>
+  <data name="csfs_VipDegreeH" xml:space="preserve">
+    <value>家庭會員</value>
+  </data>
+  <data name="csfs_WmAssetAmt" xml:space="preserve">
+    <value>財富度</value>
+  </data>
+  <data name="csfs_AssAgentsSuccess" xml:space="preserve">
+    <value>收發待辦成功</value>
+  </data>
+  <data name="csfs_menu_tit_directorreassign" xml:space="preserve">
+    <value>主管改派</value>
+  </data>
+  <data name="csfs_log_msg" xml:space="preserve">
+    <value>Log訊息與內容</value>
+  </data>
+  <data name="csfs_log_num" xml:space="preserve">
+    <value>Log編號</value>
+  </data>
+  <data name="csfs_log_qry" xml:space="preserve">
+    <value>Log查詢</value>
+  </data>
+  <data name="csfs_log_qry_memo1" xml:space="preserve">
+    <value>欄位後面有星號</value>
+  </data>
+  <data name="csfs_log_qry_memo2" xml:space="preserve">
+    <value>者,表示可進行模糊查詢</value>
+  </data>
+  <data name="csfs_log_time" xml:space="preserve">
+    <value>Log發生時間</value>
+  </data>
+  <data name="csfs_log_title" xml:space="preserve">
+    <value>Log分類</value>
+  </data>
+  <data name="csfs_menu_tit_cachemanagement" xml:space="preserve">
+    <value>Cache管理</value>
+  </data>
+  <data name="csfs_menu_tit_csfslog" xml:space="preserve">
+    <value>Log查詢</value>
+  </data>
+  <data name="csfs_seq" xml:space="preserve">
+    <value>順序</value>
+  </data>
+  <data name="csfs_UpdateAllCache" xml:space="preserve">
+    <value>更新全部資料至Cache</value>
+  </data>
+  <data name="csfs_usr_empid" xml:space="preserve">
+    <value>使用者員編</value>
+  </data>
+  <data name="csfs_usr_pc_name" xml:space="preserve">
+    <value>使用者電腦名稱</value>
+  </data>
+  <data name="csfs_menu_tit_PARMScheduleSetting" xml:space="preserve">
+    <value>排程管理</value>
+  </data>
+  <data name="csfs_enable_ornot" xml:space="preserve">
+    <value>是否啟用</value>
+  </data>
+  <data name="csfs_schedule" xml:space="preserve">
+    <value>排程管理</value>
+  </data>
+  <data name="csfs_schedule_fix_hh" xml:space="preserve">
+    <value>定時啟動-時</value>
+  </data>
+  <data name="csfs_schedule_fix_mm" xml:space="preserve">
+    <value>定時啟動-分</value>
+  </data>
+  <data name="csfs_schedule_memo1" xml:space="preserve">
+    <value>(ex：2014/01/12 23:30:00，24小時制，不可填入上下午)</value>
+  </data>
+  <data name="csfs_schedule_memo2" xml:space="preserve">
+    <value>(ex：晚上9點執行請輸入數字21，晚上12點執行請輸入0)</value>
+  </data>
+  <data name="csfs_schedule_memo3" xml:space="preserve">
+    <value>(ex：xx點45分執行請輸入數字45，整點執行請輸入0)</value>
+  </data>
+  <data name="csfs_schedule_msg1" xml:space="preserve">
+    <value>請輸入排程名稱與排程路徑</value>
+  </data>
+  <data name="csfs_schedule_msg2" xml:space="preserve">
+    <value>是否確定刪除此筆排程設定</value>
+  </data>
+  <data name="csfs_schedule_name" xml:space="preserve">
+    <value>排程名稱</value>
+  </data>
+  <data name="csfs_schedule_param" xml:space="preserve">
+    <value>排程參數</value>
+  </data>
+  <data name="csfs_schedule_path" xml:space="preserve">
+    <value>排程路徑</value>
+  </data>
+  <data name="csfs_schedule_status" xml:space="preserve">
+    <value>排程狀態</value>
+  </data>
+  <data name="csfs_start_time" xml:space="preserve">
+    <value>啟動時間</value>
+  </data>
+  <data name="csfs_y_or_n" xml:space="preserve">
+    <value>Y/N</value>
+  </data>
+  <data name="csfs_repeal" xml:space="preserve">
+    <value>撤銷</value>
+  </data>
+  <data name="csfs_menu_tit_warningquery" xml:space="preserve">
+    <value>警示案件查詢</value>
+  </data>
+  <data name="csfs_menu_tit_seizureoldquery" xml:space="preserve">
+    <value>法扣舊資料查詢(上線前)</value>
+  </data>
+  <data name="csfs_menu_tit_externaloldquery" xml:space="preserve">
+    <value>外來文舊資料查詢(上線前)</value>
+  </data>
+  <data name="csfs_menu_tit_warningupload" xml:space="preserve">
+    <value>警示案件附件管理</value>
+  </data>
+  <data name="csfs_165warn" xml:space="preserve">
+    <value>165案號</value>
+  </data>
+  <data name="csfs_e_warn" xml:space="preserve">
+    <value>e化案號</value>
+  </data>
+  <data name="csfs_other_reason" xml:space="preserve">
+    <value>其他原因</value>
+  </data>
+  <data name="csfs_paste_warn" xml:space="preserve">
+    <value>複製新增</value>
+  </data>
+  <data name="csfs_print" xml:space="preserve">
+    <value>列印</value>
+  </data>
+  <data name="csfs_relieve_reason" xml:space="preserve">
+    <value>解除原因</value>
+  </data>
+  <data name="csfs_warningnum" xml:space="preserve">
+    <value>被通報帳號</value>
+  </data>
+  <data name="csfs_warnstates" xml:space="preserve">
+    <value>警示狀態</value>
+  </data>
+  <data name="csfs_warn_add" xml:space="preserve">
+    <value>新增案發內容</value>
+  </data>
+  <data name="csfs_warn_address" xml:space="preserve">
+    <value>通報單位</value>
+  </data>
+  <data name="csfs_warn_content" xml:space="preserve">
+    <value>通報內容</value>
+  </data>
+  <data name="csfs_warn_date" xml:space="preserve">
+    <value>案發時間</value>
+  </data>
+  <data name="csfs_warn_dates" xml:space="preserve">
+    <value>通報聯徵日期</value>
+  </data>
+  <data name="csfs_warn_id" xml:space="preserve">
+    <value>被通報ID</value>
+  </data>
+  <data name="csfs_warn_name" xml:space="preserve">
+    <value>被通報姓名</value>
+  </data>
+  <data name="csfs_warn_people" xml:space="preserve">
+    <value>通報人員</value>
+  </data>
+  <data name="csfs_warn_phone" xml:space="preserve">
+    <value>分機</value>
+  </data>
+  <data name="csfs_warn_police" xml:space="preserve">
+    <value>警局</value>
+  </data>
+  <data name="csfs_warn_relieve" xml:space="preserve">
+    <value>解除警示日期</value>
+  </data>
+  <data name="csfs_warn_setdate" xml:space="preserve">
+    <value>設定時間(Etabs)</value>
+  </data>
+  <data name="csfs_warn_source" xml:space="preserve">
+    <value>通報來源</value>
+  </data>
+  <data name="csfs_warn_status" xml:space="preserve">
+    <value>帳戶狀態</value>
+  </data>
+  <data name="csfs_warn_victim" xml:space="preserve">
+    <value>被害人</value>
+  </data>
+  <data name="csfs_createpeople_name" xml:space="preserve">
+    <value>執行人員姓名</value>
+  </data>
+  <data name="csfs_endDocno" xml:space="preserve">
+    <value>本案件結案!</value>
+  </data>
+  <data name="csfs_seizuremaintain" xml:space="preserve">
+    <value>扣押補建</value>
+  </data>
+  <data name="csfs_Close" xml:space="preserve">
+    <value>結案</value>
+  </data>
+  <data name="csfs_person" xml:space="preserve">
+    <value>人員</value>
+  </data>
+  <data name="csfs_Police_Unit" xml:space="preserve">
+    <value>通報單位(警局)</value>
+  </data>
+  <data name="csfs_caseno_notok" xml:space="preserve">
+    <value>輸入案件編號重複!</value>
+  </data>
+  <data name="csfs_seizuremaintainquery" xml:space="preserve">
+    <value>扣押補建維護</value>
+  </data>
+  <data name="csfs_DontHaveEnoughCheck" xml:space="preserve">
+    <value>庫存支票張數不足</value>
+  </data>
+  <data name="csfs_plzInputNumberBetween0And1" xml:space="preserve">
+    <value>請輸入{0}到{1}的數字</value>
+  </data>
+  <data name="csfs_PreservCheckNumber" xml:space="preserve">
+    <value>預留支票張數</value>
+  </data>
+  <data name="csfs_PreservCheckReturn" xml:space="preserve">
+    <value>預留支票未使用還原</value>
+  </data>
+  <data name="csfs_PreservCheckReturnConfirm" xml:space="preserve">
+    <value>確認還原</value>
+  </data>
+  <data name="csfs_noPreservCheckNoUse" xml:space="preserve">
+    <value>沒有預留支票未使用資料</value>
+  </data>
+  <data name="csfs_no_file" xml:space="preserve">
+    <value>未選擇任何檔案!</value>
+  </data>
+  <data name="csfs_no_mate_file" xml:space="preserve">
+    <value>無匹配檔案!</value>
+  </data>
+  <data name="csfs_amount_ok" xml:space="preserve">
+    <value>请输入扣押金额!</value>
+  </data>
+  <data name="csfs_sendagain" xml:space="preserve">
+    <value>再次發文</value>
+  </data>
+  <data name="csfs_Amount_ntd_max" xml:space="preserve">
+    <value>支付金額大於臺幣金額!</value>
+  </data>
+  <data name="csfs_alreadychargeoff" xml:space="preserve">
+    <value>該案件已銷帳，並不得清除</value>
+  </data>
+  <data name="csfs_return_answer" xml:space="preserve">
+    <value>分行回覆原因</value>
+  </data>
+  <data name="csfs_cancel_fail" xml:space="preserve">
+    <value>取消失敗!</value>
+  </data>
+  <data name="csfs_cancel_ok" xml:space="preserve">
+    <value>取消成功!</value>
+  </data>
+  <data name="csfs_confirm_cancel_Send" xml:space="preserve">
+    <value>確定取消再次發文嗎？</value>
+  </data>
+  <data name="csfs_only_cancel_max" xml:space="preserve">
+    <value>只能取消再次發文子案件最大號!</value>
+  </data>
+  <data name="csfs_only_cancel_send" xml:space="preserve">
+    <value>只能取消再次發文子案件!</value>
+  </data>
+  <data name="csfs_confirm_sendagain" xml:space="preserve">
+    <value>確定再次發文嗎?</value>
+  </data>
+  <data name="csfs_sendagain_fail" xml:space="preserve">
+    <value>再次發文失敗!</value>
+  </data>
+  <data name="csfs_sendagain_max" xml:space="preserve">
+    <value>再次發文已達到上限!</value>
+  </data>
+  <data name="csfs_sendagain_ok" xml:space="preserve">
+    <value>再次發文成功!</value>
+  </data>
+  <data name="csfs_page_tit_role_12" xml:space="preserve">
+    <value>理債信控人員</value>
+  </data>
+  <data name="csfs_AlreadyPreservForbidden_0" xml:space="preserve">
+    <value>已預留{0}張,請執行還原功能或用完,才能繼續預留</value>
+  </data>
+  <data name="csfs_checkno_max1" xml:space="preserve">
+    <value>請先預留支票張數!</value>
+  </data>
+  <data name="csfs_dianwen_status" xml:space="preserve">
+    <value>電文狀態:</value>
+  </data>
+  <data name="csfs_reset_fail" xml:space="preserve">
+    <value>重查失敗!</value>
+  </data>
+  <data name="csfs_reset_ok" xml:space="preserve">
+    <value>重查成功!</value>
+  </data>
+  <data name="csfs_page_tit_role_13" xml:space="preserve">
+    <value>警示經辦</value>
+  </data>
+  <data name="csfs_page_tit_role_14" xml:space="preserve">
+    <value>客服經辦</value>
+  </data>
+  <data name="csfs_pay_amt1" xml:space="preserve">
+    <value>支付金額(不含手續費)</value>
+  </data>
+  <data name="csfs_FileNotFound" xml:space="preserve">
+    <value>檔案未找到</value>
+  </data>
+  <data name="csfs_inputOneQuery" xml:space="preserve">
+    <value>最少輸入一個條件!</value>
+  </data>
+  <data name="csfs_approveDate" xml:space="preserve">
+    <value>主管放行日</value>
+  </data>
+  <data name="csfs_approveDate1" xml:space="preserve">
+    <value>主管放行日</value>
+  </data>
+  <data name="csfs_page_tit_role_15" xml:space="preserve">
+    <value>分行主管</value>
+  </data>
+  <data name="csfs_sendkind" xml:space="preserve">
+    <value>發文方式</value>
+  </data>
+  <data name="csfs_sendkind1" xml:space="preserve">
+    <value>紙本發文</value>
+  </data>
+  <data name="csfs_description1" xml:space="preserve">
+    <value>說明僅能有三大點！</value>
+  </data>
+  <data name="csfs_description2" xml:space="preserve">
+    <value>說明第二點字符長度超過限制，最大長度為240個中文字！</value>
+  </data>
+  <data name="csfs_description3" xml:space="preserve">
+    <value>說明第三點字符長度超過限制，最大長度為240個中文字！</value>
+  </data>
+  <data name="csfs_bqf" xml:space="preserve">
+    <value>不區分</value>
+  </data>
+  <data name="csfs_wckwl" xml:space="preserve">
+    <value>於本行無存款往來</value>
+  </data>
+  <data name="csfs_opentxt" xml:space="preserve">
+    <value>開啟TXT檔案</value>
+  </data>
+  <data name="csfs_openpdf" xml:space="preserve">
+    <value>開啟PDF檔案</value>
+  </data>
+  <data name="csfs_tbTotal" xml:space="preserve">
+    <value>台幣金額合計：</value>
+  </data>
+  <data name="csfs_txtdocnotfound" xml:space="preserve">
+    <value>沒有找到相關的TXT文檔</value>
+  </data>
+  <data name="csfs_sendupdate" xml:space="preserve">
+    <value>電子發文上傳日</value>
+  </data>
+  <data name="csfs_approvedcase" xml:space="preserve">
+    <value>已放行案件查詢</value>
+  </data>
+  <data name="csfs_casesendup" xml:space="preserve">
+    <value>電子發文上傳</value>
+  </data>
+  <data name="csfs_upload" xml:space="preserve">
+    <value>上傳</value>
+  </data>
+  <data name="csfs_fxdt" xml:space="preserve">
+    <value>放行日期</value>
+  </data>
+  <data name="csfs_fxzg" xml:space="preserve">
+    <value>放行主管</value>
+  </data>
+  <data name="csfs_menu_tit_CaseSendUpLoad" xml:space="preserve">
+    <value>電子發文上傳</value>
+  </data>
+  <data name="csfs_menu_tit_DirectorApproved" xml:space="preserve">
+    <value>已放行案件查詢</value>
+  </data>
+  <data name="csfs_uploadfirmmsg" xml:space="preserve">
+    <value>電子發文上傳共計{0}件，確認上傳?</value>
+  </data>
+  <data name="csfs_uploadfail" xml:space="preserve">
+    <value>上傳失敗!</value>
+  </data>
+  <data name="csfs_AccountKind10" xml:space="preserve">
+    <value>電子發文明細表</value>
+  </data>
+  <data name="csfs_AccountKind11" xml:space="preserve">
+    <value>電子發文統計表</value>
+  </data>
+  <data name="csfs_YellowPage" xml:space="preserve">
+    <value>黃頁資料維護</value>
+  </data>
+  <data name="csfs_YP" xml:space="preserve">
+    <value>黃頁資料庫(YP101)</value>
+  </data>
+  <data name="csfs_YP_CC_OC" xml:space="preserve">
+    <value>標準版CC_OC對應(YP102)</value>
+  </data>
+  <data name="csfs_YP_TITLE_MAPP" xml:space="preserve">
+    <value>職稱對應表(YP103)</value>
+  </data>
+  <data name="csfs_EmailGroup" xml:space="preserve">
+    <value>電子發文通知群組</value>
+  </data>
+  <data name="csfs_isdelete" xml:space="preserve">
+    <value>是否刪除</value>
+  </data>
+  <data name="csfs_emailaccount" xml:space="preserve">
+    <value>Email帳號</value>
+  </data>
+  <data name="csfs_emaligroup_msg1" xml:space="preserve">
+    <value>請輸入Email帳號</value>
+  </data>
+  <data name="csfs_emaligroup_msg2" xml:space="preserve">
+    <value>Email帳號格式不正確</value>
+  </data>
+  <data name="csfs_yp_repeat" xml:space="preserve">
+    <value>不可儲存重複的公司電話與公司名稱資料!</value>
+  </data>
+  <data name="csfs_importdeocquery" xml:space="preserve">
+    <value>電子收文查詢</value>
+  </data>
+  <data name="csfs_excutedate" xml:space="preserve">
+    <value>執行日期</value>
+  </data>
+  <data name="csfs_govnum" xml:space="preserve">
+    <value>來文號</value>
+  </data>
+  <data name="csfs_govword" xml:space="preserve">
+    <value>來文字</value>
+  </data>
+  <data name="csfs_recase" xml:space="preserve">
+    <value>重複</value>
+  </data>
+  <data name="csfs_timesection" xml:space="preserve">
+    <value>執行時段</value>
+  </data>
+  <data name="csfs_sendtimesection" xml:space="preserve">
+    <value>電子收文時段設定</value>
+  </data>
+  <data name="csfs_timesection_msg1" xml:space="preserve">
+    <value>請輸入執行時段</value>
+  </data>
+  <data name="csfs_menu_tit_agent_job" xml:space="preserve">
+    <value>經辦作業待辦理</value>
+  </data>
+  <data name="csfs_menu_tit_collection_job" xml:space="preserve">
+    <value>收發作業待辦理</value>
+  </data>
+  <data name="csfs_menu_tit_common" xml:space="preserve">
+    <value>共用</value>
+  </data>
+  <data name="csfs_menu_tit_display_err" xml:space="preserve">
+    <value>錯誤訊息顯示</value>
+  </data>
+  <data name="csfs_menu_tit_home" xml:space="preserve">
+    <value>首頁預設</value>
+  </data>
+  <data name="csfs_menu_tit_login" xml:space="preserve">
+    <value>系統登入</value>
+  </data>
+  <data name="csfs_menu_tit_qry_tab" xml:space="preserve">
+    <value>案件查詢各頁籤</value>
+  </data>
+  <data name="csfs_menu_tit_qry_tab_detail" xml:space="preserve">
+    <value>案件查詢各頁籤明細</value>
+  </data>
+  <data name="csfs_Yp_Occupation_Mapp" xml:space="preserve">
+    <value>職位類別對應表(YP104)</value>
+  </data>
+  <data name="csfs_Yp_ParmCode" xml:space="preserve">
+    <value>黃頁基本參數維護(YP105)</value>
+  </data>
+  <data name="csfs_Yp_Aml_Cc" xml:space="preserve">
+    <value>AML_CC對應(YP106)</value>
+  </data>
+  <data name="csfs_Yp_Aml_Oc" xml:space="preserve">
+    <value>AML_OC對應(YP107)</value>
+  </data>
+  <data name="csfs_Yp_Credit_Cc" xml:space="preserve">
+    <value>Credit_CC對應(YP108)</value>
+  </data>
+  <data name="csfs_Yp_Credit_Oc" xml:space="preserve">
+    <value>Credit_OC對應(YP109)</value>
+  </data>
+  <data name="csfs_emailgroup_msg1" xml:space="preserve">
+    <value>該Email已設定，請勿重複設定！</value>
+  </data>
+  <data name="csfs_timesection_msg2" xml:space="preserve">
+    <value>該時段已經設定，請勿重複設定！</value>
+  </data>
+  <data name="csfs_Yp_Query_Main" xml:space="preserve">
+    <value>AP查詢黃頁記錄(YP201)</value>
+  </data>
+  <data name="csfs_Yp_Get_Main" xml:space="preserve">
+    <value>AP接收黃頁記錄(YP202)</value>
+  </data>
+  <data name="returnmsg" xml:space="preserve">
+    <value>選擇的資料中有電子發文上傳日或是掛號號碼，無法退回！</value>
+  </data>
+  <data name="csfs_agent_date_time" xml:space="preserve">
+    <value>日期時間</value>
+  </data>
+  <data name="csfs_agent_func_name" xml:space="preserve">
+    <value>功能名稱</value>
+  </data>
+  <data name="csfs_agent_handle_person" xml:space="preserve">
+    <value>處理人員</value>
+  </data>
+  <data name="csfs_agent_id" xml:space="preserve">
+    <value>ID</value>
+  </data>
+  <data name="csfs_agent_manage" xml:space="preserve">
+    <value>管理</value>
+  </data>
+  <data name="csfs_agent_modify_before" xml:space="preserve">
+    <value>修改前</value>
+  </data>
+  <data name="csfs_agent_modify_later" xml:space="preserve">
+    <value>修改後</value>
+  </data>
+  <data name="csfs_agent_tab_name" xml:space="preserve">
+    <value>頁簽名稱</value>
+  </data>
+  <data name="csfs_agent_transrecord_info" xml:space="preserve">
+    <value>資訊異動記錄</value>
+  </data>
+  <data name="csfs_menu_tit_mojcaseaudit" xml:space="preserve">
+    <value>檢視放行</value>
+  </data>
+  <data name="csfs_menu_tit_mojcasecust" xml:space="preserve">
+    <value>收文啟動查詢</value>
+  </data>
+  <data name="csfs_menu_tit_mojcasehistory" xml:space="preserve">
+    <value>歷史紀錄查詢與重送</value>
+  </data>
+  <data name="csfs_menu_tit_moj" xml:space="preserve">
+    <value>法務部檢調案件查詢</value>
+  </data>
+  <data name="csfs_Return_Message" xml:space="preserve">
+    <value>所勾選的案件總筆數過大，系統無法產製回文PDF檔案，請重新勾選少一些的案件項目，再執行一次！</value>
+  </data>
+  <data name="csfs_pm_AllPerson" xml:space="preserve">
+    <value>所有人員</value>
+  </data>
+  <data name="csfs_pm_AuthorizedPerson" xml:space="preserve">
+    <value>授權人員</value>
+  </data>
+  <data name="csfs_pm_AutoDispatch_FS" xml:space="preserve">
+    <value>請確認 !! 外來文經辦人員自動派件目前設定- {0}人 已完成!</value>
+  </data>
+  <data name="csfs_pm_AutoDispatch_Seizure" xml:space="preserve">
+    <value>請確認 !! 扣押經辦人員自動派件目前設定- {0}人 已完成!</value>
+  </data>
+  <data name="csfs_pm_CheckUser" xml:space="preserve">
+    <value>檢核帳號</value>
+  </data>
+  <data name="csfs_pm_EnableAutoDispatch" xml:space="preserve">
+    <value>啟用自動派送</value>
+  </data>
+  <data name="csfs_pm_psLDAP" xml:space="preserve">
+    <value>LDAP密碼</value>
+  </data>
+  <data name="csfs_pm_psRACF" xml:space="preserve">
+    <value>RACF密碼</value>
+  </data>
+  <data name="csfs_pm_SeizuredStaff" xml:space="preserve">
+    <value>設定扣押經辦</value>
+  </data>
+  <data name="csfs_pm_usrLDAP" xml:space="preserve">
+    <value>LDAP帳戶</value>
+  </data>
+  <data name="csfs_pm_UsrPswd" xml:space="preserve">
+    <value>請輸入認證帳密</value>
+  </data>
+  <data name="csfs_pm_usrRACF" xml:space="preserve">
+    <value>RACF帳戶</value>
+  </data>
+  <data name="csfs_pm_WailaiwenStaff" xml:space="preserve">
+    <value>設定外來文經辦</value>
+  </data>
+  <data name="csfs_menu_tit_AutoAuditAssignments" xml:space="preserve">
+    <value>自動化審核作業</value>
+  </data>
+  <data name="csfs_menu_tit_warningAccountQuery" xml:space="preserve">
+    <value>警示帳卡查詢</value>
+  </data>
+  <data name="csfs_menu_tit_eDocUpload" xml:space="preserve">
+    <value>外來文結案重傳</value>
+  </data>
+  <data name="csfs_trs_detail_send" xml:space="preserve">
+    <value>交易明細抛查</value>
+  </data>
+  <data name="csfs_trs_his_record" xml:space="preserve">
+    <value>歷史交易紀錄</value>
+  </data>
+  <data name="csfs_trs_his_send" xml:space="preserve">
+    <value>歷史交易拋查</value>
+  </data>
+  <data name="csfs_menu_ePay_start" xml:space="preserve">
+    <value>電子支付發查</value>
+  </data>
+  <data name="csfs_menu_History_Query" xml:space="preserve">
+    <value>歷史資料查詢</value>
+  </data>
+  <data name="csfs_dead_search" xml:space="preserve">
+    <value>死亡案件查詢</value>
+  </data>
+  <data name="csfs_dead_setup" xml:space="preserve">
+    <value>死亡設定上傳</value>
+  </data>
+  <data name="csfs_menu_tit_highcaseaudit" xml:space="preserve">
+    <value>新-檢視放行</value>
+  </data>
+  <data name="csfs_menu_tit_highcasecust" xml:space="preserve">
+    <value>新-收文啟動查詢</value>
+  </data>
+  <data name="csfs_menu_tit_highcasehistory" xml:space="preserve">
+    <value>新-歷史紀錄查詢與重送</value>
+  </data>
+  <data name="csfs_menu_tit_Warningtoapprove" xml:space="preserve">
+    <value>警示待核決</value>
+  </data>
+  <data name="csfs_WarningReturn" xml:space="preserve">
+    <value>警示案件退件區</value>
+  </data>
+  <data name="csfs_menu_tit_WarningReturn" xml:space="preserve">
+    <value>警示案件退件區</value>
+  </data>
+  <data name="csfs_menu_tit_warningimportquery" xml:space="preserve">
+    <value>工單匯入查詢</value>
+  </data>
+  <data name="csfs_menu_tit_warningunionquery" xml:space="preserve">
+    <value>聯防案件編輯及查詢</value>
+  </data>
+</root>

@@ -1,0 +1,96 @@
+﻿@model PARMMenuViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_menutopage;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_menu_tit_menutopage</h3>
+    </div>
+    <div class="box-body form-horizontal ">
+        <table class="table-noborder col-md-12">
+            <tbody>
+                <tr>
+                    <td class="col-md-3 text-right">@Lang.csfs_menu_id</td>
+                    <td class="col-md-9">
+                        @Model.PARMMenuXMLNode.ID
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-3 text-right">@Lang.csfs_menu_name</td>
+                    <td class="col-md-9">
+                        @Lang.ResourceManager.GetString(Convert.ToString(Model.PARMMenuXMLNode.TITLE + "").Trim())
+                    </td>
+                </tr>
+                <tr>
+                    <td class="col-md-3 text-right">@Lang.csfs_fuc_id</td>
+                    <td class="col-md-9">
+                        @Model.PARMMenuXMLNode.md_FuncID
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div><!-- /.box-body -->
+    <div class="box-footer text-center">
+        <button id="btnSelectAll" type="button" class="btn btn-default btn-xs">@Lang.csfs_all_checked</button>
+        <button id="btnSelectNone" type="button" class="btn btn-default btn-xs">@Lang.csfs_all_cancel</button>
+        <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+        <a href="@Url.Action("Index","MenuToPage", new { area = "SystemManagement"})" class="btn btn-default btn-xs">@Lang.csfs_cancel</a>
+    </div>
+</div>
+
+@using (Html.BeginForm("DoEdit", "MenuToPage", new { area = "SystemManagement" }, FormMethod.Post, new { id = "frmEdit" }))
+{
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="box box-primary">
+                <div class="box-header">
+                </div><!-- /.box-header -->
+                <div id="querytablediv" class="box-body ">
+                    <div style="height: 300px; overflow: scroll; overflow-x: hidden;">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                @if (Model != null && Model.PARMMenuXMLNodeList != null && Model.PARMMenuXMLNodeList.Any())
+                                {
+                                    int cnt = Model.PARMMenuXMLNodeList.Count;
+                                    foreach (var item in Model.PARMMenuXMLNodeList)
+                                    {
+                                        <div class="col-xs-3">
+                                            @if (item.ActionChecked == "Y")
+                                            {
+                                                <input type="checkbox" name="md_AuthZ_Seleted" value="@item.ID " checked="checked" onclick="chkRoleClick()" />
+                                                <span>@Lang.ResourceManager.GetString(item.TITLE.Trim())</span>
+                                            }
+                                            else
+                                            {
+                                                <input type="checkbox" name="md_AuthZ_Seleted" value="@item.ID " onclick="chkRoleClick()" />
+                                                <span>@Lang.ResourceManager.GetString(item.TITLE.Trim())</span>
+                                            }
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @Html.HiddenFor(m => m.PARMMenuXMLNode.ID)
+    @Html.HiddenFor(m => m.PARMMenuXMLNode.TITLE)
+}
+
+@Html.Hidden("NowPage", "MenuToPageEdit")
+@Html.Hidden("CancelUrl", @Url.Action("Index", "MenuToPage", new { area = "SystemManagement" }))
+@Html.Hidden("EditSuccessMsg", Lang.csfs_edit_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_edit_fail)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/SystemManagement/MenuToPage.js")
+}
+
+
+

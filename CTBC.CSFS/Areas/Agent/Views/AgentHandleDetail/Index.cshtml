@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class="active"><a href="#panel1" data-toggle="tab">公文資訊</a></li>
+        <li class=""><a href="#panel2" data-toggle="tab">帳務資訊</a></li>      
+        <li class=""><a href="#panel3" data-toggle="tab">會辦資訊</a></li>   
+        <li class=""><a href="#panel4" data-toggle="tab">正本備查</a></li>   
+        <li class=""><a href="#panel5" data-toggle="tab">資訊部調閱</a></li>   
+        <li class=""><a href="#panel6" data-toggle="tab">發文資訊</a></li>   
+        <li class=""><a href="#panel7" data-toggle="tab">流程紀錄</a></li>   
+        <li class=""><a href="#panel8" data-toggle="tab">利息計算</a></li>   
+        <li class=""><a href="#panel9" data-toggle="tab">內部註記</a></li>   
+    </ul>
+    <div class="tab-content ">
+        <!-- Morris chart - Sales -->
+        <div class="tab-pane active" id="panel1">
+            @* 公文資訊 *@
+            @Html.Action("_Main")
+        </div>
+        <div class="tab-pane" id="panel2">
+            @* 帳務資訊 *@
+            @if (Convert.ToString(ViewBag.CaseKind) == CTBC.CSFS.Models.CaseKind.CASE_SEIZURE)
+            {
+                //*扣押
+                @Html.Action("_AccountForSeizure")
+            }
+            else if (Convert.ToString(ViewBag.CaseKind) == CTBC.CSFS.Models.CaseKind.CASE_EXTERNAL)
+            {
+                //*外來文
+                @Html.Action("_AccountForExternal")
+            }
+        </div>
+        <div class="tab-pane" id="panel3">33</div>
+        <div class="tab-pane" id="panel4">44</div>
+        <div class="tab-pane" id="panel5">55</div>
+        <div class="tab-pane" id="panel6">66</div>
+        <div class="tab-pane" id="panel7">
+            @Html.Action("ProcessLog")
+        </div>
+        <div class="tab-pane" id="panel8">
+            @Html.Action("CaseCalculator")
+        </div>
+        <div class="tab-pane" id="panel9">
+            @Html.Action("_Memo")
+        </div>
+    </div>
+</div>

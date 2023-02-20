@@ -1,0 +1,541 @@
+﻿@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    @* 為了default Active頁簽*@
+    string seizureClass = "";
+    string seizureAndPayClass = "";
+    string payClass = "";
+    string cancelClass = "";
+    if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure)
+    {
+        seizureClass = "active";
+    }
+    if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+    {
+        seizureAndPayClass = "active";
+    }
+    else if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+    {
+        payClass = "active";
+    }
+    else if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+    {
+        cancelClass = "active";
+    }
+
+
+}
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfo", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_document_info</a></li>
+        <li class="active"><a href="@Url.Action("Index", "AgentAccountInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_account_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentMeetInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_meet_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentOriginalInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_original_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccess", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_department_access</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentSendSettingInfo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_sendsetting_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseHistory", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_history</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseCalculator", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_calculator</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseMemo", new {area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_case_memo</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentTransactionRecords", new { area = "Agent", caseId = ViewBag.CaseId })">@Lang.csfs_agent_transrecord_info</a></li>
+        @Html.GetBackButtonInTab()
+    </ul>
+    <div class="tab-content ">
+        <div class="row">
+            <div class="col-md-4">
+             <!--
+            @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure)
+            {
+                    <a>
+                        @Lang.csfs_gov_no : @ViewBag.GovNo
+                    </a>
+            }
+            -->
+            @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure)
+            {
+                    @Lang.csfs_dianwen_status
+                    <label id="lblDianWenStatus"></label>
+                    <a onclick="ResetStatus('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnReset">
+                        重查
+                    </a>
+            }
+            @*@if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+            {
+                    @Lang.csfs_dianwen_status
+                    <label id="lblDianWenStatus"></label>
+                    <a onclick="openTxtDoc()" class="btn btn-primary btn-xs" id="btnOpenTxtDoc">
+                        @Lang.csfs_opentxt
+                    </a>
+            }*@
+
+
+            @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay && ViewBag.AfterSeizureApproved == 0)
+            {
+                    @Lang.csfs_dianwen_status
+                    <label id="lblDianWenStatus"></label>
+                    <a onclick="ResetStatus('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnReset">
+                        重查
+                    </a>
+            }
+                @if (ViewBag.ReceiveKind == "電子公文" && ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+                {
+                    <a onclick="openTxtDoc()" class="btn btn-primary btn-xs" id="btnOpenTxtDoc">
+                        開啟TXT
+                    </a>
+                    <a onclick="openPayPdfDoc1('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnOpenPdfDoc">
+                        來文
+                    </a>
+                }
+                @if (ViewBag.ReceiveKind == "電子公文" && ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+                {
+                    <a onclick="openTxtDoc()" class="btn btn-primary btn-xs" id="btnOpenTxtDoc">
+                        開啟TXT
+                    </a>
+                    <a onclick="openPayPdfDoc1('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnOpenPdfDoc">
+                        來文
+                    </a>
+                }
+                @if (ViewBag.ReceiveKind == "電子公文" && ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure)
+                {
+                    <a onclick="openTxtDoc()" class="btn btn-primary btn-xs" id="btnOpenTxtDoc">
+                        開啟TXT
+                    </a>
+                    <a onclick="openPayPdfDoc1('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnOpenPdfDoc">
+                        來文
+                    </a>
+                }
+            @if (ViewBag.ReceiveKind == "電子公文" && ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+                    {
+                    <a onclick="openTxtDoc()" class="btn btn-primary btn-xs" id="btnOpenTxtDoc">
+                        開啟TXT
+                    </a>
+                    <a onclick="openPayPdfDoc1('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnOpenPdfDoc">
+                        來文
+                    </a>
+                    <a onclick="openPayPdfDoc2('@ViewBag.CaseId')" class="btn btn-primary btn-xs" id="btnOpenPdfDoc2">
+                        附表
+                    </a>
+                }
+
+                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay )
+                {
+                    <a onclick="openSendSeting()" class="btn btn-primary btn-xs" id="btnOpenSendSeting">
+                    開啟發文
+                    </a>
+                }
+                <a onclick="openEmsg()" class="btn btn-primary btn-xs" id="btnOpenEmsg">
+                    電文記錄
+                </a>
+            </div>
+
+
+
+            @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+                {
+                <div class="col-md-4 text-left " >
+                    <a>
+                        @Lang.csfs_gov_no : @ViewBag.GovNo
+                    </a>
+                </div>
+                <div  class="col-md-2 text-left ">
+                    <a>
+                        收取金額 : @ViewBag.PreReceiveAmount
+                    </a>
+                </div>
+                <div class="col-md-2 text-left ">
+                    <a>
+                        　手續費 : @ViewBag.AddCharge
+                    </a>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-6 text-left ">
+                    @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure)
+                {
+                        <a>
+                            @Lang.csfs_gov_no : @ViewBag.GovNo
+                        </a>
+                    }
+                </div>
+                <div class="col-md-1 text-left ">
+                </div>
+                <div class="col-md-1 text-left ">
+                </div>
+            }
+            @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+            {
+                <div class="col-md-4 text-left ">
+                    <a>
+                        @Lang.csfs_gov_no : @ViewBag.GovNo
+                    </a>
+                </div>
+            }
+        </div>
+        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+                {
+         <div class="row">
+                <div class="col-md-4 text-left ">
+                    <a>
+                        扣押來文日期:@ViewBag.PreSubDate
+                    </a>
+                </div>
+                <div class="col-md-4 text-left ">
+                    <a>
+                        前案字號 : @ViewBag.PreGovNo
+                    </a>
+                </div>
+                <div class="col-md-2 text-left ">
+                    <a>
+                        扣押金額 : @ViewBag.PreSubAmount
+                    </a>
+                </div>
+                <div class="col-md-2 text-left ">
+                    <a>
+                        超扣撤銷 : @ViewBag.OverCancel
+                    </a>
+                </div>
+          </div>
+        }
+
+                <div class="tab-pane active" id="panel1">
+                    @if (ViewBag.CaseKind == CTBC.CSFS.Models.CaseKind.CASE_EXTERNAL)
+                {
+                        @* 外來文 *@
+                        @Html.Action("_AccountForExternal", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId })
+                    }
+                    else if (ViewBag.CaseKind == CTBC.CSFS.Models.CaseKind.CASE_SEIZURE)
+                    {
+                        @* 扣押 *@
+                        <div class="nav-tabs-custom">
+                            <ul class="nav nav-tabs" style="cursor: move;">
+                                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure)
+                                {
+                                    <li class="@seizureClass"><a href="#panelAccount1" data-toggle="tab">@Lang.csfs_seizure_set</a></li>
+                                }
+                                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay && ViewBag.AfterSeizureApproved == 0)
+                                {
+                                    <li class="@seizureAndPayClass"><a href="#panelAccount1" data-toggle="tab">@Lang.csfs_seizure_set</a></li>
+                                }
+
+                                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+                                {
+                                    <li class="@payClass"><a href="#panelAccount2" data-toggle="tab">@Lang.csfs_pay_set</a></li>
+                                    <li class=""><a href="#panelAccount3" data-toggle="tab">@Lang.csfs_receive_set</a></li>
+                                }
+                                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay && ViewBag.AfterSeizureApproved == 1)
+                                {
+                                    <li class="@seizureAndPayClass"><a href="#panelAccount2" data-toggle="tab">@Lang.csfs_pay_set</a></li>
+                                    <li class=""><a href="#panelAccount3" data-toggle="tab">@Lang.csfs_receive_set</a></li>
+                                }
+
+                                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+                                {
+                                    <li class="@cancelClass"><a href="#panelAccount4" data-toggle="tab">@Lang.csfs_cancel_set</a></li>
+                                }
+                            </ul>
+                            <div class="tab-content">
+                                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure)
+                                {
+                                    <div class="tab-pane @seizureClass" id="panelAccount1">
+                                        @Html.Action("_SeizureSetting", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId })
+                                    </div>
+                                }
+                                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay && ViewBag.AfterSeizureApproved == 0)
+                                {
+                                    <div class="tab-pane @seizureAndPayClass" id="panelAccount1">
+                                        @Html.Action("_SeizureSetting", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId })
+                                    </div>
+                                }
+
+
+                                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+                                {
+                                    <div class="tab-pane @payClass" id="panelAccount2">
+                                        @Html.Action("_PaySetting", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId })
+                                    </div>
+
+                                    <div class="tab-pane" id="panelAccount3">
+                                        @Html.Action("_PayeeSetting", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId })
+                                    </div>
+                                }
+                                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay && ViewBag.AfterSeizureApproved == 1)
+                                {
+                                    <div class="tab-pane @seizureAndPayClass" id="panelAccount2">
+                                        @Html.Action("_PaySetting", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId })
+                                    </div>
+
+                                    <div class="tab-pane" id="panelAccount3">
+                                        @Html.Action("_PayeeSetting", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId })
+                                    </div>
+                                }
+
+                                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+                                {
+                                    <div class="tab-pane @cancelClass" id="panelAccount4">
+                                        @Html.Action("_SeizureCancel", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId })
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+
+@* 逾期原因*@
+<div class="modal fade" id="modalOver" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Over"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_nuclear</h4>
+            </div>
+            <div class="modal-body">
+                @Lang.csfs_over_memo:
+                <textarea id="OverDueMemo" rows="15" class="col-xs-12 no-padding" maxlength="50"></textarea>
+                @*@Html.TextAreaFor(m => m.OverDueMemo, new { @id = "OverDueMemo", @rows = "15", @class = "col-xs-12 no-padding", @MaxLength = "50" })*@
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnOverSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("OpenTxtDocUrl", Url.Action("OpenTxtDoc", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId }))
+@Html.Hidden("OpenPdfDocUrl", Url.Action("OpenPdfDoc", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("OpenPayPdfDoc1Url", Url.Action("OpenPdfDoc", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("OpenPayPdfDoc2Url", Url.Action("OpenPdfDoc", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("AccountPageUrl", Url.Action("Index", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId }))
+@Html.Hidden("ResetStatusUrl", Url.Action("ResetStatus", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("panelAccount1Url", Url.Action("_SeizureSetting", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId }))
+@Html.Hidden("panelAccount2Url", Url.Action("_PaySetting", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId }))
+@Html.Hidden("panelAccount3Url", Url.Action("_PayeeSetting", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId }))
+@Html.Hidden("panelAccount4Url", Url.Action("_SeizureCancel", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId }))
+@Html.Hidden("loadImgUrl", Url.Content("~/Content/img/ajax-loader1.gif"))
+@Html.Hidden("HidStatus", (string)ViewBag.Status)
+@Html.Hidden("HidHasFile", (string)ViewBag.HasFile)
+@Html.Hidden("OpenSendSetingUrl", Url.Action("_SendCreate", "AgentSendSettingInfo", new { area = "Agent", caseId = ViewBag.CaseId }))
+@Html.Hidden("OpenSendSetingEditUrl", Url.Action("_SendEdit", "AgentSendSettingInfo", new { area = "Agent", serialId = ViewBag.SerialId, caseId = ViewBag.CaseId }))
+@Html.Hidden("HidCaseSendSetting", (string)ViewBag.CaseSendSettingView)
+@Html.Hidden("OpenEmsgUrl", Url.Action("OpenEmsg", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId }))
+@* 呈核 *@
+@Html.Hidden("AgentAccountUrl", Html.GetBackUrl())
+@Html.Hidden("NuclearConfirmMsg", Lang.csfs_confirm_nuclear)
+@Html.Hidden("NuclearOkMsg", Lang.csfs_nuclear_success)
+@Html.Hidden("NuclearFaileMsg", Lang.csfs_nuclear_fail)
+@Html.Hidden("AddDay", (Int32)ViewBag.AddDay)
+@Html.Hidden("HidCaseId", (Guid)ViewBag.CaseId)
+@Html.Hidden("LimiteDate", (string)ViewBag.LimiteDate)
+@Html.Hidden("HidAfterSeizureApproved", ViewData["AfterSeizureApproved2"])
+@Html.Hidden("OverDueUrl", Url.Action("OverDue", "AgentSendSettingInfo", new { area = "Agent" }))
+@* 呈核 *@
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            if ($("#HidStatus").val() == "2") {
+                $("#lblDianWenStatus").html("成功");
+                $("#lblDianWenStatus").removeClass("text-red");
+            }
+
+            if ($("#HidStatus").val() == "1") {
+                $("#lblDianWenStatus").html("成功");
+                $("#lblDianWenStatus").addClass("text-red");
+                //電文沒有異常(Status為1即無異常)，則重查按鈕反灰
+                $("#btnReset").attr("disabled", true);
+                $("#btnReset").css("pointer-events", "none");
+            }
+
+            if ($("#HidStatus").val() == "0") {
+                $("#lblDianWenStatus").html("待查");
+                $("#lblDianWenStatus").removeClass("text-red");
+            }
+
+            if ($("#HidStatus").val() == "9") {
+                $("#lblDianWenStatus").html("可查");
+                $("#lblDianWenStatus").removeClass("text-red");
+            }
+
+            function getQueryString(name) {
+                var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)", "i");
+                var r = window.location.search.substr(1).match(reg);
+                if (r != null) return unescape(r[2]);
+                return null;
+            }
+
+            var tabNo = getQueryString("tabNo");
+            switch (tabNo) {
+                case "1":
+                    $('#panel1 a[href="#panelAccount1"]').tab('show');
+                    break;
+                case "2":
+                    $('#panel1 a[href="#panelAccount2"]').tab('show');
+                    break;
+                case "3":
+                    $('#panel1 a[href="#panelAccount3"]').tab('show');
+                    break;
+                case "4":
+                    $('#panel1 a[href="#panelAccount4"]').tab('show');
+                    break;
+            }
+            $("#HidHasFile").val() == "1" ? $("#btnOpenTxtDoc").show() : $("#btnOpenTxtDoc").hide();
+            $("#btnOverSubmit").click(function () { return btnOverSubmit(); });
+        });
+
+
+        function ResetStatus(caseid) {
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: $("#ResetStatusUrl").val(),
+                data: { CaseId: caseid },
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess($("#ResetSuccessMsg").val(), function () {
+                            //location.href = $("#AccountPageUrl").val() + "&TabNo=1";
+                            $("#lblDianWenStatus").html("待查");
+                        });
+                    } else {
+                        jAlertError($("#ResetFailMsg").val());
+                        $.unblockUI();
+                    }
+                }
+            });
+        }
+
+        function openTxtDoc() {
+            //$.ajax({
+            //    type: "POST",
+            //    async: false,
+            //    url: $("#OpenTxtDocUrl").val(),
+            //    error: function () {
+            //        jAlertError($("#LoadErrorMsg").val());
+            //        $.unblockUI();
+            //    },
+            //    success: function (data) {
+            //        //jAlertSuccess(data.ReturnMsg);
+            //        $.unblockUI();
+            //    }
+            //});
+            var url = $("#OpenTxtDocUrl").val();
+            //弹出窗口的宽度; 
+            var iWidth = 600;
+            //弹出窗口的高度; 
+            var iHeight = 600;
+            //获得窗口的垂直位置 
+            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+            //获得窗口的水平位置 
+            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+            window.open(url, 'Agent', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',scrollbars= yes, resiable = yes');
+        }
+
+        function openPdfDoc(caseid) {
+            var actionUrl = $("#OpenPdfDocUrl").val() + "?caseId=" + caseid;
+            $("#frmForReport").attr("src", actionUrl);
+            return false;
+        }
+        function openPayPdfDoc1(caseid) {
+            var actionUrl = $("#OpenPayPdfDoc1Url").val() + "?caseId=" + caseid+"|di";
+            $("#frmForReport").attr("src", actionUrl);
+            return false;
+        }
+        function openPayPdfDoc2(caseid) {
+            var actionUrl = $("#OpenPayPdfDoc2Url").val() + "?caseId=" + caseid+"|Attach";
+            $("#frmForReport").attr("src", actionUrl);
+            return false;
+        }
+        //開啟發文內容
+        function openSendSeting() {
+            if ($("#HidCaseSendSetting").val() === "Add") {
+                var url = $("#OpenSendSetingUrl").val() + "&AccountInfoFlag=true";
+            }
+            else {
+                var url = $("#OpenSendSetingEditUrl").val() + "&AccountInfoFlag=true";
+            }
+            //弹出窗口的宽度; 
+            var iWidth = 1000;
+            //弹出窗口的高度; 
+            var iHeight = 680;
+            //获得窗口的垂直位置 
+            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+            //获得窗口的水平位置 
+            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+            window.open(url, 'Agent', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',scrollbars= yes, resiable = yes');
+        }
+        //電文記錄
+        function openEmsg() {
+            var url = $("#OpenEmsgUrl").val();
+            //弹出窗口的宽度; 
+            var iWidth = 1000;
+            //弹出窗口的高度; 
+            var iHeight = 400;
+            //获得窗口的垂直位置 
+            var iTop = (window.screen.availHeight - 30 - iHeight) / 2;
+            //获得窗口的水平位置 
+            var iLeft = (window.screen.availWidth - 10 - iWidth) / 2;
+            window.open(url, 'Agent', 'height=' + iHeight + ',innerHeight=' + iHeight + ',width=' + iWidth + ',innerWidth=' + iWidth + ',top=' + iTop + ',left=' + iLeft + ',scrollbars= yes, resiable = yes');
+        }
+
+        function btnOverSubmit() {
+            var aryCaseId = new Array();
+            aryCaseId.push($("#HidCaseId").val());//向数组中添加元素
+
+            var strCaseId = aryCaseId.join(',');
+
+            if (strCaseId.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+
+            if (!ajaxValidateOver()) {
+                return false;
+            }
+            jConfirm($("#NuclearConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    //* click confirm ok
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#OverDueUrl").val(),
+                        async: false,
+                        data: { strIds: strCaseId, OverDueMemo: $("#OverDueMemo").val() },
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#NuclearOkMsg").val(), function () {
+                                    $("#modalOver").modal("hide");
+                                    $("#OverDueMemo").val("");
+                                    location.href = $("#AgentAccountUrl").val();
+                                });
+                            } else {
+                                jAlertError($("#NuclearFaileMsg").val());
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        function ajaxValidateOver() {
+            if ($.trim($("#OverDueMemo").val()) === "") {
+                jAlertError($("#TextNotNull").val());
+                return false;
+            }
+            return true;
+        }
+    </script>
+}

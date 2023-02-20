@@ -1,0 +1,569 @@
+﻿@model CTBC.CSFS.ViewModels.CaseWarningViewModel
+@using CTBC.CSFS.Models
+@using CTBC.FrameWork.Util
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_casewarning;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_edit</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("Edit", "CaseWarning", new { area = "KeyInput" }, FormMethod.Post, new { id = "frmEdit", @class = "form-horizontal", enctype = "multipart/form-data", target = "upload_frame" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder col-md-12">
+                <tbody>
+                    <tr style="">
+                        <td class="col-md-2 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-4">
+                            @Html.DisplayFor(m => m.WarningMaster.DocNo, new { @id = "txtDocNoD" })
+                            @Html.HiddenFor(m => m.WarningMaster.DocNo, new { @MaxLength = "12", @id = "txtDocNo", @readonly = "readonly" })
+                            @*@Model.WarningMaster.DocNo*@
+                        </td>
+                        <td class="col-md-2 text-right"></td>
+                        <td class="col-md-4"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_warn_id</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.WarningMaster.CustId, new { @id = "txtCustId", @MaxLength = "20" })
+                            舊:
+                            @Html.TextBoxFor(m => m.WarningMaster.CustId_Old, new { @id = "txtCustId_Old" })
+                        </td>                        
+                        <td class="col-md-2 text-right">@Lang.csfs_warningnum</td>
+                        <td class="col-md-4">
+                            @Html.HiddenFor(m => m.WarningMaster.CustAccount, new { @MaxLength = "12", @id = "txtCustAccount", @readonly = "readonly" })
+                            @Model.WarningMaster.CustAccount
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">外國人統一證號</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.WarningMaster.ForeignId, new { @id = "txtForeignId", @MaxLength = "20" })
+                            舊:
+                            @Html.TextBoxFor(m => m.WarningMaster.ForeignId_Old, new { @id = "txtForeignId_Old" })
+                        </td>
+                        <td class="col-md-2"></td>
+                        <td class="col-md-4">                           
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_warn_name</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.CustName, new { @id = "txtCustName", @MaxLength = "10" })
+                        </td>
+                        <td class="col-md-2 text-right">@Lang.csfs_warn_status</td>
+                        <td class="col-md-4">
+                            @Html.DropDownListFor(m => m.WarningMaster.AccountStatus, (IEnumerable<SelectListItem>)ViewBag.StatusList, new { @id = "txtAccountStatus" })
+                            結清日 @Html.TextBoxFor(m => m.WarningMaster.ClosedDate, new { data_datepicker = "true", @Maxlength = "10", @style = "width:80px" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_bankID</td>
+                        <td class="col-md-4">
+                            @Html.DropDownListFor(m => m.WarningMaster.BankID, (IEnumerable<SelectListItem>)ViewBag.BankID, new { @id = "ddlBankID", onchange = "changeBranchName(this)" })
+                        </td>
+                        <td class="col-md-2 text-right">@Lang.csfs_bank_name</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.BankName, new { @id = "txtBankName", @readonly = "readonly" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_case_attachment</td>
+                        <td class="col-md-4">
+                            <table class="table table-bordered" id="divUploadList">
+                                @for (int i = 0; i < Model.WarningAttachmentList.Count; i++)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("DownFile", "Home", new { area = "", uploadkind = Uploadkind.WarnAttach, id = Model.WarningAttachmentList[i].AttachmentId })" target="frmDownload">
+                                                @Model.WarningAttachmentList[i].AttachmentName
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a data-href="@Url.Action("DeleteAttatch", "CaseWarning", new { area = "KeyInput", attachId = Model.WarningAttachmentList[i].AttachmentId })" data-deletelink="true">
+                                                @Lang.csfs_delete
+                                            </a>
+                                        </td>
+                                    </tr>
+                                }
+                            </table>
+
+
+
+                            @***** 上傳部分開始 ******@
+                            <table class="table table-bordered" id="divUploadList">
+                                <tr>
+                                    <td><input type="file" class="col-sm-12 no-padding" name="fileAttNames" id="fileAtt1" /></td>
+                                </tr>
+                            </table>
+                            @***** 上傳部分結束 ******@
+                        </td>
+                        <td class="col-md-2 text-right">幣別</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.Currency, new { @id = "txtCurrency", @style = "width:100px" })
+                            通報時餘額
+                            @Html.TextBoxFor(m => m.WarningMaster.NotifyBal, new { @id = "txtNotifyBal", @style = "width:100px" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_create_date</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningQuery.ForCDateS, new { @id = "ForCDateS", data_datepicker = "true", @Maxlength = "9", @style = "width:80px" })
+                            ～
+                            @Html.TextBoxFor(m => m.WarningQuery.ForCDateE, new { @id = "ForCDateE", data_datepicker = "true", @Maxlength = "9", @style = "width:80px" })
+                            <button id="btnGenDetail" type="button" class="btn btn-primary btn-xs">產生交易明細</button>
+                        </td>
+                        <td class="col-md-2 text-right">目前餘額</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.CurBal, new { @id = "txtCurBal", @style = "width:100px" })
+                            VD/MD
+                            @Html.TextBoxFor(m => m.WarningMaster.VD, new { @id = "txtVD", @style = "width:100px" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">MD</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.MD, new { @id = "txtMD", @style = "width:100px" })
+                        </td>
+                        <td class="col-md-2 text-right">可用餘額</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => @Model.WarningMaster.ReleaseBal, new { @id = "txtReleaseBal", @readonly = "readonly" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">生日</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.BirthDay, new { @id = "txtBirthDay" })
+                        </td>
+                        <td class="col-md-2 text-right">電話</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.Tel, new { @id = "txtTel" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">地址</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.Address, new { @id = "txtAddress" })
+                        </td>
+                        <td class="col-md-2 text-right">行動電話</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.WarningMaster.Mobile, new { @id = "txtMobile" })
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <table class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>帳號</th>
+                        <th>類別</th>
+                        <th>調閱日期起</th>
+                        <th>調閱日期迄</th>
+                        <th>文件名</th>
+                        <th>下載</th>
+                        <th>刪除</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in @Model.WarningHistoryList)
+                    {
+                        <tr>
+                            <td>@item.CustAccount</td>
+                            <td>@item.AcctDesc</td>
+                            <td>@if (!string.IsNullOrEmpty(item.ForCDateS))
+                            {
+                                <text>@UtlString.FormatDateTw(item.ForCDateS)</text>
+                            }</td>
+                            <td>@if (!string.IsNullOrEmpty(item.ForCDateE))
+                            {
+                                <text>@UtlString.FormatDateTw(item.ForCDateE)</text>
+                            }</td>
+                            <td>@item.FileName</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.ESBStatus) && item.ESBStatus.Trim() == "02")
+                                {
+                                    <a href="@Url.Action("DownLoadExcel", "CaseWarning", new { area = "KeyInput", NewID = item.NewID,TrnNum=item.TrnNum,CustAccount=item.CustAccount,ForCDateS=UtlString.FormatDateTw(item.ForCDateS),ForCDateE=UtlString.FormatDateTw(item.ForCDateE),@radom = DateTime.Now.ToString() })" >下載</a>
+                                }    
+                            </td>
+                            <td>
+                                <a onclick='DeleteWarningHistory("@item.NewID")'>
+                                   刪除
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+             </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnRequire" type="button" class="btn btn-primary btn-xs">重發</button>
+            <button id="btnSaveEdit" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+<iframe id="upload_frame" name="upload_frame" src="" class="hidden"></iframe>
+
+@* 警示狀態 *@
+@*<div id="divStatus" class="table-wrap" data-target-url="@Url.Action("_QueryResultForWarnStatus", "CaseWarning", new { area = "KeyInput" })">
+    </div>*@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_warnstates</h3>
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort ">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th>@Lang.csfs_settings</th>
+                            <th class="col-md-2">@Lang.csfs_warn_source</th>
+                            <th class="col-md-2">@Lang.csfs_warn_relieve</th>
+                            <th class="col-md-2">@Lang.csfs_createpeople_name</th>
+                            <th class="col-md-2">@Lang.csfs_relieve_reason</th>
+                            <th class="col-md-3">@Lang.csfs_other_reason</th>
+                            <th class="col-md-3">外來文編號</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.WarningStateList != null && Model.WarningStateList.Any())
+                        {
+                            foreach (var item in Model.WarningStateList)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("SetStatus", "CaseWarning", new { area = "KeyInput", DocNo = item.DocNo, NotificationSource = item.NotificationSource, @radom = DateTime.Now.ToString() })" class="fancy950_450">
+                                            <i class="glyphicon glyphicon-cog"></i>
+                                        </a>
+
+                                    </td>
+                                    <td class="text-center">@item.NotificationSource</td>
+                                    <td class="text-center">
+                                        @if (!string.IsNullOrEmpty(item.RelieveDate))
+                                        {
+                                            <text>@UtlString.FormatDateTw(item.RelieveDate)</text>
+                                        }
+                                    </td>
+                                    <td class="text-center">@item.ModifiedUser</td>
+                                    <td class="text-center">@item.RelieveReason</td>
+                                    <td class="text-center">@item.OtherReason</td>
+                                    <td class="text-center">@item.EtabsNo</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+
+@* 結果區域 *@
+@*<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResultForDetails", "CaseWarning", new { area = "KeyInput" })">
+    </div>*@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort ">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th>@Lang.csfs_edit</th>
+                            <th class="text-center">@Lang.csfs_delete</th>
+                            <th>@Lang.csfs_print</th>
+                            <th>序號</th>
+                            <th>正本</th>
+                            <th>解除</th>
+                            <th>@Lang.csfs_warn_date</th>
+                            <th>@Lang.csfs_165warn</th>
+                            <th>聯徵案號</th>
+                            @*<th>@Lang.csfs_e_warn</th>*@
+                            <th>@Lang.csfs_warn_content</th>
+                            <th>@Lang.csfs_warn_source</th>
+                            <th>@Lang.csfs_warn_dates</th>
+                            <th>@Lang.csfs_warn_setdate</th>
+                            <th>@Lang.csfs_warn_address</th>
+                            <th>@Lang.csfs_warn_people</th>
+                            <th>@Lang.csfs_warn_phone</th>
+                            <th>@Lang.csfs_warn_police</th>
+                            <th>二</th>
+                            <th>@Lang.csfs_warn_victim</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.WarningDetailsList != null && Model.WarningDetailsList.Any())
+                        {
+                            foreach (var item in Model.WarningDetailsList)
+                            {
+                        <tr>
+                            <td class="text-center">
+                                <a href="@Url.Action("EditWarn", "CaseWarning", new { area = "KeyInput", SerialID = item.SerialID,@radom = DateTime.Now.ToString() })" class="fancy900_455"><i class=" glyphicon glyphicon-edit"></i></a>
+                            </td>
+                            <td class="text-center">
+                                <a onclick='DeleteWarn("@item.SerialID","@item.DocNo","@item.NotificationSource")' style="cursor:pointer">
+                                    <i class="glyphicon glyphicon-remove"></i>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                <a href="@Url.Action("ReportWarning", "CaseWarning", new { area = "KeyInput", SerialID = item.SerialID, @radom = DateTime.Now.ToString() })">
+                                    <i class="glyphicon glyphicon-file"></i>
+                                </a>
+                            </td>
+                            <td class="text-center">
+                                @item.RowNum
+                            </td>
+                            <td class="text-center">
+                                @item.Original
+                            </td>
+                            <td class="text-center">
+                                @if (@item.Release == "1")
+                                {
+                                    <input type="checkbox" class="PayIsOrNo" enable="readonly" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="PayIsOrNo" enable="readonly">
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(item.HappenDateTime))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.HappenDateTime)</text>
+                                }
+                            </td>
+                            <td class="text-center">@item.No_165</td>
+                            <td class="text-center">@item.UniteNo</td>
+                            @*<td class="text-center">@item.No_e</td>*@
+                            <td class="text-center">@item.NotificationContent</td>
+                            <td class="text-center">@item.NotificationSource</td>
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(item.ForCDate))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.ForCDate)</text>
+                                }
+                            </td>
+                            <td class="text-center">
+                                @if (!string.IsNullOrEmpty(item.EtabsDatetime))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.EtabsDatetime)</text>
+                                }
+                            </td>
+                            <td class="text-center">@item.NotificationUnit</td>
+                            <td class="text-center">@item.NotificationName</td>
+                            <td class="text-center">@item.ExtPhone</td>
+                            <td class="text-center">@item.PoliceStation</td>
+                            <td class="text-center">
+                                @if (@item.Retry == "1" )
+                                {
+                                    <input type="checkbox" class="PayIsOrNo" enable="readonly" checked>
+                                }
+                                else
+                                {
+                                    <input type="checkbox" class="PayIsOrNo" enable="readonly">
+                                }
+
+                            </td>
+                            <td class="text-center">@item.VictimName</td>
+                        </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="16"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+            <div class="box-footer text-center">
+                <a href="@Url.Action("CreateWarn", "CaseWarning", new { area = "KeyInput", DocNo = ViewBag.DocNo, @radom = DateTime.Now.ToString(),Currency=ViewBag.Currency })" class="btn btn-primary btn-xs fancy900_455">@Lang.csfs_warn_add</a>
+                <a href="@Url.Action("CopyWarn", "CaseWarning", new { area = "KeyInput", DocNo = ViewBag.DocNo, @radom = DateTime.Now.ToString(),Currency=ViewBag.Currency })" class="btn btn-primary btn-xs fancy900_455">@Lang.csfs_paste_warn</a>
+            </div>
+        </div><!-- /.box -->
+    </div>
+</div>
+
+@* 帳卡區域 *@
+@*<div id="divResultAccount" class="table-wrap" data-target-url="@Url.Action("_QueryResultForWarnAccount", "CaseWarning", new { area = "KeyInput" })">
+    </div>*@
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort ">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th>@Lang.csfs_edit</th>
+                            @*<th class="text-center">@Lang.csfs_delete</th>*@
+                            <th>@Lang.csfs_print</th>
+                            <th>序號</th>
+                            <th>交易日</th>
+                            <th>掛帳金額</th>
+                            <th>還款金額</th>
+                            <th>餘額</th>
+                            <th>eTabs</th>
+                            <th>備註</th>
+                            <th>時程LOG</th>
+                         </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.WarningGenAcctList != null && Model.WarningGenAcctList.Any())
+                        {
+                            foreach (var item in Model.WarningGenAcctList)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("EditWarnAccount", "CaseWarning", new { area = "KeyInput", id = item.id,@radom = DateTime.Now.ToString() })" class="fancy800_400"><i class=" glyphicon glyphicon-edit"></i></a>
+                                    </td>
+                                   @* <td class="text-center">
+                                        <a onclick='DeleteWarnAccount("@item.id","@item.DocNo")' style="cursor:pointer">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </a>
+                                    </td>*@
+                                    <td class="text-center">
+                                        <a href="@Url.Action("ReportWarningGenAcct", "CaseWarning", new { area = "KeyInput", DocNo = item.DocNo, @radom = DateTime.Now.ToString() })">
+                                            <i class="glyphicon glyphicon-file"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">@item.id</td>
+                                    <td class="text-center">
+                                        @if (!string.IsNullOrEmpty(item.TRAN_DATE))
+                                        {
+                                            <text>@UtlString.FormatDateTw(item.TRAN_DATE)</text>
+                                        }
+                                    </td>
+                                    <td class="text-center">@item.HangAmount</td>
+                                    <td class="text-center">@item.AMOUNT</td>
+                                    <td class="text-center">@item.Balance</td>
+                                    <td class="text-center">@item.eTabs</td>
+                                    <td class="text-center">@item.Memo</td>
+                                    <td class="text-center">@item.TimeLog</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="16"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+            <div class="box-footer text-center">
+             </div>
+        </div><!-- /.box -->
+    </div>
+</div>
+
+
+
+
+@Html.Hidden("NowPage", "CaseWarningEdit")
+@Html.Hidden("DeleteUrl", Url.Action("DeleteWarn", "CaseWarning", new { area = "KeyInput" }))
+@Html.Hidden("DeleteConfirm", Lang.csfs_confirm_delete)
+@Html.Hidden("DeleteSucMsg", Lang.csfs_del_ok)
+@Html.Hidden("DeleteFailMsg", Lang.csfs_del_fail)
+@Html.Hidden("EditSuccessMsg", Lang.csfs_edit_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_edit_fail)
+
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("NameCustId", Lang.csfs_warn_id)
+@Html.Hidden("NameCustAccount", Lang.csfs_warningnum)
+@Html.Hidden("NameCustName", Lang.csfs_warn_name)
+@Html.Hidden("NameBankID", Lang.csfs_bankID)
+@Html.Hidden("GetBranchNameUrl", Url.Action("GetBranchName", "AgentAccountInfo", new { area = "Agent" }))
+@Html.Hidden("GenDetailUrl", Url.Action("GetGenDetail", "CaseWarning", new { area = "KeyInput" }))
+@Html.Hidden("RequireUrl", Url.Action("RequireAgain33401", "CaseWarning", new { area = "KeyInput" }))
+@Html.Hidden("DeleteWarningHistoryUrl", Url.Action("DeleteWarningHistory", "CaseWarning", new { area = "KeyInput" }))
+@section scripts {
+    @Scripts.Render("~/Scripts/KeyInput/CaseWarning.js")
+    @Scripts.Render("~/Scripts/common.uploadlist.js")
+    <script>
+        function DeleteWarn(serialID,docNo,source) {
+            jConfirm($("#DeleteConfirm").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    $.ajax({
+                        url: $("#DeleteUrl").val(),
+                        type: "Post",
+                        cache: false,
+                        data: { serialID: serialID,DocNo:docNo,Source: source},
+                        dataType: "json",
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#DeleteSucMsg").val(), function () {
+                                    location.href = location.href;
+                                });
+                            } else {
+                                jAlertError($("#DeleteFailMsg").val());
+                                $.unblockUI();
+                            }
+
+                        }
+                    });
+                }
+                return false;
+            })
+        };
+
+        function changeBranchName(obj) {
+            var BankID = $("#ddlBankID").val();
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: $("#GetBranchNameUrl").val(),
+                data: { codeNo: BankID },
+                success: function (data) {
+                    $("#txtBankName").val(data)
+                }
+            });
+        }
+        //刪除其中一條交易明細數據
+        function DeleteWarningHistory(NewID)
+        {
+            jConfirm($("#DeleteConfirm").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    $.ajax({
+                        url: $("#DeleteWarningHistoryUrl").val(),
+                        type: "Post",
+                        cache: false,
+                        data: { NewID: NewID },
+                        dataType: "json",
+                        error: function () {
+                            jAlertError("刪除數據發生錯誤！");
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#DeleteSucMsg").val(), function () {
+                                    location.href = location.href;
+                                });
+                            } else {
+                                jAlertError($("#DeleteFailMsg").val());
+                                $.unblockUI();
+                            }
+
+                        }
+                    });
+                }
+                return false;
+            })
+        }
+    </script>
+}

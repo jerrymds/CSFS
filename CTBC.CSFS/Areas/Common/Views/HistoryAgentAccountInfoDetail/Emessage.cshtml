@@ -1,0 +1,63 @@
+﻿@model IList<CTBC.CSFS.Models.HistoryBatchQueue>
+
+@{
+    ViewBag.Title = "電文記錄";
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+<div class="margin">
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">電文記錄</h3>
+            <br />
+            <br />
+            <br />
+            <div>
+                <div>
+                    <table class="table table-bordered table-striped text-black">
+                        <thead>
+                            <tr>
+                                <th>經辦人</th>
+                                <th>義務人</th>
+                                <th>電文編號</th>
+                                <th>發查時間</th>
+                                <th>狀態</th>
+                                <th>錯誤訊息</th>
+                                <th>建檔時間</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.Any())
+                            {
+                                for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr style="text-align:center;">
+                                        <td>@Model[i].SendUser</td>
+                                        <td>@Model[i].ObligorNo</td>
+                                        <td>@Model[i].ServiceName</td>
+                                        <td>@Model[i].SendDate</td>
+                                        @if (Model[i].Status == "0")
+                                        {
+                                            <td>待查</td>
+                                        }
+                                        else if (Model[i].Status == "1")
+                                        {
+                                            <td>成功</td>
+                                        }
+                                        else
+                                        {
+                                            <td>失敗</td>
+                                        }
+                                        <td>@Model[i].ErrorMsg</td>
+                                        <td>@Model[i].CreateDatetime</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+

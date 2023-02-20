@@ -1,0 +1,91 @@
+﻿@using CTBC.FrameWork.Paging
+@model CheckNoSettingViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.CheckNoSettingList != null)
+                {
+                    if (Model.CheckNoSettingList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CheckNoSetting.PageSize, Model.CheckNoSetting.CurrentPage, Model.CheckNoSetting.TotalItemCount, Model.CheckNoSetting, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CheckNoSetting.SortExpression, Model.CheckNoSetting.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th class="col-md-2" data-sortcolumn="CheckIntervalID">@Lang.csfs_CheckIntervalID</th>
+                            <th class="col-md-2" data-sortcolumn="CheckNoStart">@Lang.csfs_CheckNoStart</th>
+                            <th class="col-md-2" data-sortcolumn="CheckNoEnd">@Lang.csfs_CheckNoEnd</th>
+                            <th class="col-md-2" data-sortcolumn="WeekTempAmount">@Lang.csfs_WeekTempAmount</th>
+                            <th class="col-md-2" data-sortcolumn="UseStatus">@Lang.csfs_UseStatus</th>
+                            <th class="col-md-1">@Lang.csfs_editdelete/@Lang.csfs_enable</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CheckNoSettingList != null && Model.CheckNoSettingList.Any())
+                        {
+                            foreach (var item in Model.CheckNoSettingList)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        @if (@item.UseStatus == "已使用")
+                                        {
+                                            @Html.ActionLink(Convert.ToString(item.CheckIntervalID) + " ", "Detail", "CheckNoSetting", new { area = "SystemManagement", CheckIntervalID = item.CheckIntervalID }, new { })
+                                        }
+                                        else
+                                        {
+                                            @item.CheckIntervalID
+                                        }
+                                    </td>
+                                    <td class="text-center">@item.CheckNoStart</td>
+                                    <td class="text-center">@item.CheckNoEnd</td>
+                                    <td class="text-center">@item.WeekTempAmount</td>
+                                    <td class="text-center">@item.UseStatus</td>
+                                    <td class="text-center">
+                                        @if (@item.UseStatus == "未使用")
+                                        {
+                                            <a class="btn btn-default btn-xs" title="@Lang.csfs_edit" href="@Url.Action("Edit", "CheckNoSetting", new { area = "SystemManagement", CheckIntervalID = item.CheckIntervalID })">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                            <a class="btn btn-default btn-xs" title="@Lang.csfs_delete" href="#" data-href="@Url.Action("Delete", "CheckNoSetting", new { area = "SystemManagement", CheckIntervalID = item.CheckIntervalID })" data-deletelink="true">
+                                                <i class="glyphicon glyphicon-remove"></i>
+                                            </a>
+                                            <a class="btn btn-primary btn-xs" title="@Lang.csfs_enable" href="#" data-href="@Url.Action("Active", "CheckNoSetting", new { area = "SystemManagement", CheckIntervalID = item.CheckIntervalID})" data-activelink="true">
+                                                @Lang.csfs_enable
+                                        </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.CheckNoSetting.CheckIntervalID)
+                @Html.Hidden("defaultSortColumn", Model.CheckNoSetting.SortExpression)
+                @Html.Hidden("defaultSort", Model.CheckNoSetting.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.sort($("#divResult"));
+        $.CheckNoSetting.bindGrid();
+    });
+</script>

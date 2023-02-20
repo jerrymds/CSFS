@@ -1,0 +1,382 @@
+﻿@model CTBC.CSFS.ViewModels.CaseCalculatorViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfoDetail", new { area = "Common", CaseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_document_info</a></li>
+        @if (Html.GetBackControllerName() != "DebtPersonQuery")
+        {
+            <li class=""><a href="@Url.Action("Index", "AgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">帳務資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentMeetInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">會辦資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">正本備查</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccessDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">資訊部調閱</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">發文資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseHistoryDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">流程紀錄</a></li>
+            <li class="active"><a href="@Url.Action("Index", "AgentCaseCalculatorDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">利息計算</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseMemoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">內部註記</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentTransactionRecordsDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">資訊異動記錄</a></li>
+        }
+        @Html.GetBackButtonInTab()
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel8">
+            @using (Html.BeginForm("index", "AgentCaseCalculatorDetail", new { area = "Common" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal", target = "upload_frame" }))
+            {
+                <div class="box box-primary">
+                    <!-- form start -->
+                    <div class="box-body ">
+                        <table class="table-noborder col-md-12">
+                            <tbody>
+                                <tr>
+                                    <td class="col-md-2 text-right">@Lang.csfs_cal_caseamount</td>
+                                    <td class="col-md-2">
+                                        @Html.TextBoxFor(m => m.CaseCalculatorMain.Amount1, new { @id = "txtAmount1", @disabled = "disabled" })
+                                    </td>
+                                    <td class="col-md-2">
+                                        @Html.TextBoxFor(m => m.CaseCalculatorMain.Amount2, new { @id = "txtAmount2", @disabled = "disabled" })
+                                    </td>
+                                    <td class="col-md-2">
+                                        @Html.TextBoxFor(m => m.CaseCalculatorMain.Amount3, new { @id = "txtAmount3", @disabled = "disabled" })
+                                    </td>
+                                    <td class="col-md-2">
+                                        @Html.TextBoxFor(m => m.CaseCalculatorMain.Amount4, new { @id = "txtAmount4", @disabled = "disabled" })
+                                    </td>
+                                    <td class="col-md-2">
+                                        @Html.TextBoxFor(m => m.CaseCalculatorMain.Amount5, new { @id = "txtAmount5", @disabled = "disabled" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="col-md-2 text-right">@Lang.csfs_cal_amount</td>
+                                    <td class="col-md-10" colspan="5">
+                                        @Html.TextBoxFor(m => m.CaseCalculatorDetails.Amount, new { @id = "txtAmount", @disabled = "disabled" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-2 text-right">@Lang.csfs_cal_intresttype</th>
+                                    <td class="col-md-4" colspan="2">
+                                        @Html.DropDownListFor(m => m.CaseCalculatorDetails.InterestRateType, (IEnumerable<SelectListItem>)ViewBag.InterestRateList, Lang.csfs_select, new { @id = "ddlInterestRateType" })
+                                    </td>
+                                    <th class="col-md-2 text-right">@Lang.csfs_cal_intrest</th>
+                                    <td class="col-md-4" colspan="2">
+                                        @Html.TextBoxFor(m => m.CaseCalculatorDetails.InterestRate, new { @id = "txtInterestRate", @disabled = "disabled" })%
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-2 text-right">@Lang.csfs_cal_start</th>
+                                    <td class="col-md-4" colspan="2">
+                                        @Html.TextBoxFor(m => m.CaseCalculatorDetails.StartDate, new { @id = "txtStartDate", data_datepicker = "true", @disabled = "disabled" })
+                                    </td>
+                                    <th class="col-md-2 text-right">@Lang.csfs_cal_end</th>
+                                    <td class="col-md-4" colspan="2">
+                                        @Html.TextBoxFor(m => m.CaseCalculatorDetails.EndDate, new { @id = "txtEndDate", data_datepicker = "true", @disabled = "disabled" })
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-2 text-right">@Lang.csfs_cal_result</th>
+                                    <td class="col-md-10" colspan="5" id="tdResult"></td>
+                                </tr>
+                                <tr>
+                                    <th class="col-md-2 text-right">@Lang.csfs_cal_intresttotal</th>
+                                    <td class="col-md-4" colspan="2">
+                                        @Html.HiddenFor(m => m.CaseCalculatorDetails.InterestTotal, new { @id = "txtInterestTotal", @disabled = "disabled" })
+                                        <input type="text" id="txtInterestTotalShow" readonly="readonly" />
+                                    </td>
+                                    <th class="col-md-2 text-right">@Lang.csfs_cal_casetotal</th>
+                                    <td class="col-md-4" colspan="2">
+                                        @Html.HiddenFor(m => m.CaseCalculatorDetails.CaseTotal, new { @id = "txtCaseTotal", @disabled = "disabled" })
+                                        <input type="text" id="txtCaseTotalShow" readonly="readonly" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer text-center">
+                        @*<button id="btnCalculator" type="button" class="btn btn-primary btn-xs">@Lang.csfs_create</button>
+                            <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_btnconfirmOk</button>
+                            <button id="btnCancel" type="reset" class="btn btn-primary btn-xs">@Lang.csfs_cancel</button>*@
+                    </div>
+                </div>
+            }
+            @Html.Hidden("CreateCalculatorDetailUrl", Url.Action("CreateCalculatorDetail", "AgentCaseCalculator", new { area = "Agent" }))@*點擊新增計算利息*@
+            @Html.Hidden("CreateDetailUrl", Url.Action("QueryResult", "AgentCaseCalculatorDetail", new { area = "Common" }))@*計算利息返回結果*@
+            @Html.Hidden("EditMainUrl", Url.Action("EditMain", "AgentCaseCalculator", new { area = "Agent" }))@*點擊確定儲存各項金額*@
+            @Html.Hidden("DeleteUrl", Url.Action("DeleteCalCase", "AgentCaseCalculator", new { area = "Agent" }))@*刪除*@
+            @Html.Hidden("hidCaseId", (System.Guid)ViewBag.CaseId)
+            @Html.Hidden("hidSum", (int)ViewBag.Sum)
+            @Html.Hidden("NametxtAmount", Lang.csfs_cal_amount_ok) @*計息金額*@
+            @Html.Hidden("NametxtAmount1", Lang.csfs_cal_amount1_ok) @*計息金額*@
+            @Html.Hidden("NametxtAmountN", Lang.csfs_cal_amount2_ok) @*各項金額*@
+            @Html.Hidden("NameddlInterestRateType", Lang.csfs_cal_interestype_ok) @*利率類型*@
+            @Html.Hidden("NametxtInterestRate", Lang.csfs_cal_interest_ok) @*利率*@
+            @Html.Hidden("NametxtInterestRate1", Lang.csfs_cal_interest_ok1) @*利率*@
+            @Html.Hidden("NametxtStartDate", Lang.csfs_cal_start_ok) @*起始日*@
+            @Html.Hidden("NametxtStartDate1", Lang.csfs_cal_start1_ok) @*起始日*@
+            @Html.Hidden("NametxtEndDate", Lang.csfs_cal_end_ok)@*截止日*@
+            @Html.Hidden("NametxtEndDate1", Lang.csfs_cal_end1_ok)@*截止日*@
+            @Html.Hidden("NameDate", Lang.csfs_cal_startoend_ok)@*起始日與截止日比較*@
+            @Html.Hidden("NameConfirmOK", Lang.csfs_cal_ok)@*確認成功*@
+            @Html.Hidden("NameConfirmFail", Lang.csfs_cal_fail)@*確認失敗*@
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script src="~/Scripts/jquery.alerts-vsdoc.js"></script>
+<script src="~/Scripts/jquery.validate.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script type="text/javascript">
+    function commafy(num) {
+        //1.先去除空格,判断是否空值和非数   
+        num = num + "";
+        num = num.replace(/[ ]/g, ""); //去除空格  
+        if (num === "") {
+            return 0;
+        }
+        if (isNaN(num)) {
+            return 0;
+        }
+        //2.针对是否有小数点，分情况处理   
+        var index = num.indexOf(".");
+        if (index === -1) {//无小数点   
+            var reg = /(-?\d+)(\d{3})/;
+            while (reg.test(num)) {
+                num = num.replace(reg, "$1,$2");
+            }
+        } else {
+            var intPart = num.substring(0, index);
+            var pointPart = num.substring(index + 1, num.length);
+            var reg = /(-?\d+)(\d{3})/;
+            while (reg.test(intPart)) {
+                intPart = intPart.replace(reg, "$1,$2");
+            }
+            num = intPart + "." + pointPart;
+        }
+        return num;
+    }
+
+    //*初始化帶出利息結果列表
+    $(function () {
+        var totalLast = Number($("#txtAmount1").val()) + Number($("#txtAmount2").val()) + Number($("#txtAmount3").val()) + Number($("#txtAmount4").val()) + Number($("#txtAmount5").val());
+        $.ajax({
+            type: "get",
+            async: false,
+            cache: false,
+            url: $("#CreateDetailUrl").val(),
+            data: { CaseId: $("#hidCaseId").val() },
+            success: function (data) {
+                $("#tdResult").html(data);
+                $("#txtInterestTotal").val($("#hidSum").val());
+                $("#txtCaseTotal").val(Number(totalLast) + Number($("#hidSum").val()));
+
+                $("#txtInterestTotalShow").val(commafy($("#txtInterestTotal").val()));
+                $("#txtCaseTotalShow").val(commafy($("#txtCaseTotal").val()));
+            }
+        });
+    })
+    $("#btnCalculator").click(function () { return CalculatorInfo(); });
+    $("#btnSave").click(function () { return CalMainInfo(); })
+
+    //* 點擊確認
+    function CalMainInfo() {
+        var newLine = "<br/>";
+        var msg = "";
+        var re = /^\d+$/;
+        if (!re.test($("#txtAmount1").val()) || !re.test($("#txtAmount2").val()) || !re.test($("#txtAmount3").val()) || !re.test($("#txtAmount4").val()) || !re.test($("#txtAmount5").val())) {
+            msg = msg + $("#NametxtAmountN").val() + newLine;
+        }
+        //* 有必填檢核錯誤
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+
+        var totalLast = Number($("#txtAmount1").val()) + Number($("#txtAmount2").val()) + Number($("#txtAmount3").val()) + Number($("#txtAmount4").val()) + Number($("#txtAmount5").val());
+        $.ajax({
+            type: "Post",
+            async: false,
+            cache: false,
+            url: $("#EditMainUrl").val(),
+            data: { CaseId: $("#hidCaseId").val(), amount1: $("#txtAmount1").val(), amount2: $("#txtAmount2").val(), amount3: $("#txtAmount3").val(), amount4: $("#txtAmount4").val(), amount5: $("#txtAmount5").val(), },
+            success: function (data) {
+                var resultdata = new Array();
+                resultdata = data.split('|');
+                if (resultdata[0]) {
+                    $.ajax({
+                        type: "get",
+                        async: false,
+                        cache: false,
+                        url: $("#CreateDetailUrl").val(),
+                        data: { CaseId: $("#hidCaseId").val() },
+                        success: function (data) {
+                            $("#tdResult").html(data);
+                            $("#txtInterestTotal").val(resultdata[1]);
+                            $("#txtCaseTotal").val(Number(totalLast) + Number(resultdata[1]));
+                            jAlertSuccess($("#NameConfirmOK").val());
+                            $("#txtAmount").val("");@*新增后清空*@
+                            $("#txtInterestRate").val("");
+                            $("#txtStartDate").val("");
+                            $("#txtEndDate").val("");
+                            $("#ddlInterestRateType").val("");
+
+                            $("#txtInterestTotalShow").val(commafy($("#txtInterestTotal").val()));
+                            $("#txtCaseTotalShow").val(commafy($("#txtCaseTotal").val()));
+                        }
+                    });
+                } else {
+                    jAlertError($("#NameConfirmFail").val());
+                    $.unblockUI();
+                }
+                return true;
+            }
+        });
+    }
+
+    //*點擊新增
+    function CalculatorInfo() {
+        var txtAmount = $("#txtAmount").val();               //*計息金額
+        var ddlInterestRateType = $("#ddlInterestRateType option:selected").val(); //* 利率類型 Y:年利率 D:日利率
+        var txtInterestRate = $("#txtInterestRate").val(); //*利率
+        var txtStartDate = $("#txtStartDate").val();           //*起始日
+        var txtEndDate = $("#txtEndDate").val();              //*截止日
+
+        var newLine = "<br/>";
+        var msg = "";
+        var re = /^\d+\.\d+$/;
+        if (txtAmount == "" || txtAmount == null) {
+            msg = msg + $("#NametxtAmount").val() + newLine;
+        }
+        if (!re.test(txtAmount)) {
+            msg = msg + $("#NametxtAmount1").val() + newLine;
+        }
+        if ($("#ddlInterestRateType").val().length <= 0) {
+            msg = msg + $("#NameddlInterestRateType").val() + newLine;
+        }
+        if (txtInterestRate == "" || txtInterestRate == null) {
+            msg = msg + $("#NametxtInterestRate").val() + newLine;
+        }
+        else if (!re.test(txtInterestRate)) {
+            msg = msg + $("#NametxtInterestRate1").val() + newLine;
+        }
+        if (txtStartDate == "" || txtStartDate == null) {
+            msg = msg + $("#NametxtStartDate").val() + newLine;
+        } else if (!checkIsValidDate(txtStartDate)) {
+            msg = msg + $("#NametxtStartDate1").val() + newLine;
+        }
+        if (txtEndDate == "" || txtEndDate == null) {
+            msg = msg + $("#NametxtEndDate").val() + newLine;
+        } else if (!checkIsValidDate(txtEndDate)) {
+            msg = msg + $("#NametxtEndDate1").val() + newLine;
+        }
+        if (dateCompare(txtStartDate, txtEndDate) == 1) {
+            msg = msg + $("#NameDate").val() + newLine;
+        }
+        //* 有必填檢核錯誤
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+
+        CreateCalCase(txtAmount, txtInterestRate, txtStartDate, txtEndDate, $("#hidCaseId").val(), ddlInterestRateType);
+        return true;
+    }
+
+    //新增一筆利息結果
+    function CreateCalCase(amount, interestrate, startdate, enddate, caseid, casetype) {
+        var totalLast = Number($("#txtAmount1").val()) + Number($("#txtAmount2").val()) + Number($("#txtAmount3").val()) + Number($("#txtAmount4").val()) + Number($("#txtAmount5").val());
+        $.ajax({
+            type: "POST",
+            async: false,
+            cache: false,
+            url: $("#CreateCalculatorDetailUrl").val(),
+            data: {
+                amount: amount, InterestRate: interestrate, StartDate: startdate,
+                EndDate: enddate, CaseId: caseid, CaseType: casetype
+            },
+            success: function (data) {
+                var resultdata = new Array();
+                resultdata = data.split('|');
+                if (resultdata[0]) {
+                    $.ajax({
+                        type: "get",
+                        async: false,
+                        cache: false,
+                        url: $("#CreateDetailUrl").val(),
+                        data: { CaseId: $("#hidCaseId").val() },
+                        success: function (data) {
+                            $("#tdResult").html(data);
+                            $("#txtInterestTotal").val(resultdata[1]);
+                            $("#txtCaseTotal").val(Number(totalLast) + Number(resultdata[1]));
+
+
+                            $("#txtInterestTotalShow").val(commafy($("#txtInterestTotal").val()));
+                            $("#txtCaseTotalShow").val(commafy($("#txtCaseTotal").val()));
+                        }
+                    });
+                }
+            },
+            error: function (xhr) {
+            }
+        });
+    }
+
+    //* 刪除利息結果的一筆數據
+    function DeleteCal(calid) {
+        var totalLast = Number($("#txtAmount1").val()) + Number($("#txtAmount2").val()) + Number($("#txtAmount3").val()) + Number($("#txtAmount4").val()) + Number($("#txtAmount5").val());
+        $.ajax({
+            type: "post",
+            async: false,
+            url: $("#DeleteUrl").val(),
+            data: { calId: calid, CaseId: $("#hidCaseId").val() },
+            success: function (data) {
+                var resultdata = new Array();
+                resultdata = data.split('|');
+                if (resultdata[0]) {
+                    $.ajax({
+                        type: "get",
+                        async: false,
+                        cache: false,
+                        url: $("#CreateDetailUrl").val(),
+                        data: { CaseId: $("#hidCaseId").val() },
+                        success: function (data) {
+                            $("#tdResult").html(data);
+                            $("#txtInterestTotal").val(resultdata[1]);
+                            $("#txtCaseTotal").val(Number(totalLast) + Number(resultdata[1]));
+
+                            $("#txtInterestTotalShow").val(commafy($("#txtInterestTotal").val()));
+                            $("#txtCaseTotalShow").val(commafy($("#txtCaseTotal").val()));
+                        }
+                    });
+                } else {
+
+                }
+            }
+        });
+    }
+
+    //*判斷起始日不能大於截止日
+    function dateCompare(date1, date2) {
+        date1 = ConvertDateToAd(date1);
+        date2 = ConvertDateToAd(date2);
+
+        var time1 = new Date(date1).getTime();
+        var time2 = new Date(date2).getTime();
+        if (time1 > time2) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+    function ConvertDateToAd(date1) {
+        date1 = date1.replace(/\-/gi, "/");
+        var arrDate = date1.split("\/");
+        if (parseInt(arrDate[0], 10) < 200) {
+            arrDate[0] = parseInt(arrDate[0], 10) + 1911;
+        }
+        return arrDate[0] + "/" + arrDate[1] + "/" + arrDate[2];
+    }
+</script>

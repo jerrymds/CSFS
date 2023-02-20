@@ -1,0 +1,366 @@
+﻿@model  CaseSeizureViewModel
+@using CTBC.CSFS.Models;
+@{
+    ViewBag.Title = "_Main";
+}
+
+@using (Html.BeginForm("EditMaster", "AgentHandleDetail", new { area = "Agent" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal", enctype = "multipart/form-data", target = "upload_frame" }))
+{
+    <div class="box box-primary">
+        <!-- form start -->
+        <div class="box-body ">
+            <table class="table-noborder col-md-12">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_unit</td>
+                        <td class="col-md-10" colspan="5">
+                            @Html.DropDownListFor(m => m.CaseMaster.GovKind, (IEnumerable<SelectListItem>)ViewBag.GOV_KINDList, Lang.csfs_select, new { @id = "ddlGOV_KIND" })
+                            @Html.DropDownListFor(m => m.CaseMaster.GovUnit, (IEnumerable<SelectListItem>)ViewBag.GovUnitList, Lang.csfs_select, new { @id = "ddlGovUnit" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_date</td>
+                        <td class="col-md-3">@Html.TextBoxFor(m => m.CaseMaster.GovDate, new { @id = "txtGovDate", data_datepicker = "true" })</td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_speed</td>
+                        <td class="col-md-3">@Html.DropDownListFor(m => m.CaseMaster.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, new { @id = "ddlSpeed" })</td>
+                        <td class="col-md-1 text-right">@Lang.csfs_receive_kind</td>
+                        <td class="col-md-3">@Html.DropDownListFor(m => m.CaseMaster.ReceiveKind, (IEnumerable<SelectListItem>)ViewBag.ReceiveKindList, new { @id = "ddlReceiveKind" })</td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_no</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.CaseMaster.GovNo, new { @id = "txtGovNo", @MaxLength = "60" })
+                            <i id="iLogo" class=""></i>
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_limited_date</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.CaseMaster.LimitDate, new { @id = "txtLimitDate", @disabled = "true" })
+                        </td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-3"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                        <td class="col-md-3">
+                            @Html.DropDownListFor(m => m.CaseMaster.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, new { @id = "ddlCaseKind", @disabled = "true" })
+                            @Html.DropDownListFor(m => m.CaseMaster.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, new { @id = "ddlCaseKind2" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_unit</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.CaseMaster.Unit, new { @id = "txtUnit", @disabled = "true" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_person</td>
+                        <td class="col-md-3">@Html.TextBoxFor(m => m.CaseMaster.Person, new { @id = "txtPerson", @disabled = "true" })</td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_attachment</td>
+                        <td class="col-md-11" colspan="5">
+                            <ul>
+                                @for (int i = 0; i <Model.CaseAttachmentlistO.Count; i++)
+                                {
+                                    <li>
+                                        <a href="#">
+                                            @Model.CaseAttachmentlistO[i].AttachmentName
+                                         </a> 
+                                        @*<a href="#" onclick="deleteAttatch(4)">刪除</a>*@
+                                    </li>
+                                }
+                            </ul>
+                            @***** 上傳部分開始 ******@
+                            <div id="divUploadList" style="Margin-left: 15px;">
+                                <div class="row">
+                                    <input type="file" class="col-sm-6" name="fileAttNames" id="fileAtt1" />
+                                </div>
+                            </div>
+                            @***** 上傳部分結束 ******@
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save_and_send</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    </div>
+
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header"></div>
+            <div class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th class="col-xs-3"> @Lang.csfs_obligor_name</th>
+                            <th class="col-xs-3"> @Lang.csfs_obligor_no</th>
+                            <th class="col-xs-5"> @Lang.csfs_usr_id</th>
+                            <th class="col-xs-1"> @Lang.csfs_remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @for (int i = 0; i < 10; i++)
+                        {
+                            <tr>
+                                <td>
+                                    @Html.TextBoxFor(m => m.CaseObligorlistO[i].ObligorName, new { @MaxLength = "20", @class = "col-xs-12" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.CaseObligorlistO[i].ObligorNo, new { @MaxLength = "10", @class = "col-xs-12" })
+                                </td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.CaseObligorlistO[i].ObligorAccount, new { @MaxLength = "16", @class = "col-xs-12" })
+                                </td>
+                                <td class="text-center">
+                                    <a class="btn btn-default btn-xs js-CleanLine" title="@Lang.csfs_delete" href="#" onclick="deleteValue(this)">
+                                        <i class="glyphicon glyphicon-remove"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    @Html.HiddenFor(m => m.CaseMaster.CaseId, new { @id = "HidCaseIdValue" })
+    @Html.HiddenFor(m => m.CaseMaster.LimitDate, new { @id = "HidLimitDateValue" })
+    @Html.HiddenFor(m => m.CaseMaster.Person, new { @id = "HidPersonValue" })
+    @Html.HiddenFor(m => m.CaseMaster.Unit, new { @id = "HidUnitValue" })
+    @Html.HiddenFor(m => m.CaseMaster.CaseKind, new { @id = "HidCaseKindValue" })
+    @Html.HiddenFor(m => m.CaseMaster.DocNo, new { @id = "HidDocNoValue" })
+    @Html.HiddenFor(m => m.CaseMaster.CaseNo, new { @id = "HidCaseNoValue" })
+    @Html.HiddenFor(m => m.CaseMaster.Status, new { @id = "HidStatusValue" })
+}
+<iframe id="upload_frame" name="upload_frame" src="" class="hidden"></iframe>
+
+@Html.Hidden("NowPage", "AgentHandleDetail_Main")
+@Html.Hidden("SyncAuthUrl", Url.Action("ChangGovUnit", "AgentHandleDetail", new { area = "Agent" }))
+@Html.Hidden("CheckGovNoExistUrl", Url.Action("IsGovNoExist", "AgentHandleDetail", new { area = "Agent" }))
+@Html.Hidden("DeleteAttatchUrl", Url.Action("DeleteAttatch", "AgentHandleDetail", new { area = "Agent" }))
+@Html.Hidden("CaseEndSoonMsg", string.Format(Lang.csfs_case_end_soon_msg, (string)ViewBag.CASE_END_TIME))
+@Html.Hidden("CaseEndMsg", Lang.csfs_case_end_msg)
+@Html.Hidden("EndTime", (string)ViewBag.CASE_END_TIME)
+
+
+<script src="~/Scripts/jquery-1.10.2.js"></script>
+<script src="~/Scripts/jquery.alerts-vsdoc.js"></script>
+<script src="~/Scripts/Common.UploadList.js"></script>
+<script type="text/javascript">
+    $("#btnSave").click(function () { return checkData(); });       //* 提交表單
+    //二級連動 點擊來文機關選擇
+    $("#ddlGOV_KIND").change(function () {
+        changeGOV_KIND();
+    });
+    //* 改變了來文機關-大類 顯示相應小類
+    function changeGOV_KIND() {
+        try {
+            var selectedValue = $('#ddlGOV_KIND option:selected').val();
+            if (selectedValue == "") {
+                $('#ddlGovUnit').attr("disabled", "true");
+                $("#ddlGovUnit").empty();
+                $("#ddlGovUnit").append($('<option></option>').val('').text('--請選擇--'));
+            } else {
+                if ($.trim(selectedValue).length > 0) {
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: $("#SyncAuthUrl").val(),
+                        data: { govKind: selectedValue },
+                        success: function (data) {
+                            if (data.length > 0) {
+                                $("#ddlGovUnit").removeAttr("disabled");
+                                $("#ddlGovUnit").empty();
+                                $("#ddlGovUnit").append($('<option></option>').val('').text('--請選擇--'));
+                                $.each(data, function (i, item) {
+                                    $("#ddlGovUnit").append($('<option></option>').val(item.Key).text(item.Value));
+                                });
+                            } else {
+                                $("#ddlGovUnit").attr("disabled", "true");
+                                $("#ddlGovUnit").empty();
+                                $("#ddlGovUnit").append($('<option></option>').val('').text('--請選擇--'));
+                            }
+                        }
+                    });
+                }
+            }
+        }
+        catch (e) {
+        }
+    }
+
+    //* 進畫面來先檢查是否結束建檔
+    checkEnd();
+    //* 檢查目前是否已到停止建檔時間
+    function checkEnd(nowarning) {
+        var h = new Date().getHours();
+        var m = new Date().getMinutes();
+        h = h < 10 ? "0" + h : h;
+        m = m < 10 ? "0" + m : m;
+        var initTime = h.toString() + m.toString();
+        var endTime = $("#EndTime").val();
+
+        if (parseInt(initTime) - parseInt(endTime) >= 0) {
+            //* 時間已過
+             jAlertError($("#CaseEndMsg").val());
+              $("#btnSave").prop("disabled", "disabled");
+            return false;
+        } else if (parseInt(initTime) - parseInt(endTime) > -50) {
+            //* 時間將要到期
+            if (nowarning !== true) {
+                 jAlertError($("#CaseEndSoonMsg").val());
+            }
+            return true;
+        }
+        return true;
+    }
+
+    //* 檢核畫面資料.如果無問題則提交
+    function checkData() {
+        if (!checkEnd(true)) {
+            //* 超出期限不准提交
+            return false;
+        }
+        var newLine = "<br/>";
+        var msg = "";
+        if ($("#ddlGovUnit").val().length <= 0) {
+            msg = msg + $.validator.format($("#PlzInput").val(), $("#NameGovUnit").val()) + newLine;
+        }
+        if ($("#txtGovDate").val().length <= 0) {
+            msg = msg + $.validator.format($("#PlzInput").val(), $("#NameGovDate").val()) + newLine;
+        } else if (!checkIsValidDate($("#txtGovDate").val())) {
+            msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#NameGovDate").val()) + newLine;
+        }
+        if ($("#ddlSpeed").val().length <= 0) {
+            msg = msg + $.validator.format($("#PlzInput").val(), $("#NameSpeed").val()) + newLine;
+        }
+        if ($("#ddlReceiveKind").val().length <= 0) {
+            msg = msg + $.validator.format($("#PlzInput").val(), $("#NameReceiveKind").val()) + newLine;
+        }
+        if ($("#txtGovNo").val().length <= 0) {
+            msg = msg + $.validator.format($("#PlzInput").val(), $("#NameGovNo").val()) + newLine;
+        }
+        if ($("#ddlCaseKind2").val().length <= 0) {
+            msg = msg + $.validator.format($("#PlzInput").val(), $("#NameCaseKind").val()) + newLine;
+        }
+
+        var errorId = false;
+        var oNum = 0;
+        for (var i = 0; i < 10; i++) {
+            if ($("#CaseObligorlistO_" + i + "__ObligorName").val().length > 0
+                && $("#CaseObligorlistO_" + i + "__ObligorNo").val().length > 0
+                && $("#CaseObligorlistO_" + i + "__ObligorAccount").val().length > 0) {
+                //* 都有輸入,檢核ID格式
+                if (!checkId($("#CaseObligorlistO_" + i + "__ObligorNo").val())) {
+                    errorId = true;
+                }
+
+                oNum = oNum + 1;
+            }
+        }
+        if (oNum === 0) {
+            msg = msg + $("#AtLeastOne").val() + newLine;
+        }
+
+        var confirmMsg = "";
+        if ($("#iLogo").hasClass("fa-exclamation-circle")) {
+            confirmMsg = confirmMsg + $("#GovNoExistConfirmMsg").val() + newLine;
+        }
+        if (errorId === true) {
+            confirmMsg = confirmMsg + $("#ObligorNoErrorConfirmMsg").val() + newLine;
+        }
+
+        //* 有必填檢核錯誤
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+        //* 有confirm
+        if (confirmMsg.length > 0) {
+            jConfirm(confirmMsg, $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $("#frmCreate").submit();
+                }
+            });
+            return false;
+        }
+
+        $("#frmCreate").submit();
+        return true;
+    }
+
+    //* 檢查來文編號是否重複
+    function checkGovNo() {
+        var txtGovNo = $.trim($("#txtGovNo").val());
+        if (txtGovNo != null && txtGovNo !== "") {
+            $.ajax({
+                type: "Post",
+                url: $("#CheckGovNoExistUrl").val(),
+                dataType: "json",
+                data: { txtGovNo: txtGovNo },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {//數據重複
+                        $("#iLogo").removeClass();
+                        $("#iLogo").addClass("fa fa-exclamation-circle");
+                    } else {//數據未重複
+                        $("#iLogo").removeClass();
+                        $("#iLogo").addClass("fa fa-check-circle");
+                    }
+                }
+            });
+        } else {
+            $("#iLogo").removeClass();
+        }
+    }
+    //* 檢查義務人統編格式
+    function checkId(str) {
+        //* 判斷第一碼為英文時，採用身份證字號檢核邏輯，檢核邏輯：身分證檢核邏輯
+        //var pattern1 = /^[0-9]{8}/g;
+
+        //* 判斷前兩碼為英文時，採用統一證號檢核邏輯，檢核邏輯：兩碼英文+六碼數字
+        var pattern2 = /^[a-zA-Z]{2}[0-9]{6}$/g;
+        if (pattern2.test(str))
+            return true;
+        //* 判斷第一碼為數字時，採用統編檢核邏輯，檢核邏輯：8碼數字
+        var pattern3 = /^[0-9]{8}$/g;
+        if (pattern3.test(str))
+            return true;
+        //* 都不對就驗證失敗
+        return false;
+    }
+
+    //* 點選義務人後面的X清空該行
+    function deleteValue(obj) {
+        var tds = $(obj).parent().parent().children("td");
+        tds.eq(0).children().val("");
+        tds.eq(1).children().val("");
+        tds.eq(2).children().val("");
+    }
+
+    //* 隱藏iframe回調用
+    function showMessage(strType, strMsg) {
+        if (strType === "1") {
+            jAlertSuccess(strMsg, function () { location.href = location.href; });
+        }
+        if (strType === "0") {
+            jAlertError(strMsg);
+        }
+    }
+
+    //* 刪除一筆附件
+    function deleteAttatch(AttatchId) {
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: $("#DeleteAttatchUrl").val(),
+            data: { AttachId: AttatchId },
+            success: function (data) {
+                if (data=="1") {
+                    showMessage('1', "刪除成功");
+                } else {
+                    showMessage('0', "刪除失敗");
+                }
+            }
+        });
+    }
+
+</script>

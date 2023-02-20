@@ -1,0 +1,359 @@
+﻿@using CTBC.CSFS.BussinessLogic
+@using CTBC.CSFS.Models
+@model CTBC.CSFS.ViewModels.TxCustomerInfo
+@{
+    ViewBag.Title = "CustomerInfo";
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+    CustomerInfoBIZ custBiz = new CustomerInfoBIZ();
+}
+<div class="margin">
+    @if (Model == null)
+    {
+        <text>@Lang.csfs_no_data</text>
+    }
+    else if (!string.IsNullOrEmpty(Model.ErrMsg))
+    {
+        @Model.ErrMsg
+    }
+    else
+    {
+        <table class="col-md-12  text-black table table-bordered">
+            <tr>
+                <td class="alert-success">戶名</td>
+                <td colspan="11">@Model.Tx60491Grp.CustomerName</td>
+            </tr>
+            <tr>
+                <td class="alert-success">統一編號</td>
+                <td>@Model.Tx60491Grp.CustomerId</td>
+                <td class="alert-success">ID重號</td>
+                <td>@Model.Tx67072Grp.IdDupFlag</td>
+                <td class="alert-success">幣別</td>
+                <td>０全部</td>
+                <td class="alert-success">系統選項</td>
+                <td>Ｓ存放款理財</td>
+                <td class="alert-success">產品選項</td>
+                <td>ＡＬＬ所有帳戶</td>
+                <td class="alert-success">狀態</td>
+                <td>1</td>
+            </tr>
+            <tr>
+                <td class="alert-success">客戶等級</td>
+                <td colspan="3">
+                    @Model.Tx60491Grp.VipCdI
+
+                    @switch (Model.Tx60491Grp.VipCdI)
+                    {
+                        case "01":
+                            <text>-1.5E</text>
+                            break;
+                        case "02":
+                        <text>-6000</text>
+                            break;
+                        case "03":
+                        <text>-3000</text>
+                            break;
+                        case "04":
+                        <text>-1500</text>
+                            break;
+                        case "05":
+                        <text>-1200</text>
+                            break;
+                        case "06":
+                        <text>-900</text>
+                            break;
+                        case "07":
+                        <text>-600</text>
+                            break;
+                        case "08":
+                        <text>-300</text>
+                            break;
+                        case "09":
+                        <text>-150</text>
+                            break;
+                        case "10":
+                        <text>-100</text>
+                            break;
+                        case "11":
+                        <text>-50</text>
+                            break;
+                        case "12":
+                        <text>-10</text>
+                            break;
+                        default:
+                        <text> &lt;10 </text>
+                            break; ;
+                    }
+
+                </td>
+                <td class="alert-success">理財專員</td>
+                <td colspan="3">
+                    @Model.Tx60491Grp.FbAoCode&nbsp;
+                    @Model.Tx60491Grp.FbAoBranch - @Model.Tx60491Grp.FbTeller
+                </td>
+                <td class="alert-success">卡額度</td>
+                <td class="text-right">@FormatMoney(Model.Tx67072Grp.CardLimit)</td>
+                <td class="alert-success">基金CIF</td>
+                <td>@Model.Tx60491Grp.FundCif</td>
+            </tr>
+            <tr>
+                <td class="alert-success">卡狀及繳款</td>
+                <td>@Model.Tx67072Grp.CardStatus @Model.Tx67072Grp.CardPay</td>
+                <td class="alert-success">保管箱</td>
+                <td>@Model.Tx60491Grp.SboxFlag</td>
+                <td class="alert-success">協商狀態</td>
+                <td colspan="3">@Model.Tx67072Grp.ConsultStatus</td>
+                <td class="alert-success">可用額度</td>
+                <td class="text-right">@FormatMoney(@Model.Tx67072Grp.CardAvail)</td>
+                <td class="alert-success">統一證號</td>
+                <td></td>
+            </tr>
+        </table>
+
+        if (Model.Tx60491Detls.Any())
+        {
+            <table class="col-md-12 table table-bordered table-striped text-black">
+                <thead>
+                    <tr class="alert-success text-center ">
+                        <td>序號</td>
+                        <td>帳號</td>
+                        <td>分行別</td>
+                        <td>分行名稱</td>
+                        <td>狀態</td>
+                        <td>產品型態</td>
+                        <td>幣別</td>
+                        <td>關係</td>
+                        <td>餘額</td>
+                        <td>管理</td>
+                        <td>可用餘額</td>
+                    </tr>
+                </thead>
+
+                @for (int i = 0; i < Model.Tx60491Detls.Count; i++)
+                {
+                    string stsClass = Model.Tx60491Detls[i].StsDesc == "事故" ? "text-red" : "";
+                    string linkClass = Model.Tx60491Detls[i].Link.ToUpper() != "OWN" ? "text-red" : "";
+                    
+                    <tr>
+                        <td class="text-center">@(i + 1)</td>
+                        <td class="text-left">
+                            @FormatacctNo(Model.Tx60491Detls[i].Account, Model.Tx60491Detls[i].Ccy)
+                        </td>
+                        <td>@Model.Tx60491Detls[i].Branch</td>
+                        <td>@Model.Tx60491Detls[i].BranchName</td>
+                        <td>@Model.Tx60491Detls[i].StsDesc</td>
+                        <td class="@stsClass">@Model.Tx60491Detls[i].ProdDesc</td>
+                        <td>@Model.Tx60491Detls[i].Ccy</td>
+                        <td class="@linkClass">@Model.Tx60491Detls[i].Link</td>
+                        <td class="text-right">@FormatMoney(@Model.Tx60491Detls[i].Bal)</td>
+                        <td>
+                            @switch (Model.Tx60491Detls[i].SegmentCode)
+                            {
+                                case "1":
+                                    <text>個金</text>
+                                    break;
+                                case "2":
+                                <text>法金</text>
+                                    break;
+                                case "3":
+                                <text>SBG</text>
+                                    break;
+                            }
+                        </td>
+                        <td class="text-right">
+                            @if (Model.Tx60491Detls[i].System.Trim() != "B" || Model.Tx60491Detls[i].System.Trim() != "T")
+                            {
+                                TX_33401 tx33401 = custBiz.GetLatestTx33401(Model.Tx60491Detls[i].Account,@Model.Tx60491Grp.CaseId,Model.Tx60491Detls[i].Ccy);
+                                if (tx33401 != null)
+                                {
+                                    if (!string.IsNullOrEmpty(tx33401.InvestCode))
+                                    {
+                                        <text>*</text>
+                                    }
+                                    @FormatMoney(@tx33401.TrueAmt.Trim())
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+
+        if (Model.Tx60491DetlIdDupDatas.Any())
+        {
+            <table class="col-md-12 table table-bordered table-striped text-black">
+                <thead>
+                    <tr class="alert-success text-center ">
+                        <td>序號</td>
+                        <td>帳號</td>
+                        <td>分行別</td>
+                        <td>分行名稱</td>
+                        <td>狀態</td>
+                        <td>產品型態</td>
+                        <td>幣別</td>
+                        <td>關係</td>
+                        <td>餘額</td>
+                        <td>管理</td>
+                        <td>可用餘額</td>
+                    </tr>
+                </thead>
+
+                @for (int i = 0; i < Model.Tx60491DetlIdDupDatas.Count; i++)
+                {
+                    string stsClass = Model.Tx60491DetlIdDupDatas[i].StsDesc == "事故" ? "text-red" : "";
+                    string linkClass = Model.Tx60491DetlIdDupDatas[i].Link.ToUpper() != "OWN" ? "text-red" : "";
+
+                    <tr>
+                        <td class="text-center">@(i + 1)</td>
+                        <td class="text-left">
+                            @FormatacctNo(Model.Tx60491DetlIdDupDatas[i].Account, Model.Tx60491DetlIdDupDatas[i].Ccy)
+                        </td>
+                        <td>@Model.Tx60491DetlIdDupDatas[i].Branch</td>
+                        <td>@Model.Tx60491DetlIdDupDatas[i].BranchName</td>
+                        <td class="@stsClass">@Model.Tx60491DetlIdDupDatas[i].StsDesc</td>
+                        <td>@Model.Tx60491DetlIdDupDatas[i].ProdDesc</td>
+                        <td>@Model.Tx60491DetlIdDupDatas[i].Ccy</td>
+                        <td class="@linkClass">@Model.Tx60491DetlIdDupDatas[i].Link</td>
+                        <td class="text-right">@FormatMoney(@Model.Tx60491DetlIdDupDatas[i].Bal)</td>
+                        <td>
+                            @switch (Model.Tx60491DetlIdDupDatas[i].SegmentCode)
+                            {
+                                case "1":
+                                    <text>個金</text>
+                                    break;
+                                case "2":
+                                <text>法金</text>
+                                    break;
+                                case "3":
+                                <text>SBG</text>
+                                    break;
+                            }
+                        </td>
+                        <td class="text-right">
+                            @if (Model.Tx60491DetlIdDupDatas[i].System.Trim() != "B" || Model.Tx60491DetlIdDupDatas[i].System.Trim() != "T")
+                            {
+                                TX_33401 tx33401 = custBiz.GetLatestTx33401(Model.Tx60491DetlIdDupDatas[i].Account, @Model.Tx60491Grp.CaseId, Model.Tx60491DetlIdDupDatas[i].Ccy);
+                                if (tx33401 != null)
+                                {
+                                    if (!string.IsNullOrEmpty(tx33401.InvestCode))
+                                    {
+                                        <text>*</text>
+                                    }
+                                    @FormatMoney(@tx33401.TrueAmt.Trim())
+                                }
+                            }
+                        </td>
+                    </tr>
+                }
+            </table>
+        }
+
+        if (Model.Tx67072Detls.Any())
+        {
+            <table class="table table-bordered table-striped text-black">
+                <thead>
+                    <tr class="alert-success text-center ">
+                        <td>分行</td>
+                        <td>帳號/額度編號</td>
+                        <td>產品別</td>
+                        <td>核准日</td>
+                        <td>到期日</td>
+                        <td>幣別</td>
+                        <td>授信額度(千元)</td>
+                        <td>餘額</td>
+                        <td>債務別</td>
+                        <td>台幣現狀</td>
+                        <td>凍結</td>
+                    </tr>
+                </thead>
+
+                @foreach (var item in Model.Tx67072Detls)
+                {
+                    <tr>
+                        <td class="text-left">@item.Branc</td>
+                        <td>@item.LimNo</td>
+                        <td>@item.Produ</td>
+                        <td>@item.AppDat</td>
+                        <td>@item.ExpDat</td>
+                        <td>@item.Curr</td>
+                        <td class="text-right">@FormatMoneyForAmt(item.Amt)</td>
+                        <td class="text-right">@FormatMoney(item.BalAmt)</td>
+                        <td>@item.DbbTyp</td>
+                        <td>@item.Status</td>
+                        <td>@item.StopCd</td>
+                    </tr>
+                }
+            </table>
+        }
+    }
+</div>
+
+@helper FormatMoney(string money)
+{
+    if (string.IsNullOrEmpty(money))
+    {
+        <text>0</text>
+    }
+    else
+    {
+        string str = money;
+        string flag = "";
+        if (str.Substring(str.Length - 1) == "+")
+        {
+            str = str.Substring(0, str.Length - 1);
+        }
+        if (str.Substring(str.Length - 1) == "-")
+        {
+            flag = "-";
+            str = str.Substring(0, str.Length - 1);
+        }
+        Decimal dNum = 0;
+
+        Decimal.TryParse(str, out dNum);
+        if (dNum == 0)
+        {
+            <text>0</text>
+        }
+        else
+        {
+            if (str.Contains("."))
+            {
+                <text>@flag @string.Format("{0:N}", dNum)</text>
+            }
+            else
+            {
+                <text>@flag @string.Format("{0:N}", dNum / 100)</text>
+            }
+        }
+    }
+}
+@helper FormatacctNo(string acctNo, string currency)
+{
+    string str = string.IsNullOrEmpty(acctNo) ? "000000000000000" : acctNo.PadLeft(15, '0');
+    if (currency.ToUpper() != "TWD")
+    {
+        str = str.Substring(0, str.Length - 3);
+    }
+    str = str.Substring(str.Length - 12);
+    str = str.Substring(0, 5) + "-" + str.Substring(5, 6) + "-" + str.Substring(11);
+    <text>@str</text>
+}
+@helper FormatMoneyForAmt(string money)
+{
+    if (string.IsNullOrEmpty(money))
+    {
+        <text>0</text>
+    }
+    else
+    {
+        Decimal dNum = 0;
+        Decimal.TryParse(money, out dNum);
+        if (dNum == 0)
+        {
+            <text>0</text>
+        }
+        else
+        {
+            <text>@string.Format("{0:N}", dNum)</text>
+        }
+    }
+}

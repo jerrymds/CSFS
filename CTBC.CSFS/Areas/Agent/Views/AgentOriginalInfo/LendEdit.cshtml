@@ -1,0 +1,122 @@
+﻿@using CTBC.CSFS.Models
+@model CTBC.CSFS.ViewModels.AgentOriginalInfoViewModel
+@{
+    ViewBag.Title = "LendEdit";
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+<div class="margin">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="glyphicon glyphicon-search"></i>
+            <h3 class="box-title">@Lang.csfs_edit</h3>
+        </div>
+        <!-- form start -->
+        @using (Html.BeginForm("LendEdit", "AgentOriginalInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmLendEdit", @class = "form-horizontal" }))
+        {
+            <div class="box-body ">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_case_no</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.LendDataInfo.CaseNo, new { @id = "txtDocNoEdit", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_clientID</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.LendDataInfo.ClientID, new { @id = "txtClientIDLendEdit", @readonly = "readonly" })
+                            </td>
+                            <td class="col-md-1 text-right">@Lang.csfs_clientName</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.LendDataInfo.Name, new { @id = "txtClientNameLendEdit", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_bankID</td>
+                            <td class="col-md-5">
+                                @Html.DropDownListFor(m => m.LendDataInfo.BankID, (IEnumerable<SelectListItem>)ViewBag.BranchNoList, new { @id = "ddlBranchLendEdit", @disabled = "disabled" })
+                                @Html.HiddenFor(m=>m.LendDataInfo.BankID)
+                            </td>
+                            <td class="col-md-1 text-right">@Lang.csfs_bank</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.LendDataInfo.Bank, new { @id = "txtBankLendEdit", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_account</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.LendDataInfo.Account, new { @id = "txtAccountLendEdit", @readonly = "readonly" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_case_attachment</td>
+                            <td class="col-md-11" colspan="5">
+                                <ul>
+                                    @for (int i = 0; i < Model.LendAttachmentInfoList.Count; i++)
+                                    {
+                                        <li>
+                                            <a href="@Url.Action("DownFile", "Home", new { area = "", uploadkind = Uploadkind.LendAttach, id = Model.LendAttachmentInfoList[i].LendAttachId })" target="frmDownload">
+                                                @Model.LendAttachmentInfoList[i].LendAttachName
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_ReturnDate</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.LendDataInfo.ReturnDate, new { @id = "txtReturnDateEdit", data_datepicker = "true" })
+                            </td>
+                            <td class="col-md-1 text-right">@Lang.csfs_ReturnBankDate</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.LendDataInfo.ReturnBankDate, new { @id = "txtReturnBankDate", data_datepicker = "true" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_ReturnPostNo</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.LendDataInfo.ReturnPostNo, new { @id = "txtReturnPostNoEdit" })
+                            </td>
+                            <td class="col-md-1 text-right">@Lang.csfs_BankReceiver</td>
+                            <td class="col-md-5">
+                                @Html.TextBoxFor(m => m.LendDataInfo.BankReceiver, new { @id = "txtBankReceiverEdit" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1 text-right">@Lang.csfs_ReturnMemo</td>
+                            <td class="col-md-11" colspan="5">
+                                @Html.TextAreaFor(m => m.LendDataInfo.ReturnMemo, new { @id = "txtReturnMemoEdit", @maxlength = "100", @class = "col-sm-12  no-padding" })
+                            </td>
+                        </tr>
+                        @Html.HiddenFor(m => m.LendDataInfo.CaseId, new { @id = "hidCaseIdCreateLendEdit" })
+                        @Html.HiddenFor(m => m.LendDataInfo.LendID, new { @id = "hidLendIDEdit" })
+                        @Html.HiddenFor(m => m.LendDataInfo.ReturnCaseId)
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer text-center">
+                <button id="btnSaveBackEdit" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+                <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            </div>
+        }
+    </div>
+</div>
+@Html.Hidden("NowPage", "AgentOriginalInfoLendEdit")
+@Html.Hidden("NametxtDocNoEdit", Lang.csfs_DocNo_ok)
+@Html.Hidden("NametxtClientIDLendEdit", Lang.csfs_ClientID_ok)
+@Html.Hidden("NametxtClientNameLendEdit", Lang.csfs_ClientName_ok)
+@Html.Hidden("NametxtBankIDLendEdit", Lang.csfs_BankID_ok)
+@Html.Hidden("NametxtBankLendEdit", Lang.csfs_Bank_ok)
+@Html.Hidden("NametxtAccountLendEdit", Lang.csfs_Account_ok)
+@Html.Hidden("NametxtReturnDateEdit", Lang.csfs_ReturnDate_ok)
+@Html.Hidden("NametxtReturnBankDate", Lang.csfs_ReturnBankDate_ok)
+@Html.Hidden("NametxtReturnPostNoEdit", Lang.csfs_ReturnPostNo_ok)
+@Html.Hidden("NametxtBankReceiverEdit", Lang.csfs_BankReceiver_ok)
+@Html.Hidden("NameReturnDate", Lang.csfs_ReturnDate1_ok)
+@Html.Hidden("NameReturnBankDate", Lang.csfs_BankReceiver1_ok)
+@section scripts{
+    @Scripts.Render("~/Scripts/Agent/AgentOriginalInfo.js")
+    @Scripts.Render("~/Scripts/Common.UploadList.js")
+}

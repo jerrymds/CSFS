@@ -1,0 +1,77 @@
+﻿@{
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+
+<div class="margin">
+    <div class="box box-primary col-xs-12">
+        <div class="box-header">
+            <h3 class="box-title">@Lang.csfs_seizuremaintainquery</h3>
+        </div>
+        @using (Html.BeginForm("SeizureMaintainQueryResult", "AgentAccountInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+        {
+            <div class="box-body " style="display:none">
+                <table id="query_table" class="table text-black sort">
+                    <tbody>
+                        <tr>
+                            <td>
+                                <input type="hidden" id="txtCaseId" name="CaseId" />
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer text-center" style="display:none">
+                <button id="btnMaintainQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+                <button id="btnCancel" type="button" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            </div>
+        }
+    </div>
+
+    <div id="divResult" class="table-wrap" data-target-url="@Url.Action("SeizureMaintainQueryResult", "AgentAccountInfo", new { area = "Agent" })">
+    </div>
+</div>
+@Html.Hidden("hidCaseId", (Guid)ViewBag.CaseId)
+
+<script src="~/Scripts/jquery-2.1.3.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        btnQueryMaintainClick();
+    });
+
+    $("#btnCancel").click(function () { return btnCancelClick(); });
+
+    //* 點選查詢
+    function btnQueryMaintainClick() {
+        $("#txtCaseId").val($("#hidCaseId").val())
+        $("#divResult").html("");
+        trimAllInput();
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmQuery").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmQuery").serialize(),
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                $("#divResult").html(data).show();
+                $.unblockUI();
+                $("#querystring").val($("#frmQuery").serialize());
+            }
+        });
+        return false;
+    }
+    //* 點擊取消
+    function btnCancelClick() {
+        parent.$.colorbox.close();
+    }
+
+    function trimAllInput() {
+        $(":input[type='text']").each(function () {
+            $(this).val($.trim($(this).val()));
+        });
+    }
+</script>

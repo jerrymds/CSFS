@@ -1,0 +1,112 @@
+﻿@model CTBC.CSFS.ViewModels.CaseReturnViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.CaseReturnList != null)
+                {
+                    if (Model.CaseReturnList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CaseReturn.PageSize, Model.CaseReturn.CurrentPage, Model.CaseReturn.TotalItemCount, Model.CaseReturn, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CaseReturn.SortExpression, Model.CaseReturn.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th><input type="checkbox" id="CheckAll"></th>
+                            <th class="col-md-1" data-sortcolumn="CaseKind2">@Lang.csfs_case_no</th>
+                            <th class="col-md-1" data-sortcolumn="CaseKind">@Lang.csfs_case_kind</th>
+                            <th class="col-md-1" data-sortcolumn="CaseNo">@Lang.csfs_gongwen_no</th>
+                            <th class="col-md-1" data-sortcolumn="Speed">@Lang.csfs_case_speed</th>
+                            <th class="col-md-2" data-sortcolumn="GovUnit">@Lang.csfs_gov_unit</th>
+                            <th class="col-md-1" data-sortcolumn="GovNo">@Lang.csfs_gov_no</th>
+                            <th class="col-md-1" data-sortcolumn="GovDate">@Lang.csfs_gov_date</th>
+                            <th class="col-md-1" data-sortcolumn="LimitDate">@Lang.csfs_case_limited_date</th>
+                            <th class="col-md-1" data-sortcolumn="Unit">@Lang.csfs_case_unit</th>
+                            <th class="col-md-1" data-sortcolumn="Person">@Lang.csfs_keyin_person</th>
+                            <th class="col-md-1" data-sortcolumn="Status">@Lang.csfs_back_reason</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CaseReturnList != null && Model.CaseReturnList.Any())
+                        {
+                            foreach (var item in Model.CaseReturnList)
+                            {
+                                string className = "";
+                                if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) > Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                {
+                                    className = "text-red";
+                                }
+                                else if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) == Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                {
+                                    className = "text-light-blue";
+                                }
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="r2" class="checkfile" value="@item.CaseId" data-returnreason="@item.ReturnReason" data-returnanswer="@item.ReturnAnswer" />
+                                    </td>
+                                    <td class="text-center @className">@item.CaseNo</td>
+                                    <td class="text-center @className">@item.CaseKind</td>
+                                    <td class="text-center @className">@item.DocNo</td>
+                                    <td class="text-center @className">@item.Speed</td>
+                                    <td class="@className">@item.GovUnit</td>
+                                    <td class="@className">@item.GovNo</td>
+                                    <td class="text-center @className">@item.GovDate</td>
+                                    <td class="text-center @className">@item.LimitDate</td>
+                                    <td class="text-center @className">@item.Unit</td>
+                                    <td class="text-center @className">@item.CreateUser</td>
+                                    <td class="text-center @className">@item.ReturnReason</td>
+
+                                    @if (item.CloseReason.Length >= 10)
+                                    {
+                                        <td class="@className">
+                                            @item.CloseReason.Substring(0, 10)
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="@className">
+                                            @item.CloseReason
+                                        </td>
+                                    }
+
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.CaseReturn.DocNo)
+                @Html.Hidden("querystring", Model.CaseReturn.GovKind)
+                @Html.Hidden("querystring", Model.CaseReturn.CaseNo)
+                @Html.Hidden("querystring", Model.CaseReturn.Speed)
+                @Html.Hidden("querystring", Model.CaseReturn.GovUnit)
+                @Html.Hidden("querystring", Model.CaseReturn.GovNo)
+                @Html.Hidden("querystring", Model.CaseReturn.GovDate)
+                @Html.Hidden("querystring", Model.CaseReturn.LimitDate)
+                @Html.Hidden("querystring", Model.CaseReturn.Unit)
+                @Html.Hidden("querystring", Model.CaseReturn.Person)
+                @Html.Hidden("defaultSortColumn", Model.CaseReturn.SortExpression)
+                @Html.Hidden("defaultSort", Model.CaseReturn.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.BindCheckBox();
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

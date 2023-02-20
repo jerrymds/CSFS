@@ -1,0 +1,77 @@
+﻿@model CTBC.CSFS.Models.DeptAccessQuery
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_deptaccessquery;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("GetTxt", "DeptAccessQuery", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div>
+            <table>
+                <tr>
+                    <td class="col-md-1 text-right">@Lang.csfs_lend_date</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.AccessDataS, new { data_datepicker = "true", @Maxlength = "9" })
+                        ～
+                        @Html.TextBoxFor(m => m.AccessDataE, new { data_datepicker = "true", @Maxlength = "9" })
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_debtexcel</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+
+        </div>
+    }
+</div>
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("GovDateText", Lang.csfs_lend_date)
+@Html.Hidden("PleaseInputMsg", Lang.csfs_pleaseinput_0)
+@Html.Hidden("RightTime", Lang.csfs_right_time)
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnQuery").click(function () { return btnQueryClick() });
+    });
+    function btnQueryClick() {
+        var newLine = "<br/>";
+        var msg = "";
+        if ($("#AccessDataS").val() == "") {
+            msg = msg + $.validator.format($("#PleaseInputMsg").val(), $("#GovDateText").val()) + newLine;
+        }
+        if ($("#AccessDataE").val() == "") {
+            msg = msg + $.validator.format($("#PleaseInputMsg").val(), $("#GovDateText").val()) + newLine;
+        }
+        if (!checkIsValidDate($("#AccessDataS").val())) {
+            msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#GovDateText").val()) + newLine;
+        }
+        if (!checkIsValidDate($("#AccessDataE").val())) {
+            msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#GovDateText").val()) + newLine;
+        }
+        if (dateCompare($("#AccessDataS").val(), $("#AccessDataE").val())==1) {
+            msg = msg + $.validator.format($("#PleaseInputMsg").val(), $("#RightTime").val()) + newLine;
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+        $("#frmQuery").submit();
+        
+    }
+    function dateCompare(date1, date2) {
+        date1 = date1.replace(/\-/gi, "/");
+        date2 = date2.replace(/\-/gi, "/");
+        var time1 = new Date(date1).getTime();
+        var time2 = new Date(date2).getTime();
+        if (time1 > time2) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
+</script>

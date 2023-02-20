@@ -1,0 +1,445 @@
+﻿@using System.Web.Mvc.Html;
+@using System.Web.Mvc;
+@using CTBC.CSFS.Models;
+@using System.Web.Optimization;
+@model CTBC.CSFS.Models.NewCaseCustCondition
+
+@{
+    ViewBag.Title = "檢視放行";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("_QueryResult", "NewCaseCustManager", new { area = "NewCaseCust" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="text-right" width="15%">
+                            來文機關
+                        </td>
+                        <td width="35%">
+                            @Html.TextBoxFor(m => m.FileGovenment, new { @MaxLength = "100" })
+                        </td>
+                        <td class="text-right" width="15%">
+                            案件編號
+                        </td>
+                        <td width="35%">
+                            @Html.TextBoxFor(m => m.DocNo, new { @MaxLength = "15" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">
+                            來文日期
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.FileDateStart, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.FileDateEnd, new { data_datepicker = "true" })
+                        </td>
+                        <td class="text-right">
+                            查詢項目
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.SearchProgram, (IEnumerable<SelectListItem>)ViewBag.SearchProgramList, Lang.csfs_select, new { @id = "ddlSearchProgram" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">
+                            來文字號
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.FileNo, new { @MaxLength = "100" })
+                        </td>
+                        <td class="text-right">
+                            回應結果
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.Result, (IEnumerable<SelectListItem>)ViewBag.ResultList, Lang.csfs_select, new { @id = "ddlResult" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">
+                            建檔日期
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.DateStart, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.DateEnd, new { data_datepicker = "true" })
+                        </td>
+                        <td class="text-right">
+                            審核狀態
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.Status, (IEnumerable<SelectListItem>)ViewBag.StatusList, Lang.csfs_select, new { @id = "ddlStatus" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">
+                            來文ID
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.CustIdNo, new { @MaxLength = "11" })
+                        </td>
+                        <td class="text-right">
+                            來文帳號
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.CustAccount, new { @MaxLength = "15" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">
+                            案件狀態
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.CaseStatus, (IEnumerable<SelectListItem>)ViewBag.CaseStatusList, Lang.csfs_select, new { @id = "ddlCaseStatus" })
+                        </td>
+                        <td class="text-right">
+                            是否重號
+                        </td>
+                        <td>
+                            @Html.DropDownListFor(m => m.Double, (IEnumerable<SelectListItem>)ViewBag.DoubleList, Lang.csfs_select, new { @id = "ddlDobule" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+        <input type="hidden" id="pageNum" name="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "NewCaseCustManager", new { area = "NewCaseCust" })">
+</div>
+@Html.Hidden("NowPage", "CaseCustManagerQueryResult")
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("ReturnMessage", Lang.csfs_Return_Message)
+@Html.Hidden("hidAuditFinish", Url.Action("AuditFinish", "NewCaseCustManager", new { area = "NewCaseCust" }))
+@Html.Hidden("hidUpload", Url.Action("Upload", "NewCaseCustManager", new { area = "NewCaseCust" }))
+@Html.Hidden("GetEdit", Url.Action("Edit", "NewCaseCustHistory", new { area = "NewCaseCust" }))
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        // 按鈕事件註冊
+        $("#btnQuery").click(function () { QueryData(); });
+        $("#frmQuery").submit(function () { QueryData(); });
+        $("#btnCancel").click(function () { Cancel(); });
+
+        if ($("#isQuery").val() == "1") {
+            $("#pageNum").val(parseInt($("#CurrentPage").val()));
+            QueryData();
+        }
+    });
+
+    // 查詢
+    function QueryData() {
+        if (CheckData()) {
+            $("#divResult").html("");
+
+            $.blockUI();
+            $.ajax({
+                url: $("#frmQuery").attr("action"),
+                type: "Post",
+                cache: false,
+                data: $("#frmQuery").serialize(),
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    $("#divResult").html(data).show();
+                    $.unblockUI();
+                    $("#querystring").val($("#frmQuery").serialize());
+                }
+            });
+        }
+    }
+
+    //* 點選取消
+    function Cancel() {
+        $("#divResult").html("");
+        $("#TITLE").val("");
+        $("#md_FuncID").val("");
+    }
+
+    // 審核完成
+    function AuditFinish() {
+        var checkKey = new Array();
+        $(".checkfile:checked").each(function () {
+            checkKey.push($(this).val());//向数组中添加元素
+        });
+        var pKey = checkKey.join(',');
+
+        if (pKey.length <= 0) {
+            jAlertError($("#SelectOneMsg").val());
+            return;
+        } else {
+            // 審核完成
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: $("#hidAuditFinish").val(),
+                data: {
+                    strKey: pKey,
+                    flag: "1"
+                },
+                success: function (data) {
+                    if (data) {
+                        alert("審核完成成功");
+
+                        // 刷新清單
+                        QueryData();
+
+                    } else {
+                        alert("審核完成失敗");
+                    }
+                }
+            });
+        }
+    }
+
+    // 上傳
+    function Upload() {
+        // 提示內容
+        var pMsg = "";
+
+        // 聲明變量數組 主檔主鍵&案件狀態&審核狀態
+        var checkKey = new Array();
+        var checkStatus = new Array();
+        var checkAuditStatus = new Array();
+
+        // 獲取選中的資料
+        $(".checkfile:checked").each(function () {
+            // 向数组中添加元素 主檔主鍵&案件狀態&審核狀態
+            checkKey.push($(this).val());
+            checkStatus.push($(this).attr("data-Status"));
+            checkAuditStatus.push($(this).attr("data-AuditStatus"));
+
+            // 【拋查結果】=“重查成功”且【審核狀態】=“N”時，就需要提示“是否確定上傳？”
+            if ($(this).attr("data-Status") == "07" && $(this).attr("data-AuditStatus") == "N") {
+                pMsg = pMsg + "\r\n" + $(this).attr("data-DocNo");
+            }
+        });
+        var pKey = checkKey.join(',');
+        var pStatus = checkStatus.join(',');
+        var pAuditStatus = checkAuditStatus.join(',');
+
+        if (pKey.length <= 0) {
+            jAlertError($("#SelectOneMsg").val());
+            return;
+        }
+        else if (pMsg != "") {
+            if (confirm("以下案件編號【拋查結果】=\"重查成功\"且【審核狀態】=\"N\",是否確定上傳?" + pMsg)) {
+                $.blockUI();
+                // 上傳
+                $.ajax({
+                    type: "POST",
+                    async: false,
+                    url: $("#hidUpload").val(),
+                    data: {
+                        strKey: pKey,
+                        strStatus: pStatus,
+                        strAuditStatus: pAuditStatus
+                    },
+                    success: function (data) {
+                        $.unblockUI();
+                        if (data) {
+                            alert("上傳成功");
+
+                            // 刷新清單
+                            QueryData();
+
+                        } else {
+                            alert("上傳失敗");
+                        }
+                    }
+                });
+            }
+        }
+        else {
+            $.blockUI();
+            // 上傳
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: $("#hidUpload").val(),
+                data: {
+                    strKey: pKey,
+                    strStatus: pStatus,
+                    strAuditStatus: pAuditStatus
+                },
+                success: function (data) {
+                    $.unblockUI();
+                    if (data) {
+                        alert("上傳成功");
+
+                        // 刷新清單
+                        QueryData();
+
+                    } else {
+                        alert("上傳失敗");
+                    }
+                }
+            });
+        }
+    }
+
+    // 強制結案
+    function EndCase() {
+        var checkKey = new Array();
+        $(".checkfile:checked").each(function () {
+            // 主檔主鍵
+            checkKey.push($(this).val().toString());
+        });
+        var pKey = checkKey.join(',');
+
+        if (pKey.length <= 0) {
+            jAlertError($("#SelectOneMsg").val());
+            return;
+        } else {
+            // 獲取路徑
+            var url = $("#GetEdit").val();
+
+            // 開窗
+            //var wd = window.showModalDialog(url + "?pKey=" + pKey + "&pFlag='1'", 'window', 'dialogHeight : 300px; dialogWidth :550px; left :" + iLeft + ";top:"+iTop+";status:no');
+            // adam20210401
+            var wd = window.open(url + "?pKey=" + pKey + "&pFlag='1'", 'window', 'dialogHeight : 300px; dialogWidth :550px; left :" + iLeft + ";top:"+iTop+";status:no');
+            if (wd.value == "ok") {
+                //刷新清單資料
+                alert('return ok');
+                QueryData();
+            }
+        }
+    }
+
+    // 欄位檢核
+    function CheckData() {
+        var msg = "";
+        trimAllInput();
+
+        // 來文日期
+        var CloseDateMsg = CheckDate($("#FileDateStart").val(), $("#FileDateEnd").val(), "來文日期")
+        if (CloseDateMsg != "") {
+            msg += CloseDateMsg;
+        }
+
+        // 建檔日期
+        var CreateDateMsg = CheckDate($("#DateStart").val(), $("#DateEnd").val(), "建檔日期")
+        if (CreateDateMsg != "") {
+            msg += CreateDateMsg;
+        }
+
+        if (msg == "") {
+            return true;
+        } else {
+            jAlertError(msg);
+
+            return false;
+        }
+    }
+
+    // 日期檢核
+    function CheckDate(startDate, endDate, alertMsg) {
+        var msg = "";
+
+        if (startDate != "" && endDate != "") {
+            startDate = ChangeDate(startDate);
+            endDate = ChangeDate(endDate);
+
+            if (new Date(startDate) > new Date(endDate)) {
+                msg = alertMsg + "起日不得大於迄日!\r\n";
+            }
+        }
+
+        return msg;
+    }
+
+    // 轉換成西元年
+    function ChangeDate(strDate) {
+        // 截取年份
+        var pYear = strDate.substring(0, strDate.indexOf('/'));
+
+        // 截取月份和天
+        var pMonthDay = strDate.substring(strDate.indexOf('/'), strDate.length);
+
+        // 年份+1991
+        if (parseInt(pYear) <= 200) {
+            pYear = parseInt(pYear) + 1911;
+        }
+
+        return pYear + "/" + pMonthDay;
+    }
+
+    // 全選
+    function ChkAll() {
+
+        if ($("#check01").prop("checked") == true) {
+            $(".checkfile").prop("checked", "checked");
+        } else {
+            $(".checkfile").removeAttr("checked");
+        }
+    }
+
+    // checkbox點擊事件
+    function ChildItem() {
+        // 選中個數
+        var chkResult = 0;
+        $(".checkfile").each(function () {
+            if ($(this).prop("checked") == true) {
+                chkResult++;
+            }
+        });
+
+        if (chkResult == $(".checkfile").length) {
+            $("#check01").prop("checked", "checked");
+        } else {
+            $("#check01").removeAttr("checked");
+        }
+    }
+
+    // 文本框去空格
+    function trimAllInput() {
+        $(":input[type='text']").each(function () {
+            $(this).val($.trim($(this).val()));
+        });
+    }
+
+    // 回文資料
+    function ReturnsView() {
+        var checkKey = new Array();
+
+        $(".checkfile:checked").each(function () {
+            checkKey.push($(this).val());//向数组中添加元素
+        });
+
+        var pKey = checkKey.join(',');
+
+        if (pKey.length <= 0) {
+            jAlertError($("#SelectOneMsg").val());
+            return;
+        }
+        else {
+            if (checkKey.length > 5) {
+                jAlertError($("#ReturnMessage").val());
+            }
+            else {
+                window.location.href = "NewCaseCustManager/ReturnsView?strPk=" + pKey;
+            }
+
+        }
+    }
+</script>

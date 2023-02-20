@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "Query";
+}
+@model CTBC.CSFS.Models.PARMScheduleSettingVO
+<div class="headline">
+    @Lang.csfs_schedule
+</div>
+<div class="con_title1">
+    @Lang.csfs_query_area
+</div>
+<div>
+    @using (Ajax.BeginForm("_QueryResult", new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "post", OnBegin = "ajaxValidate", OnFailure = "displayError" }))
+    {    
+    <table width="100" border="1" cellpadding="3" cellspacing="0" class="query_table" id="tblQuery">
+        <tr>
+            <td class="query_table_td">@Lang.csfs_schedule_name</td>
+            <td class="f_word_left">@Html.TextBoxFor(m => m.Name, new {  @MaxLength = "20" })<font color="red">＊</font></td>
+            <td class="query_table_td">@Lang.csfs_schedule_path</td>
+            <td class="f_word_left">
+                @Html.TextBoxFor(m => m.Path, new {  @MaxLength = "20" })<font color="red">＊</font>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <div style="text-align: center">
+        <button type="submit" id="Inquiry" >@Lang.csfs_query</button>&nbsp;&nbsp;
+        <button type="submit" id="btnCancel" name="btnCancel" onclick="Cancel()">@Lang.csfs_cancel</button>&nbsp;&nbsp;
+        <button type="button" onclick="location.href = '@Url.Action("Create","PARMScheduleSetting") '">@Lang.csfs_create</button>
+    </div>
+    }
+    <div id="result"></div>     
+</div>
+<script type="text/javascript">
+    function ajaxValidate() {
+        Comm_Trim();
+        return true;
+    }
+    function Cancel() {
+        $("#Name").val('');
+        $("#Path").val('');
+    }
+    $(document).ready(function () {
+        $("#Inquiry").click();
+    });
+</script>

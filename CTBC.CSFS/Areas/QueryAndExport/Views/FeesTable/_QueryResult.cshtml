@@ -1,0 +1,105 @@
+﻿@using CTBC.FrameWork.Util
+@model CTBC.CSFS.ViewModels.CaseSeizureViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.CaseMasterlistO != null)
+                {
+                    if (Model.CaseMasterlistO.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CaseMaster.PageSize, Model.CaseMaster.CurrentPage, Model.CaseMaster.TotalItemCount, Model.CaseMaster, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CaseMaster.SortExpression, Model.CaseMaster.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body table-scroll" style="padding: 0;">
+                <table id="query_table" class="table table-bordered table-striped text-black sort ">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th><input type="checkbox" class="checkfile" value="" name="r2" id="CheckAll" /></th>
+                            <td class="text-center">@Lang.csfs_menu_sort</td>
+                            <th>@Lang.csfs_case_no</th>
+                            <th>@Lang.csfs_gov_name</th>
+                            <th>@Lang.csfs_paypeople</th>
+                            <th>@Lang.csfs_senddate</th>
+                            <th>@Lang.csfs_hangDate</th>
+                            <th>@Lang.csfs_hangAmount</th>
+                            <th>@Lang.csfs_chargeDate</th>
+                            <th>@Lang.csfs_chargeAmount</th>
+                            <th>@Lang.csfs_balance1</th>
+                            <th>@Lang.csfs_memo</th>
+                            <th>@Lang.csfs_chareoff</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CaseMasterlistO != null && Model.CaseMasterlistO.Any())
+                        {
+                            int i = 1;
+                            foreach (var item in Model.CaseMasterlistO)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" class="checkfile" value="@item.CaseId|@item.PayeeId" name="r2" />
+                                    </td>
+                                    <td class="text-center">@i</td>
+                                    <td class="text-center">
+                                        @item.CaseNo
+                                    </td>
+                                    <td class="text-center">@item.GovUnit</td>
+                                    <td class="text-center">@item.ReceivePerson</td>
+                                    <td class="text-center">@item.SendDate</td>
+                                    <td class="text-center">@item.HangingDate</td>
+                                    <td class="text-right">@UtlString.FormatCurrency(item.Fee, 0)</td>
+                                    <td class="text-center">@item.ChargeOffsDate</td>
+                                    <td class="text-right">@UtlString.FormatCurrency(item.ChargeOffsAmount, 0)</td>
+                                    <td class="text-right">
+                                        @{
+                                            int aa = 0;
+                                            if (item.ChargeOffsAmount != "")
+                                            {
+                                                aa = Convert.ToInt32(item.Fee) - Convert.ToInt32(item.ChargeOffsAmount);
+                                                @UtlString.FormatCurrency(aa, 0)
+                                            }
+                                            else
+                                            {
+                                                aa = Convert.ToInt32(item.Fee) ;
+                                                @UtlString.FormatCurrency(aa, 0)
+                                            }
+}
+                                    </td>
+                                    <td class="text-center">@item.Memo</td>
+                                    <td class="text-center">
+                                        @if (!string.IsNullOrEmpty(@item.HangingDate))
+                                        {
+                                            <button class="btn btn-default btn-xs" data-toggle="modal" data-target="#modalCharge" data-valuesinite="@item.CaseId"
+                                                    data-valuesinite1="@item.PayeeId" data-valuesinite2="@item.Fee" data-valuesinite3="@item.HangingDate"
+                                                    data-valuesinite4="@UtlString.FormatDateTw(DateTime.Now.ToString("yyyy/MM/dd"))" data-valuesinite5="@item.Memo">
+                                                @Lang.csfs_chareoff
+                                            </button>
+                                        }
+                                    </td>
+                                </tr>
+                                        i = i + 1;
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+<script language="javascript">
+    $.custPagination.BindCheckBox();
+</script>

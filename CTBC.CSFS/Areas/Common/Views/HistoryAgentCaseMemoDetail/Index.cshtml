@@ -1,0 +1,126 @@
+﻿@using CTBC.CSFS.Models
+@model CTBC.CSFS.ViewModels.HistoryCaseMemoViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "HistoryAgentDocumentInfoDetail", new { area = "Common", CaseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_document_info</a></li>
+        @if (Html.GetBackControllerName() != "DebtPersonQuery")
+        {
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">帳務資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">正本備查</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">發文資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseHistoryDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">流程紀錄</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseCalculatorDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">利息計算</a></li>
+            <li class="active"><a href="@Url.Action("Index", "HistoryAgentCaseMemoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">內部註記</a></li>
+        }
+        @Html.GetBackButtonInTab()
+    </ul>
+
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel9">
+            <div class="box box-primary">
+                <div id="querytablediv" class="box-body">
+                    <table id="query_table" class="table table-bordered table-striped text-black sort">
+                        <thead>
+                            <tr class="alert-success text-center ">
+                                <th class="col-xs-4">@Lang.csfs_content</th>
+                                <th class="col-xs-1">@Lang.csfs_event_time</th>
+                                <th class="col-xs-1">@Lang.csfs_memo_person</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (Model != null && Model.HistoryCaseMemoList != null && Model.HistoryCaseMemoList.Any())
+                            {
+                                foreach (var item in Model.HistoryCaseMemoList)
+                                {
+
+                                    <tr>
+                                        <td class="text-left">@item.Memo</td>
+                                        <td class="text-center">@item.MemoDate</td>
+                                        <td class="text-center">@item.MemoUser</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                @using (Html.BeginForm("CreateMemo", "AgentCaseMemo", new { area = "Agent" }, FormMethod.Post, new { id = "frmCreateMemo", @class = "form-horizontal" }))
+                {
+                    <div class="box-body ">
+                        @*@Html.TextAreaFor(m => m.CaseMemo.Memo, new { @id = "Memo", @rows = "10", @class = "col-xs-12 no-padding",@maxlength = "200" })*@
+                    </div>
+                    <div class="box-footer text-center">
+                        @*<button id="btnSaveMemo" type="button" class="btn btn-primary btn-xs">@Lang.csfs_meetSave</button>*@
+                    </div>
+                    @Html.HiddenFor(m => m.HistoryCaseMemo.CaseId)
+                    @Html.HiddenFor(m => m.HistoryCaseMemo.MemoType)
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("NowPage", "MenuMemo")
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_save_fail)
+@Html.Hidden("TextNotNull", Lang.csfs_text_notnull)
+@section scripts {
+    <script type="text/javascript">
+        $("#btnSaveMemo").click(function () { return btnSaveMemoClick(); });
+        //* 新增修改
+        function btnSaveMemoClick() {
+            trimAllInput();
+            if (!ajaxValidate()) {
+                return false;
+            }
+
+            $.blockUI();
+            $.ajax({
+                url: $("#frmCreateMemo").attr("action"),
+                type: "Post",
+                cache: false,
+                data: $("#frmCreateMemo").serialize(),
+                dataType: "json",
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess($("#CreateSuccessMsg").val(), function () { location.href = location.href });
+                    } else {
+                        jAlertError($("#CreateFailMsg").val());
+                        $.unblockUI();
+                    }
+
+                }
+            });
+            return false;
+        }
+
+        function ajaxValidate() {
+            if ($.trim($("#Memo").val()) === "") {
+                jAlertError($("#TextNotNull").val());
+                return false;
+            }
+            return true;
+        }
+
+        function trimAllInput() {
+            $(":input[type='text']").each(function () {
+                $(this).val($.trim($(this).val()));
+            });
+        }
+    </script>
+}
+
+

@@ -1,0 +1,103 @@
+﻿@model CTBC.CSFS.ViewModels.PARMMenuViewModel
+
+@{
+    ViewBag.Title = "PageToAction";
+}
+
+@*
+    <style type="text/css">
+        .menu_lev_2 {
+            width: 20px;
+            display: inline-block;
+        }
+
+        .menu_lev_3 {
+            width: 40px;
+            display: inline-block;
+        }
+    </style>*@
+<div class="headline">
+    @Lang.csfs_page_to_action
+</div><br />
+@*<div style="text-align:left;height:25px;"><button type="button" id="syncBtn" onclick="SyncAuthZ();">立即同步功能授權設定</button></div>*@
+    <div>
+        <table id="detail" class="query_table" align="center" border="1" cellpadding="3" cellspacing="0">
+            <thead>
+                <tr>
+                    <th style="width:10%">
+                        @Lang.csfs_menu_page_num
+                    </th>
+                    <th style="width:20%">
+                        @Lang.csfs_menu_mainpage_name
+                    </th>
+                    @*
+                    <th style="width:55%">
+                         @Lang.csfs_auth_role
+                    </th>*@
+                    <th style="width:15%">
+                        @Lang.csfs_auth_main
+                    </th>
+                </tr>
+            </thead>
+            @if (Model.PARMMenuXMLNodeList.Any())
+            { 
+                foreach (var item in Model.PARMMenuXMLNodeList)
+                { 
+                    <tr>
+                        <td>@item.ID</td>
+                        <td style="text-align:left;">@Lang.ResourceManager.GetString(item.TITLE.Trim())</td>
+                        @*
+                        <td style="text-align:left;">
+                            @if (item.md_AuthZ.Trim().Length == 0)
+                            {** 目前尚未授權 ** }else{
+                            @item.md_AuthZ.Replace(",", "、");
+                            }
+                        </td>*@
+                        <td><img src="@Url.Content("~/Content/img/u299.png") " alt="" style="cursor:pointer;" onclick="EditPageToAction('@item.ID','@item.TITLE','@item.md_FuncID');" /></td>
+                    </tr>
+                }
+            }
+            else
+            {
+            <tr><td colspan="3" style="text-align:center;">@Lang.csfs_no_data</td></tr>
+            } 
+        </table><br />
+        @*<div style="text-align:left;">
+        1.設定後，離開本維護功能前須按下<span style="color:Blue;">立即同步功能授權設定</span>按鈕，本次異動才會生效。<br />
+        2.使用者需重新登入本網站，才可套用最新功能授權設定。
+        </div>*@
+    </div>
+    <script type="text/javascript">
+        $("#detail tr:odd").addClass("gridrow");
+        $("#detail tr:even").addClass("gridrow_alternate");
+
+        function EditPageToAction(menuID, title, funcID) {
+            location.href = '@Url.Action("EditPageToAction","PARMMenu")?menuID=' + menuID + '&title=' + title + '&funcid=' + funcID;
+        }
+
+        //    function SyncAuthZ() {
+        //        $.ajax({
+        //            type: "POST",
+        //            url: '@Url.Action("SyncAuthZ","PARMMenu")',
+        //            async: false,
+        //            dataType: "text",
+        //            success: function (data) {
+        //                if (data == null) {
+        //                    alert("同步失敗!");
+        //                } else if (data == "Y") {
+        //                    alert("同步成功!");
+        //                } else {
+        //                    alert("同步失敗!");
+        //                }
+        //            },
+        //            error: function (xhr) {
+        //                displayError(xhr);
+        //            }
+        //        });
+        //    }
+
+        //    $(document).ready(function () {
+        //        alert('** 完成設定後 **\n離開本維護功能前\n須按下左上角[立即同步功能授權設定]按鈕\n本次異動才會生效');
+        //    });
+    </script>
+

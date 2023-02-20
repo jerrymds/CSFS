@@ -1,0 +1,84 @@
+﻿@model CTBC.CSFS.Models.Email_Notice
+@{
+    ViewBag.Title = Lang.csfs_EmailGroup;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_edit</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Ajax.BeginForm("Edit", new AjaxOptions() { HttpMethod = "post", OnBegin = "ajaxValidate", OnFailure = "displayError" }))
+    {
+        <input type="hidden" value="@Model.Email" name="EmailEdit">
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_emailaccount
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "", @MaxLength = "50" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_Unit
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.Unit, new { @class = "", @MaxLength = "20" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_person
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.Employee, new { @class = "", @MaxLength = "10" })
+                        </td>
+                    </tr>
+                    
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+        <div class="box-footer text-center">
+            <button type="submit" id="btnSubmit" class="btn btn-primary btn-xs">
+                @Lang.csfs_save
+            </button>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Query", "EmailGroup", new { area = "SystemManagement" })">@Lang.csfs_cancel</a>
+        </div>
+    }
+</div>
+
+@section scripts {
+    <script type="text/javascript">
+        function ajaxValidate() {
+            if ($.trim($("#Email").val()) === '') {
+                jAlertError("@Lang.csfs_emaligroup_msg1");
+                return false;
+            }
+            else if (!checkMail($.trim($("#Email").val())))
+            {
+                jAlertError("@Lang.csfs_emaligroup_msg2");
+                return false;
+            }
+            else {
+                return true;
+            }
+        }
+        function displayError() {
+            jAlertError($("#LoadErrorMsg").val());
+        }
+        function checkMail(email) {
+            var filter = /^([a-zA-Z0-9_\.\-])+\@@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+            if (filter.test(email)) {
+                return true;
+            }
+            return false;
+        }
+    </script>
+}

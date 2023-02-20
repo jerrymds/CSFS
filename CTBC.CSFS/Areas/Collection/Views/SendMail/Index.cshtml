@@ -1,0 +1,948 @@
+﻿@model CTBC.CSFS.Models.CaseMaster
+@using CTBC.FrameWork.Util
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_sendmail;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("_QueryResult", "SendMail", new { area = "Collection" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_sendmailtype</td>
+                        <td class="col-md-11" colspan="3">
+                            @Html.DropDownListFor(m => m.PostType, (IEnumerable<SelectListItem>)ViewBag.Type, new { @id = "ddlPostType" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_receiver</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovName, new { })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.CaseNo, new { })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_senddate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.SendDateStart, new { data_datepicker = "true" })
+                            ~
+                            @Html.TextBoxFor(m => m.SendDateEnd, new { data_datepicker = "true" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_sendword1</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.SendWord, new { })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_closeddate</td>
+                        <td class="col-md-10" colspan="3">
+                            @Html.TextBoxFor(m => m.CloseDateStart, new { data_datepicker = "true" })
+                            ~
+                            @Html.TextBoxFor(m => m.CloseDateEnd, new { data_datepicker = "true" })
+                        </td>
+                    </tr>
+                    @*20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 update start*@
+                    @*<tr>*@
+                    @*<td class="col-md-2 text-right">@Lang.csfs_agnet</td>*@
+                    @*<td class="col-md-10" colspan="3">*@
+                    @*@Html.DropDownListFor(m => m.AgentUser, (IEnumerable<SelectListItem>)ViewBag.AgentUserList, Lang.csfs_select, new { @id = "ddlAgentUser" })*@
+                    @*</td>*@
+                    @*</tr>*@
+                    @*20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 update end*@
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_postNo</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.MailNo1, new { })
+                            ~
+                            @Html.TextBoxFor(m => m.MailNo2, new { })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_sendperson</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.CreatedUser, new { @id = "ddlkind" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_senddate1</td>
+                        <td class="col-md-10" colspan="3">
+                            @Html.TextBoxFor(m => m.MailDateStart, new { @id = "ddlMailDateStart", data_datepicker = "true" })
+                            ~
+                            @Html.TextBoxFor(m => m.MailDateEnd, new { @id = "ddlMailDateEnd", data_datepicker = "true" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_mail_status</td>
+                        <td class="col-md-11" colspan="3">
+                            @Html.DropDownListFor(m => m.MailStatus, (IEnumerable<SelectListItem>)ViewBag.MailStatus, new { @id = "ddlMailStatus" })
+                        </td>
+                    </tr>
+                    @*20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add start*@
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_agnet</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.AgentDepartment, (IEnumerable<SelectListItem>)ViewBag.AgentDepartmentList, Lang.csfs_select, new { @id = "ddlAgentDepartment" })
+                            @Html.DropDownListFor(m => m.AgentDepartment2, (IEnumerable<SelectListItem>)ViewBag.AgentDepartment2List, Lang.csfs_select, new { @id = "ddlAgentDepartment2" })
+                            @Html.DropDownListFor(m => m.AgentDepartmentUser, (IEnumerable<SelectListItem>)ViewBag.AgentDepartmentUserList, Lang.csfs_select, new { @id = "ddlAgentDepartmentUser" })
+                        </td>
+                    </tr>
+                    @*20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add end*@
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnSeeting" type="button" class="btn btn-primary btn-xs">@Lang.csfs_sendnum</button>
+            <button id="btnCancelSeeting" type="button" class="btn btn-primary btn-xs">@Lang.csfs_cancelSetting</button>
+            <button id="btnReport" type="button" class="btn btn-primary btn-xs">@Lang.csfs_report</button>
+            <button id="btnExcel" type="button" class="btn btn-primary btn-xs">@Lang.csfs_excelmailno</button>
+            <button id="btnAddr" type="button" class="btn btn-primary btn-xs">列印地址條</button>
+        </div>
+
+    }
+</div>
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "SendMail", new { area = "Collection" })">
+
+</div>
+<div class="modal fade" id="modalMailNo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@Lang.csfs_sendnum</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-1">起始掛號號碼</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.MailNo, new { @id = "MailNo", @MaxLength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1">掛號日期</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.MailDate, new { data_datepicker = "true", @id = "MailDate" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalPrintQuery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel2" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel2">列印函文</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-1">起始號碼</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.MailNo3, new { @id = "txtSNo1", @MaxLength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1">結束號碼</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.MailNo4, new { @id = "txtSNo2", @MaxLength = "50" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnReportSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalMailNoQuery" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@Lang.csfs_excelmailno</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-1">起始掛號號碼</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.MailNo3, new { @id = "txtMailNo1", @MaxLength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1">結束掛號號碼</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.MailNo4, new { @id = "txtMailNo2", @MaxLength = "50" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSubmitQuery">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalAddr" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">列印地址條</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-1">起始掛號號碼</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.MailNo3, new { @id = "txtMailNoAddr", @MaxLength = "50" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1">結束掛號號碼</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.MailNo4, new { @id = "txtMailNoAddress", @MaxLength = "50" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSubmitAddr">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("NowPage", "SendMailQuery")
+@Html.Hidden("HidCheckDays", (string)ViewBag.CheckDays)
+@Html.Hidden("CreateUrl", Url.Action("Create", "SendMail", new { area = "Collection" }))
+@Html.Hidden("DeleteUrl", Url.Action("Delete", "SendMail", new { area = "Collection" }))
+@Html.Hidden("MailNoUrl", Url.Action("CreateMailNo", "SendMail", new { area = "Collection" }))
+@Html.Hidden("IsExistMailNoUrl", Url.Action("IsExistMailNo", "SendMail", new { area = "Collection" }))
+@Html.Hidden("DeleteMailNoUrl", Url.Action("DeleteMailNo", "SendMail", new { area = "Collection" }))
+@Html.Hidden("ExcelMailNoUrl", Url.Action("ExcelMailNo", "SendMail", new { area = "Collection" }))
+@Html.Hidden("ReportUrl", Url.Action("Report", "SendMail", new { area = "Collection" }))
+@Html.Hidden("AddrUrl", Url.Action("ReportAddr", "SendMail", new { area = "Collection" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("DeleteConfirmMsg", Lang.csfs_del_confirm)
+@Html.Hidden("DeleteFailMsg", Lang.csfs_del_fail)
+@Html.Hidden("DeleteSuccessMsg", Lang.csfs_del_ok)
+@Html.Hidden("SaveSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("SaveFailMsg", Lang.csfs_save_fail)
+@Html.Hidden("SaveConfirmMsg", Lang.csfs_issave_ok)
+@Html.Hidden("CancelConfirmMsg", Lang.csfs_iscancel_ok)
+@Html.Hidden("NametxtMailNo1", Lang.csfs_ismailnostart_ok)
+@Html.Hidden("NametxtMailNo2", Lang.csfs_ismailnoend_ok)
+@Html.Hidden("NametxtMailNo3", Lang.csfs_ismailnonull_ok)
+@Html.Hidden("NameMailDate", Lang.csfs_ismaildate_ok)
+@Html.Hidden("NameMailDate2", Lang.csfs_mailno_new)
+@Html.Hidden("NameMailDate3", Lang.csfs_mailno_cancel)
+@Html.Hidden("NameMailDate1", Lang.csfs_ismaildatenotnull_ok)
+@Html.Hidden("HidDate", (string)ViewBag.MailDate)
+@* 20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add start *@
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("GetAgentDepartment2Url", Url.Action("ChangAgentDepartment1", "CollectionToAgent", new { area = "Collection" }))
+@Html.Hidden("GetAgentDepartmentUserUrl", Url.Action("ChangAgentDepartment2", "CollectionToAgent", new { area = "Collection" }))
+@* 20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add end *@
+
+@section scripts {
+    <script type="text/javascript">
+        $("#btnSeeting").hide();
+        $("#btnExcel").hide();
+        $("#btnAddr").hide();
+        $("#btnCancelSeeting").hide();
+        $("#btnReport").hide();
+        $("#btnQuery").click(function () { return QueryData(); });
+        $("#btnSeeting").click(function () { return btnSeetingClick(); });
+        $("#btnSubmit").click(function () { return btnSubmitClick(); });//*設定掛號號碼
+        $("#btnCancelSeeting").click(function () { return btnCancelSetClick(); });
+        $("#btnExcel").click(function () { return btnExcelSetClick(); });
+        $("#btnSubmitQuery").click(function () { return btnSubmitQueryClick(); });
+        $("#ddlPostType").change(function () { return ChangPostType(); });
+        $("#btnReport").click(function () { return btnPrintSetClick(); });
+        $("#btnReportSubmit").click(function () { return btnReportSubmitClick(); });
+        $("#btnAddr").click(function () { return btnAddrClick(); });
+        /*        $("#btnSubmitAddr").click(function () { return btnSubmitAddrClick(); });*/
+        $("#btnSubmitAddr").click(function () { return btnPrintAddressClick(); });
+        //20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add start
+        $("#ddlAgentDepartment2").prop("disabled", "disabled");
+        $("#ddlAgentDepartmentUser").prop("disabled", "disabled");
+        //* 經辦人員
+        $("#ddlAgentDepartment").change(function () { changeAgentDepartment(); });
+        $("#ddlAgentDepartment2").change(function () { changeAgentDepartment2(); });
+        //20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add end
+
+
+        //*列印涵文
+        function btnReportSubmitClick() {
+            var iLen = 0;
+            var strKey = "";
+            $(".checkfile").each(function () {
+                iLen = iLen + 1;
+                strKey = strKey + $(this).val() + ",";
+            });
+            if (iLen <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+            var aryDetailId = new Array();
+            $(".checkfile").each(function () {
+                aryDetailId.push($(this).val());//向数组中添加元素
+            });
+
+            var aryDetailIdNew = new Array();
+            for (var i = 0; i < aryDetailId.length; i++) {
+                var sno1 = $("#txtSNo1").val();
+                var sno2 = $("#txtSNo2").val();
+                if (aryDetailId[i] != "" && i >= sno1 && i <= sno2) {
+                    aryDetailIdNew.push(aryDetailId[i]);
+                }
+            }
+
+            var strDetailId = aryDetailIdNew.join(',');
+            if (strDetailId.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+
+            $("#modalPrintQuery").modal("hide");
+            $("#txtSNo1").val("");
+            $("#txtSNo2").val("");
+            $.unblockUI();
+            var actionUrl = $("#ReportUrl").val() + "?detailIdList=" + strDetailId;
+            $("#frmForReport").attr("src", actionUrl);
+            return false;
+        }
+        //*列印涵文
+        function btnReportClick() {
+            var iLen = 0;
+            var strKey = "";
+            $(".checkfile").each(function () {
+                if ($(this).prop("checked") === true) {
+                    iLen = iLen + 1;
+                    strKey = strKey + $(this).val() + ",";
+                }
+            });
+            if (iLen <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+            var aryDetailId = new Array();
+            $(".checkfile:checked").each(function () {
+                aryDetailId.push($(this).val());//向数组中添加元素
+            });
+
+            var aryDetailIdNew = new Array();
+            for (var i = 0; i < aryDetailId.length; i++) {
+                if (aryDetailId[i] != "") {
+                    aryDetailIdNew.push(aryDetailId[i]);
+                }
+            }
+
+            var strDetailId = aryDetailIdNew.join(',');
+            if (strDetailId.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+
+            var actionUrl = $("#ReportUrl").val() + "?detailIdList=" + strDetailId;
+            $("#frmForReport").attr("src", actionUrl);
+            return false;
+        }
+
+        //*取消掛號號碼按鈕,
+        function ChangPostType() {
+            $("#divResult").html("");
+            if ($("#ddlPostType").val() == "-1") {
+                $("#btnSeeting").hide();
+                $("#btnExcel").hide();
+                $("#btnAddr").hide();
+                $("#btnCancelSeeting").hide();
+                $("#btnReport").hide();
+            } else if ($("#ddlPostType").val() == "0") {
+                $("#btnCancelSeeting").show();
+                $("#btnReport").show();
+                $("#btnSeeting").show();
+                $("#btnExcel").show();
+                $("#btnAddr").show();
+            } else if ($("#ddlPostType").val() == "1") {
+                $("#btnSeeting").show();
+                $("#btnExcel").show();
+                $("#btnAddr").show();
+                $("#btnCancelSeeting").show();
+                $("#btnReport").hide();
+            }
+            else {
+                $("#btnSeeting").show();
+                $("#btnExcel").show();
+                $("#btnAddr").show();
+                $("#btnCancelSeeting").show();
+                $("#btnReport").hide();
+            }
+            return true;
+        }
+
+        //*點擊查詢
+        function QueryData() {
+            if (CheckData()) {
+                $("#divResult").html("");
+                trimAllInput();
+
+                var newLine = "<br/>";
+                var msg = "";
+                if (isNaN($("#MailNo1").val())) {
+                    msg = msg + $("#NametxtMailNo1").val() + newLine;
+                }
+                if (isNaN($("#MailNo2").val())) {
+                    msg = msg + $("#NametxtMailNo2").val() + newLine;
+                }
+
+                //* 有必填檢核錯誤
+                if (msg.length > 0) {
+                    jAlertError(msg);
+                    return false;
+                }
+
+                $.blockUI();
+                $.ajax({
+                    url: $("#frmQuery").attr("action"),
+                    type: "Post",
+                    cache: false,
+                    data: $("#frmQuery").serialize(),
+                    error: function () {
+                        jAlertError($("#LoadErrorMsg").val());
+                        $.unblockUI();
+                    },
+                    success: function (data) {
+                        $("#divResult").html(data).show();
+                        $("#MailNo").val("");
+                        $("#MailDate").val("");
+                        $("#txtMailNo1").val("");
+                        $("#txtMailNo2").val("");
+                        $.custPagination.BindCheckBox();
+                        $.unblockUI();
+                    }
+                });
+                return false;
+            }
+        }
+
+        // 欄位檢核
+        function CheckData() {
+            var msg = "";
+            var ct = 0;
+            trimAllInput();
+            // 發文日期
+            var SendDateMsg = CheckDate($("#SendDateStart").val(), $("#SendDateEnd").val(), "發文日期")
+            if (SendDateMsg != "") {
+                if (SendDateMsg == "全部") {
+                    ct = ct + 1;
+                }
+                else {
+                    msg += SendDateMsg;
+                }
+            }
+
+            // 結案日期
+            var CloseDateMsg = CheckDate($("#CloseDateStart").val(), $("#CloseDateEnd").val(), "結案日期")
+            if (CloseDateMsg != "") {
+                if (CloseDateMsg == "全部") {
+                    ct = ct + 1;
+                }
+                else {
+                    msg += CloseDateMsg;
+                }
+            }
+
+            // 掛號日期
+            var MailDateMsg = CheckDate($("#ddlMailDateStart").val(), $("#ddlMailDateEnd").val(), "掛號日期")
+            if (MailDateMsg != "") {
+                if (MailDateMsg == "全部") {
+                    ct = ct + 1;
+                }
+                else {
+                    msg += MailDateMsg;
+                }
+            }
+            if (ct == 3) {
+                msg = "發文,結案,掛號日期最少輸入一條件!"
+            }
+            if (msg == "") {
+                return true;
+            } else {
+                jAlertError(msg);
+
+                return false;
+            }
+        }
+
+        // 日期檢核
+        function CheckDate(startDate, endDate, alertMsg) {
+            var msg = "";
+            var checkdays = $("#HidCheckDays").val();
+            var icheckdays = parseInt(checkdays);
+            var startDatelen = startDate.length;
+            var endDatelen = endDate.length;
+            if (startDatelen > 6 && endDatelen > 6) {
+                if (startDate != "" && endDate != "") {
+                    startDate = ChangeDate(startDate);
+                    endDate = ChangeDate(endDate);
+                    var iStatDate = new Date(startDate);
+                    var iEndDate = new Date(endDate);
+                    const diffInMs = iEndDate - iStatDate;
+                    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+                    if (diffInDays < 0) {
+                        msg = alertMsg + "起日不得大於迄日!\r\n";
+                    }
+                    if (diffInDays > icheckdays) {
+                        msg = alertMsg + "迄日不得大於起日" + checkdays.toString() + "日!\r\n";
+                    }
+                }
+            }
+            else {
+                msg = "全部";
+            }
+            return msg;
+        }
+
+        // 轉換成西元年
+        function ChangeDate(strDate) {
+            // 截取年份
+            var pYear = strDate.substring(0, strDate.indexOf('/'));
+
+            // 截取月份和天
+            var pMonthDay = strDate.substring(strDate.indexOf('/'), strDate.length);
+
+            // 年份+1991
+            if (parseInt(pYear) <= 200) {
+                pYear = parseInt(pYear) + 1911;
+            }
+
+            return pYear + "/" + pMonthDay;
+        }
+        //*點擊設定掛號號碼
+        function btnSeetingClick() {
+            var iLen = 0;
+            var strKey = "";
+            $(".checkfile").each(function () {
+                if ($(this).prop("checked") === true) {
+                    iLen = iLen + 1;
+                    strKey = strKey + $(this).val() + ",";
+                }
+            });
+            if (iLen <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+            $("#MailDate").val($("#HidDate").val());
+            $("#MailNo").val("");
+            $("#modalMailNo").modal();
+        }
+        //新PrintAddress
+        function btnPrintAddressClick() {
+            var aryMailNo = new Array();
+            $("#MailBody").find("[class=checkmail]").each(function () {
+                var mailno = $(this).val();
+                if (mailno != "" && mailno.length == 14) {
+                    aryMailNo.push($(this).val());//向数组中添加元素
+                }
+            });
+            var aryDetailsId = new Array();
+            $("#MailBody").find("[class=checkfile]").each(function () {
+                var DetailsId = $(this).val();
+                if (DetailsId != "") {
+                    aryDetailsId.push($(this).val());//向数组中添加元素
+                }
+            });
+            var inDetailsId = aryDetailsId.join(',');
+
+            var fileData = new FormData();
+            var strType = $("#ddlPostType").val();
+
+            var inMailNo = aryMailNo.join(',');
+            if (inMailNo.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+
+            var newLine = "<br/>";
+            var msg = "";
+            if (isNaN($("#txtMailNoAddr").val())) {
+                msg = msg + $("#NametxtMailNo1").val() + newLine;
+            }
+            if (isNaN($("#txtMailNoAddress").val())) {
+                msg = msg + $("#NametxtMailNo2").val() + newLine;
+            }
+
+            //var strMailDateStart = $("#ddlMailDateStart").val();
+            //var strMailDateEnd = $("#ddlMailDateEnd").val();
+            //if (strMailDateStart == "") {
+            //    msg = msg + "掛號日期起為必填" + newLine;
+            //}
+            //if (strMailDateEnd == "") {
+            //    msg = msg + "掛號日期迄為必填" + newLine;
+            //}
+
+            //* 有必填檢核錯誤
+            if (msg.length > 0) {
+                jAlertError(msg);
+                return false;
+            }
+
+            $.blockUI();
+            $.ajax(
+                {
+                url: $("#AddrUrl").val(),
+                contentType: 'application/json; charset=utf-8',
+                datatype: 'json',
+                data: { postType: $("#ddlPostType").val(), strMailNo1: $("#txtMailNoAddr").val(), strMailNo2: $("#txtMailNoAddress").val(), inMailNo: inMailNo, inDetailsId: inDetailsId },
+                type: "GET",
+                    success: function (newfilename) {
+                        ConfigPath = "txtMailAddressPath";
+                        FileName = newfilename;
+                        FileFormat = "pdf";
+                        window.location.href = "SendMail/OpenTxtDoc?FileName="
+                            + FileName + "&ConfigPath=" + ConfigPath + "&FileFormat=" + FileFormat;
+                }
+            });
+            //location.href = $("#AddrUrl").val() + "?postType=" + $("#ddlPostType").val() + "&strMailNo1=" + $("#txtMailNoAddr").val() + "&strMailNo2=" + $("#txtMailNoAddress").val() + "&inMailNo=" + inMailNo;
+            $("#modalAddr").modal("hide");
+            $("#txtMailNo1").val("");
+            $("#txtMailNo2").val("");
+            $.unblockUI();
+        }
+        //*儲存掛號號碼
+        function btnSubmitClick() {
+            var aryDetailId = new Array();
+            var fileData = new FormData();
+            var strType = $("#ddlPostType").val();
+            $(".checkfile:checked").each(function () {
+                aryDetailId.push($(this).val());//向数组中添加元素
+            });
+
+            var aryDetailIdNew = new Array();
+            for (var i = 0; i < aryDetailId.length; i++) {
+                if (aryDetailId[i] != "") {
+                    aryDetailIdNew.push(aryDetailId[i]);
+                }
+            }
+
+            var strDetailId = aryDetailIdNew.join(',');
+            if (strDetailId.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+
+            var newLine = "<br/>";
+            var msg = "";
+            //if ($("#ddlPostType").val() == "3")
+            //{
+            if ($("#MailNo").val().length != 14) {
+                msg = msg + "起始號碼長度需為14!" + newLine;
+            }
+            //}
+            if ($("#MailNo").val().length <= 0) {
+                msg = msg + $("#NametxtMailNo3").val() + newLine;
+            }
+            if (isNaN($("#MailNo").val())) {
+                msg = msg + $("#NametxtMailNo1").val() + newLine;
+            }
+            if ($("#MailDate").val().length <= 0) {
+                msg = msg + $("#NameMailDate1").val() + newLine;
+            }
+            if (!checkIsValidDate($("#MailDate").val())) {
+                msg = msg + $("#NameMailDate").val() + newLine;
+            }
+
+            //* 有必填檢核錯誤
+            if (msg.length > 0) {
+                jAlertError(msg);
+                return false;
+            }
+
+            jConfirm($("#SaveConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#MailNoUrl").val(),
+                        async: false,
+                        data: { strIds: strDetailId, MailNo: $("#MailNo").val(), MailDate: $("#MailDate").val(), strType: strType },
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#SaveSuccessMsg").val(), function () {
+                                    $("#modalMailNo").modal("hide");
+                                    $("#MailNo").val("");
+                                    $("#MailDate").val("");
+                                    QueryData();
+                                });
+                            } else if (data.ReturnCode === "2") {
+                                jAlertError($("#NameMailDate2").val());
+                                $("#modalMailNo").modal("hide");
+                                $("#MailNo").val("");
+                                $("#MailDate").val("");
+                                $.unblockUI();
+                            }
+                            else {
+                                jAlertError($("#SaveFailMsg").val());
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        //*點擊取消掛號號碼
+        function btnCancelSetClick() {
+            var iLen = 0;
+            var strKey = "";
+            $(".checkfile").each(function () {
+                if ($(this).prop("checked") === true) {
+                    iLen = iLen + 1;
+                    strKey = strKey + $(this).val() + ",";
+                }
+            });
+            if (iLen <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+
+            var aryDetailId = new Array();
+            $(".checkfile:checked").each(function () {
+                aryDetailId.push($(this).val());//向数组中添加元素
+            });
+            var aryDetailIdNew = new Array();
+            for (var i = 0; i < aryDetailId.length; i++) {
+                if (aryDetailId[i] != "") {
+                    aryDetailIdNew.push(aryDetailId[i]);
+                }
+            }
+            var strDetailId = aryDetailIdNew.join(',');
+            if (strDetailId.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+            jConfirm($("#CancelConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#IsExistMailNoUrl").val(),
+                        async: false,
+                        data: { strIds: strDetailId },
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                $.ajax({
+                                    type: "POST",
+                                    traditional: true,
+                                    url: $("#DeleteMailNoUrl").val(),
+                                    async: false,
+                                    data: { strIds: strDetailId },
+                                    error: function () {
+                                        jAlertError($("#LoadErrorMsg").val());
+                                        $.unblockUI();
+                                    },
+                                    success: function (data) {
+                                        if (data.ReturnCode === "1") {
+                                            jAlertSuccess("取消成功", function () {
+                                                QueryData();
+                                            });
+                                        } else if (data.ReturnCode === "2") {
+                                            jAlertError($("#NameMailDate3").val());
+                                            $.unblockUI();
+                                        }
+                                        else {
+                                            jAlertError($("#LoadErrorMsg").val());
+                                            $.unblockUI();
+                                        }
+                                    }
+                                });
+                            } else {
+                                jAlertError("您選擇的數據有未設置掛號編號的,請重新輸入!");
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+        function btnPrintSetClick() {
+            $("#txtSNo1").val();
+            $("#txtSNo2").val();
+            $("#modalPrintQuery").modal();
+        }
+        function btnExcelSetClick() {
+            $("#txtMailNo1").val($("#hidMinNo").val());
+            $("#txtMailNo2").val($("#hidMaxNo").val());
+            $("#modalMailNoQuery").modal();
+        }
+        function btnAddrClick() {
+            $("#txtMailNoAddr").val($("#hidMinNo").val());
+            $("#txtMailNoAddress").val($("#hidMaxNo").val());
+            $("#modalAddr").modal();
+        }
+        function btnSubmitQueryClick() {
+            var newLine = "<br/>";
+            var msg = "";
+            if (isNaN($("#txtMailNo1").val())) {
+                msg = msg + $("#NametxtMailNo1").val() + newLine;
+            }
+            if (isNaN($("#txtMailNo2").val())) {
+                msg = msg + $("#NametxtMailNo2").val() + newLine;
+            }
+
+            //* 有必填檢核錯誤
+            if (msg.length > 0) {
+                jAlertError(msg);
+                return false;
+            }
+
+            location.href = $("#ExcelMailNoUrl").val() + "?postType=" + $("#ddlPostType").val() + "&strMailNo1=" + $("#txtMailNo1").val() + "&strMailNo2=" + $("#txtMailNo2").val();
+            $("#modalMailNoQuery").modal("hide");
+            $("#txtMailNo1").val("");
+            $("#txtMailNo2").val("");
+            $.unblockUI();
+        }
+        function btnSubmitAddrClick() {
+            var newLine = "<br/>";
+            var msg = "";
+            if (isNaN($("#txtMailNoAddr").val())) {
+                msg = msg + $("#NametxtMailNo1").val() + newLine;
+            }
+            if (isNaN($("#txtMailNoAddress").val())) {
+                msg = msg + $("#NametxtMailNo2").val() + newLine;
+            }
+
+            //* 有必填檢核錯誤
+            if (msg.length > 0) {
+                jAlertError(msg);
+                return false;
+            }
+
+            location.href = $("#AddrUrl").val() + "?postType=" + $("#ddlPostType").val() + "&strMailNo1=" + $("#txtMailNoAddr").val() + "&strMailNo2=" + $("#txtMailNoAddress").val();
+            $("#modalAddr").modal("hide");
+            $("#txtMailNo1").val("");
+            $("#txtMailNo2").val("");
+            $.unblockUI();
+        }
+
+        //20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add start
+        //* 經辦人員下拉(處)
+        function changeAgentDepartment() {
+            try {
+                $("#ddlAgentDepartmentUser").attr("disabled", "true");
+                $("#ddlAgentDepartmentUser").empty();
+                $("#ddlAgentDepartmentUser").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                var selectedValue = $("#ddlAgentDepartment option:selected").val();
+                if (selectedValue === "") {
+                    $("#ddlAgentDepartment2").attr("disabled", "true");
+                    $("#ddlAgentDepartment2").empty();
+                    $("#ddlAgentDepartment2").append($("<option></option>").val("").text($("#PleaseSelect").val()));
+                } else {
+                    if ($.trim(selectedValue).length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: $("#GetAgentDepartment2Url").val(),
+                            data: { AgentDepartment: selectedValue },
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    $("#ddlAgentDepartment2").removeAttr("disabled");
+                                    $("#ddlAgentDepartment2").empty();
+                                    $("#ddlAgentDepartment2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                    $.each(data, function (i, item) {
+                                        $("#ddlAgentDepartment2").append($("<option></option>").val(item.Value).text(item.Value));
+                                    });
+                                } else {
+                                    $("#ddlAgentDepartment2").attr("disabled", "true");
+                                    $("#ddlAgentDepartment2").empty();
+                                    $("#ddlAgentDepartment2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            catch (e) {
+            }
+        }
+        //* 經辦人員下拉(科組)
+        function changeAgentDepartment2() {
+            try {
+                var selectedValue = $("#ddlAgentDepartment2 option:selected").val();
+                if (selectedValue === "") {
+                    $("#ddlAgentDepartmentUser").attr("disabled", "true");
+                    $("#ddlAgentDepartmentUser").empty();
+                    $("#ddlAgentDepartmentUser").append($("<option></option>").val("").text($("#PleaseSelect").val()));
+                } else {
+                    if ($.trim(selectedValue).length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: $("#GetAgentDepartmentUserUrl").val(),
+                            data: { AgentDepartment: selectedValue },
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    $("#ddlAgentDepartmentUser").removeAttr("disabled");
+                                    $("#ddlAgentDepartmentUser").empty();
+                                    $("#ddlAgentDepartmentUser").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                    $.each(data, function (i, item) {
+                                        $("#ddlAgentDepartmentUser").append($("<option></option>").val(item.Value).text(item.Value));
+                                    });
+                                } else {
+                                    $("#ddlAgentDepartmentUser").attr("disabled", "true");
+                                    $("#ddlAgentDepartmentUser").empty();
+                                    $("#ddlAgentDepartmentUser").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            catch (e) {
+            }
+        }
+            //20170811 RC RQ-2015-019666-020 派件至跨單位 宏祥 add end
+    </script>
+}

@@ -1,0 +1,43 @@
+﻿
+<div class="nav-tabs-custom">
+    <ul class="nav nav-tabs" style="cursor: move;">
+        
+        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+        {
+            <li><a href="#panelAccount1" data-toggle="tab">扣押設定</a></li>
+        }
+        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+        {
+            <li class=""><a href="#panelAccount2" data-toggle="tab">支付設定</a></li>
+            <li class=""><a href="#panelAccount3" data-toggle="tab">受款人設定</a></li>
+        }
+        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+        {
+            <li class=""><a href="#panelAccount4" data-toggle="tab">撤銷設定</a></li>
+        }
+    </ul>
+    <div class="tab-content">
+        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizure || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+        {
+            <div class="tab-pane" id="panelAccount1">
+                這裡是 扣押設定
+            </div>
+        }
+        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay || ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureAndPay)
+        {
+            <div class="tab-pane" id="panelAccount2">
+                這裡是 支付設定
+            </div>
+
+            <div class="tab-pane" id="panelAccount3">
+                這裡是 受款人設定
+            </div>
+        }
+        @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+        {
+            <div class="tab-pane" id="panelAccount4">
+                這裡是 撤銷設定
+            </div>
+        }
+    </div>
+</div>

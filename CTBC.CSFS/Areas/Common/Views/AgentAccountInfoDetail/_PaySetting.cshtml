@@ -1,0 +1,302 @@
+﻿@using CTBC.CSFS.Models
+@using CTBC.FrameWork.Util
+@model PaySettingViewModel
+@using (Html.BeginForm("DoSavePaySetting", "AgentAccountInfoDetail", new { area = "Common" }, FormMethod.Post, new { id = "frmPaySetting", @class = "form-horizontal" }))
+{
+    <div>
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">@Lang.csfs_this_case</h3>
+            </div>
+            <div class="box-body">
+                <table id="payTable" class="table table-bordered table-striped text-black">
+                    <thead>
+                    <tr class="alert-success text-center">
+                        <th>@Lang.csfs_delete</th>
+                        <th>@Lang.csfs_case_no</th>
+                        <th>@Lang.csfs_id_1</th>
+                        <th>@Lang.csfs_name</th>
+                        <th>@Lang.csfs_case_unit</th>
+                        <th>@Lang.csfs_case_status</th>
+                        <th>@Lang.csfs_bank_name</th>
+                        <th>@Lang.csfs_deposit_account</th>
+                        <th>@Lang.csfs_currency_1</th>
+                        <th style="display:none" class="col-xs-1">@Lang.csfs_balance</th>
+                        <th class="col-xs-1">@Lang.csfs_cal_caseamount</th>
+                        <th class="col-xs-1">@Lang.csfs_t_amt</th>
+                        <th class="col-xs-1">@Lang.csfs_pay_amt</th>
+                        <th>   </th>
+                        <th class="col-xs-1">解扣金額</th>
+                    </tr>
+                    </thead>
+                    <tbody id="Paytbody">
+                    @if (Model != null && Model.ListPay != null && Model.ListPay.Any())
+                    {
+                        for (int i = 0; i < Model.ListPay.Count; i++)
+                        {
+                            <tr data-seizureid="@Model.ListPay[i].SeizureId">
+                                <td class="text-center">
+                                    
+                                    @*@if (!Model.AlreadySaved)
+                                    {
+                                        <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                                    }*@
+                                </td>
+                                <td>@Model.ListPay[i].CaseNo</td>
+                                <td>@Model.ListPay[i].CustId</td>
+                                <td>@Model.ListPay[i].CustName</td>
+                                <td>@Model.ListPay[i].BranchNo</td>
+                                <td id="AccStatus">
+                                    @if (Model.ListPay[i].AccountStatusflag == "true")
+                                    {
+                                        if (Model.ListPay[i].AccountStatus == "事故")
+                                        {
+                                            @Html.ActionLink(Model.ListPay[i].AccountStatus, "AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.ListPay[i].Account, ccy = Model.ListPay[i].Currency }, new { @class = "fancy1100_600", @style = "color:red;" })
+                                            @*<a style="color:red;" href="@Url.Action("AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.ListPay[i].Account })">@Model.ListPay[i].AccountStatus</a>*@
+                                        }
+                                        else
+                                        {
+                                            <span style="color:red">@Model.ListPay[i].AccountStatus</span>
+                                        }
+                                    }
+                                    else
+                                    {
+                                        if (Model.ListPay[i].AccountStatus == "事故")
+                                        {
+                                            @Html.ActionLink(Model.ListPay[i].AccountStatus, "AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.ListPay[i].Account, ccy = Model.ListPay[i].Currency }, new { @class = "fancy1100_600" })
+                                            @*<a href="@Url.Action("AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.ListPay[i].Account })">@Model.ListPay[i].AccountStatus</a>*@
+                                        }
+                                        else
+                                        {
+                                            @Model.ListPay[i].AccountStatus
+                                        }
+                                    }
+                                    @Html.HiddenFor(m => m.ListPay[i].AccountStatus, new { @id = "AccountStatus" + i })
+                                </td>
+
+                                <td>@Model.ListPay[i].BranchName</td>
+                                <td>@Model.ListPay[i].Account</td>
+                                <td>@Model.ListPay[i].Currency</td>
+                                <td class="text-right" style="display:none">@UtlString.FormatCurrency(Model.ListPay[i].Balance, 2)</td>
+                                <td class="text-right">@UtlString.FormatCurrency(Model.ListPay[i].SeizureAmount,2)</td>
+                                <td class="text-right">
+                                    @UtlString.FormatCurrency(Model.ListPay[i].SeizureAmountNtd,2)
+                                    @Html.HiddenFor(m => m.ListPay[i].SeizureId, new { @id = "SeizureId_" + i })
+                                </td>
+                                @*<td class="text-right">
+                                    @Html.TextBoxFor(m => m.ListPay[i].PayAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding", @id = "PayAmount_" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].PayAmount, 0) })
+                                </td>*@
+                                <td class="text-right" id="PayAmt">
+                                    @*支付金額*@
+                                    @if (Model.ListPay[i].PayAmountflag == "true")
+                                    {
+                                        @Html.TextBoxFor(m => m.ListPay[i].PayAmount, new { @disabled = "disabled", @MaxLength = "10", @class = "col-xs-12 no-padding", @id = "PayAmount" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].PayAmount, 0), @style = "color:red" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(m => m.ListPay[i].PayAmount, new { @disabled = "disabled", @MaxLength = "10", @class = "col-xs-12 no-padding", @id = "PayAmount" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].PayAmount, 0) })
+                                    }
+                                </td>
+                                <td class="text-center">
+                                    @if (Model.ListPay[i].SeizureStatus == "1")
+                                    {
+                                        <input type="checkbox" class="IsOrNo" enable="readonly" checked>
+                                    }
+                                    else
+                                    {
+                                        <input type="checkbox" class="IsOrNo" enable="readonly">
+                                    }
+                                </td>
+                                <td class="text-right" id="TripAmt">
+                                    @*解扣金額*@
+                                    @if (Model.ListPay[i].TripAmountflag == "true")
+                                    {
+                                        @Html.TextBoxFor(m => m.ListPay[i].TripAmount, new { @disabled = "disabled", @class = "col-xs-12 no-padding", @id = "TripAmount" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].TripAmount, 0), @style = "color:red" })
+                                    }
+                                    else
+                                    {
+                                        @Html.TextBoxFor(m => m.ListPay[i].TripAmount, new { @disabled = "disabled", @class = "col-xs-12 no-padding", @id = "TripAmount" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].TripAmount, 0) })
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    </tbody>
+                </table>
+            </div>
+            @*<div class="box-footer text-center">
+                @if (!Model.AlreadySaved)
+                {
+                    <button id="btnPaySettingSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+                }
+            </div>*@
+        </div>
+        @if (Model != null && Model.CaseKind2 == CaseKind2.CasePay && !Model.AlreadySaved)
+        {
+            //* 沒有儲存,且案件類型為支付的,才顯示.
+            //* 因為扣押並支付情況下.不允許選擇其他案件
+            <div class="box box-primary">
+                <div class="box-header">
+                    <h3 class="box-title">@Lang.csfs_no_list</h3>
+                </div>
+                <div class="box-body">
+                    <table id="payTable2" class="table table-bordered table-striped text-black">
+                        <thead>
+                        <tr class="alert-success text-center">
+                            <th class="col-xs-1">@Lang.csfs_create</th>
+                            <th class="col-xs-1">@Lang.csfs_case_no</th>
+                            <th class="col-xs-1">@Lang.csfs_id_1</th>
+                            <th class="col-xs-1">@Lang.csfs_name</th>
+                            <th class="col-xs-1">@Lang.csfs_case_unit</th>
+                            <th class="col-xs-1">@Lang.csfs_bank_name</th>
+                            <th class="col-xs-1">@Lang.csfs_deposit_account</th>
+                            <th style="display:none" class="col-xs-1">@Lang.csfs_currency_1</th>
+                            <th class="col-xs-1">@Lang.csfs_balance</th>
+                            <th class="col-xs-1">@Lang.csfs_cal_caseamount</th>
+                            <th class="col-xs-1">@Lang.csfs_t_amt</th>
+                            @*<th>   </th>*@
+                            <th class="col-xs-1">@Lang.csfs_pay_amt</th>
+                        </tr>
+                        </thead>
+                        <tbody id="Paytbody2">
+                        @if (Model != null && Model.ListSeizure != null && Model.ListSeizure.Any())
+                        {
+                            foreach (CaseSeizure item in Model.ListSeizure)
+                            {
+                                <tr data-seizureid="@item.SeizureId">
+                                    <td class="text-center">
+                                        @*<button type="button" class="btn btn-default btn-xs js-add"><i class="glyphicon glyphicon-plus"></i></button>*@
+                                    </td>
+                                    <td>@item.CaseNo</td>
+                                    <td>@item.CustId</td>
+                                    <td>@item.CustName</td>
+                                    <td>@item.BranchNo</td>
+                                    <td>@item.BranchName</td>
+                                    <td>@item.Account</td>
+                                    @*<td>@item.Currency</td>*@
+                                    <td class="text-right">@UtlString.FormatCurrency(item.Balance, 0)</td>
+                                    <td class="text-right">@UtlString.FormatCurrency(item.SeizureAmount,0)</td>   
+                                    <td class="text-right">@UtlString.FormatCurrency(item.SeizureAmountNtd,0)</td>
+                                    @*<td></td>*@
+                                    <td class="text-right">@UtlString.FormatCurrency(item.PayAmount, 0)</td>
+                                </tr>
+                            }
+                        }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        }
+
+    </div>
+    @Html.Hidden("SaveSuccessMsg", Lang.csfs_save_ok)
+    @Html.Hidden("SaveFailMsg", Lang.csfs_save_fail)
+    @Html.Hidden("AtLeastSelectOne", Lang.csfs_at_least_select_one)
+    @Html.HiddenFor(m => m.CaseId)
+    @Html.Hidden("panelAccount2Url", Url.Action("_PaySetting", "AgentAccountInfoDetail", new { area = "Common", caseId = (Model == null ? "" : Convert.ToString(Model.CaseId)) }))
+}
+
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    
+
+    jQuery(document).ready(function () {
+        $("#btnPaySettingSave").click(function () { return btnPaySettingSave(); });
+        //* 已選擇中的移除
+        $("#Paytbody .js-delete").unbind("click").click(function () { return btnRemovePayClick(this); });
+        $("#Paytbody2 .js-add").unbind("click").click(function () { return btnAddPayClick(this); });
+
+        
+    });
+    
+
+    function reCalcTextBoxName() {
+        //* 重新給金額編號
+        $("#Paytbody").find("[id^=PayAmount]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].PayAmount");
+        });
+        //* 重新給Id編號
+        $("#Paytbody").find("[id^=SeizureId]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].SeizureId");
+        });
+        //* 已選擇中的移除
+        $("#Paytbody .js-delete").unbind("click").click(function () { return btnRemovePayClick(this); });
+        $("#Paytbody2 .js-add").unbind("click").click(function () { return btnAddPayClick(this); });
+    }
+    function btnPaySettingSave() {
+
+        if ($("#Paytbody tr").length <= 0) {
+            jAlertError($("#AtLeastSelectOne").val());
+            return false;
+        }
+
+        var msg = "";
+        var newline = "<br/>";
+        $("#Paytbody tr").each(function (i) {
+            var tr = $(this);
+            if ($(this).find("[id^=PayAmount]").length <= 0 || isNaN($(this).find("[id^=PayAmount]").val())) {
+                msg = msg + "@Lang.csfs_Please_enter" +(i + 1) +"@Lang.csfs_pen  @Lang.csfs_Amount" +newline;
+            }
+            if ($(this).find("[id^=SeizureId]").length <= 0 || isNaN($(this).find("[id^=SeizureId]").val())) {
+                msg = msg + "@Lang.csfs_err_id" + newline;
+            }
+        });
+
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmPaySetting").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmPaySetting").serialize(),
+            dataType: "json",
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess($("#SaveSuccessMsg").val(), function () { location.reload(); });
+                } else {
+                    jAlertError($("#SaveFailMsg").val());
+                    $.unblockUI();
+                }
+
+            }
+        });
+        return false;
+    }
+
+    function btnRemovePayClick(obj) {
+        var buttonFormat = '<button type="button" class="btn btn-default btn-xs js-add"><i class="glyphicon glyphicon-plus"></i></button>';
+
+        var objtr = $(obj).parent().parent();
+        var objtrclone = objtr.clone();
+        objtrclone.find("td:last").html("");
+        objtrclone.find("td:first").html(buttonFormat);
+        objtrclone.appendTo($("#Paytbody2"));
+        objtr.remove();
+        reCalcTextBoxName();
+
+        return false;
+    }
+
+    function btnAddPayClick(obj) {
+        
+        var inputAmountFormat = '<input maxlength="10" class="col-xs-12 no-padding" id="PayAmount_{0}" name="ListPay[{0}].PayAmount" type="text" value="0.00"><input id="SeizureId_{0}" name="ListPay[{0}].SeizureId" type="hidden" value="{1}">';
+        var buttonFormat = '<button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>';
+
+        var objtr = $(obj).parent().parent();
+        var objtrclone = objtr.clone(); 
+        objtrclone.find("td:last").html($.validator.format(inputAmountFormat, new Array($("#Paytbody tr").length, objtrclone.data("seizureid"))));
+        objtrclone.find("td:first").html(buttonFormat);
+        objtrclone.appendTo($("#Paytbody"));
+        objtr.remove();
+        reCalcTextBoxName();
+    }
+</Script> 

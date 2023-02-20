@@ -1,0 +1,854 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CSFSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="AgentSetting">
+          <Key>
+            <PropertyRef Name="SettingId" />
+          </Key>
+          <Property Name="SettingId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="EmpId" Type="nvarchar" MaxLength="20" />
+          <Property Name="SectionName" Type="nvarchar" MaxLength="50" />
+          <Property Name="DepartmentID" Type="nvarchar" MaxLength="20" />
+          <Property Name="IsSeizure" Type="bit" />
+          <Property Name="IsCase" Type="bit" />
+        </EntityType>
+        <EntityType Name="AutoLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="bigint" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="SendUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="DocNo" Type="nvarchar" MaxLength="13" />
+          <Property Name="ObligorNo" Type="nvarchar" MaxLength="14" />
+          <Property Name="ServiceName" Type="nvarchar" MaxLength="400" />
+          <Property Name="SendDate" Type="datetime" />
+          <Property Name="Status" Type="int" />
+          <Property Name="ErrorMsg" Type="nvarchar" MaxLength="1000" />
+          <Property Name="CreateDatetime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CaseAssignTable">
+          <Key>
+            <PropertyRef Name="AssignId" />
+          </Key>
+          <Property Name="AssignId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CaseId" Type="uniqueidentifier" />
+          <Property Name="EmpId" Type="nvarchar" MaxLength="20" />
+          <Property Name="AlreadyAssign" Type="int" />
+          <Property Name="CreatdUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CaseHistory">
+          <Key>
+            <PropertyRef Name="HistoryId" />
+          </Key>
+          <Property Name="HistoryId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="FromRole" Type="nvarchar" MaxLength="50" />
+          <Property Name="FromUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="FromFolder" Type="nvarchar" MaxLength="50" />
+          <Property Name="Event" Type="nvarchar" MaxLength="50" />
+          <Property Name="EventTime" Type="datetime" />
+          <Property Name="ToRole" Type="nvarchar" MaxLength="50" />
+          <Property Name="ToUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ToFolder" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CaseMaster">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DocNo" Type="nvarchar" MaxLength="13" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="5" Nullable="false" />
+          <Property Name="isDelete" Type="bit" Nullable="false" />
+          <Property Name="CaseNo" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="GovKind" Type="nvarchar" MaxLength="200" />
+          <Property Name="GovUnit" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ReceiverNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="GovDate" Type="datetime" Nullable="false" />
+          <Property Name="Speed" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ReceiveKind" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="GovNo" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="LimitDate" Type="datetime" Nullable="false" />
+          <Property Name="CaseKind" Type="nvarchar" MaxLength="200" />
+          <Property Name="CaseKind2" Type="nvarchar" MaxLength="200" />
+          <Property Name="ReceiveDate" Type="datetime" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Person" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignPerson" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="CloseReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="ApproveDate" Type="datetime" />
+          <Property Name="CloseDate" Type="datetime" />
+          <Property Name="AgentUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="AgentBranchId" Type="nchar" MaxLength="10" />
+          <Property Name="AgentDeptId" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApproveUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CloseUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="AgentSection" Type="nvarchar" MaxLength="50" />
+          <Property Name="OverDueMemo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PropertyDeclaration" Type="nvarchar" MaxLength="30" />
+          <Property Name="ReturnReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="AfterSeizureApproved" Type="bit" Nullable="false" />
+          <Property Name="ReturnAnswer" Type="nvarchar" MaxLength="200" />
+          <Property Name="PayDate" Type="datetime" />
+          <Property Name="AgentSubmitDate" Type="datetime" />
+          <Property Name="AgentSubmitDate2" Type="datetime" />
+          <Property Name="ApproveUser2" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApproveDate2" Type="datetime" />
+          <Property Name="AgentUser2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Receiver" Type="nvarchar" MaxLength="100" />
+          <Property Name="ReceiveAmount" Type="int" />
+          <Property Name="NotSeizureAmount" Type="int" />
+          <Property Name="RMUser" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="CaseMemo">
+          <Key>
+            <PropertyRef Name="MemoId" />
+          </Key>
+          <Property Name="MemoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="MemoType" Type="nvarchar" MaxLength="20" />
+          <Property Name="Memo" Type="ntext" />
+          <Property Name="MemoDate" Type="datetime" />
+          <Property Name="MemoUser" Type="nvarchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="CaseObligor">
+          <Key>
+            <PropertyRef Name="ObligorId" />
+          </Key>
+          <Property Name="ObligorId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ObligorName" Type="nvarchar" MaxLength="70" />
+          <Property Name="ObligorNo" Type="nvarchar" MaxLength="14" />
+          <Property Name="ObligorAccount" Type="nvarchar" MaxLength="16" />
+          <Property Name="CreatedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="CaseSeizure">
+          <Key>
+            <PropertyRef Name="SeizureId" />
+          </Key>
+          <Property Name="SeizureId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="PayCaseId" Type="uniqueidentifier" />
+          <Property Name="CaseNo" Type="nvarchar" MaxLength="15" />
+          <Property Name="CustId" Type="nvarchar" MaxLength="14" />
+          <Property Name="CustName" Type="nvarchar" MaxLength="60" />
+          <Property Name="BranchNo" Type="nvarchar" MaxLength="4" />
+          <Property Name="BranchName" Type="nvarchar" MaxLength="200" />
+          <Property Name="Account" Type="nvarchar" MaxLength="17" />
+          <Property Name="AccountStatus" Type="nvarchar" MaxLength="6" />
+          <Property Name="Currency" Type="nvarchar" MaxLength="3" />
+          <Property Name="Balance" Type="nvarchar" MaxLength="17" />
+          <Property Name="SeizureAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="ExchangeRate" Type="decimal" Precision="18" Scale="3" />
+          <Property Name="SeizureAmountNtd" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="PayAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="SeizureStatus" Type="nvarchar" MaxLength="10" />
+          <Property Name="CreatedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="CancelCaseId" Type="uniqueidentifier" />
+          <Property Name="ProdCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="Link" Type="nvarchar" MaxLength="4" />
+          <Property Name="SegmentCode" Type="nvarchar" MaxLength="4" />
+          <Property Name="CancelAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TripAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="OtherSeizure" Type="nvarchar" MaxLength="1" />
+          <Property Name="Seq" Type="int" />
+          <Property Name="SeizureAmountSUB" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="TxtStatus" Type="nvarchar" MaxLength="1" />
+          <Property Name="TxtProdCode" Type="nvarchar" MaxLength="4" />
+        </EntityType>
+        <EntityType Name="EDocTXT1">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="GovUnit" Type="nvarchar" MaxLength="200" />
+          <Property Name="GovUnitCode" Type="nvarchar" MaxLength="18" />
+          <Property Name="GovDate" Type="datetime" Nullable="false" />
+          <Property Name="ReceiverNo" Type="nvarchar" MaxLength="40" />
+          <Property Name="ObligorName" Type="nvarchar" MaxLength="70" />
+          <Property Name="Agent" Type="nvarchar" MaxLength="70" />
+          <Property Name="RegistrationNo" Type="nvarchar" MaxLength="70" />
+          <Property Name="ObligorNo" Type="nvarchar" MaxLength="70" />
+          <Property Name="Amount" Type="bigint" />
+          <Property Name="Fee" Type="bigint" />
+          <Property Name="Total" Type="bigint" />
+          <Property Name="Memo" Type="nvarchar" MaxLength="480" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="20" />
+          <Property Name="Contact" Type="nvarchar" MaxLength="12" />
+          <Property Name="Telephone" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'CSFS_UAT.dbo.EDocTXT1_Detail' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="EDocTXT1_Detail">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ExecCaseNo" Type="nvarchar" MaxLength="15" />
+          <Property Name="TransferUnitID" Type="nvarchar" MaxLength="6" />
+          <Property Name="TransferCaseNo" Type="nvarchar" MaxLength="27" />
+          <Property Name="ManageID" Type="nvarchar" MaxLength="24" />
+        </EntityType>
+        <EntityType Name="EDocTXT2">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="GovUnit" Type="nvarchar" MaxLength="200" />
+          <Property Name="GovUnitCode" Type="nvarchar" MaxLength="18" />
+          <Property Name="GovDate" Type="datetime" Nullable="false" />
+          <Property Name="ReceiverNo" Type="nvarchar" MaxLength="40" />
+          <Property Name="ObligorName" Type="nvarchar" MaxLength="70" />
+          <Property Name="Agent" Type="nvarchar" MaxLength="70" />
+          <Property Name="RegistrationNo" Type="nvarchar" MaxLength="70" />
+          <Property Name="ObligorNo" Type="nvarchar" MaxLength="70" />
+          <Property Name="Amount" Type="bigint" />
+          <Property Name="GovDate2" Type="datetime" />
+          <Property Name="ReceiverNo2" Type="nvarchar" MaxLength="40" />
+          <Property Name="Memo" Type="nvarchar" MaxLength="480" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="20" />
+          <Property Name="Contact" Type="nvarchar" MaxLength="12" />
+          <Property Name="Telephone" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <!--產生期間發現錯誤:
+警告 6002: 資料表/檢視 'CSFS_UAT.dbo.EDocTXT2_Detail' 未定義主索引鍵。已推斷此索引鍵，並將定義建立成唯讀的資料表/檢視。-->
+        <EntityType Name="EDocTXT2_Detail">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="ExecCaseNo" Type="nvarchar" MaxLength="15" />
+          <Property Name="TransferUnitID" Type="nvarchar" MaxLength="6" />
+          <Property Name="TransferCaseNo" Type="nvarchar" MaxLength="27" />
+          <Property Name="ManageID" Type="nvarchar" MaxLength="24" />
+        </EntityType>
+        <EntityType Name="PARMCode">
+          <Key>
+            <PropertyRef Name="CodeUid" />
+          </Key>
+          <Property Name="CodeUid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodeType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CodeTypeDesc" Type="nvarchar" MaxLength="200" />
+          <Property Name="CodeNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CodeDesc" Type="nvarchar" MaxLength="200" />
+          <Property Name="SortOrder" Type="int" />
+          <Property Name="CodeTag" Type="nvarchar" MaxLength="50" />
+          <Property Name="CodeMemo" Type="nvarchar" MaxLength="500" />
+          <Property Name="Enable" Type="bit" />
+          <Property Name="CreatedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="BANCSCode" Type="varchar" MaxLength="10" />
+          <Property Name="SeizureAmt" Type="int" />
+        </EntityType>
+        <EntityContainer Name="CSFSModelStoreContainer">
+          <EntitySet Name="AgentSetting" EntityType="Self.AgentSetting" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="AutoLog" EntityType="Self.AutoLog" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CaseAssignTable" EntityType="Self.CaseAssignTable" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CaseHistory" EntityType="Self.CaseHistory" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CaseMaster" EntityType="Self.CaseMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CaseMemo" EntityType="Self.CaseMemo" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CaseObligor" EntityType="Self.CaseObligor" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CaseSeizure" EntityType="Self.CaseSeizure" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EDocTXT1" EntityType="Self.EDocTXT1" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EDocTXT2" EntityType="Self.EDocTXT2" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PARMCode" EntityType="Self.PARMCode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="EDocTXT1_Detail" EntityType="Self.EDocTXT1_Detail" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [EDocTXT1_Detail].[CaseId] AS [CaseId], 
+    [EDocTXT1_Detail].[ExecCaseNo] AS [ExecCaseNo], 
+    [EDocTXT1_Detail].[TransferUnitID] AS [TransferUnitID], 
+    [EDocTXT1_Detail].[TransferCaseNo] AS [TransferCaseNo], 
+    [EDocTXT1_Detail].[ManageID] AS [ManageID]
+    FROM [dbo].[EDocTXT1_Detail] AS [EDocTXT1_Detail]</DefiningQuery>
+          </EntitySet>
+          <EntitySet Name="EDocTXT2_Detail" EntityType="Self.EDocTXT2_Detail" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [EDocTXT2_Detail].[CaseId] AS [CaseId], 
+    [EDocTXT2_Detail].[ExecCaseNo] AS [ExecCaseNo], 
+    [EDocTXT2_Detail].[TransferUnitID] AS [TransferUnitID], 
+    [EDocTXT2_Detail].[TransferCaseNo] AS [TransferCaseNo], 
+    [EDocTXT2_Detail].[ManageID] AS [ManageID]
+    FROM [dbo].[EDocTXT2_Detail] AS [EDocTXT2_Detail]</DefiningQuery>
+          </EntitySet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CSFSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="CaseAssignTable">
+          <Key>
+            <PropertyRef Name="AssignId" />
+          </Key>
+          <Property Name="AssignId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CaseId" Type="Guid" />
+          <Property Name="EmpId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="AlreadyAssign" Type="Int32" />
+          <Property Name="CreatdUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CaseHistory">
+          <Key>
+            <PropertyRef Name="HistoryId" />
+          </Key>
+          <Property Name="HistoryId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="FromRole" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="FromFolder" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Event" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="EventTime" Type="DateTime" Precision="3" />
+          <Property Name="ToRole" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ToUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ToFolder" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CaseMaster">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="DocNo" Type="String" MaxLength="13" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Status" Type="String" MaxLength="5" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="isDelete" Type="Boolean" Nullable="false" />
+          <Property Name="CaseNo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GovKind" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GovUnit" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ReceiverNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="GovDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Speed" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="ReceiveKind" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="GovNo" Type="String" MaxLength="60" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="LimitDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CaseKind" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CaseKind2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiveDate" Type="DateTime" Precision="3" />
+          <Property Name="Unit" Type="String" MaxLength="200" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="Person" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="CloseReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ApproveDate" Type="DateTime" Precision="3" />
+          <Property Name="CloseDate" Type="DateTime" Precision="3" />
+          <Property Name="AgentUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AgentBranchId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="AgentDeptId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApproveUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CloseUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AgentSection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OverDueMemo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PropertyDeclaration" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ReturnReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AfterSeizureApproved" Type="Boolean" Nullable="false" />
+          <Property Name="ReturnAnswer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PayDate" Type="DateTime" Precision="3" />
+          <Property Name="AgentSubmitDate" Type="DateTime" Precision="3" />
+          <Property Name="AgentSubmitDate2" Type="DateTime" Precision="3" />
+          <Property Name="ApproveUser2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApproveDate2" Type="DateTime" Precision="3" />
+          <Property Name="AgentUser2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Receiver" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiveAmount" Type="Int32" />
+          <Property Name="NotSeizureAmount" Type="Int32" />
+          <Property Name="RMUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CaseMemo">
+          <Key>
+            <PropertyRef Name="MemoId" />
+          </Key>
+          <Property Name="MemoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="MemoType" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Memo" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="MemoDate" Type="DateTime" Precision="3" />
+          <Property Name="MemoUser" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CaseObligor">
+          <Key>
+            <PropertyRef Name="ObligorId" />
+          </Key>
+          <Property Name="ObligorId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="ObligorName" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="ObligorNo" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
+          <Property Name="ObligorAccount" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CaseSeizure">
+          <Key>
+            <PropertyRef Name="SeizureId" />
+          </Key>
+          <Property Name="SeizureId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="PayCaseId" Type="Guid" />
+          <Property Name="CaseNo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="CustId" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
+          <Property Name="CustName" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="BranchNo" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="BranchName" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Account" Type="String" MaxLength="17" FixedLength="false" Unicode="true" />
+          <Property Name="AccountStatus" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="Currency" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="Balance" Type="String" MaxLength="17" FixedLength="false" Unicode="true" />
+          <Property Name="SeizureAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="ExchangeRate" Type="Decimal" Precision="18" Scale="3" />
+          <Property Name="SeizureAmountNtd" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="PayAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="SeizureStatus" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="CancelCaseId" Type="Guid" />
+          <Property Name="ProdCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="Link" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="SegmentCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="CancelAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TripAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="OtherSeizure" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="SeizureAmountSUB" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="TxtStatus" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="Seq" Type="Int32" />
+          <Property Name="TxtProdCode" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="EDocTXT2">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="GovUnit" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GovUnitCode" Type="String" MaxLength="18" FixedLength="false" Unicode="true" />
+          <Property Name="GovDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReceiverNo" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="ObligorName" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="Agent" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationNo" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="ObligorNo" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Int64" />
+          <Property Name="GovDate2" Type="DateTime" Precision="3" />
+          <Property Name="ReceiverNo2" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="Memo" Type="String" MaxLength="480" FixedLength="false" Unicode="true" />
+          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Contact" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="EDocTXT1_Detail">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="ExecCaseNo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="TransferUnitID" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="TransferCaseNo" Type="String" MaxLength="27" FixedLength="false" Unicode="true" />
+          <Property Name="ManageID" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="EDocTXT2_Detail">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="ExecCaseNo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="TransferUnitID" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="TransferCaseNo" Type="String" MaxLength="27" FixedLength="false" Unicode="true" />
+          <Property Name="ManageID" Type="String" MaxLength="24" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="CSFS1Entities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="CaseAssignTable" EntityType="Self.CaseAssignTable" />
+          <EntitySet Name="CaseHistory" EntityType="Self.CaseHistory" />
+          <EntitySet Name="CaseMaster" EntityType="Self.CaseMaster" />
+          <EntitySet Name="CaseMemo" EntityType="Self.CaseMemo" />
+          <EntitySet Name="CaseObligor" EntityType="Self.CaseObligor" />
+          <EntitySet Name="CaseSeizure" EntityType="Self.CaseSeizure" />
+          <EntitySet Name="EDocTXT2" EntityType="Self.EDocTXT2" />
+          <EntitySet Name="EDocTXT1_Detail" EntityType="Self.EDocTXT1_Detail" />
+          <EntitySet Name="EDocTXT2_Detail" EntityType="Self.EDocTXT2_Detail" />
+          <EntitySet Name="AgentSetting" EntityType="CSFSModel.AgentSetting" />
+          <EntitySet Name="PARMCode" EntityType="CSFSModel.PARMCode" />
+          <EntitySet Name="EDocTXT1" EntityType="CSFSModel.EDocTXT1" />
+          <EntitySet Name="AutoLog" EntityType="CSFSModel.AutoLog" />
+        </EntityContainer>
+        <EntityType Name="AgentSetting">
+          <Key>
+            <PropertyRef Name="SettingId" />
+          </Key>
+          <Property Name="SettingId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="EmpId" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SectionName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DepartmentID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="IsSeizure" Type="Boolean" />
+          <Property Name="IsCase" Type="Boolean" />
+        </EntityType>
+        <EntityType Name="PARMCode">
+          <Key>
+            <PropertyRef Name="CodeUid" />
+          </Key>
+          <Property Name="CodeUid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodeType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CodeTypeDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CodeNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CodeDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SortOrder" Type="Int32" />
+          <Property Name="CodeTag" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CodeMemo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Enable" Type="Boolean" />
+          <Property Name="CreatedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="BANCSCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SeizureAmt" Type="Int32" />
+        </EntityType>
+        <EntityType Name="EDocTXT1">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="GovUnit" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GovUnitCode" Type="String" MaxLength="18" FixedLength="false" Unicode="true" />
+          <Property Name="GovDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="ReceiverNo" Type="String" MaxLength="40" FixedLength="false" Unicode="true" />
+          <Property Name="ObligorName" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="Agent" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="RegistrationNo" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="ObligorNo" Type="String" MaxLength="70" FixedLength="false" Unicode="true" />
+          <Property Name="Amount" Type="Int64" />
+          <Property Name="Fee" Type="Int64" />
+          <Property Name="Total" Type="Int64" />
+          <Property Name="Memo" Type="String" MaxLength="480" FixedLength="false" Unicode="true" />
+          <Property Name="Unit" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Contact" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="Telephone" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="AutoLog">
+          <Key>
+            <PropertyRef Name="Id" />
+          </Key>
+          <Property Name="Id" Type="Int64" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="SendUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="DocNo" Type="String" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="ObligorNo" Type="String" MaxLength="14" FixedLength="false" Unicode="true" />
+          <Property Name="ServiceName" Type="String" MaxLength="400" FixedLength="false" Unicode="true" />
+          <Property Name="SendDate" Type="DateTime" Precision="3" />
+          <Property Name="Status" Type="Int32" />
+          <Property Name="ErrorMsg" Type="String" MaxLength="1000" FixedLength="false" Unicode="true" />
+          <Property Name="CreateDatetime" Type="DateTime" Precision="3" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CSFSModelStoreContainer" CdmEntityContainer="CSFS1Entities">
+          <EntitySetMapping Name="CaseAssignTable">
+            <EntityTypeMapping TypeName="CSFSModel.CaseAssignTable">
+              <MappingFragment StoreEntitySet="CaseAssignTable">
+                <ScalarProperty Name="AssignId" ColumnName="AssignId" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="EmpId" ColumnName="EmpId" />
+                <ScalarProperty Name="AlreadyAssign" ColumnName="AlreadyAssign" />
+                <ScalarProperty Name="CreatdUser" ColumnName="CreatdUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CaseHistory">
+            <EntityTypeMapping TypeName="CSFSModel.CaseHistory">
+              <MappingFragment StoreEntitySet="CaseHistory">
+                <ScalarProperty Name="HistoryId" ColumnName="HistoryId" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="FromRole" ColumnName="FromRole" />
+                <ScalarProperty Name="FromUser" ColumnName="FromUser" />
+                <ScalarProperty Name="FromFolder" ColumnName="FromFolder" />
+                <ScalarProperty Name="Event" ColumnName="Event" />
+                <ScalarProperty Name="EventTime" ColumnName="EventTime" />
+                <ScalarProperty Name="ToRole" ColumnName="ToRole" />
+                <ScalarProperty Name="ToUser" ColumnName="ToUser" />
+                <ScalarProperty Name="ToFolder" ColumnName="ToFolder" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CaseMaster">
+            <EntityTypeMapping TypeName="CSFSModel.CaseMaster">
+              <MappingFragment StoreEntitySet="CaseMaster">
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="DocNo" ColumnName="DocNo" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="CaseNo" ColumnName="CaseNo" />
+                <ScalarProperty Name="GovKind" ColumnName="GovKind" />
+                <ScalarProperty Name="GovUnit" ColumnName="GovUnit" />
+                <ScalarProperty Name="ReceiverNo" ColumnName="ReceiverNo" />
+                <ScalarProperty Name="GovDate" ColumnName="GovDate" />
+                <ScalarProperty Name="Speed" ColumnName="Speed" />
+                <ScalarProperty Name="ReceiveKind" ColumnName="ReceiveKind" />
+                <ScalarProperty Name="GovNo" ColumnName="GovNo" />
+                <ScalarProperty Name="LimitDate" ColumnName="LimitDate" />
+                <ScalarProperty Name="CaseKind" ColumnName="CaseKind" />
+                <ScalarProperty Name="CaseKind2" ColumnName="CaseKind2" />
+                <ScalarProperty Name="ReceiveDate" ColumnName="ReceiveDate" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Person" ColumnName="Person" />
+                <ScalarProperty Name="AssignPerson" ColumnName="AssignPerson" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CloseReason" ColumnName="CloseReason" />
+                <ScalarProperty Name="ApproveDate" ColumnName="ApproveDate" />
+                <ScalarProperty Name="CloseDate" ColumnName="CloseDate" />
+                <ScalarProperty Name="AgentUser" ColumnName="AgentUser" />
+                <ScalarProperty Name="AgentBranchId" ColumnName="AgentBranchId" />
+                <ScalarProperty Name="AgentDeptId" ColumnName="AgentDeptId" />
+                <ScalarProperty Name="ApproveUser" ColumnName="ApproveUser" />
+                <ScalarProperty Name="CloseUser" ColumnName="CloseUser" />
+                <ScalarProperty Name="AgentSection" ColumnName="AgentSection" />
+                <ScalarProperty Name="OverDueMemo" ColumnName="OverDueMemo" />
+                <ScalarProperty Name="PropertyDeclaration" ColumnName="PropertyDeclaration" />
+                <ScalarProperty Name="ReturnReason" ColumnName="ReturnReason" />
+                <ScalarProperty Name="AfterSeizureApproved" ColumnName="AfterSeizureApproved" />
+                <ScalarProperty Name="ReturnAnswer" ColumnName="ReturnAnswer" />
+                <ScalarProperty Name="PayDate" ColumnName="PayDate" />
+                <ScalarProperty Name="AgentSubmitDate" ColumnName="AgentSubmitDate" />
+                <ScalarProperty Name="AgentSubmitDate2" ColumnName="AgentSubmitDate2" />
+                <ScalarProperty Name="ApproveUser2" ColumnName="ApproveUser2" />
+                <ScalarProperty Name="ApproveDate2" ColumnName="ApproveDate2" />
+                <ScalarProperty Name="AgentUser2" ColumnName="AgentUser2" />
+                <ScalarProperty Name="Receiver" ColumnName="Receiver" />
+                <ScalarProperty Name="ReceiveAmount" ColumnName="ReceiveAmount" />
+                <ScalarProperty Name="NotSeizureAmount" ColumnName="NotSeizureAmount" />
+                <ScalarProperty Name="RMUser" ColumnName="RMUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CaseMemo">
+            <EntityTypeMapping TypeName="CSFSModel.CaseMemo">
+              <MappingFragment StoreEntitySet="CaseMemo">
+                <ScalarProperty Name="MemoId" ColumnName="MemoId" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="MemoType" ColumnName="MemoType" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="MemoDate" ColumnName="MemoDate" />
+                <ScalarProperty Name="MemoUser" ColumnName="MemoUser" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CaseObligor">
+            <EntityTypeMapping TypeName="CSFSModel.CaseObligor">
+              <MappingFragment StoreEntitySet="CaseObligor">
+                <ScalarProperty Name="ObligorId" ColumnName="ObligorId" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="ObligorName" ColumnName="ObligorName" />
+                <ScalarProperty Name="ObligorNo" ColumnName="ObligorNo" />
+                <ScalarProperty Name="ObligorAccount" ColumnName="ObligorAccount" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CaseSeizure">
+            <EntityTypeMapping TypeName="CSFSModel.CaseSeizure">
+              <MappingFragment StoreEntitySet="CaseSeizure">
+                <ScalarProperty Name="TxtProdCode" ColumnName="TxtProdCode" />
+                <ScalarProperty Name="SeizureId" ColumnName="SeizureId" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="PayCaseId" ColumnName="PayCaseId" />
+                <ScalarProperty Name="CaseNo" ColumnName="CaseNo" />
+                <ScalarProperty Name="CustId" ColumnName="CustId" />
+                <ScalarProperty Name="CustName" ColumnName="CustName" />
+                <ScalarProperty Name="BranchNo" ColumnName="BranchNo" />
+                <ScalarProperty Name="BranchName" ColumnName="BranchName" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="AccountStatus" ColumnName="AccountStatus" />
+                <ScalarProperty Name="Currency" ColumnName="Currency" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="SeizureAmount" ColumnName="SeizureAmount" />
+                <ScalarProperty Name="ExchangeRate" ColumnName="ExchangeRate" />
+                <ScalarProperty Name="SeizureAmountNtd" ColumnName="SeizureAmountNtd" />
+                <ScalarProperty Name="PayAmount" ColumnName="PayAmount" />
+                <ScalarProperty Name="SeizureStatus" ColumnName="SeizureStatus" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CancelCaseId" ColumnName="CancelCaseId" />
+                <ScalarProperty Name="ProdCode" ColumnName="ProdCode" />
+                <ScalarProperty Name="Link" ColumnName="Link" />
+                <ScalarProperty Name="SegmentCode" ColumnName="SegmentCode" />
+                <ScalarProperty Name="CancelAmount" ColumnName="CancelAmount" />
+                <ScalarProperty Name="TripAmount" ColumnName="TripAmount" />
+                <ScalarProperty Name="OtherSeizure" ColumnName="OtherSeizure" />
+                <ScalarProperty Name="SeizureAmountSUB" ColumnName="SeizureAmountSUB" />
+                <ScalarProperty Name="TxtStatus" ColumnName="TxtStatus" />
+                <ScalarProperty Name="Seq" ColumnName="Seq" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EDocTXT2">
+            <EntityTypeMapping TypeName="CSFSModel.EDocTXT2">
+              <MappingFragment StoreEntitySet="EDocTXT2">
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="GovUnit" ColumnName="GovUnit" />
+                <ScalarProperty Name="GovUnitCode" ColumnName="GovUnitCode" />
+                <ScalarProperty Name="GovDate" ColumnName="GovDate" />
+                <ScalarProperty Name="ReceiverNo" ColumnName="ReceiverNo" />
+                <ScalarProperty Name="ObligorName" ColumnName="ObligorName" />
+                <ScalarProperty Name="Agent" ColumnName="Agent" />
+                <ScalarProperty Name="RegistrationNo" ColumnName="RegistrationNo" />
+                <ScalarProperty Name="ObligorNo" ColumnName="ObligorNo" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="GovDate2" ColumnName="GovDate2" />
+                <ScalarProperty Name="ReceiverNo2" ColumnName="ReceiverNo2" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EDocTXT1_Detail">
+            <EntityTypeMapping TypeName="CSFSModel.EDocTXT1_Detail">
+              <MappingFragment StoreEntitySet="EDocTXT1_Detail">
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="ExecCaseNo" ColumnName="ExecCaseNo" />
+                <ScalarProperty Name="TransferUnitID" ColumnName="TransferUnitID" />
+                <ScalarProperty Name="TransferCaseNo" ColumnName="TransferCaseNo" />
+                <ScalarProperty Name="ManageID" ColumnName="ManageID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EDocTXT2_Detail">
+            <EntityTypeMapping TypeName="CSFSModel.EDocTXT2_Detail">
+              <MappingFragment StoreEntitySet="EDocTXT2_Detail">
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="ExecCaseNo" ColumnName="ExecCaseNo" />
+                <ScalarProperty Name="TransferUnitID" ColumnName="TransferUnitID" />
+                <ScalarProperty Name="TransferCaseNo" ColumnName="TransferCaseNo" />
+                <ScalarProperty Name="ManageID" ColumnName="ManageID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AgentSetting">
+            <EntityTypeMapping TypeName="CSFSModel.AgentSetting">
+              <MappingFragment StoreEntitySet="AgentSetting">
+                <ScalarProperty Name="IsCase" ColumnName="IsCase" />
+                <ScalarProperty Name="IsSeizure" ColumnName="IsSeizure" />
+                <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
+                <ScalarProperty Name="SectionName" ColumnName="SectionName" />
+                <ScalarProperty Name="EmpId" ColumnName="EmpId" />
+                <ScalarProperty Name="SettingId" ColumnName="SettingId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PARMCode">
+            <EntityTypeMapping TypeName="CSFSModel.PARMCode">
+              <MappingFragment StoreEntitySet="PARMCode">
+                <ScalarProperty Name="SeizureAmt" ColumnName="SeizureAmt" />
+                <ScalarProperty Name="BANCSCode" ColumnName="BANCSCode" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="CodeMemo" ColumnName="CodeMemo" />
+                <ScalarProperty Name="CodeTag" ColumnName="CodeTag" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="CodeDesc" ColumnName="CodeDesc" />
+                <ScalarProperty Name="CodeNo" ColumnName="CodeNo" />
+                <ScalarProperty Name="CodeTypeDesc" ColumnName="CodeTypeDesc" />
+                <ScalarProperty Name="CodeType" ColumnName="CodeType" />
+                <ScalarProperty Name="CodeUid" ColumnName="CodeUid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EDocTXT1">
+            <EntityTypeMapping TypeName="CSFSModel.EDocTXT1">
+              <MappingFragment StoreEntitySet="EDocTXT1">
+                <ScalarProperty Name="Telephone" ColumnName="Telephone" />
+                <ScalarProperty Name="Contact" ColumnName="Contact" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="Total" ColumnName="Total" />
+                <ScalarProperty Name="Fee" ColumnName="Fee" />
+                <ScalarProperty Name="Amount" ColumnName="Amount" />
+                <ScalarProperty Name="ObligorNo" ColumnName="ObligorNo" />
+                <ScalarProperty Name="RegistrationNo" ColumnName="RegistrationNo" />
+                <ScalarProperty Name="Agent" ColumnName="Agent" />
+                <ScalarProperty Name="ObligorName" ColumnName="ObligorName" />
+                <ScalarProperty Name="ReceiverNo" ColumnName="ReceiverNo" />
+                <ScalarProperty Name="GovDate" ColumnName="GovDate" />
+                <ScalarProperty Name="GovUnitCode" ColumnName="GovUnitCode" />
+                <ScalarProperty Name="GovUnit" ColumnName="GovUnit" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AutoLog">
+            <EntityTypeMapping TypeName="CSFSModel.AutoLog">
+              <MappingFragment StoreEntitySet="AutoLog">
+                <ScalarProperty Name="CreateDatetime" ColumnName="CreateDatetime" />
+                <ScalarProperty Name="ErrorMsg" ColumnName="ErrorMsg" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="SendDate" ColumnName="SendDate" />
+                <ScalarProperty Name="ServiceName" ColumnName="ServiceName" />
+                <ScalarProperty Name="ObligorNo" ColumnName="ObligorNo" />
+                <ScalarProperty Name="DocNo" ColumnName="DocNo" />
+                <ScalarProperty Name="SendUser" ColumnName="SendUser" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="Id" ColumnName="Id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

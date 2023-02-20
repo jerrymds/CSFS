@@ -1,0 +1,452 @@
+﻿@model CTBC.CSFS.Models.CaseTrsCondition
+@{
+    ViewBag.Title = "歷史交易拋查";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("_QueryResult", "eTrsHisSend", new { area = "TrsDetail" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal", enctype = "multipart/form-data"}))
+{
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+  
+
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                    </tr> 
+                    <tr>
+                        <td class="text-right" width="30%">
+                            案件編號
+                        </td>
+                        <td width="35%">
+                            @Html.TextBoxFor(m => m.DocNo, new { @MaxLength = "15" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right" width="30%">
+                            選擇條件:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right" >
+                            @Html.RadioButtonFor(m => m.Option1,"1",new { @id = "radio1", @name = Model.Option1 }))  
+                            整批拋檔
+                        </td>
+                        <td td class="text-right" width="50%"><input type="file" class="col-sm-12 no-padding" name="fileAttNames" id="fileAttNames" /></td>
+                        @*
+                        <td class="text-left">
+                            <button id="btnUpload" type="button" class="btn btn-default btn-xs">上傳</button>
+                        </td>
+                            *@
+                    </tr>
+                    <tr>
+                        <td class="text-right">
+                            @Html.RadioButtonFor(m => m.Option1, "2", new { @id = "radio2", @name = Model.Option1 }))                           
+                            統一編號
+                        </td>
+                        <td>
+                            @Html.TextBoxFor(m => m.CustId, new { @MaxLength = "11" })即ID項下全部帳號
+                        </td>
+                     </tr>
+                    <tr>
+                        <td class="text-right" >
+                            @Html.RadioButtonFor(m => m.Option1, "3", new { @id = "radio3", @name = Model.Option1 }))                     
+                            帳　　號
+                        </td>
+                        <td class="text-left" width="350px">
+                            @Html.TextBoxFor(m => m.CustAccount, new { @MaxLength = "12" })備註:只能查詢12碼帳號
+                        </td>
+                        <td class="text-right" width="40px" >幣別:</td>
+                        <td class="text-left" width="80px">
+                                @Html.DropDownListFor(m => m.Currency, (IEnumerable<SelectListItem>)ViewBag.CurrencyList, Lang.csfs_select, new { @id = "ddlCurrency" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="text-right">
+                            查詢區間:起日
+                        </td>                        
+                        <td>
+                            @Html.TextBoxFor(m => m.ForCDateS, new { data_datepicker = "true" })
+                            迄日
+                            @Html.TextBoxFor(m => m.ForCDateE, new { data_datepicker = "true" })
+                        </td>
+                    </tr>
+                    <tr>
+                        @Html.ValidationMessage("Error")
+                    </tr>
+                </tbody>
+            </table>
+            <table class="table table-bordered" id="divUploadList">
+            </table>
+
+</div><!-- /.box-body -->
+        <input type="hidden" id="pageNum" name="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confim</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>    
+</div>
+}
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "eTrsHisSend", new {area = "TrsDetail"})">
+</div>
+<iframe id="upload_frame" name="upload_frame" src="" class="hidden"></iframe>
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("GenDetailUrl", Url.Action("GetGenDetail", "eTrsHisSend", new { area = "TrsDetail" }))
+@Html.Hidden("UploadUrl", Url.Action("Upload", "eTrsHisSend", new { area = "TrsDetail" }))
+@Html.HiddenFor(m => m.IsEnable, new { id = "hidIsEnable" })
+@Html.Hidden("QueryUrl", Url.Action("_QueryResult", "eTrsHisSend", new { area = "TrsDetail" }))
+@Html.HiddenFor(m => m.DocNo, new { id = "hidDocNo" })
+@*
+        @Html.HiddenFor(m => m.Option1, new { id = "hidIsEnable" })
+    @Html.HiddenFor(m => m.Option2, new { id = "hidIsEnable" })
+    @Html.HiddenFor(m => m.Option3, new { id = "hidIsEnable" })
+        @section scripts {
+        @Scripts.Render("~/Scripts/common.uploadlist.js")
+    }*@
+<input type="hidden" id="hidDocNo" name="hidDocNo" value="@Model.DocNo" />
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script src="~/Scripts/json2.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        // 按鈕事件註冊
+       // $("#btnQuery").click(function () { QueryData(); });
+        $("#btnQuery").click(function () { StartSearch(); });
+       // $("#btnUpload").click(function () { return UploadClick(); });
+        $("#btnCancel").click(function () { Cancel(); });
+
+    });
+    //
+    function trimAllInput() {
+        $(":input[type='text']").each(function () {
+            $(this).val($.trim($(this).val()));
+        });
+    }
+    //
+    //
+    function btnAccountSaveClick() {
+        $("#divResult").html("");
+        trimAllInput();
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmQuery").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmQuery").serialize(),
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                $("#divResult").html(data).show();
+                $.unblockUI();
+                $("#querystring").val($("#frmQuery").serialize());
+            }
+        });
+    }
+    // 查詢
+    function QueryData() {
+        // 當前登錄者是否可以重查
+        //if ($("#hidIsEnable").val() != "Y") {
+        //    alert("當前登錄者沒有啟動發查權限");
+        //    return;
+        //}
+        if (CheckData()) {
+            jConfirm($.validator.format("是否確定"), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag == true) {
+                    $.blockUI();
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#UploadUrl").val(),
+                        async: false,
+                        //url: '@Url.Action("_QueryResult", "eTrsHisSend", new { area = "TrsDetail" })',
+                        //url: $("#frmQuery").attr("action"),
+                        data: {},
+                        error: function () {
+                            jAlertError("啟動失敗!!");
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode == "設定成功-待發查") {
+                                jAlertSuccess("啟動成功", function () {
+                                    $.unblockUI();
+                                    btnQueryclick();
+                                });
+                            } else if (data.ReturnCode == "0") {
+                                jAlertError("請先輸入RCAF帳密");
+                                $.unblockUI();
+                                btnQueryclick();
+                            } else if (data.ReturnCode == "1") {
+                                jAlertError("迄日不能大於營業日前二日");
+                                $.unblockUI();
+                                btnQueryclick();
+                            } else if (data.ReturnCode == "3") {
+                                jAlertError("啟動失敗");
+                                $.unblockUI();
+                                btnQueryclick();
+                            }
+
+                        }
+                    });
+                }
+            });
+        }
+
+    }
+
+
+    // 欄位檢核
+    function CheckData() {
+        var msg = "";
+        var docno = "";
+        var custid = "";
+        var custaccount = "";
+        var option1 = "";
+        var ForCDateS = "";
+        var ForCDateE = "";
+        trimAllInput();
+        if ($("#radio1").is(":checked")) {
+            option1 = $("#radio1").val();
+        }
+        if ($("#radio2").is(":checked")) {
+            option1 = $("#radio2").val();
+        }
+        if ($("#radio3").is(":checked")) {
+            option1 = $("#radio3").val();
+        }
+        docno = $("#DocNo").val().toLocaleUpperCase();
+        if (docno == "") {
+            msg += "案件編號不能空白!! ";
+        }
+        else
+        {
+            if (docno.substr(0, 1) != "C")
+            {
+                msg += "案件編號第一碼需為C ";
+            }
+            if (docno.length != 13)
+            {
+                msg += "案件編號非13碼,請重新輸入";
+            }
+        }
+        if ( option1 != "1"  &&  option1 != "2"  &&  option1  != "3")
+        {
+            msg += "選擇條件不能空白!!";
+        }
+        if (option1  == "1") {
+            var fileObj = document.getElementById("fileAttNames").files[0];
+            if (fileObj == null) {
+                //* need jquery 1.4+
+                msg += "請先匯入整批XLSX;重新查詢";
+                return;
+            }
+        }
+        custid = $("#CustId").val();
+        ForCDateS = $("#ForCDateS").val();
+        ForCDateE = $("#ForCDateE").val();
+        if (option1 == "2") {
+            if (custid.length == 8 || custid.length == 10 || custid.length == 11) {
+            }
+            else {
+                msg += "統一編號長度錯誤!! ";
+            }
+            // 查詢範圍
+            if (ForCDateS.length == 0 && ForCDateE.length == 0)
+            {
+                msg += "起迄日期範圍必填"
+            }
+            if (ForCDateE.length == 0) {
+                msg += "迄日期不能為空白"
+            }
+            var CloseDateMsg = CheckDate($("#ForCDateS").val(), $("#ForCDateE").val(), "查詢區間")
+            if (CloseDateMsg != "") {
+                msg += CloseDateMsg;
+            }
+        }
+
+        // 檢查帳號
+        custaccount = $("#CustAccount").val();
+        if (option1 == "3") {
+            if (custaccount.length != 12) {
+                msg += "帳號長度錯誤!! ";
+            }
+            // 查詢範圍
+            if (ForCDateS.length == 0 && ForCDateE.length == 0) {
+                msg += "起迄日期範圍必填"
+            }
+            if (ForCDateE.length == 0) {
+                msg += "迄日期不能為空白"
+            }
+            var CloseDateMsg = CheckDate($("#ForCDateS").val(), $("#ForCDateE").val(), "查詢區間")
+            if (CloseDateMsg != "") {
+                msg += CloseDateMsg;
+            }
+
+        }
+
+        if (msg == "") {
+            //$("#frmQuery").submit();
+            return true;
+        } else {
+            jAlertError(msg);
+            return false;
+        }
+
+    }
+
+    function paddingLeft(str, lenght) {
+        if (str.length >= lenght)
+            return str;
+        else
+            return paddingLeft("0" + str, lenght);
+    }
+    function paddingRight(str, lenght) {
+        if (str.length >= lenght)
+            return str;
+        else
+            return paddingRight(str + "0", lenght);
+    }
+
+    // 日期檢核
+    function CheckDate(startDate, endDate, alertMsg) {
+        var msg = "";
+
+        if (startDate != "" && endDate != "") {
+            startDate = ChangeDate(startDate);
+            endDate = ChangeDate(endDate);
+
+            if (new Date(startDate) > new Date(endDate)) {
+                msg = alertMsg + "起日不得大於迄日!\r\n";
+            }
+        }
+        if (startDate == "" && endDate == "")
+        {
+            msg = alertMsg + "請輸入查詢區間";
+        }
+        return msg;
+    }
+
+    // 轉換成西元年
+    function ChangeDate(strDate) {
+        // 截取年份
+        var pYear = strDate.substring(0, strDate.indexOf('/'));
+
+        // 截取月份和天
+        var pMonthDay = strDate.substring(strDate.indexOf('/'), strDate.length);
+
+        // 年份+1991
+        if (parseInt(pYear) <= 200) {
+            pYear = parseInt(pYear) + 1911;
+        }
+
+        return pYear + "/" + pMonthDay;
+    }
+
+    //* 點選取消
+    function Cancel() {
+        $("#divResult").html("");
+        $("#TITLE").val("");
+        $("#md_FuncID").val("");
+    }
+
+    // 全選
+    function ChkAll() {
+
+        if ($("#check01").prop("checked") == true) {
+            $(".checkfile").prop("checked", "checked");
+        } else {
+            $(".checkfile").removeAttr("checked");
+        }
+    }
+
+    // 啟動發查
+    function StartSearch() {
+         //當前登錄者是否可以重查
+        //if ($("#hidIsEnable").val() != "Y") {
+        //    alert("當前登錄者沒有啟動發查權限");
+        //    return;
+        //}
+        var formParam = $("#frmQuery").serialize();//序列化表格内容为字符串
+
+        //$.blockUI();
+        if (CheckData())
+        {
+            var data = new FormData($("#frmQuery")[0]);
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: $("#UploadUrl").val(),
+                data:data,
+                processData: false,
+                contentType: false,
+                error: function () {
+                    jAlertError("啟動發查失敗!!");
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode == "1") {
+                        alert("設定成功-待發查!");
+                        $.unblockUI();
+                        document.getElementById("frmQuery").reset();
+                        $("#querystring").val($("#frmQuery").serialize());
+                    }
+                    else
+                    {
+                        if (data.ReturnMsg != "")
+                        {
+                            alert(data.ReturnMsg);
+                        }
+                        else
+                        {
+                            alert("系統異常錯誤!");
+                        }
+                        $.unblockUI();
+                        $("#querystring").val($("#frmQuery").serialize());
+                    }
+                }
+            });
+        }
+        else
+        {
+            return;
+        }
+    }
+
+
+    // checkbox點擊事件
+    function ChildItem() {
+        // 選中個數
+        var chkResult = 0;
+        $(".checkfile").each(function () {
+            if ($(this).prop("checked") == true) {
+                chkResult++;
+            }
+        });
+
+        if (chkResult == $(".checkfile").length) {
+            $("#check01").prop("checked", "checked");
+        } else {
+            $("#check01").removeAttr("checked");
+        }
+    }
+
+    function trimAllInput() {
+        $(":input[type='text']").each(function () {
+            $(this).val($.trim($(this).val()));
+        });
+    }
+
+
+
+
+
+</script>

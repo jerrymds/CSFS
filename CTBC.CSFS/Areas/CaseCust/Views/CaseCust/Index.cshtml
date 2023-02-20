@@ -1,0 +1,173 @@
+﻿@using System.Web.Mvc.Html;
+@using System.Web.Mvc;
+@using CTBC.CSFS.Models;
+@using System.Web.Optimization;
+
+@model CTBC.CSFS.Models.CaseCustQuery
+
+@{
+    ViewBag.Title = "收文啟動查詢";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<button id="btnSearch" type="button" class="btn btn-primary btn-xs" onclick="StartSearch();">啟動發查</button>&nbsp;&nbsp;
+<button id="btnDelete" type="button" class="btn btn-primary btn-xs" onclick="Delete();">刪除</button><br />
+@using (Html.BeginForm("_QueryResult", "CaseCust", new { area = "CaseCust" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+{
+}
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "CaseCust", new { area = "CaseCust" })">
+</div>
+@Html.Hidden("NowPage", "CaseCustQueryResult")
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("hidRefrash", Url.Action("Index", "CaseCust", new { area = "CaseCust" }))
+@Html.HiddenFor(m => m.IsEnable, new { id = "hidIsEnable" })
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        btnAccountSaveClick();
+    });
+    function btnAccountSaveClick() {
+        $("#divResult").html("");
+        trimAllInput();
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmQuery").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmQuery").serialize(),
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                $("#divResult").html(data).show();
+                $.unblockUI();
+                $("#querystring").val($("#frmQuery").serialize());
+            }
+        });
+    }
+
+    // 全選
+    function ChkAll() {
+        if ($("#check01").prop("checked") == true) {
+            $(".checkfile").prop("checked", "checked");
+        } else {
+            $(".checkfile").removeAttr("checked");
+        }
+    }
+
+    // checkbox點擊事件
+    function ChildItem() {
+        // 選中個數
+        var chkResult = 0;
+        $(".checkfile").each(function () {
+            if ($(this).prop("checked") == true) {
+                chkResult++;
+            }
+        });
+
+        if (chkResult == $(".checkfile").length) {
+            $("#check01").prop("checked", "checked");
+        } else {
+            $("#check01").removeAttr("checked");
+        }
+    }
+
+    function trimAllInput() {
+        $(":input[type='text']").each(function () {
+            $(this).val($.trim($(this).val()));
+        });
+    }
+
+    // 啟動發查
+    function StartSearch() {
+        // 當前登錄者是否可以重查
+        if ($("#hidIsEnable").val() != "Y") {
+            alert("當前登錄者沒有啟動發查權限");
+
+            return;
+        }
+
+        $.blockUI();
+
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: '@Url.Action("StartSearch", "CaseCust", new { area = "CaseCust" })',
+            data: {
+            },
+            success: function (data) {
+                $.unblockUI();
+
+                if (data == "OK") {
+                    alert("啟動發查成功!");
+
+                    // 刷新清單
+                    btnAccountSaveClick();
+
+                }
+                else if (data.substring(0, 5) == "SubOK") {
+                    alert("部份發查案件(如下)的查詢迄日未在可發查日期之內!\n\n" + data.substring(6, data.length));
+
+                    // 刷新清單
+                    btnAccountSaveClick();
+                }
+                else if (data == "NoData") {
+                    alert("沒有要發查的資料!");
+                }
+                else {
+                    alert("啟動發查失敗!");
+                }
+            }
+        });
+    }
+
+    // 刪除
+    function Delete() {
+        var pMsg = "";
+        var checkKey = new Array();
+        $(".checkfile:checked").each(function () {
+            checkKey.push($(this).attr("data-VersionKey"));//向数组中添加元素
+        });
+
+        var strVersionKey = checkKey.join(',');
+
+        if (strVersionKey.length <= 0) {
+            jAlertError($("#SelectOneMsg").val());
+            return;
+        } else if (pMsg != "") {
+            alert(pMsg);
+            return;
+        } else {
+            jConfirm("您確定要刪除嗎?", $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+
+                    // 刪除
+                    $.ajax({
+                        type: "POST",
+                        async: false,
+                        url: '@Url.Action("DeleteCaseCustQuery", "CaseCust", new { area = "CaseCust" })', //"/CaseCust/CaseCust/DeleteCaseCustQuery",
+                        data: {
+                            Content: strVersionKey
+                        },
+                        success: function (data) {
+                            $.unblockUI();
+
+                            if (data) {
+                                alert("刪除成功!");
+
+                                // 刷新清單
+                                btnAccountSaveClick();
+
+                            } else {
+                                alert("刪除失敗!");
+                            }
+                        }
+                    });
+                }
+            })
+        }
+    }
+</script>

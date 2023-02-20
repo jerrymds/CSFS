@@ -1,0 +1,74 @@
+﻿@model CTBC.CSFS.ViewModels.AgentOriginalInfoViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfoDetail", new { area = "Common", CaseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_document_info</a></li>
+        @if (Html.GetBackControllerName() != "DebtPersonQuery")
+        {
+            <li class=""><a href="@Url.Action("Index", "AgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">帳務資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentMeetInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">會辦資訊</a></li>
+            <li class="active"><a href="@Url.Action("Index", "AgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">正本備查</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccessDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">資訊部調閱</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">發文資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseHistoryDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">流程紀錄</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseCalculatorDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">利息計算</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseMemoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">內部註記</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentTransactionRecordsDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">資訊異動記錄</a></li>
+        }
+        @Html.GetBackButtonInTab()
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel1">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs" style="cursor: move;">
+                    <li class="active"><a href="@Url.Action("Index", "AgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })">@Lang.csfs_original_reading</a></li>
+                    <li class=""><a href="@Url.Action("LendIndex", "AgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })">@Lang.csfs_original_return</a></li>
+                </ul>
+                <div class="tab-content ">
+                    <div class="tab-pane active" id="panel1_1">
+                        @using (Html.BeginForm("_QueryResult", "AgentOriginalInfoDetail", new { area = "Common" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+                        {
+                            @Html.HiddenFor(m => m.LendDataInfo.CaseId, new { @id = "hidLendCaseId" })
+                            @Html.HiddenFor(m => m.LendDataInfo.LendID, new { @id = "hidLendId" })
+                        }
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div class="box box-primary">
+                                    <div class="box-header">
+                                        <i class="glyphicon glyphicon-th"></i>
+                                        <h3 class="box-title">@Lang.csfs_result_area</h3>
+                                    </div>
+                                    <div id="querytablediv" class="box-body">
+
+                                        <div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "AgentOriginalInfoDetail", new { area = "Common" })">
+
+                                        </div>
+                                    </div><!-- /.box-body -->
+                                    <div class="box-footer text-center">
+                                        @*<a href="@Url.Action("Create", "AgentOriginalInfo", new { area = "Agent", CaseID = ViewBag.CaseId, @radom = DateTime.Now.ToString() })" class="fancy800_310 btn btn-default btn-xs">@Lang.csfs_create_lend</a>*@
+                                    </div>
+                                </div><!-- /.box -->
+                            </div>
+                        </div>
+                        <iframe id="upload_frame" name="upload_frame" src="" class="hidden"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("hidCaseid", (System.Guid)ViewBag.CaseId)
+@Html.Hidden("NowPage", "AgentOriginalInfoQuery")
+@Html.Hidden("EditInfoUrl", Url.Action("Edit", "AgentOriginalInfo", new { area = "Agent" }))
+@Html.Hidden("DeleteLendUrl", Url.Action("DeleteLend", "AgentOriginalInfo", new { area = "Agent" }))
+@Html.Hidden("DeleteSucMsgUrl", Lang.csfs_del_ok)
+@Html.Hidden("ReturnFailMsg", Lang.csfs_del_fail)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/Agent/AgentOriginalInfo.js")
+}

@@ -1,0 +1,66 @@
+﻿@model CTBC.CSFS.Models.CheckNoSetting
+@{
+    ViewBag.Title = Lang.csfs_checkno_setting;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_create</h3>
+    </div>
+    @using (Html.BeginForm("Create", "CheckNoSetting", new { area = "SystemManagement" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_CheckNoStart</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CheckNoStart, new { @id = "txtCheckNoStart", @MaxLength = "7" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_CheckNoEnd</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.CheckNoEnd, new { @id = "txtCheckNoEnd", @MaxLength = "7" })
+                        </td>
+                    </tr>
+                    <tr class="hidden">
+                        <td class="col-md-1 text-right">@Lang.csfs_WeekTempAmount</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.WeekTempAmount, new { @id = "txtWeekTempAmount", @MaxLength = "7" })
+                        </td>
+                    </tr>
+                    @*<tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_UseStatus</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.UseStatus, (IEnumerable<SelectListItem>)ViewBag.UseStatusList, new { @id = "ddlUseStatus", @style = "width:19%" })
+                        </td>
+                    </tr>*@
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Index", "CheckNoSetting", new { area = "SystemManagement" })">@Lang.csfs_cancel</a>
+        </div>
+    }
+</div>
+
+@Html.Hidden("NowPage", "CheckNoSettingCreate")
+@Html.Hidden("CancelUrl", @Url.Action("Index", "CheckNoSetting", new { area = "SystemManagement" }))
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_add_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_add_fail)
+
+@Html.Hidden("CheckNoStartName", Lang.csfs_CheckNoStart)
+@Html.Hidden("CheckNoEndName", Lang.csfs_CheckNoEnd)
+@Html.Hidden("WeekTempAmount", Lang.csfs_WeekTempAmount)
+@Html.Hidden("CheckLength", Lang.csfs_enter_number)
+@Html.Hidden("CheckNoTooMany", Lang.csfs_checknotoomany)
+@Html.Hidden("EndThanStart", Lang.csfs_EndThanStart)
+@Html.Hidden("ErrMsg", Lang.csfs_err)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/SystemManagement/CheckNoSetting.js")
+}

@@ -1,0 +1,41 @@
+﻿@using CTBC.CSFS.BussinessLogic
+@using CTBC.CSFS.Models
+@model IList<CTBC.CSFS.Models.TX_00450>
+@{
+    ViewBag.Title = "AccidentInfo";
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+<div class="margin">
+    @if (Model == null)
+    {
+        <text>@Lang.csfs_no_data</text>
+    }
+    else
+    {
+        <table class="col-md-12  text-black table table-bordered">
+            <thead>
+                <tr>
+                    <th>NO</th>
+                    <th>交易別/交易日期/交易代號/交易序號</th>
+                    <th>分行別/櫃員/事故代號/備註</th>
+                    <th>其他</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr style="text-align:center;">
+                            <td>@i</td>
+                            <td>@Model[i].DATA1</td>
+                            <td>@Model[i].DATA2</td>
+                            <td>@Model[i].DATA3</td>
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+    }
+</div>
+       

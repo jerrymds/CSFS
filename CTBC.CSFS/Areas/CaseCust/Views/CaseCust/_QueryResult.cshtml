@@ -1,0 +1,112 @@
+﻿@using System.Web.Mvc.Ajax
+@using System.Web.Mvc.Html
+@model CTBC.CSFS.ViewModels.CaseCustViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                案件總筆數：@Model.DataCount 筆
+                <label style="margin-top:8px;">&nbsp;</label> 
+                @if (Model.CaseCustQueryList != null)
+                {
+                    if (Model.CaseCustQueryList.Count > 0)
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CaseCustQuery.PageSize, Model.CaseCustQuery.CurrentPage, Model.CaseCustQuery.TotalItemCount, Model.CaseCustQuery, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CaseCustQuery.SortExpression, Model.CaseCustQuery.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th nowrap width="5%">
+                                <input type="checkbox" id="check01" onClick="ChkAll();" />
+                            </th>
+                            <th nowrap width="5%">
+                                @Lang.csfs_seqnum
+                            </th>
+                            <th nowrap width="12%">
+                                案件編號(E+12碼)
+                            </th>
+                            <th nowrap width="12%">
+                                來文字號
+                            </th>
+                            <th nowrap width="12%">
+                                來文機關
+                            </th>
+                            <th nowrap width="10%">
+                                義(債)務人統編
+                            </th>
+                            <th nowrap width="10%">
+                                查詢項目
+                            </th>
+                            <th nowrap width="10%">
+                                限辦日期(T+7)
+                            </th>
+                            <th nowrap width="10%">
+                                案件狀態
+                            </th>
+                            <th nowrap width="14%">
+                                狀態原因
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CaseCustQueryList != null && Model.CaseCustQueryList.Count>0)
+                        {
+                            int pNum = 1;
+
+                            foreach (var item in Model.CaseCustQueryList)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        @if (item.CaseStatus=="01") {
+                                        <input name="chkChild" type="checkbox" data-CaseStatus="@item.CaseStatus" class="checkfile" id="checkbox_@pNum" onclick="ChildItem();" value="@item.DocNo" data-VersionKey="@item.VersionKey" />
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @item.RowNum
+                                    </td>
+                                    <td class="text-center">
+                                        @item.ShowDocNo
+                                    </td>
+                                    <td class="text-left">@item.FileNo</td>
+                                    <td class="text-left">@item.Govement</td>
+                                    <td class="text-left">
+                                        @item.CustIdNo
+                                    </td>
+                                    <td class="text-left">
+                                        @Html.Raw(item.SearchProgram)
+                                    </td>
+                                    <td class="text-center">
+                                        @item.LimitDate
+                                    </td>
+                                    <td class="text-left">
+                                        @Html.Raw(item.CaseStatusName)
+                                    </td>
+                                    <td class="text-left">
+                                        @Html.Raw(item.StatusReason)
+                                    </td>
+                                </tr>
+                                pNum++;
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>

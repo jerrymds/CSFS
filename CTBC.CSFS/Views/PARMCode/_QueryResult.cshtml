@@ -1,0 +1,81 @@
+﻿@model CTBC.CSFS.ViewModels.PARMCodeViewModel
+@{
+    Layout = null;
+}
+<script type="text/javascript">
+    //--------------------------------------------
+    // Export File
+    //--------------------------------------------
+    function Export() {
+        var rdoVal = $("input[name='rdoFormat']:checked").val();
+        ExportFileData('@Url.Action("Export")', {
+            typeValue: rdoVal,
+            fileName: "PARMCode"
+        });
+    }
+    //-----------------------------------------------------------------
+    $(document).ready(function () {
+        $("#detail tr:odd").addClass("gridrow");
+        $("#detail tr:even").addClass("gridrow_alternate");
+    });
+</script>
+<div class="con_title2">
+    @Lang.csfs_result_area&nbsp;&nbsp;
+    <button type="button" onclick="Export()">@Lang.csfs_export_file</button>@Html.Partial("_CSFSExportTemplate")
+</div>
+<div>
+    <table id="detail" width="100" class="query_table" align="center" border="1" cellpadding="3" cellspacing="0">
+        <thead>
+            <tr>
+                <th>@Lang.csfs_pm_codetype / @Lang.csfs_pm_codetypedesc</th>
+                <th>@Lang.csfs_pm_detail_code</th>
+                <th>@Lang.csfs_pm_detail_name</th>
+                <th>@Lang.csfs_pm_detail_order</th>
+                <th>@Lang.csfs_pm_enable</th>
+                <th>@Lang.csfs_edit</th>
+                @*<th>@Lang.csfs_delete </th>*@
+            </tr>
+        </thead>
+        @if(Model !=null)
+        { 
+            if (Model.Result.Any())
+            {
+                    foreach (var item in Model.Result)
+                    {
+                        <tr>
+                            <td>@item.CodeType / @item.CodeTypeDesc</td>
+                            <td>@item.CodeNo</td>
+                            <td>@item.CodeDesc</td>
+                            <td>@item.SortOrder</td>
+                            <td>
+                                @if (item.Enable)
+                                { @Lang.csfs_enable;
+                                }
+                                else
+                                { @Lang.csfs_disable;
+                                }
+                            </td>
+                            <td>
+                                <img src="@Url.Content("~/Content/img/u299.png") " alt="" onclick="location.href = '@Url.Action("Edit", "PARMCode", new { id = item.CodeUid })';" />
+                            </td>
+                        </tr>
+                    }
+            }
+            else
+            {
+                <tr class="gridrow"><td colspan="10"><span style="color:red">@Lang.csfs_no_data</span></td></tr> }
+        }
+        else
+        {
+            <tr class="gridrow"><td colspan="10"><span style="color:red">@Lang.csfs_no_data</span></td></tr> }            
+    </table>
+@if (Model.Result != null)
+{
+    if (Model.Result.Any())
+    {
+    <div class="pager" id="pager">
+        @Ajax.Pager(Model.Criteria.PageSize, Model.Criteria.CurrentPage, Model.Criteria.TotalItemCount, Model.Criteria, new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "post" }, Lang.csfs_prev_page, Lang.csfs_first_page, Lang.csfs_last_page, Lang.csfs_next_page, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record)
+    </div>
+    }
+}
+</div>

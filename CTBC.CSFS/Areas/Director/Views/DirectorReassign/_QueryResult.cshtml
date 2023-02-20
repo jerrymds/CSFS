@@ -1,0 +1,127 @@
+﻿@model CTBC.CSFS.ViewModels.CaseQueryViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.CaseQueryList != null)
+                {
+                    if (Model.CaseQueryList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CaseQuery.PageSize, Model.CaseQuery.CurrentPage, Model.CaseQuery.TotalItemCount, Model.CaseQuery, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CaseQuery.SortExpression, Model.CaseQuery.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th><input type="checkbox" id="CheckAll"></th>
+                            @*<th style="width:4%">@Lang.csfs_seqnum</th>*@
+                            <th class="col-md-1">@Lang.csfs_case_no</th>
+                            <th class="col-md-1">@Lang.csfs_case_kind</th>
+                            <th class="col-md-1">@Lang.csfs_case_kind2</th>
+                            <th style="width:7%">@Lang.csfs_case_speed</th>
+                            <th class="col-md-2">@Lang.csfs_gov_unit</th>
+                            <th style="width:6%">@Lang.csfs_gov_no</th>
+                            <th class="col-md-1">@Lang.csfs_gov_date</th>
+                            <th class="col-md-1">@Lang.csfs_case_limited_date</th>
+                            <th class="col-md-1">@Lang.csfs_agnet</th>
+                            <th class="col-md-1">@Lang.csfs_closeddate</th>
+                            <th class="col-md-1">@Lang.csfs_case_status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CaseQueryList != null && Model.CaseQueryList.Any())
+                        {
+                            int a=0;
+                            foreach (var item in Model.CaseQueryList)
+                            {
+                                a = a + 1;
+                                string className = "";
+                                if (item.CloseDate != null && item.CloseDate != "")
+                                {
+                                    if (Convert.ToInt32(item.CloseDate.Replace("/", "")) > Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                    {
+                                        className = "text-red";
+                                    }
+                                    if (Convert.ToInt32(item.CloseDate.Replace("/", "")) == Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                    {
+                                        className = "text-light-blue";
+                                    }
+                                }else if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) > Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                {
+                                    className = "text-red";
+                                }
+                                else if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) == Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                {
+                                    className = "text-light-blue";
+                                }
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="r2" class="checkfile" value="@item.CaseId" data-limitdate="@item.LimitDate" />
+                                    </td>
+                                    @*<td class="text-center @className">@a</td>*@
+                                    <td class="text-center @className">
+                                        @Html.ActionLink(Convert.ToString(item.CaseNo + " "), "Index", "AgentDocumentInfoDetail", new { area = "Common", CaseId = item.CaseId }, new { })
+                                    </td>
+                                    <td class="text-center @className">@item.CaseKind</td>
+                                    <td class="text-center @className">@item.CaseKind2</td>
+                                    <td class="text-center @className">@item.Speed</td>
+                                    <td class="text-center @className">@item.GovUnit</td>
+                                    <td class="@className">@item.GovNo</td>
+                                    <td class="@className">@item.GovDate</td>
+                                    <td class="text-center @className">@item.LimitDate</td>
+                                    <td class="text-center @className">@item.AgentUser</td>
+                                    <td class="text-center @className">@item.CloseDate</td>
+                                    <td class="text-center @className">@item.StatusShow</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="13"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.CaseQuery.CaseKind)
+                @Html.Hidden("querystring", Model.CaseQuery.CaseKind2)
+                @Html.Hidden("querystring", Model.CaseQuery.GovKind)
+                @Html.Hidden("querystring", Model.CaseQuery.GovUnit)
+                @Html.Hidden("querystring", Model.CaseQuery.CaseNo)
+                @Html.Hidden("querystring", Model.CaseQuery.GovDateS)
+                @Html.Hidden("querystring", Model.CaseQuery.GovDateE)
+                @Html.Hidden("querystring", Model.CaseQuery.Speed)
+                @Html.Hidden("querystring", Model.CaseQuery.ReceiveKind)
+                @Html.Hidden("querystring", Model.CaseQuery.GovNo)
+                @Html.Hidden("querystring", Model.CaseQuery.CreatedDateS)
+                @Html.Hidden("querystring", Model.CaseQuery.CreatedDateE)
+                @Html.Hidden("querystring", Model.CaseQuery.Unit)
+                @Html.Hidden("querystring", Model.CaseQuery.CreateUser)
+                @Html.Hidden("querystring", Model.CaseQuery.ObligorNo)
+                @Html.Hidden("querystring", Model.CaseQuery.ObligorName)
+                @Html.Hidden("querystring", Model.CaseQuery.SendDateS)
+                @Html.Hidden("querystring", Model.CaseQuery.SendDateE)
+                @Html.Hidden("querystring", Model.CaseQuery.SendNo)
+                @Html.Hidden("querystring", Model.CaseQuery.OverDateS)
+                @Html.Hidden("querystring", Model.CaseQuery.OverDateE)
+                @Html.Hidden("querystring", Model.CaseQuery.Status)
+                @Html.Hidden("querystring", Model.CaseQuery.AgentUser)
+                @Html.Hidden("defaultSortColumn", Model.CaseQuery.SortExpression)
+                @Html.Hidden("defaultSort", Model.CaseQuery.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.BindCheckBox();
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

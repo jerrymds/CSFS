@@ -1,0 +1,57 @@
+﻿@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta content='width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no' name='viewport'>
+    <title>@Lang.csfs_sysname @ViewBag.Title</title>
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" /><!--bootstrap.min /3.3.1-->
+    <link href="~/Content/font-awesome.min.css" rel="stylesheet" /><!--font-awesome/4.2.0-->
+    <link href="~/Content/AdminLTE.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css" rel="stylesheet" />
+    <link href="@Url.Content("~/Content/themes/date/jquery-ui-1.10.4.custom.min.css")" rel="stylesheet" type="text/css" />
+    <link href="~/Content/BoostrapUpdate.css" rel="stylesheet" />
+    <link href="~/Content/colorbox.css" rel="stylesheet" />
+</head>
+<body>
+    @RenderSection("header", false)
+    @RenderBody()
+    @RenderSection("btnSet", false)
+
+    @Html.Hidden("j_loadingImg", Url.Content("~/content/img/ajax-loader1.gif"))
+    @Html.Hidden("j_confirm_ok", Lang.csfs_btnconfirmOk)
+    @Html.Hidden("j_confirm_cancel", Lang.csfs_btnconfirmCancel)
+    @Html.Hidden("j_confirm_header", Lang.csfs_confirmToSubmit)
+    @Html.Hidden("j_confirm_message", Lang.csfs_confirmHeader)
+    @Html.Hidden("LoadErrorMsg", Lang.csfs_load_error)
+
+    @Scripts.Render("~/Scripts/jquery-2.1.3.min.js")
+    @Scripts.Render("~/Scripts/jquery-ui-1.10.4.custom.min.js")
+    @* 20150401 Add by Ge.Song for 民國年日曆元件 start*@
+    @Scripts.Render("~/Scripts/jquery.ui.datepicker.js")
+    @Scripts.Render("~/Scripts/jquery.ui.datepicker.expand.js")
+    @* 20150401 Add by Ge.Song for 民國年日曆元件 end*@
+    @Scripts.Render("~/Scripts/jquery.ui.datepicker-en-US.min.js")
+    @Scripts.Render("~/Scripts/jquery.ui.datepicker-zh-TW.min.js")
+    @Scripts.Render("~/Scripts/Common.Datepicker.js")
+    @Scripts.Render("~/Scripts/json2.js")
+    <script type="text/javascript"> function getRootURL() { return '@Url.Content("~/")'; } </script>
+    @Scripts.Render("~/Scripts/AdminLTE/cross-page.js")
+    @Scripts.Render("~/Scripts/bootstrap.min.js")
+    @Scripts.Render("~/Scripts/AdminLTE/app.js")
+    @Scripts.Render("~/Scripts/jquery.blockUI-vsdoc.js")
+    @Scripts.Render("~/Scripts/jquery.alerts-vsdoc.js")
+    @Scripts.Render("~/Scripts/Common.SortTable.js")
+    @Scripts.Render("~/Scripts/jquery.unobtrusive-ajax.min.js")
+    @Scripts.Render("~/scripts/jquery.validate.min.js")
+    @Scripts.Render("~/Scripts/Common.js")
+    @Scripts.Render("~/Scripts/Colorbox/jquery.colorbox.js")
+
+    @RenderSection("scripts", required: false)
+</body>
+</html>

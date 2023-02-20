@@ -1,0 +1,107 @@
+﻿@model CTBC.CSFS.ViewModels.CollectionToAgentViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.CollectionToAgentList != null)
+                {
+                    if (Model.CollectionToAgentList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CollectionToAgent.PageSize, Model.CollectionToAgent.CurrentPage, Model.CollectionToAgent.TotalItemCount, Model.CollectionToAgent, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CollectionToAgent.SortExpression, Model.CollectionToAgent.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th><input type="checkbox" id="CheckAll"></th>
+                            <th style="width:4%" data-sortcolumn="num">@Lang.csfs_seqnum</th>
+                            <th class="col-md-1" data-sortcolumn="CaseNo">@Lang.csfs_case_no</th>
+                            <th class="col-md-1" data-sortcolumn="CaseKind">@Lang.csfs_case_kind</th>
+                            <th class="col-md-1" data-sortcolumn="CaseKind2">@Lang.csfs_case_kind2</th>
+                            <th style="width:7%" data-sortcolumn="Speed">@Lang.csfs_case_speed</th>
+                            <th class="col-md-2" data-sortcolumn="GovUnit">@Lang.csfs_gov_unit</th>
+                            <th style="width:6%" data-sortcolumn="GovNo">@Lang.csfs_gov_no</th>
+                            <th class="col-md-1" data-sortcolumn="GovDate">@Lang.csfs_gov_date</th>
+                            <th class="col-md-1" data-sortcolumn="LimitDate">@Lang.csfs_case_limited_date</th>
+                            <th class="col-md-1" data-sortcolumn="Unit">@Lang.csfs_case_unit</th>
+                            <th class="col-md-1" data-sortcolumn="CreatedUser">@Lang.csfs_keyin_person</th>
+                            <th class="col-md-1" data-sortcolumn="AgentUser">@Lang.csfs_agnet</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CollectionToAgentList != null && Model.CollectionToAgentList.Any())
+                        {
+                            foreach (var item in Model.CollectionToAgentList)
+                            {
+                                string className = "";
+                                if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) > Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                {
+                                    className = "text-red";
+                                }
+                                else if (Convert.ToInt32(DateTime.Now.ToString("yyyyMMdd")) == Convert.ToInt32(item.LimitDate.Replace("/", "")))
+                                {
+                                    className = "text-light-blue";
+                                }
+                                <tr>
+                                    <td class="text-center">
+                                        <input type="checkbox" name="r2" class="checkfile" value="@item.CaseId" data-limitdate="@item.LimitDate" data-overduememo="@item.OverDueMemo" />
+                                    </td>
+                                    <td class="text-center @className">@item.num</td>
+                                    <td class="text-center @className">
+                                        @Html.ActionLink(Convert.ToString(item.CaseNo) + " ", "Index", "AgentDocumentInfo", new { area = "Agent", CaseId = item.CaseId, pageFrom = "1" }, new { })
+                                    </td>
+                                    <td class="text-center @className">@item.CaseKind</td>
+                                    <td class="text-center @className">@item.CaseKind2</td>
+                                    <td class="text-center @className">@item.Speed</td>
+                                    <td class="text-center @className">@item.GovUnit</td>
+                                    <td class="@className">@item.GovNo</td>
+                                    <td class="@className">@item.GovDate</td>
+                                    <td class="text-center @className">@item.LimitDate</td>
+                                    <td class="text-center @className">@item.Unit</td>
+                                    <td class="text-center @className">@item.CreatedUser</td>
+                                    <td class="text-center @className">@item.AgentUser</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="13"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.CollectionToAgent.CaseKind)
+                @Html.Hidden("querystring", Model.CollectionToAgent.CaseKind2)
+                @Html.Hidden("querystring", Model.CollectionToAgent.GovKind)
+                @Html.Hidden("querystring", Model.CollectionToAgent.GovUnit)
+                @Html.Hidden("querystring", Model.CollectionToAgent.CaseNo)
+                @Html.Hidden("querystring", Model.CollectionToAgent.GovDateS)
+                @Html.Hidden("querystring", Model.CollectionToAgent.GovDateE)
+                @Html.Hidden("querystring", Model.CollectionToAgent.Speed)
+                @Html.Hidden("querystring", Model.CollectionToAgent.ReceiveKind)
+                @Html.Hidden("querystring", Model.CollectionToAgent.GovNo)
+                @Html.Hidden("querystring", Model.CollectionToAgent.CreatedDateS)
+                @Html.Hidden("querystring", Model.CollectionToAgent.CreatedDateE)
+                @Html.Hidden("querystring", Model.CollectionToAgent.Unit)
+                @Html.Hidden("querystring", Model.CollectionToAgent.CreatedUser)
+                @Html.Hidden("querystring", Model.CollectionToAgent.AgentUser)
+                @Html.Hidden("defaultSortColumn", Model.CollectionToAgent.SortExpression)
+                @Html.Hidden("defaultSort", Model.CollectionToAgent.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.BindCheckBox();
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

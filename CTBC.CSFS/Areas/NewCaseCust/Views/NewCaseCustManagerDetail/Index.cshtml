@@ -1,0 +1,332 @@
+﻿@using System.Web.Mvc.Html;
+@using System.Web.Mvc;
+@using CTBC.CSFS.Models;
+@using System.Web.Optimization;
+@using CTBC.CSFS;
+@model CTBC.CSFS.Models.NewCaseCustCondition
+@{
+    ViewBag.Title = "外來主管放行";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box-footer text-center">
+    <table border="0" style="width:100%">
+        <tr>
+            <td style="text-align:center;width:80%">
+                <button type="button" id="btnExportTXT" class="btn btn-primary btn-xs" onclick="Export('1');">來文txt</button>&nbsp;&nbsp;
+                <button type="button" id="btnExportPDF" class="btn btn-primary btn-xs" onclick="Export('2');">來文pdf</button>&nbsp;&nbsp;
+                @*<button type="button" id="btnView" class="btn btn-primary btn-xs" onclick="ReturnViewByPk();">回文檢視</button>&nbsp;&nbsp;*@
+                <button type="button" id="btnView" class="btn btn-primary btn-xs" onclick="Export('8');">回文檢視</button>&nbsp;&nbsp;
+                @if (Model.PageSource == "2" || Model.PageSource == "1")
+                {
+                    <!--<button type="button" id="btnReturnFile" class="btn btn-primary btn-xs" onclick="ReturnFile();">回文檔案</button><span>&nbsp;&nbsp;</span>-->
+                    <button type="button" id="btnReturnFile" class="btn btn-primary btn-xs" onclick="Export('7');">回文檔案</button><span>&nbsp;&nbsp;</span>
+                    <button type="button" id="btnReturnPDF" class="btn btn-primary btn-xs" onclick="Export('3');">回函pdf</button><span>&nbsp;&nbsp;</span>
+                    <button type="button" id="btnROpenFile" class="btn btn-primary btn-xs" onclick="Export('4');">基本資料</button><span>&nbsp;&nbsp;</span>
+                    <button type="button" id="btnRFileTransactionFile" class="btn btn-primary btn-xs" onclick="Export('5');">存款明細</button><span>&nbsp;&nbsp;</span>
+                    <button type="button" id="btnBoxFile" class="btn btn-primary btn-xs" onclick="Export('6');">保管箱</button><span>&nbsp;&nbsp;</span>
+                }
+                @if ((Model.PageSource == "2" || Model.PageSource == "1")  && Model.QFileName3.Length > 0)
+                {
+                    <button type="button" id="btnAttachFile" class="btn btn-primary btn-xs" onclick="Export('0');">附件檔</button><span>&nbsp;&nbsp;</span>
+                }
+                @if (Model.PageSource == "1" && Model.AuditStatus == "N")
+                {
+                    <button type="button" id="btnAuditFinish" class="btn btn-primary btn-xs" onclick="AuditFinish();">審核完成</button>
+                }
+            </td>
+            <td style="text-align:right;width:20%;" nowrap>
+                @Html.GetBackButtonInTab()
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm("_QueryResult", "NewCaseCustManagerDetail", new { area = "NewCaseCust" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+{
+    @Html.HiddenFor(m => m.NewID, new { id = "hidNewID" })
+    @Html.HiddenFor(m => m.PageSource, new { id = "hidPageSource" })
+}
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "NewCaseCustManagerDetail", new { area = "NewCaseCust" ,model=Model})">
+</div>
+@Html.HiddenFor(m => m.PageFrom)
+@Html.HiddenFor(m => m.QFileName, new { id = "hidQFileName" })
+@Html.HiddenFor(m => m.QFileName2, new { id = "hidQFileName2" })
+@Html.HiddenFor(m => m.QFileName3, new { id = "hidQFileName3" })
+@Html.HiddenFor(m => m.ROpenFileName, new { id = "hidROpenFileName" })
+@Html.HiddenFor(m => m.ROpenFileName, new { id = "hidImportMessage" })
+@Html.HiddenFor(m => m.RFileTransactionFileName, new { id = "hidRFileTransactionFileName" })
+@Html.HiddenFor(m => m.ReturnFilePDF, new { id = "hidReturnFilePDF" })
+@Html.HiddenFor(m => m.ReturnFileTitle, new { id = "hidReturnFileTitle" })
+
+@Html.HiddenFor(m => m.DocNo, new { id = "hidDocNo" })
+@Html.HiddenFor(m => m.Version, new { id = "hidVersion" })
+
+@Html.Hidden("NowPage", "NewCaseCustManagerDetail")
+@Html.Hidden("CancelUrl", @Url.Action("Index", "NewCaseCustManager", new { area = "NewCaseCust", isBack = "1" }))
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_add_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_add_fail)
+@Html.Hidden("GetFileView", Url.Action("FileView", "NewCaseCustManagerDetail", new { area = "NewCaseCust" }))
+@Html.Hidden("hidOpenTxtDocUrl", Url.Action("OpenTxtDoc", "NewCaseCustManagerDetail", new { area = "NewCaseCust" }))
+@Html.Hidden("hidAuditFinish", Url.Action("AuditFinish", "NewCaseCustManager", new { area = "NewCaseCust" }))
+@Html.Hidden("hidReturnViewByPk", Url.Action("ReturnViewByPk", "NewCaseCustManagerDetail", new { area = "NewCaseCust" }))
+@Html.Hidden("hidIsExistReturnfile", Url.Action("IsExistReturnfile", "NewCaseCustManagerDetail", new { area = "NewCaseCust" }))
+@Html.Hidden("hidIsExistDownloadfile", Url.Action("IsExistDownloadfile", "NewCaseCustManagerDetail", new { area = "NewCaseCust" }))
+@Html.Hidden("hidIsExistDownloadZip", Url.Action("IsExistDownloadZip", "NewCaseCustManagerDetail", new { area = "NewCaseCust" }))
+@Html.Hidden("hidReturnFileDownLoad", Url.Action("ReturnFileDownLoad", "NewCaseCustManagerDetail", new { area = "NewCaseCust" }))
+@Html.Hidden("hidBoxFileDownLoad", Url.Action("BoxFileDownLoad", "NewCaseCustManagerDetail", new { area = "NewCaseCust" }))
+
+@Html.Hidden("hidtxtReciveFilePath", @ViewData["txtReciveFilePath"])
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".content-header").hide();
+        QueryClick();
+    });
+
+    // 查詢
+    function QueryClick() {
+        $("#divResult").html("");
+        trimAllInput();
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmQuery").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmQuery").serialize(),
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                $("#divResult").html(data).show();
+                $.unblockUI();
+                $("#querystring").val($("#frmQuery").serialize());
+            }
+        });
+    }
+
+    // 來文txt、來文pdf按鈕事件
+    function Export(flag) {
+
+        var strPk = $("#hidNewID").val().toString();
+
+        var strDocNo = $("#hidDocNo").val().toString();
+
+
+        // 文件名/URL
+        var FileName = "";
+        var ConfigPath = "";
+        var FileFormat = "";
+
+
+        // 來文TXT
+        if (flag == "1") {
+            ConfigPath = "txtReciveFilePath";
+            FileName = $("#hidQFileName").val();
+            FileFormat = "txt";
+        }
+        // 來文PDF
+        else if (flag == "2") {
+            ConfigPath = "txtReciveFilePath";
+            FileName = $("#hidQFileName2").val();
+            FileFormat = "pdf";
+        }
+        // 回函pdf第一頁
+        else if (flag == "3") {
+            ConfigPath = "txtFilePath";
+            //FileName = $("#hidReturnFileTitle").val();
+            FileName = $("#hidDocNo").val() + "_" + $("#hidVersion").val() + "_001.pdf";
+            FileFormat = "pdf";
+        }
+        // 存款帳戶開戶txt
+        else if (flag == "4") {
+            ConfigPath = "txtFilePath";
+            FileName = $("#hidROpenFileName").val();
+            FileFormat = "txt";
+        }
+        // 存款往來明細txt
+        else if (flag == "5") {
+            ConfigPath = "txtFilePath";
+            FileName = $("#hidRFileTransactionFileName").val();
+            FileFormat = "txt";
+        }
+        // 保管箱
+        else if (flag == "6") {
+            ConfigPath = "txtFilePath";
+            //FileName = $("#hidImportMessage").val();
+            FileName = $("#hidDocNo").val() + "_" + $("#hidVersion").val() + "_SBox.csv";
+            FileFormat = "txt";
+        }
+        // 回文檔案
+        else if (flag == "7") {
+            ConfigPath = "txtFilePath";
+            //FileName = $("#hidImportMessage").val();
+            FileName = $("#hidDocNo").val() + "_" + $("#hidVersion").val() + ".pdf";
+            FileFormat = "pdf";
+        }
+        // 回文檢視
+        else if (flag == "8") {
+            ConfigPath = "txtFilePath";
+            //FileName = $("#hidImportMessage").val();
+            FileName = $("#hidDocNo").val() + "_" + $("#hidVersion").val() + ".zip";
+            FileFormat = "ZIP";
+        }
+        // 回文檢視
+        else if (flag == "0") {
+            ConfigPath = "txtReciveFilePath";
+            FileName = $("#hidQFileName3").val();
+            //FileName = $("#hidDocNo").val() + "_" + $("#hidVersion").val() + ".zip";
+            FileFormat = "ZIP";
+        }
+        //
+        if (flag == "1" || flag == "2" || flag == "0") {
+            if (FileName == "") {
+                alert("要檢視的檔案不存在，無法檢視");
+                return;
+            }
+            else {
+                window.location.href = "NewCaseCustManagerDetail/OpenTxtDoc?FileName="
+                    + FileName + "&ConfigPath=" + ConfigPath + "&FileFormat=" + FileFormat;
+            }
+        }
+        else
+        {
+            $.blockUI();
+            $.ajax({
+                type: "POST",
+                async: false,
+                url: $("#hidIsExistDownloadfile").val(),
+                data: {
+                    strPk: strPk,
+                    strDocNo: strDocNo,
+                    strFileName: FileName
+                },
+                success: function (data) {
+                    $.unblockUI();
+                    if (data != "Y") {
+                        alert("要檢視的檔案不存在！");
+                        return
+                    }
+                    else {
+                        window.location.href = "NewCaseCustManagerDetail/OpenTxtDoc?FileName="
+                            + FileName + "&ConfigPath=" + ConfigPath + "&FileFormat=" + FileFormat;
+                    }
+                }
+            });
+
+        }
+        //if (FileName == "") {
+        //    alert("要檢視的檔案不存在，無法檢視");
+        //    return;
+        //} else {
+        // 因window.open 只能打開工程下的文件，不能指定目錄，故調整為下載
+        //window.location.href = "NewCaseCustManagerDetail/OpenTxtDoc?FileName="
+        //    + FileName + "&ConfigPath=" + ConfigPath + "&FileFormat=" + FileFormat;
+        /*        }*/
+    }
+
+    // 審核完成
+    function AuditFinish() {
+        $.blockUI();
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: $("#hidAuditFinish").val(),
+            data: {
+                strKey: $("#hidNewID").val().toString(),
+                flag: "2"
+            },
+            success: function (data) {
+                $.unblockUI();
+                if (data) {
+                    alert("審核完成成功");
+
+                    // 返回清單頁面
+                    location.href = $("#CancelUrl").val();
+
+                } else {
+                    alert("審核完成失敗");
+                }
+            }
+        });
+    }
+
+    // 全選
+    function ChkAll() {
+        if ($("#check01").prop("checked") == true) {
+            $(".checkfile").prop("checked", "checked");
+        } else {
+            $(".checkfile").removeAttr("checked");
+        }
+    }
+
+    // checkbox點擊事件
+    function ChildItem() {
+        // 選中個數
+        var chkResult = 0;
+        $(".checkfile").each(function () {
+            if ($(this).prop("checked") == true) {
+                chkResult++;
+            }
+        });
+
+        if (chkResult == $(".checkfile").length) {
+            $("#check01").prop("checked", "checked");
+        } else {
+            $("#check01").removeAttr("checked");
+        }
+    }
+
+    // 回文檢視
+    function ReturnViewByPk() {
+        var strPk = $("#hidNewID").val().toString();
+
+        var strDocNo = $("#hidDocNo").val().toString();
+
+        $.blockUI();
+
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: $("#hidIsExistReturnfile").val(),
+            data: {
+                strPk: strPk,
+                strDocNo: strDocNo
+            },
+            success: function (data) {
+                $.unblockUI();
+                if (data == "Y") {
+                    window.location.href = "NewCaseCustManagerDetail/ReturnViewByPk?strPk=" + strPk + "&strDocNo=" + strDocNo;
+
+                }
+                else {
+                    alert("沒有回文資料，無法檢視！");
+                }
+            }
+        });
+    }
+
+    // 回文檔案
+    function ReturnFile() {
+        var strPk = $("#hidNewID").val().toString();
+        var strDocNo = $("#hidDocNo").val().toString();
+
+        if ($("#hidROpenFileName").val() == "" && $("#hidRFileTransactionFileName").val() == "" && $("#hidReturnFilePDF").val() == "") {
+            alert("沒有回文檔案，無法下載！");
+        }
+        else {
+            // 將文檔做壓縮動作
+            window.location.href = "NewCaseCustManagerDetail/ReturnFileDownLoad?strPk=" + strPk
+                + "&strDocNo=" + $("#hidDocNo").val()
+                + "&strROpenFileName=" + $("#hidROpenFileName").val()
+                + "&strRFileTransactionFileName=" + $("#hidRFileTransactionFileName").val()
+                + "&strReturnFilePDF=" + $("#hidReturnFileTitle").val()
+                + "&strImportMessage=" + $("#hidImportMessage").val()
+                + "&strVersion=" + $("#hidVersion").val();
+        }
+    }
+
+</script>

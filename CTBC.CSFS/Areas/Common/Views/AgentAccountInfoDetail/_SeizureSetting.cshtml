@@ -1,0 +1,634 @@
+﻿@model  CaseSeizureViewModel
+@using CTBC.FrameWork.Util
+@*@model IList<CTBC.CSFS.Models.CaseSeizure>*@
+           
+@using (Html.BeginForm("DoSaveSeizureSetting", "AgentAccountInfoDetail", new { area = "Common" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal" }))
+{
+    <div>
+        <div class="box box-primary">
+            <div class="box-header"></div>
+            <div class="box-body">
+                <table>
+                    <tr>
+                        <th style="width:110px">來函扣押總金額：</th>
+                        <td style="width:80px">@ViewBag.ReceiveAmount</td>
+                        <th style="width:130px">金額未達毋需扣押：</th>
+                        <td style="width:80px">@ViewBag.NotSeizureAmount</td>
+                    </tr>
+                </table>
+                <table class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr>
+                            <th style="width:60px">&nbsp;</th>
+                            <th>姓名</th>
+                            <th>ID</th>
+                            <th>ID重號</th>
+                            <th>客戶等級</th>
+                            <th>RM/理專</th>
+                            <th style="width:60px">&nbsp;</th>
+                            <th>姓名</th>
+                            <th>ID</th>
+                            <th>ID重號</th>
+                            <th>客戶等級</th>
+                            <th>RM/理專</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.CaseObligorlistO.Any())
+                        {
+                            int row = Model.CaseObligorlistO.Count % 2 == 0 ? Model.CaseObligorlistO.Count / 2 : (Model.CaseObligorlistO.Count / 2 + 1);
+                            for (int j = 0; j < row; j++)
+                            {
+                                <tr>
+                                    @for (int i = 0; i < Model.CaseObligorlistO.Count; i++)
+                                    {
+                                        var flag = true;
+                                        if (Model != null && Model.CaseSeizureList.Any())
+                                        {
+                                            foreach (var item in Model.CaseSeizureList.Where(m => (m.CustId.Length > 10 ? m.CustId.Substring(0, 10) : m.CustId) == Model.CaseObligorlistO[i].ObligorNo))
+                                            {
+                                                flag = flag && item.CustName.Trim().Equals(Model.CaseObligorlistO[i].ObligorName.Trim());
+                                            }
+                                        }
+
+                                        if (i == j * 2)
+                                        {
+                                            <td class="col-xs-1">義務人@(j * 2 + 1).</td>
+                                            <td class="col-xs-1">
+                                                @if (flag)
+                                                {
+                                                    @Model.CaseObligorlistO[i].ObligorName
+                                                }
+                                                else
+                                                {
+                                                    <span style="color:red">@Model.CaseObligorlistO[i].ObligorName</span>
+                                                }
+                                            </td>
+                                            <td class="col-xs-1">@Model.CaseObligorlistO[i].ObligorNo</td>
+                                            <td class="col-xs-1">@Model.CaseObligorlistO[i].DuplicateID</td>
+                                            <td class="col-xs-1">@Model.CaseObligorlistO[i].CustomerLevel</td>
+                                            <td class="col-xs-1">@Model.CaseObligorlistO[i].RMcommissioner</td>
+                                        }
+                                        else if (i == j * 2 + 1)
+                                        {
+                                            <td class="col-xs-1">義務人@(j * 2 + 2).</td>
+                                            <td class="col-xs-1">
+                                                @if (flag)
+                                                {
+                                                    @Model.CaseObligorlistO[i].ObligorName
+                                                }
+                                                else
+                                                {
+                                                    <span style="color:red">@Model.CaseObligorlistO[i].ObligorName</span>
+                                                }
+                                            </td>
+                                            <td class="col-xs-1">@Model.CaseObligorlistO[i].ObligorNo</td>
+                                            <td class="col-xs-1">@Model.CaseObligorlistO[i].DuplicateID</td>
+                                            <td class="col-xs-1">@Model.CaseObligorlistO[i].CustomerLevel</td>
+                                            <td class="col-xs-1">@Model.CaseObligorlistO[i].RMcommissioner</td>
+                                        }
+                                    }
+                                    @if ((j + 1) * 2 > Model.CaseObligorlistO.Count)
+                                    {
+                                        <td class="col-xs-1">義務人@((j + 1) * 2).</td>
+                                        <td class="col-xs-1"></td>
+                                        <td class="col-xs-1"></td>
+                                        <td class="col-xs-1"></td>
+                                        <td class="col-xs-1"></td>
+                                        <td class="col-xs-1"></td>
+                                    }
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <br />
+                <table id="seizureTable" class="table table-bordered table-striped text-black">
+                    <thead>
+                    <tr class="alert-success text-center ">
+                        <th style="width: 31px;" width="31">&nbsp;</th>
+                        <th class="hidden">@Lang.csfs_case_no</th>
+                        <th class="col-xs-1">@Lang.csfs_id_1</th>
+                        <th style="width:80px">@Lang.csfs_name</th>
+                        <th style="width:60px">@Lang.csfs_case_unit</th>
+                        <th style="width:80px">@Lang.csfs_bank_name</th>
+                        <th style="width:110px">@Lang.csfs_deposit_account</th>
+                        <th style="width:60px">@Lang.csfs_case_status</th>
+                        @*<th style="width:60px">@Lang.csfs_dianwen_status</th>*@
+                        <th style="width:60px">@Lang.csfs_ProdCode</th>
+			            <th style="width:60px">產品代碼</th>
+                        <th style="width:50px">@Lang.csfs_Link</th>
+                        <th style="width:50px">管理</th>
+                        <th style="width:50px">@Lang.csfs_currency_1</th>
+                        <th class="col-xs-1">@Lang.csfs_balance</th>
+                        @*<th class="col-xs-1">@Lang.csfs_Amount</th>
+                        <th style="width:50px">@Lang.csfs_rate</th>
+                        <th class="col-xs-1">@Lang.csfs_t_amt</th>*@
+                        <th style="width:50px">@Lang.csfs_rate</th>
+                        <th style="width:110px">ETABS扣押金額</th>
+                        <th class="col-xs-1">台幣</th>
+                        <th style="width:60px">他案扣押</th>
+                    </tr>
+                    </thead>
+                    <tbody id="SeizureSettingtbody">
+                    @if (Model != null && Model.CaseSeizureList.Any())
+                        {
+                            for (int i = 0; i < Model.CaseSeizureList.Count; i++)
+                            {
+                                string stsClass = Model.CaseSeizureList[i].AccountStatus == "事故" ? "text-red" : "";
+                                string linkClass = Model.CaseSeizureList[i].Link.ToUpper() != "OWN" ? "text-red" : "";
+
+                                <tr>
+                                    <td style="width: 31px;"></td>
+                                    <td class="hidden">
+                                        @Model.CaseSeizureList[i].CaseNo
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].SeizureId, new { @id = "SeizureId" + i })
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].CaseId, new { @id = "CaseId" + i })
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].CaseNo, new { @id = "CaseNo" + i })
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].TxtStatus, new { @id = "TxtStatus" + i })
+                                    </td>
+                                    <td>
+                                        @if (Model.CaseSeizureList[i].CustIdflag == "true")
+                                        {
+                                            @Html.ActionLink(Model.CaseSeizureList[i].CustId, "CustomerInfo", "AgentAccountInfo", new { area = "Agent", custId = Model.CaseSeizureList[i].CustId, caseId = Model.CaseSeizureList[i].CaseId }, new { @class = "fancy1100_600", @style = "color:red;" })
+                                        }
+                                        else
+                                        {
+                                            @Html.ActionLink(Model.CaseSeizureList[i].CustId, "CustomerInfo", "AgentAccountInfo", new { area = "Agent", custId = Model.CaseSeizureList[i].CustId, caseId = Model.CaseSeizureList[i].CaseId }, new { @class = "fancy1100_600" })
+
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].CustId, new { @id = "CustId" + i })
+                                    </td>
+                                    <td>
+                                        @if (Model.CaseSeizureList[i].CustNameflag == "true")
+                                        {
+                                            <span style="color:red">@Model.CaseSeizureList[i].CustName.Trim()</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.CaseSeizureList[i].CustName.Trim()
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].CustName, new { @id = "CustName" + i })
+                                    </td>
+                                    <td>
+                                        @if (Model.CaseSeizureList[i].BranchNoflag == "true")
+                                        {
+                                            <span style="color:red">@Model.CaseSeizureList[i].BranchNo</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.CaseSeizureList[i].BranchNo
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].BranchNo, new { @id = "BranchNo" + i })
+                                    </td>
+                                    <td>
+                                        @if (Model.CaseSeizureList[i].BranchNameflag == "true")
+                                        {
+                                            <span style="color:red">@Model.CaseSeizureList[i].BranchName</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.CaseSeizureList[i].BranchName
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].BranchName, new { @id = "BranchName" + i })
+                                    </td>
+                                    <td>
+                                        @if (Model.CaseSeizureList[i].Accountflag == "true")
+                                        {
+                                            <span style="color:red">@FormatacctNo(Model.CaseSeizureList[i].Account, Model.CaseSeizureList[i].Currency)</span>
+                                        }
+                                        else
+                                        {
+                                            @FormatacctNo(Model.CaseSeizureList[i].Account, Model.CaseSeizureList[i].Currency)
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].Account, new { @id = "AccountNum" + i })
+                                    </td>
+                                    <td class="@stsClass">
+                                        @*@if (Model.CaseSeizureList[i].AccountStatusflag == "true")
+                                        {
+                                            <span style="color:red">@Model.CaseSeizureList[i].AccountStatus</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.CaseSeizureList[i].AccountStatus
+                                        }*@
+                                        @if (Model.CaseSeizureList[i].AccountStatusflag == "true")
+                                        {
+                                            if (Model.CaseSeizureList[i].AccountStatus == "事故")
+                                            {
+                                                @Html.ActionLink(Model.CaseSeizureList[i].AccountStatus, "AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.CaseSeizureList[i].Account, ccy = Model.CaseSeizureList[i].Currency }, new { @class = "fancy1100_600", @style = "color:red;" })
+                                                @*<a style="color:red;" href="@Url.Action("AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.CaseSeizureList[i].Account })">@Model.CaseSeizureList[i].AccountStatus</a>*@
+                                            }
+                                            else
+                                            {
+                                                <span style="color:red">@Model.CaseSeizureList[i].AccountStatus</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Model.CaseSeizureList[i].AccountStatus == "事故")
+                                            {
+                                                @Html.ActionLink(Model.CaseSeizureList[i].AccountStatus, "AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.CaseSeizureList[i].Account, ccy = Model.CaseSeizureList[i].Currency }, new { @class = "fancy1100_600" })
+                                                @*<a href="@Url.Action("AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.CaseSeizureList[i].Account })">@Model.CaseSeizureList[i].AccountStatus</a>*@
+                                            }
+                                            else
+                                            {
+                                                @Model.CaseSeizureList[i].AccountStatus
+                                            }
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].AccountStatus, new { @id = "AccountStatus" + i })
+                                    </td>
+                                    <td>
+                                        @if (Model.CaseSeizureList[i].ProdCodeflag == "true")
+                                        {
+                                            <span style="color:red">@Model.CaseSeizureList[i].ProdCode</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.CaseSeizureList[i].ProdCode
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].ProdCode, new { @id = "ProdCode" + i })
+                                    </td>
+                                    <td>
+                                        @if (Model.CaseSeizureList[i].TxtProdCodeflag == "true")
+                                        {
+                                            <span style="color:red">@Model.CaseSeizureList[i].TxtProdCode</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.CaseSeizureList[i].TxtProdCode
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].TxtProdCode, new { @id = "TxtProdCode" + i })
+                                    </td>
+                                    <td class="@linkClass">
+                                        @if (Model.CaseSeizureList[i].Linkflag == "true")
+                                        {
+                                            <span style="color:red">@Model.CaseSeizureList[i].Link</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.CaseSeizureList[i].Link
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].Link, new { @id = "Link" + i })
+                                    </td>
+                                    <td>
+                                        @if (Model.CaseSeizureList[i].SegmentCodeflag == "true")
+                                        {
+                                            <span style="color:red">@Model.CaseSeizureList[i].SegmentCode</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.CaseSeizureList[i].SegmentCode
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].SegmentCode, new { @id = "SegmentCode" + i })
+                                    </td>
+                                    <td>
+                                        @if (Model.CaseSeizureList[i].Currencyflag == "true")
+                                        {
+                                            <span style="color:red">@Model.CaseSeizureList[i].Currency</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.CaseSeizureList[i].Currency
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].Currency, new { @id = "Currency" + i })
+                                    </td>
+                                    <td class=" text-right">
+                                        @*可用餘額*@@*拋查電文成功，金額不可修改*@
+                                        @if (Model.CaseSeizureList[i].Balanceflag == "true")
+                                        {
+                                            <span style="color:red">@UtlString.FormatCurrency(Model.CaseSeizureList[i].Balance, 2)</span>
+                                        }
+                                        else
+                                        {
+                                            @UtlString.FormatCurrency(Model.CaseSeizureList[i].Balance, 2)
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].Balance, new { @id = "Balance" + i })
+                                    </td>
+                                    <td class="">
+                                        @*匯率*@
+                                        @if (Model.CaseSeizureList[i].ExchangeRateflag == "true")
+                                        {
+                                            @Html.TextBoxFor(m => m.CaseSeizureList[i].ExchangeRate, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "ExchangeRate" + i, @disabled = "disabled", @style = "color:red" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.CaseSeizureList[i].ExchangeRate, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "ExchangeRate" + i, @disabled = "disabled" })
+                                        }
+                                    </td>
+                                    <td class="">
+                                        @*ETABS扣押金額*@@*拋查電文成功，金額不可修改*@
+                                        @if (Model.CaseSeizureList[i].SeizureAmountflag == "true")
+                                        {
+                                            @Html.TextBoxFor(m => m.CaseSeizureList[i].SeizureAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "SeizureAmountReal" + i, @disabled = "disabled", @style = "color:red" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.CaseSeizureList[i].SeizureAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "SeizureAmountReal" + i, @disabled = "disabled" })
+                                        }
+                                        @if (Model.CaseSeizureList[i].TxtStatus == "1")
+                                        {
+                                            <input type="checkbox" class="SAmtCheck" checked>
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="SAmtCheck">
+                                        }
+                                    </td>
+                                    <td class="">
+                                        @*台幣*@@*拋查電文成功，金額不可修改*@
+                                        @if (Model.CaseSeizureList[i].SeizureAmountNtdflag == "true")
+                                        {
+                                            @Html.TextBoxFor(m => m.CaseSeizureList[i].SeizureAmountNtd, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "SeizureAmountNtd" + i, @disabled = "disabled", @style = "color:red" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.CaseSeizureList[i].SeizureAmountNtd, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "SeizureAmountNtd" + i, @disabled = "disabled" })
+                                        }
+                                    </td>
+                                    <td>
+                                        @*他案扣押*@
+                                        @if (Model.CaseSeizureList[i].OtherSeizureflag == "true")
+                                        {
+                                            <span style="color:red">@Model.CaseSeizureList[i].OtherSeizure</span>
+                                        }
+                                        else
+                                        {
+                                            @Model.CaseSeizureList[i].OtherSeizure
+                                        }
+                                        @Html.HiddenFor(m => m.CaseSeizureList[i].OtherSeizure, new { @id = "OtherSeizure" + i })
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <div style="text-align:right" id="divTotal">
+                    @Lang.csfs_tbTotal 0.00
+                </div>
+                <br />
+                @{
+                        var checkCaseSeizureList = (IEnumerable<SelectListItem>)ViewBag.CheckCaseSeizure;
+                        if (checkCaseSeizureList != null && checkCaseSeizureList.Any())
+                        {
+                            <table class="table table-bordered table-striped text-black">
+                                @foreach (var item in checkCaseSeizureList)
+                                {
+                                    bool flag = true;
+                                    for (int i = 0; i < Model.CaseSeizureList.Count; i++)
+                                    {
+                                        if (item.Value.Contains(Model.CaseSeizureList[i].CustId) || Model.CaseSeizureList[i].CustId.Contains(item.Value))
+                                        {
+                                            flag = false;
+                                            break;
+                                        }
+                                        else
+                                        {
+
+                                        }
+                                    }
+                                    if (flag == true)
+                                    {
+                                        <tr><td>@item.Value</td><td>@item.Text</td><td>@Lang.csfs_wckwl</td></tr>
+                                    }
+                                }
+                            </table>
+                        }
+                }
+                <table class="no-border col-xs-12">
+                    <tr>
+                        <td class="text-right col-xs-1">@Lang.csfs_memo:</td>
+                        <td>
+                            <textarea name="memo" id="memo" rows="5" class="col-xs-10 no-padding"></textarea>
+                            <input type="hidden" name="CaseId" id="CaseId" value="@ViewBag.CaseId">
+                        </td>
+                    </tr>
+                </table>
+
+                @*<div class="col-xs-1">@Lang.csfs_memo:
+                    </div><input type="text" name="memo" id="memo" maxlength="200" class="col-xs-6 no-padding" value="@ViewBag.Memo" disabled="disabled">*@
+                @*<div class="col-xs-1">
+                        @Lang.csfs_memo:
+                    </div>
+                    <textarea name="memo" id="memo" rows="5" class="col-xs-10 no-padding" disabled="disabled"></textarea>*@
+            </div>
+            <div class="box-footer text-center" style="float:left">
+                <table>
+                    <tr>
+                        <td align="left">
+                            <span style="color:red;">
+                                (貼心小叮嚀)<br />
+                                1.修改帳務資訊頁籤時須同步更新發文資訊頁籤<br />
+                                2.請務必確認實際扣押情形與發文內容是否相符<br />
+                            </span>
+                        </td>
+                        <td></td>
+                    </tr>
+                </table>
+                @*<button id="btnAccountSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+                    <button id="btnAccountCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+                    <button id="btnAddSeizureSettingtbodyTr" type="button" class="btn btn-default btn-xs">@Lang.csfs_new_one</button>*@
+            </div>
+        </div>
+    </div>
+
+}
+@Html.Hidden("EditSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_save_fail)
+@Html.Hidden("hidMemo", (string)ViewBag.Memo)
+@Html.Hidden("SeizureSettingCaseId", (Guid)ViewBag.CaseId)
+@Html.Hidden("SeizureSettingCaseNo", (string)ViewBag.CaseNo)
+
+@helper FormatacctNo(string acctNo, string currency)
+{
+    string str = string.IsNullOrEmpty(acctNo) ? "000000000000000" : acctNo.PadLeft(15, '0');
+
+    str = str.Substring(str.Length - 12);
+    str = str.Substring(0, 5) + "-" + str.Substring(5, 6) + "-" + str.Substring(11);
+    <text>@str</text>
+}
+
+
+
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $("#memo").text($("#hidMemo").val());
+        //* 點選儲存
+        $("#btnAccountSave").click(function () { return btnAccountSaveClick(); });
+        //* 點選新增一列
+        $("#btnAddSeizureSettingtbodyTr").unbind("click").click(function () { btnAddSeizureSettingtbodyTrClick(); });
+
+        //* 最後3欄位數字only
+        $("#SeizureSettingtbody input.j_numonly").unbind("keypress").keypress(function () { keyPress(this); });
+        $("#SeizureSettingtbody input.j_numonly").unbind("keyup").keyup(function () { keyUp(this); });
+        $("#SeizureSettingtbody input.j_numonly").unbind("blur").blur(function () { onBlur(this); var obj = $(this).parent().parent(); obj.find("[id^=SeizureAmountNtd]").val(Math.floor(obj.find("[id^=SeizureAmountReal]").val() * obj.find("[id^=ExchangeRate]").val())); });
+
+        total();
+    });
+
+    function btnAddSeizureSettingtbodyTrClick() {
+        var strTr = '<tr>' +
+            '<td><button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button></td>' +
+            '<td>{2}' +
+            '    <input id="SeizureId{0}" name="[{0}].SeizureId" type="hidden" value="">' +
+            '    <input id="CaseId{0}" name="[{0}].CaseId" type="hidden" value="{1}">' +
+            '    <input id="CaseNo{0}" name="[{0}].CaseNo" type="hidden" value="{2}">' +
+            '</td>' +
+            '<td><input id="CustId{0}" name="[{0}].CustId" type="text" value="" class="col-xs-12 no-padding" maxlength="14"></td>' +
+            '<td><input id="CustName{0}" name="[{0}].CustName" type="text" value="" class="col-xs-12 no-padding" maxlength="60"></td>' +
+            '<td><input id="BranchNo{0}" name="[{0}].BranchNo" type="text" value="" class="col-xs-12 no-padding" maxlength="4"></td>' +
+            '<td><input id="BranchName{0}" name="[{0}].BranchName" type="text" value="" class="col-xs-12 no-padding" maxlength="200"></td>' +
+            '<td><input id="AccountNum{0}" name="[{0}].Account" type="text" value="" class="col-xs-12 no-padding" maxlength="17"></td>' +
+            '<td><input id="AccountStatus{0}" name="[{0}].AccountStatus" type="text" value="正常" class="col-xs-12 no-padding" maxlength="6"></td>' +
+            '<td><input id="Currency{0}" name="[{0}].Currency" type="text" value="NTD" class="col-xs-12 no-padding" maxlength="3"></td>' +
+            '<td><input id="Balance{0}" name="[{0}].Balance" type="text" value="" class="col-xs-12 no-padding" maxlength="17"></td>' +
+            '<td><input id="SeizureAmountReal{0}" name="[{0}].SeizureAmount" type="text" value="" maxlength="10" class="col-xs-12 no-padding j_numonly"></td>' +
+            '<td><input id="ExchangeRate{0}" name="[{0}].ExchangeRate" type="text" value="1" maxlength="10" class="col-xs-12 no-padding j_numonly"></td>' +
+            '<td><input id="SeizureAmountNtd{0}" name="[{0}].SeizureAmountNtd" type="text" value="" maxlength="10" class="col-xs-12 no-padding j_numonly"></td>' +
+            '</tr>';
+        var html = $.validator.format(strTr, new Array($("#SeizureSettingtbody tr").length, $("#SeizureSettingCaseId").val(), $("#SeizureSettingCaseNo").val()));
+        $(html).appendTo("#SeizureSettingtbody");
+        RenameSeizureSettingtbodyTr();
+    }
+    function btnRemoveSeizureSettingtbodyTrClick(obj) {
+        var objtr = $(obj).parent().parent();
+        objtr.remove();
+        RenameSeizureSettingtbodyTr();
+        total();
+    }
+    function RenameSeizureSettingtbodyTr() {
+        $("#SeizureSettingtbody").find("[id^=SeizureId]").each(function (i) { $(this).attr("name", "[" + i + "].SeizureId"); });
+        $("#SeizureSettingtbody").find("[id^=CaseId]").each(function (i) { $(this).attr("name", "[" + i + "].CaseId"); });
+        $("#SeizureSettingtbody").find("[id^=CaseNo]").each(function (i) { $(this).attr("name", "[" + i + "].CaseNo"); });
+        $("#SeizureSettingtbody").find("[id^=CustId]").each(function (i) { $(this).attr("name", "[" + i + "].CustId"); });
+        $("#SeizureSettingtbody").find("[id^=CustName]").each(function (i) { $(this).attr("name", "[" + i + "].CustName"); });
+        $("#SeizureSettingtbody").find("[id^=BranchNo]").each(function (i) { $(this).attr("name", "[" + i + "].BranchNo"); });
+        $("#SeizureSettingtbody").find("[id^=BranchName]").each(function (i) { $(this).attr("name", "[" + i + "].BranchName"); });
+        $("#SeizureSettingtbody").find("[id^=AccountNum]").each(function (i) { $(this).attr("name", "[" + i + "].Account"); });
+        $("#SeizureSettingtbody").find("[id^=AccountStatus]").each(function (i) { $(this).attr("name", "[" + i + "].AccountStatus"); });
+        $("#SeizureSettingtbody").find("[id^=Currency]").each(function (i) { $(this).attr("name", "[" + i + "].Currency"); });
+        $("#SeizureSettingtbody").find("[id^=Balance]").each(function (i) { $(this).attr("name", "[" + i + "].Balance"); });
+        $("#SeizureSettingtbody").find("[id^=SeizureAmountReal]").each(function (i) { $(this).attr("name", "[" + i + "].SeizureAmount"); });
+        $("#SeizureSettingtbody").find("[id^=ExchangeRate]").each(function (i) { $(this).attr("name", "[" + i + "].ExchangeRate"); });
+        $("#SeizureSettingtbody").find("[id^=SeizureAmountNtd]").each(function (i) { $(this).attr("name", "[" + i + "].SeizureAmountNtd"); });
+
+        $("#SeizureSettingtbody .js-delete").unbind("click").click(function () { return btnRemoveSeizureSettingtbodyTrClick(this); });
+
+        $("#SeizureSettingtbody input.j_numonly").unbind("keypress").keypress(function () { keyPress(this); });
+        $("#SeizureSettingtbody input.j_numonly").unbind("keyup").keyup(function () { keyUp(this); });
+        $("#SeizureSettingtbody input.j_numonly").unbind("blur").blur(function () { onBlur(this); var obj = $(this).parent().parent(); obj.find("[id^=SeizureAmountNtd]").val(Math.floor(obj.find("[id^=SeizureAmount]").val() * obj.find("[id^=ExchangeRate]").val())); total(); });
+    }
+
+    function keyPress(ob) {
+        if (!ob.value.match(/^[\+\-]?\d*?\.?\d*?$/))
+            ob.value = ob.t_value;
+        else
+            ob.t_value = ob.value;
+        if (ob.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))
+            ob.o_value = ob.value;
+    }
+    function keyUp(ob) {
+        if (!ob.value.match(/^[\+\-]?\d*?\.?\d*?$/))
+            ob.value = ob.t_value;
+        else
+            ob.t_value = ob.value;
+        if (ob.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?)?$/))
+            ob.o_value = ob.value;
+    }
+    function onBlur(ob) {
+        if (!ob.value.match(/^(?:[\+\-]?\d+(?:\.\d+)?|\.\d*?)?$/))
+            ob.value = ob.o_value;
+        else {
+            if (ob.value.match(/^\.\d+$/))
+                ob.value = 0 + ob.value;
+            if (ob.value.match(/^\.$/))
+                ob.value = 0;
+            ob.o_value = ob.value;
+        };
+    }
+
+    function btnAccountSaveClick() {
+        var msg = "";
+        var newline = "<br/>";
+        for (var i = 0; i < $("#seizureTable tbody tr").length; i++) {
+            if ($("#CaseId" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen CaseId" + newline; }
+            if ($("#CaseNo" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen CaseNo" + newline; }
+            if ($("#CustId" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_clientID" + newline; }
+            if ($("#CustName" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_name" + newline; }
+            if ($("#BranchNo" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_case_unit" + newline; }
+            if ($("#BranchName" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_bank_name" + newline; }
+            if ($("#AccountNum" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_deposit_account" + newline; }
+            if ($("#AccountStatus" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_case_status" + newline; }
+            if ($("#Currency" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_currency_1" + newline; }
+            //if ($("#Balance" + i).val().length <= 0) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_balance" + newline; }
+            
+
+            if (isNaN($("#SeizureAmountReal" + i).val())) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_Amount" + newline; }
+            if (isNaN($("#ExchangeRate" + i).val())) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_rate" + newline; }
+            if (isNaN($("#SeizureAmountNtd" + i).val())) { msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_t_amt" + newline; }
+
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmCreate").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmCreate").serialize(),
+            dataType: "json",
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess($("#EditSuccessMsg").val(), function () { location.href = location.href; });
+                } else {
+                    jAlertError($("#EditFailMsg").val());
+                    $.unblockUI();
+                }
+
+            }
+        });
+        return false;
+    }
+
+    function total() {
+        var total = 0;
+        var amounts = $("input[id^='SeizureAmountNtd']");
+        for (var i = 0; i <= amounts.length - 1; i++) {
+            total += parseFloat(amounts[i].value);
+        }
+        $("#divTotal").html("@Lang.csfs_tbTotal" + formatCurrency(total, 2));
+    }
+
+    //金額格式轉換方法
+    function formatCurrency(num, digit) {
+        if (!isNaN(num) || !isNaN(digit) || (digit.indexOf(".") < 0)) {
+            num = parseFloat(num).toFixed(digit).toString();
+            var index = num.indexOf(".");
+            if (index < 0) {
+                var intNum = num;
+                var decNum = "";
+            }
+            else {
+                var intNum = num.substr(0, index);
+                var decNum = num.substring(index);
+            }
+            if (intNum.length > 3) {
+                while (intNum.length > 3) {
+                    decNum = "," + intNum.substr(intNum.length - 3, 3) + decNum;
+                    intNum = intNum.substr(0, intNum.length - 3);
+                }
+                return intNum + decNum;
+            }
+            return num;
+        }
+    }
+</script>
+

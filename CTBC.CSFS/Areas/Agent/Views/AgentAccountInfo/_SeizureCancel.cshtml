@@ -1,0 +1,578 @@
+﻿@model CancelSeizureViewModel
+@using CTBC.CSFS.Models
+@using CTBC.FrameWork.Util;
+
+<div>
+    @using (Html.BeginForm("DoSaveSeizureCancel", "AgentAccountInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmSeizureCancel", @class = "form-horizontal" }))
+    {
+        @Html.Hidden("functionCancelId", "")
+        @Html.HiddenFor(m => m.GovNo)
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_this_case</h3>
+            </div>
+            <div class="box-body">
+                <table id="payTable" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center">
+                            <th style="width: 31px;"><input type="checkbox" id="CheckAll"></th>
+                            <th>@Lang.csfs_delete</th>
+                            <th>@Lang.csfs_case_no</th>
+                            <th>@Lang.csfs_gov_date</th>
+                            <th>@Lang.csfs_gov_no</th>
+                            <th>@Lang.csfs_gov_unit</th>
+                            <th>@Lang.csfs_id_1</th>
+                            <th>@Lang.csfs_name</th>
+                            <th>@Lang.csfs_case_unit</th>
+                            <th>@Lang.csfs_bank_name</th>
+                            <th>@Lang.csfs_deposit_account</th>
+                            <th>@Lang.csfs_currency_1</th>
+                            <th>@Lang.csfs_balance</th>
+                            <th>@Lang.csfs_cal_caseamount</th>
+                            <th>已撤銷金額</th>
+                        </tr>
+                    </thead>
+                    <tbody id="PaytbodyCancel">
+                        @if (Model != null && Model.ListSaved != null && Model.ListSaved.Any())
+                        {
+                            for (int i = 0; i < Model.ListSaved.Count; i++)
+                            {
+                                <tr data-seizureid="@Model.ListSaved[i].SeizureId">
+                                    <td class="text-center">
+                                        <input type="checkbox" value="" class="IsOrNo" />
+                                    </td>
+                                    <td class="text-center" id="deleteId">
+                                        <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                                    </td>
+                                    <td>@Model.ListSaved[i].CaseNo @Html.HiddenFor(m => m.ListSaved[i].CaseNo)</td>
+                                    @if (Model.ListSaved[i].CaseNo.Length < 11)
+                                    {
+                                        <td>
+                                            扣押補建
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>@Model.ListSaved[i].GovDate @Html.HiddenFor(m => m.ListSaved[i].GovDate)</td>
+                                    }
+                                    <td>@Model.ListSaved[i].GovNo @Html.HiddenFor(m => m.ListSaved[i].GovNo)</td>
+                                    <td>@Model.ListSaved[i].GovUnit @Html.HiddenFor(m => m.ListSaved[i].GovUnit)</td>
+                                    <td>@Model.ListSaved[i].CustId @Html.HiddenFor(m => m.ListSaved[i].CustId, new { @id = "CustId" + i })</td>
+                                    <td>@Model.ListSaved[i].CustName @Html.HiddenFor(m => m.ListSaved[i].CustName)</td>
+                                    <td>@Model.ListSaved[i].BranchNo @Html.HiddenFor(m => m.ListSaved[i].BranchNo)</td>
+                                    <td>@Model.ListSaved[i].BranchName @Html.HiddenFor(m => m.ListSaved[i].BranchName)</td>
+                                    <td>@Model.ListSaved[i].Account @Html.HiddenFor(m => m.ListSaved[i].Account, new { @id = "Account" + i })</td>
+                                    <td>@Model.ListSaved[i].Currency @Html.HiddenFor(m => m.ListSaved[i].Currency, new { @id = "Currency" + i })</td>
+                                    <td class="text-right">
+                                        @UtlString.FormatCurrency(Model.ListSaved[i].Balance, 2)
+                                        @Html.HiddenFor(m => m.ListSaved[i].Balance)</td>
+                                    <td class="text-right">
+                                        @UtlString.FormatCurrency(Model.ListSaved[i].SeizureAmount,2)
+                                        @Html.HiddenFor(m => m.ListSaved[i].SeizureAmount, new { @id = "SeizureAmount" + i })
+                                    </td>
+                                    <td class="text-right" id="cancelAmt">
+                                        @*拋查電文成功，金額反紅不可修改*@
+                                        @if (Model.ListSaved[i].TxtStatus == "1")
+                                        {
+                                            @Html.TextBoxFor(m => m.ListSaved[i].CancelAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "CancelAmount" + i, @style = "color:red", @readonly = "true" })
+                                        }
+                                        else
+                                        {
+                                            if (Model.ListSaved[i].CancelAmountflag == "true")
+                                            {
+                                                @Html.TextBoxFor(m => m.ListSaved[i].CancelAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "CancelAmount" + i, @style = "color:red" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.ListSaved[i].CancelAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding j_numonly", @id = "CancelAmount" + i })
+                                            }
+                                        }
+                                        @Html.HiddenFor(m => m.ListSaved[i].TxtStatus, new { @id = "TxtStatus" + i })
+                                    </td>
+                                    <td class="hidden">
+                                        @Html.HiddenFor(m => m.ListSaved[i].IsCheck, new { @id = "IsCheck_" + i })
+                                    </td>
+                                    <td class="hidden">
+                                        @Html.HiddenFor(m => m.ListSaved[i].SeizureId, new { @id = "SeizureId_" + i })
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+                <input type="hidden" name="CaseId" id="CaseId" value="@ViewBag.CaseId">
+                @Html.HiddenFor(m => m.CaseId)
+                @Html.Hidden("SaveSuccessMsg", Lang.csfs_save_ok)
+                @Html.Hidden("SaveFailMsg", Lang.csfs_save_fail)
+
+                <div class="box-footer text-center">
+                    <button id="btnCancel" type="button" class="btn btn-primary btn-xs">撤銷</button>
+                    <button id="btnCancelReset" type="button" class="btn btn-primary btn-xs">沖正</button>
+                    <button id="btnSaveSeizureCancel" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+                    @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CaseSeizureCancel)
+                    {
+                        <a href="@Url.Action("SeizureMaintain", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, @radom = DateTime.Now.ToString() })" class="btn btn-primary btn-xs fancy1000_400">
+                            @Lang.csfs_seizuremaintain
+                        </a>
+                        <a href="@Url.Action("SeizureMaintainQuery", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, @radom = DateTime.Now.ToString() })" class="btn btn-primary btn-xs fancy1000_700">
+                            @Lang.csfs_seizuremaintainquery
+                        </a>
+                    }
+                    <button id="btnCancelNuclear" type="button" class="btn btn-primary btn-xs">@Lang.csfs_nuclear</button>
+                </div>
+            </div>
+        </div>
+    }
+
+
+    @if (Model != null)
+    {
+        <div class="box box-primary">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="box box-primary">
+                        <div class="box-header">
+                            <i class="glyphicon glyphicon-th"></i>
+                            <h3 class="box-title">@Lang.csfs_result_area</h3>
+                        </div><!-- /.box-header -->
+                        <div class="box-body">
+                            <table id="payTable2" class="table table-bordered table-striped text-black">
+                                <thead>
+                                    <tr class="alert-success text-center">
+                                        <th>@Lang.csfs_create</th>
+                                        <th>@Lang.csfs_case_no</th>
+                                        <th>@Lang.csfs_gov_date</th>
+                                        <th>@Lang.csfs_gov_no</th>
+                                        <th>@Lang.csfs_gov_unit</th>
+                                        <th>@Lang.csfs_id_1</th>
+                                        <th>@Lang.csfs_name</th>
+                                        <th>@Lang.csfs_case_unit</th>
+                                        <th>@Lang.csfs_bank_name</th>
+                                        <th>@Lang.csfs_deposit_account</th>
+                                        <th>@Lang.csfs_currency_1</th>
+                                        <th>@Lang.csfs_balance</th>
+                                        <th>@Lang.csfs_cal_caseamount</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="PaytbodyCancel2">
+                                    @if (Model != null && Model.QueryResult != null && Model.QueryResult.Any())
+                                    {
+                                        foreach (CaseSeizure item in Model.QueryResult)
+                                        {
+                                            <tr data-seizureid="@item.SeizureId">
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-default btn-xs js-add"><i class="glyphicon glyphicon-plus"></i></button>
+                                                </td>
+                                                <td class="text-center hidden" id="deleteId">
+                                                    <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                                                </td>
+                                                <td>@item.CaseNo</td>
+                                                @if (item.CaseNo.Length < 11)
+                                                {
+                                                    <td>
+                                                        扣押補建
+                                                    </td>
+                                                }
+                                                else
+                                                {
+                                                    <td>@item.GovDate</td>
+                                                }
+                                                <td>@item.GovNo</td>
+                                                <td>@item.GovUnit</td>
+                                                <td>@item.CustId</td>
+                                                <td>@item.CustName</td>
+                                                <td>@item.BranchNo</td>
+                                                <td>@item.BranchName</td>
+                                                <td>@item.Account</td>
+                                                <td>@item.Currency</td>
+                                                <td class="text-right">@UtlString.FormatCurrency(item.Balance, 2)</td>
+                                                <td class="text-right">@UtlString.FormatCurrency(item.SeizureAmount,2)</td>
+                                                <td class="text-right hidden" id="cancelAmt">
+                                                    <input id="CancelAmount{0}" name="ListSaved[{0}].CancelAmount" maxlength="10" value="@item.SeizureAmount" class="col-xs-12 no-padding j_numonly">
+                                                </td>
+                                                <td class="hidden">
+                                                    <input id="IsCheck_{0}" name="ListSaved[{0}].IsCheck" type="hidden" value="">
+                                                    <input id="CustId{0}" name="ListSaved[{0}].CustId" type="hidden" value="@item.CustId">
+                                                    <input id="Account{0}" name="ListSaved[{0}].Account" type="hidden" value="@item.Account">
+                                                    <input id="Currency{0}" name="ListSaved[{0}].Currency" type="hidden" value="@item.Currency">
+                                                    <input id="SeizureAmount{0}" name="ListSaved[{0}].SeizureAmount" type="hidden" value="@item.SeizureAmount">
+                                                </td>
+                                                <td class="hidden"></td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@* 呈核 *@
+@Html.Hidden("NuclearOkMsg", Lang.csfs_nuclear_success)
+@Html.Hidden("NuclearFaileMsg", Lang.csfs_nuclear_fail)
+@* 呈核 *@
+@Html.Hidden("CancelConfirmMsg", Lang.csfs_confirm_cancel)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("SeizureCancelCaseId", Model == null ? "" : Convert.ToString(Model.CaseId))
+@Html.Hidden("SaveSeizureCancelUrl", Url.Action("DoSaveSeizureCancel", "AgentAccountInfo", new { area = "Agent" }))
+
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $("#PaytbodyCancel .js-delete").unbind("click").click(function () { return btnRemovePayClick(this); });
+        $("#PaytbodyCancel2 .js-add").unbind("click").click(function () { return btnAddPayClick(this); });
+        $("#btnSaveSeizureCancel").click(function () { return btnSaveSeizureCancelClick(); });
+
+        $("#PaytbodyCancel").children("tr").each(function (i) {
+            //$(this).children("td").eq(2).hide();
+            //$(this).children("td").eq(3).hide();
+            //$(this).children("td").eq(4).hide();
+        });
+        //*點選全部勾選
+        $('#CheckAll').on('ifChecked ifUnchecked', function (event) {
+            if ($(this).is(':checked')) {
+                $("#PaytbodyCancel").find("[class=IsOrNo]").iCheck("check");
+                $("#PaytbodyCancel").find("[id^=IsCheck_]").val("true");
+            } else {
+                $("#PaytbodyCancel").find("[class=IsOrNo]").iCheck("uncheck");
+                $("#PaytbodyCancel").find("[id^=IsCheck_]").val("");
+            }
+        });
+        $(".IsOrNo").on('ifChecked ifUnchecked', function (event) {
+            var num = $(this).closest('tr').index();
+            if ($(this).is(':checked')) {
+                $("#IsCheck_" + num).val("true");
+            } else {
+                $("#IsCheck_" + num).val("");
+            }
+        });
+        //*撤銷按鈕
+        $("#btnCancel").click(function () { return btnCancelClick(); });
+        //*沖正按鈕
+        $("#btnCancelReset").click(function () { return btnCancelResetClick(); });
+        //*呈核按鈕
+        $("#btnCancelNuclear").click(function () { return btnCancelNuclearClick(); });
+    });
+
+    function btnRemovePayClick(obj) {
+        var inputAmountFormat = '<input id="SeizureId_{0}" name="ListSaved[{0}].SeizureId" type="hidden" value="{1}">';
+        var buttonFormat = '<button type="button" class="btn btn-default btn-xs js-add"><i class="glyphicon glyphicon-plus"></i></button>';
+        var objparenttr = $(obj).parent().parent().parent().children("tr");
+        var objtr = $(obj).parent().parent();
+        var caseno = objtr.children("td").eq(2).text();//選中行的案件編號
+
+        //objtr.children("td").eq(2).show();
+        //objtr.children("td").eq(3).show();
+        //objtr.children("td").eq(4).show();
+
+        for (var i = 0; i < objparenttr.length; i++) {
+            if (caseno == objparenttr.eq(i).children("td").eq(2).text()) {
+                var objtrclone = objparenttr.eq(i).clone();
+                objtrclone.find("td:last").html($.validator.format(inputAmountFormat, new Array($("#PaytbodyCancel tr").length, objtrclone.data("seizureid"))));
+                objtrclone.find("td:first").html(buttonFormat);
+                objtrclone.find("td:first").removeClass("hidden");
+                objtrclone.find("[id=deleteId]").addClass("hidden");
+                objtrclone.find("[id=cancelAmt]").addClass("hidden");
+                objtrclone.appendTo($("#PaytbodyCancel2"));
+                objparenttr.eq(i).remove();
+                reCalcTextBoxName();
+            }
+        }
+        return false;
+    }
+
+    function btnAddPayClick(obj) {
+        //var buttonFormat = '<button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>';
+        var inputAmountFormat = '<input id="SeizureId_{0}" name="ListSaved[{0}].SeizureId" type="hidden" value="{1}">';
+        var checkboxFormat = '<input type="checkbox" class="IsOrNo" />';
+        var objparenttr = $(obj).parent().parent().parent().children("tr");
+        var objtr = $(obj).parent().parent();
+        var caseno = objtr.children("td").eq(2).text();//選中行的案件編號
+
+        for (var i = 0; i < objparenttr.length; i++) {
+            if (caseno == objparenttr.eq(i).children("td").eq(2).text()) {
+                var objtrclone = objparenttr.eq(i).clone();
+                objtrclone.attr("id", "TrNo");
+                objtrclone.find("td:last").html($.validator.format(inputAmountFormat, new Array($("#PaytbodyCancel tr").length, objtrclone.data("seizureid"))));
+                //objtrclone.find("td:first").html(buttonFormat);
+                //objtrclone.find("td:first").addClass("hidden");
+                objtrclone.find("td:first").html(checkboxFormat);
+                objtrclone.find("[id=deleteId]").removeClass("hidden");
+                objtrclone.find("[id=cancelAmt]").removeClass("hidden");
+                objtrclone.appendTo($("#PaytbodyCancel"));
+                objparenttr.eq(i).remove();
+                reCalcTextBoxName();
+            }
+        }
+
+        //var objtrclone = objtr.clone();
+        ////objtrclone.children("td").eq(2).hide()
+        ////objtrclone.children("td").eq(3).hide()
+        ////objtrclone.children("td").eq(4).hide()
+
+        //objtrclone.find("td:last").html($.validator.format(inputAmountFormat, new Array($("#PaytbodyCancel tr").length, objtrclone.data("seizureid"))));
+        //objtrclone.find("td:first").html(buttonFormat);
+        //objtrclone.appendTo($("#PaytbodyCancel"));
+
+        //objtr.remove();
+        //reCalcTextBoxName();
+    }
+
+    function reCalcTextBoxName() {
+        $("#PaytbodyCancel").find("[id^=SeizureId]").each(function (i) {
+            $(this).attr("name", "ListSaved[" + i + "].SeizureId");
+        });
+        $("#PaytbodyCancel").find("[id^=IsCheck_]").each(function (i) {
+            $(this).attr("name", "ListSaved[" + i + "].IsCheck"); $(this).attr("id", "IsCheck_" + i + "");
+        });
+        $("#PaytbodyCancel").find("[id^=CancelAmount]").each(function (i) {
+            $(this).attr("name", "ListSaved[" + i + "].CancelAmount"); $(this).attr("id", "CancelAmount" + i + "");
+        });
+        $("#PaytbodyCancel").find("[id^=CustId]").each(function (i) {
+            $(this).attr("name", "ListSaved[" + i + "].CustId"); $(this).attr("id", "CustId" + i + "");
+        });
+        $("#PaytbodyCancel").find("[id^=Account]").each(function (i) {
+            $(this).attr("name", "ListSaved[" + i + "].Account"); $(this).attr("id", "Account" + i + "");
+        });
+        $("#PaytbodyCancel").find("[id^=Currency]").each(function (i) {
+            $(this).attr("name", "ListSaved[" + i + "].Currency"); $(this).attr("id", "Currency" + i + "");
+        });
+        $("#PaytbodyCancel").find("[id^=SeizureAmount]").each(function (i) {
+            $(this).attr("name", "ListSaved[" + i + "].SeizureAmount"); $(this).attr("id", "SeizureAmount" + i + "");
+        });
+        //* 已選擇中的移除
+        $("#PaytbodyCancel .js-delete").unbind("click").click(function () { return btnRemovePayClick(this); });
+        $("#PaytbodyCancel2 .js-add").unbind("click").click(function () { return btnAddPayClick(this); });
+        $("#TrNo .IsOrNo").iCheck({
+            checkboxClass: 'icheckbox_minimal',
+            hoverClass: 'hover',
+            increaseArea: '20%' // optional
+        });
+        $(".IsOrNo").on('ifChecked ifUnchecked', function (event) {
+            var num = $(this).closest('tr').index();
+            if ($(this).is(':checked')) {
+                $("#IsCheck_" + num).val("true");
+            } else {
+                $("#IsCheck_" + num).val("");
+            }
+        });
+    }
+
+    function btnSaveSeizureCancelClick() {
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmSeizureCancel").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmSeizureCancel").serialize(),
+            dataType: "json",
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess($("#SaveSuccessMsg").val(), function () {
+                        location.href = $("#AccountPageUrl").val() + "&TabNo=4";
+
+                    });
+                } else {
+                    jAlertError($("#SaveFailMsg").val());
+                    $.unblockUI();
+                }
+            }
+        });
+
+
+
+        //jConfirm($("#CancelConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+        //    if (bFlag === true) {
+        //        $.blockUI();
+        //        //* click confirm ok
+        //        $.ajax({
+        //            type: "POST",
+        //            traditional: true,
+        //            url: $("#SaveSeizureCancelUrl").val(),
+        //            async: false,
+        //            data: { caseId: $("#SeizureCancelCaseId").val(), seizureList: strSeizureId },
+        //            error: function () {
+        //                jAlertError($("#LoadErrorMsg").val());
+        //                $.unblockUI();
+        //            },
+        //            success: function (data) {
+        //                if (data.ReturnCode === "1") {
+        //                    jAlertSuccess(data.ReturnMsg, function () {
+        //                        location.href = $("#AccountPageUrl").val() + "&TabNo=4";
+        //                    });
+        //                } else {
+        //                    jAlertError(data.ReturnMsg);
+        //                    $.unblockUI();
+        //                }
+        //            }
+        //        });
+        //    }
+        //});
+    }
+    //撤銷
+    function btnCancelClick() {
+        var iLen = 0;
+        var msg = "";
+        $("#PaytbodyCancel").find("[class=IsOrNo]").each(function () {
+            if ($(this).prop("checked") === true) {
+                iLen = iLen + 1;
+                var i = $(this).closest('tr').index();
+                msg = msg + TxtStatusCheck(i, "Cancel");//檢核是否有做過撤銷，有則不允許再撤銷
+            }
+        });
+        if (iLen <= 0) {
+            jAlertError($("#SelectOneMsg").val());
+            return false;
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+        $("#functionCancelId").val("Cancel");
+        $.blockUI();
+        $.ajax({
+            url: $("#frmSeizureCancel").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmSeizureCancel").serialize(),
+            dataType: "json",
+            timeout: 180000, //超時時間180秒
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess(data.ReturnMsg, function () {
+                        location.href = $("#AccountPageUrl").val() + "&TabNo=4";
+                    });
+                } else {
+                    jAlertError(data.ReturnMsg);
+                    $("#functionCancelId").val("");
+                    $.unblockUI();
+                }
+            }
+        });
+    }
+    //沖正
+    function btnCancelResetClick() {
+        var iLen = 0;
+        var msg = "";
+        $("#PaytbodyCancel").find("[class=IsOrNo]").each(function () {
+            if ($(this).prop("checked") === true) {
+                iLen = iLen + 1;
+                var i = $(this).closest('tr').index();
+                msg = msg + TxtStatusCheck(i, "Reset");//檢核是否有做過沖正，有則不允許再沖正
+            }
+        });
+        if (iLen <= 0) {
+            jAlertError($("#SelectOneMsg").val());
+            return false;
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+        $("#functionCancelId").val("Reset");
+        $.blockUI();
+        $.ajax({
+            url: $("#frmSeizureCancel").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmSeizureCancel").serialize(),
+            dataType: "json",
+            timeout: 180000, //超時時間180秒
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess(data.ReturnMsg, function () {
+                        location.href = $("#AccountPageUrl").val() + "&TabNo=4";
+                    });
+                } else {
+                    jAlertError(data.ReturnMsg);
+                    $("#functionCancelId").val("");
+                    $.unblockUI();
+                }
+            }
+        });
+    }
+    //檢核是否有做過沖正或撤銷，有則不允許再做
+    function TxtStatusCheck(i, kind) {
+        var msg = "";
+        var newline = "<br/>";
+        if (kind == "Cancel" && $("#TxtStatus" + i).val() == "1") {
+            msg = msg + "@Lang.csfs_Article" + (i + 1) + "筆帳戶已執行撤銷;只能允許沖正 !!" + newline;
+        }
+        if (kind == "Reset" && $("#TxtStatus" + i).val() == "0") {
+            msg = msg + "@Lang.csfs_Article" + (i + 1) + "筆帳戶已執行沖正;只能允許撤銷 !!" + newline;
+        }
+        return msg;
+    }
+
+    function GetDateStr(AddDayCount) {
+        var dd = new Date();
+        dd.setDate(dd.getDate() + AddDayCount);//获取AddDayCount天后的日期
+        var y = dd.getFullYear();
+        var m = dd.getMonth() + 1;//获取当前月份的日期
+        var d = dd.getDate();
+        return y + "" + (m < 10 ? "0" + m : m) + "" + (d < 10 ? "0" + d : d);
+    }
+    //呈核
+    function btnCancelNuclearClick() {
+        var strlimitDate = $("#LimiteDate").val().replace("/", "").replace("/", "");
+        var strNowDate = GetDateStr(parseInt($("#AddDay").val()));
+
+        if ($("#HidAfterSeizureApproved").val() != "1" && strlimitDate < strNowDate) {
+            $("#OverDueMemo").val("");
+            $("#modalOver").modal();
+        }
+        else {
+
+            var CaseIDArr = new Array();
+            CaseIDArr.push($("#HidCaseId").val());//向数组中添加元素
+            var strCaseId = CaseIDArr.join(',');
+
+            jConfirm($("#NuclearConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $("#functionCancelId").val("Nuclear");
+                    $.blockUI();
+                    $.ajax({
+                        url: $("#frmSeizureCancel").attr("action"),
+                        type: "Post",
+                        cache: false,
+                        data: $("#frmSeizureCancel").serialize(),
+                        dataType: "json",
+                        timeout: 180000, //超時時間180秒
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#NuclearOkMsg").val(), function () {
+                                    location.href = $("#AgentAccountUrl").val();
+                                });
+                            } else {
+                                jAlertError($("#NuclearFaileMsg").val());
+                                $("#functionCancelId").val("");
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+    }
+</script>

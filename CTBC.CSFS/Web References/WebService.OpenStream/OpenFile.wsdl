@@ -1,0 +1,372 @@
+<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://OpenFile" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" targetNamespace="http://OpenFile" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsdl:types>
+    <s:schema elementFormDefault="qualified" targetNamespace="http://OpenFile">
+      <s:element name="FileExist">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FullFilename" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="FileExistResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FileExistResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FullFilename" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="DeleteFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DeleteFileResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OpenFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FullFilename" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OpenFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OpenFileResult" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="OpenZipFile">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="DocNo" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FilePath" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="FilenameList" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfString">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="OpenZipFileResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="OpenZipFileResult" type="s:base64Binary" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFileSize">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="FilenameList" type="tns:ArrayOfString" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetFileSizeResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetFileSizeResult" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="string" nillable="true" type="s:string" />
+      <s:element name="base64Binary" nillable="true" type="s:base64Binary" />
+    </s:schema>
+  </wsdl:types>
+  <wsdl:message name="FileExistSoapIn">
+    <wsdl:part name="parameters" element="tns:FileExist" />
+  </wsdl:message>
+  <wsdl:message name="FileExistSoapOut">
+    <wsdl:part name="parameters" element="tns:FileExistResponse" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFileSoapIn">
+    <wsdl:part name="parameters" element="tns:DeleteFile" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFileSoapOut">
+    <wsdl:part name="parameters" element="tns:DeleteFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="OpenFileSoapIn">
+    <wsdl:part name="parameters" element="tns:OpenFile" />
+  </wsdl:message>
+  <wsdl:message name="OpenFileSoapOut">
+    <wsdl:part name="parameters" element="tns:OpenFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="OpenZipFileSoapIn">
+    <wsdl:part name="parameters" element="tns:OpenZipFile" />
+  </wsdl:message>
+  <wsdl:message name="OpenZipFileSoapOut">
+    <wsdl:part name="parameters" element="tns:OpenZipFileResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetFileSizeSoapIn">
+    <wsdl:part name="parameters" element="tns:GetFileSize" />
+  </wsdl:message>
+  <wsdl:message name="GetFileSizeSoapOut">
+    <wsdl:part name="parameters" element="tns:GetFileSizeResponse" />
+  </wsdl:message>
+  <wsdl:message name="FileExistHttpGetIn">
+    <wsdl:part name="FullFilename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="FileExistHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFileHttpGetIn">
+    <wsdl:part name="FullFilename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFileHttpGetOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="OpenFileHttpGetIn">
+    <wsdl:part name="FullFilename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="OpenFileHttpGetOut">
+    <wsdl:part name="Body" element="tns:base64Binary" />
+  </wsdl:message>
+  <wsdl:message name="FileExistHttpPostIn">
+    <wsdl:part name="FullFilename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="FileExistHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFileHttpPostIn">
+    <wsdl:part name="FullFilename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="DeleteFileHttpPostOut">
+    <wsdl:part name="Body" element="tns:string" />
+  </wsdl:message>
+  <wsdl:message name="OpenFileHttpPostIn">
+    <wsdl:part name="FullFilename" type="s:string" />
+  </wsdl:message>
+  <wsdl:message name="OpenFileHttpPostOut">
+    <wsdl:part name="Body" element="tns:base64Binary" />
+  </wsdl:message>
+  <wsdl:portType name="OpenFileStreamSoap">
+    <wsdl:operation name="FileExist">
+      <wsdl:input message="tns:FileExistSoapIn" />
+      <wsdl:output message="tns:FileExistSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFile">
+      <wsdl:input message="tns:DeleteFileSoapIn" />
+      <wsdl:output message="tns:DeleteFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OpenFile">
+      <wsdl:input message="tns:OpenFileSoapIn" />
+      <wsdl:output message="tns:OpenFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OpenZipFile">
+      <wsdl:input message="tns:OpenZipFileSoapIn" />
+      <wsdl:output message="tns:OpenZipFileSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetFileSize">
+      <wsdl:input message="tns:GetFileSizeSoapIn" />
+      <wsdl:output message="tns:GetFileSizeSoapOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="OpenFileStreamHttpGet">
+    <wsdl:operation name="FileExist">
+      <wsdl:input message="tns:FileExistHttpGetIn" />
+      <wsdl:output message="tns:FileExistHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFile">
+      <wsdl:input message="tns:DeleteFileHttpGetIn" />
+      <wsdl:output message="tns:DeleteFileHttpGetOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OpenFile">
+      <wsdl:input message="tns:OpenFileHttpGetIn" />
+      <wsdl:output message="tns:OpenFileHttpGetOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:portType name="OpenFileStreamHttpPost">
+    <wsdl:operation name="FileExist">
+      <wsdl:input message="tns:FileExistHttpPostIn" />
+      <wsdl:output message="tns:FileExistHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFile">
+      <wsdl:input message="tns:DeleteFileHttpPostIn" />
+      <wsdl:output message="tns:DeleteFileHttpPostOut" />
+    </wsdl:operation>
+    <wsdl:operation name="OpenFile">
+      <wsdl:input message="tns:OpenFileHttpPostIn" />
+      <wsdl:output message="tns:OpenFileHttpPostOut" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="OpenFileStreamSoap" type="tns:OpenFileStreamSoap">
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="FileExist">
+      <soap:operation soapAction="http://OpenFile/FileExist" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFile">
+      <soap:operation soapAction="http://OpenFile/DeleteFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenFile">
+      <soap:operation soapAction="http://OpenFile/OpenFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenZipFile">
+      <soap:operation soapAction="http://OpenFile/OpenZipFile" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFileSize">
+      <soap:operation soapAction="http://OpenFile/GetFileSize" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="OpenFileStreamSoap12" type="tns:OpenFileStreamSoap">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
+    <wsdl:operation name="FileExist">
+      <soap12:operation soapAction="http://OpenFile/FileExist" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFile">
+      <soap12:operation soapAction="http://OpenFile/DeleteFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenFile">
+      <soap12:operation soapAction="http://OpenFile/OpenFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenZipFile">
+      <soap12:operation soapAction="http://OpenFile/OpenZipFile" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetFileSize">
+      <soap12:operation soapAction="http://OpenFile/GetFileSize" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="OpenFileStreamHttpGet" type="tns:OpenFileStreamHttpGet">
+    <http:binding verb="GET" />
+    <wsdl:operation name="FileExist">
+      <http:operation location="/FileExist" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFile">
+      <http:operation location="/DeleteFile" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenFile">
+      <http:operation location="/OpenFile" />
+      <wsdl:input>
+        <http:urlEncoded />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:binding name="OpenFileStreamHttpPost" type="tns:OpenFileStreamHttpPost">
+    <http:binding verb="POST" />
+    <wsdl:operation name="FileExist">
+      <http:operation location="/FileExist" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="DeleteFile">
+      <http:operation location="/DeleteFile" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OpenFile">
+      <http:operation location="/OpenFile" />
+      <wsdl:input>
+        <mime:content type="application/x-www-form-urlencoded" />
+      </wsdl:input>
+      <wsdl:output>
+        <mime:mimeXml part="Body" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="OpenFileStream">
+    <wsdl:port name="OpenFileStreamSoap" binding="tns:OpenFileStreamSoap">
+      <soap:address location="http://localhost:35947/OpenFile.asmx" />
+    </wsdl:port>
+    <wsdl:port name="OpenFileStreamSoap12" binding="tns:OpenFileStreamSoap12">
+      <soap12:address location="http://localhost:35947/OpenFile.asmx" />
+    </wsdl:port>
+    <wsdl:port name="OpenFileStreamHttpGet" binding="tns:OpenFileStreamHttpGet">
+      <http:address location="http://localhost:35947/OpenFile.asmx" />
+    </wsdl:port>
+    <wsdl:port name="OpenFileStreamHttpPost" binding="tns:OpenFileStreamHttpPost">
+      <http:address location="http://localhost:35947/OpenFile.asmx" />
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

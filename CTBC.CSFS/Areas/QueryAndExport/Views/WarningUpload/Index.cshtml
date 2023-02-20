@@ -1,0 +1,90 @@
+﻿@model CTBC.CSFS.ViewModels.CaseWarningViewModel
+
+@using CTBC.CSFS.Models
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_warningupload;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_edit</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("SaveAttatch", "WarningUpload", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmSave", @class = "form-horizontal", enctype = "multipart/form-data", target = "upload_frame" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder col-md-12">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_attachment</td>
+                        <td class="col-md-5">
+                            @*<table class="table table-bordered" id="divUploadList">
+                                 @for (int i = 0; i < Model.WarningAttachmentList.Count; i++)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <a href="@Url.Action("DownFile", "Home", new { area = "", uploadkind = Uploadkind.WarnAttach, id = Model.WarningAttachmentList[i].AttachmentId })">
+                                                    @Model.WarningAttachmentList[i].DocNo
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <a data-href="@Url.Action("DeleteAttatch", "CaseWarning", new { area = "KeyInput", attachId = Model.WarningAttachmentList[i].AttachmentId })" data-deletelink="true">
+                                                    @Lang.csfs_delete
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    }
+                            </table>*@
+
+                            @***** 上傳部分開始 ******@
+                            <table class="table table-bordered" id="divUploadList">
+                                <tr>
+                                    <td><input type="file" class="col-sm-12 no-padding" name="fileAttNames" id="fileAtt1" /></td>
+                                </tr>
+                            </table>
+                            @***** 上傳部分結束 ******@
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnSaveAttatch" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+<iframe id="upload_frame" name="upload_frame" src="" class="hidden"></iframe>
+
+@Html.Hidden("NowPage", "CaseWarningEdit")
+@Html.Hidden("DeleteUrl", Url.Action("DeleteWarn", "CaseWarning", new { area = "KeyInput" }))
+@Html.Hidden("DeleteConfirm", Lang.csfs_confirm_delete)
+@Html.Hidden("DeleteSucMsg", Lang.csfs_del_ok)
+@Html.Hidden("DeleteFailMsg", Lang.csfs_del_fail)
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("Attachment", Lang.csfs_no_file)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/KeyInput/CaseWarning.js")
+    @Scripts.Render("~/Scripts/common.uploadlist.js")
+    <script>
+        $("#btnSaveAttatch").click(function () { return btnSaveClick(); });
+
+        function btnSaveClick() {
+            var newLine = "<br/>";
+            var msg = "";
+            var re = /^([0-9.]+)$/;
+            if ($("#fileAtt1").val().length <= 0) {
+                msg = msg + $("#Attachment").val();
+            }
+            if (msg.length > 0) {
+                jAlertError(msg);
+                return false;
+            }
+            $("#frmSave").submit();
+            return true;
+        }
+    </script>
+}

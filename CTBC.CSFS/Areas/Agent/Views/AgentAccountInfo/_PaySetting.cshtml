@@ -1,0 +1,757 @@
+﻿@using CTBC.CSFS.Models
+@using CTBC.FrameWork.Util;
+
+@model PaySettingViewModel
+
+<div>
+    @using (Html.BeginForm("DoSavePaySetting", "AgentAccountInfo", new { area = "Agent" }, FormMethod.Post, new { id = "frmPaySetting", @class = "form-horizontal" }))
+    {
+        @Html.Hidden("functionPayId", "")
+        @Html.HiddenFor(m => m.GovNo)
+        @Html.HiddenFor(m => m.CaseKind2)
+        @Html.Hidden("BreakDay", Model.BreakDay)
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">@Lang.csfs_this_case</h3>
+            </div>
+            <div class="box-body">
+
+                <table id="payTable" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center">
+                            <th style="width: 31px;"><input type="checkbox" id="CheckAll"></th>
+                            <th>@Lang.csfs_delete</th>
+                            <th>@Lang.csfs_case_no</th>
+                            <th>@Lang.csfs_gov_date</th>
+                            <th>@Lang.csfs_gov_no</th>
+                            <th style="display:none">@Lang.csfs_gov_unit</th>
+                            <th>@Lang.csfs_id_1</th>
+                            <th>@Lang.csfs_name</th>
+                            <th>@Lang.csfs_case_unit</th>
+                            <th>@Lang.csfs_case_status</th>
+                            <th>@Lang.csfs_bank_name</th>
+                            <th>@Lang.csfs_deposit_account</th>
+                            <th>@Lang.csfs_currency_1</th>
+                            <th style="display:none">@Lang.csfs_balance</th>
+                            <th>@Lang.csfs_cal_caseamount</th>  
+                            <th>台幣金額</th>
+                            <th>@Lang.csfs_pay_amt</th>
+                            <th>   </th> @*<th>@Lang.csfs_t_amt</th>*@
+                            <th>解扣金額</th>
+                        </tr>
+                    </thead>
+                    <tbody id="Paytbody">
+                        @if (Model != null && Model.ListPay != null && Model.ListPay.Any())
+                        {
+                            for (int i = 0; i < Model.ListPay.Count; i++)
+                            {
+                                <tr data-seizureid="@Model.ListPay[i].SeizureId">
+                                    <td class="text-center"  >
+                                        <input type="checkbox" class="IsOrNo" />
+                                    </td>
+                                    <td class="text-center" id="deleteId">
+                                        @*執行支付後,刪除按紐要關閉*@
+                                        @if (Model.ListPay[i].TripAmount <=  0  && Model.ListPay[i].SeizureAmount > 0)
+                                        {
+                                            <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                                        }
+                                    </td>
+                                    <td>@Model.ListPay[i].CaseNo</td>
+                                    @if (Model.ListPay[i].CaseNo.Length < 11)
+                                    {
+                                        <td>
+                                            扣押補建
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>@Model.ListPay[i].GovDate</td>
+                                    }
+                                    <td>
+                                        @Model.ListPay[i].GovNo
+                                        @Html.HiddenFor(m => m.ListPay[i].GovNo, new { @id = "GovNo" + i })
+                                    </td>
+                                    <td  style="display:none">@Model.ListPay[i].GovUnit</td>
+                                    <td>
+                                        @Model.ListPay[i].CustId
+                                        @Html.HiddenFor(m => m.ListPay[i].CustId, new { @id = "CustId" + i })
+                                    </td>
+                                    <td>@Model.ListPay[i].CustName</td>
+                                    <td>@Model.ListPay[i].BranchNo</td>
+                                    <td id="AccStatus">
+                                        @if (Model.ListPay[i].AccountStatusflag == "true")
+                                        {
+                                            if (Model.ListPay[i].AccountStatus == "事故")
+                                            {
+                                                @Html.ActionLink(Model.ListPay[i].AccountStatus, "AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.ListPay[i].Account ,ccy = Model.ListPay[i].Currency }, new { @class = "fancy1100_600", @style = "color:red;" })
+                                                @*<a style="color:red;" href="@Url.Action("AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.ListPay[i].Account })">@Model.ListPay[i].AccountStatus</a>*@
+                                            }
+                                            else
+                                            {
+                                                <span style="color:red">@Model.ListPay[i].AccountStatus</span>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Model.ListPay[i].AccountStatus == "事故")
+                                            {
+                                                @Html.ActionLink(Model.ListPay[i].AccountStatus, "AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.ListPay[i].Account, ccy = Model.ListPay[i].Currency }, new { @class = "fancy1100_600" })
+                                                @*<a href="@Url.Action("AccidentInfo", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, Account = Model.ListPay[i].Account })">@Model.ListPay[i].AccountStatus</a>*@
+                                            }
+                                            else
+                                            {
+                                                @Model.ListPay[i].AccountStatus
+                                            }
+                                        }
+                                        @Html.HiddenFor(m => m.ListPay[i].AccountStatus, new { @id = "AccountStatus" + i })
+                                    </td>
+                                    <td>@Model.ListPay[i].BranchName</td>
+                                    <td>
+                                        @Model.ListPay[i].Account
+                                        @Html.HiddenFor(m => m.ListPay[i].Account, new { @id = "Account" + i })
+                                    </td>
+                                    <td>
+                                        @Model.ListPay[i].Currency
+                                        @Html.HiddenFor(m => m.ListPay[i].Currency, new { @id = "Currency" + i })
+                                    </td>
+                                    <td class="text-right" style="display:none">@UtlString.FormatCurrency(Model.ListPay[i].Balance, 0)</td>
+                                    <td class="text-right">
+                                        @UtlString.FormatCurrency(Model.ListPay[i].SeizureAmount,2)
+                                        @Html.HiddenFor(m => m.ListPay[i].SeizureAmount, new { @id = "SeizureAmount" + i })
+                                    </td>
+   
+
+                                        <td class="text-right">
+                                            @UtlString.FormatCurrency(Model.ListPay[i].SeizureAmountNtd,2)
+                                            @Html.HiddenFor(m => m.ListPay[i].SeizureAmountNtd, new { @id = "SeizureNtd" + i })
+                                        </td>
+
+    <td class="text-right" id="PayAmt">
+        @*執行支付後 ,不能再手改支付金額(台幣不可修改,外幣可修改20181031)*@
+                                        @if (Model.ListPay[i].PayAmountflag == "true")
+                                        {
+                                            if (Model.ListPay[i].TripAmount > 0 && Model.ListPay[i].Currency.ToUpper() == "TWD")
+                                            {
+                                                @Html.TextBoxFor(m => m.ListPay[i].PayAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding", @id = "PayAmount" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].PayAmount, 0), @style = "color:red", @readonly = "true" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.ListPay[i].PayAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding", @id = "PayAmount" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].PayAmount, 0), @style = "color:red" })
+                                            }
+                                        }
+                                        else
+                                        {
+                                            if (Model.ListPay[i].TripAmount > 0 && Model.ListPay[i].Currency.ToUpper() == "TWD")
+                                            {
+                                                @Html.TextBoxFor(m => m.ListPay[i].PayAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding", @id = "PayAmount" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].PayAmount, 0), @readonly = "true" })
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(m => m.ListPay[i].PayAmount, new { @MaxLength = "10", @class = "col-xs-12 no-padding", @id = "PayAmount" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].PayAmount, 0) })
+                                            }
+                                        }
+                                    </td>
+                                    <td class="text-center" id="IsOrNo1">
+                                        @if (Model.ListPay[i].SeizureStatus == "1")
+                                        {
+                                            <input type="checkbox" class="PayIsOrNo" enable="readonly"  checked>
+                                        }
+                                        else
+                                        {
+                                            <input type="checkbox" class="PayIsOrNo" enable="readonly" >
+                                        }
+                                    </td>
+                                    <td class="text-right" id="TripAmt">
+                                        @*解扣金額*@
+                                        @if (Model.ListPay[i].TripAmountflag == "true")
+                                        {
+                                            @Html.TextBoxFor(m => m.ListPay[i].TripAmount, new { @readonly = "true", @class = "col-xs-12 no-padding", @id = "TripAmount" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].TripAmount, 0), @style = "color:red" })
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.ListPay[i].TripAmount, new { @readonly = "true", @class = "col-xs-12 no-padding", @id = "TripAmount" + i, @value = UtlString.FormatCurrency(Model.ListPay[i].TripAmount, 0) })
+                                        }
+                                    </td>
+                                    <td class="hidden">
+                                        @Html.HiddenFor(m => m.ListPay[i].SeizureStatus, new { @id = "SeizureStatus" + i })
+                                        @Html.HiddenFor(m => m.ListPay[i].IsCheck, new { @id = "IsCheck" + i })
+                                        @Html.HiddenFor(m => m.ListPay[i].SeizureId, new { @id = "SeizureId" + i })
+                                        @Html.HiddenFor(m => m.ListPay[i].SNO, new { @id = "SNO" + i })
+                                        @Html.HiddenFor(m => m.ListPay[i].FKSNO, new { @id = "FKSNO" + i })
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+            <div class="box-footer text-center">
+                <button id="btnPayAmt" type="button" class="btn btn-primary btn-xs">支付</button>
+                <button id="btnPayReset" type="button" class="btn btn-primary btn-xs">沖正</button>
+                <button id="btnPayAccident" type="button" class="btn btn-primary btn-xs">事故</button>
+                <button id="btnPaySettingSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+                @if (ViewBag.CaseKind2 == CTBC.CSFS.Models.CaseKind2.CasePay)
+                {
+                    <a href="@Url.Action("SeizureMaintain", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, @radom = DateTime.Now.ToString() })" class="btn btn-primary btn-xs fancy1000_400">
+                        @Lang.csfs_seizuremaintain
+                    </a>
+                    <a id="btnModifySeizure" href="@Url.Action("SeizureMaintainQuery", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId, @radom = DateTime.Now.ToString() })" class="btn btn-primary btn-xs callbacks">
+                        @Lang.csfs_seizuremaintainquery
+                    </a>
+                }
+            </div>
+        </div>
+        <input type="hidden" name="CaseId" id="CaseId" value="@ViewBag.CaseId">
+        @Html.Hidden("SaveSuccessMsg", Lang.csfs_save_ok)
+        @Html.Hidden("SaveFailMsg", Lang.csfs_save_fail)
+        @Html.Hidden("AtLeastSelectOne", Lang.csfs_at_least_select_one)
+        @Html.HiddenFor(m => m.CaseId)
+        @Html.Hidden("panelAccount2Url", Url.Action("_PaySetting", "AgentAccountInfo", new { area = "Agent", caseId = (Model == null ? "" : Convert.ToString(Model.CaseId)) }))
+        @Html.Hidden("locationUrl", Url.Action("_PaySetting", "AgentAccountInfo", new { area = "Agent", caseId = ViewBag.CaseId }))
+
+    }
+    @if (Model != null)
+    {
+        //* 沒有儲存,且案件類型為支付的,才顯示.
+        //* 因為扣押並支付情況下.不允許選擇其他案件
+        <div class="box box-primary">
+            <div class="box-header">
+                <h3 class="box-title">@Lang.csfs_no_list</h3>
+            </div>
+            <div class="box-body">
+                <table id="payTable2" class="table table-bordered table-striped text-black">
+                    <thead>
+                        <tr class="alert-success text-center">
+                            <th>@Lang.csfs_create</th>
+                            <th>@Lang.csfs_case_no</th>
+                            <th>@Lang.csfs_gov_date</th>
+                            <th>@Lang.csfs_gov_no</th>
+                            <th style="display:none">@Lang.csfs_gov_unit</th>
+                            <th>@Lang.csfs_id_1</th>
+                            <th>@Lang.csfs_name</th>
+                            <th>@Lang.csfs_case_unit</th>
+                            <th>@Lang.csfs_bank_name</th>
+                            <th>@Lang.csfs_deposit_account</th>
+                            <th>@Lang.csfs_currency_1</th>
+                            <th style="display:none">@Lang.csfs_balance</th>
+                            <th>@Lang.csfs_cal_caseamount</th>
+                            <th>@Lang.csfs_t_amt</th>
+                            <th class="hidden">@Lang.csfs_pay_amt</th>
+                        </tr>
+                    </thead>
+                    <tbody id="Paytbody2">
+                        @if (Model != null && Model.ListSeizure != null && Model.ListSeizure.Any())
+                        {
+                            foreach (CaseSeizure item in Model.ListSeizure)
+                            {
+                                <tr data-seizureid="@item.SeizureId">
+                                    <td class="text-center">
+                                        <button type="button" class="btn btn-default btn-xs js-add"><i class="glyphicon glyphicon-plus"></i></button>
+                                    </td>
+                                    <td class="text-center hidden" id="deleteId">
+                                        <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                                    </td>
+                                    <td>@item.CaseNo</td>
+                                    @if (item.CaseNo.Length < 11)
+                                    {
+                                        <td>
+                                            扣押補建
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td>@item.GovDate</td>
+                                    }
+                                    <td>@item.GovNo</td>
+                                    <td  style="display:none">@item.GovUnit</td>
+                                    <td>@item.CustId</td>
+                                    <td>@item.CustName</td>
+                                    <td>@item.BranchNo</td>
+                                    <td class="text-center hidden" id="AccStatus">@item.AccountStatus</td>
+                                    <td>@item.BranchName</td>
+                                    <td>@item.Account</td>
+                                    <td>@item.Currency</td>
+                                    <td style="display:none" class="text-right">@UtlString.FormatCurrency(item.Balance, 0)</td>
+                                    <td class="text-right">@UtlString.FormatCurrency(item.SeizureAmount, 2)</td>
+                                    <td class="text-right" id="SeizureNtd">@UtlString.FormatCurrency(item.SeizureAmountNtd, 2)</td>
+                                    <td class="hidden" id="PayAmt">
+                                        <input id="PayAmount{0}" name="ListPay[{0}].PayAmount" maxlength="10" value="@item.SeizureAmount" class="col-xs-12 no-padding j_numonly">
+                                    </td>
+                                    <td class="hidden" id="IsOrNo2">
+                                        <input type="checkbox" class="IsOrNo" readonly >
+                                    </td>
+                                    <td class="hidden" id="TripAmt">
+                                        <input id="TripAmount{0}" name="ListPay[{0}].TripAmount" maxlength="10" readonly value="0.00" class="col-xs-12 no-padding j_numonly">
+                                    </td>
+                                    <td class="hidden">
+                                        <input id="IsCheck{0}" name="ListPay[{0}].IsCheck" type="hidden" value="">
+                                        <input id="SeizureId{0}" name="ListPay[{0}].SeizureId" type="hidden" value="@item.SeizureId">
+                                        <input id="CustId{0}" name="ListPay[{0}].CustId" type="hidden" value="@item.CustId">
+                                        <input id="GovNo{0}" name="ListPay[{0}].GovNo" type="hidden" value="@item.GovNo">
+                                        <input id="AccountStatus{0}" name="ListPay[{0}].AccountStatus" type="hidden" value="@item.AccountStatus">
+                                        <input id="Account{0}" name="ListPay[{0}].Account" type="hidden" value="@item.Account">
+                                        <input id="Currency{0}" name="ListPay[{0}].Currency" type="hidden" value="@item.Currency">
+                                        <input id="SeizureStatus{0}" name="ListPay[{0}].SeizureStatus" type="hidden" value="@item.SeizureStatus">
+                                        <input id="SeizureAmount{0}" name="ListPay[{0}].SeizureAmount" type="hidden" value="@item.SeizureAmount">
+                                        @*<input id="SeizureAmountNtd{0}" name="ListPay[{0}].SeizureAmountNtd" type="hidden" value="@item.SeizureAmountNtd">*@
+                                        <input id="SNO{0}" name="ListPay[{0}].SNO" type="hidden" value="@item.SNO">
+                                        <input id="FKSNO{0}" name="ListPay[{0}].FKSNO" type="hidden" value="@item.FKSNO">
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    }
+</div>
+
+@*解扣日 日期視窗 扣押並支付,預設日為目前系統20日支付方法的日期；支付,預設日為 上周四到本周一 顯示 本周三日期, 本周二,三建檔日為下周三顯示 日期*@
+<div class="modal fade" id="modalBreakDay" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Over"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">解扣日設定</h4>
+            </div>
+            <div class="modal-body">
+                解扣日:
+                @Html.TextBoxFor(m => m.BreakDay, new { @id = "txtBreakDay", data_datepicker = "true" }) (@Lang.csfs_format：YYYMMDD)
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnOKSubmit">@Lang.csfs_confirm</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    jQuery(document).ready(function () {
+        $("#btnPaySettingSave").click(function () { return btnPaySettingSave(); });
+        //*支付按鈕
+        $("#btnPayAmt").click(function () { return btnPayAmtClick(); });
+        $("#btnOKSubmit").click(function () { return btnOKSubmitClick(); });
+        //*沖正按鈕
+        $("#btnPayReset").click(function () { return btnPayResetClick(); });
+        //*事故按鈕
+        $("#btnPayAccident").click(function () { return btnPayAccidentClick(); });
+        //* 已選擇中的移除
+        $("#Paytbody .js-delete").unbind("click").click(function () { return btnRemovePayClick(this); });
+        $("#Paytbody2 .js-add").unbind("click").click(function () { return btnAddPayClick(this); });
+
+        $("#Paytbody").children("tr").each(function (i) {
+            //$(this).children("td").eq(2).hide();
+            //$(this).children("td").eq(3).hide();
+            //$(this).children("td").eq(4).hide();
+        });
+
+        $("#btnModifySeizure").unbind("click").click(function () {
+            var e = $(this);
+            var v = $.colorbox({
+                href: e.attr('href') ? e.attr('href') : e.data('url'),
+                title: e.attr('title'),
+                width: "1000",
+                height: "700",
+                overlayClose: false,
+                scrolling: true,
+                iframe: true,
+                escKey: true,
+                opacity: 0.4,
+                reposition: false,
+                onLoad: function () {
+                    //$('#cboxClose').hide();
+                    //$(window).load(function () {   });
+                },
+                onComplete: function () {
+
+                },
+                onClosed: function () {
+                    location.href = $("#AccountPageUrl").val() + "&TabNo=2";
+                }
+            });
+            return false;
+        });
+        //*點選全部勾選
+        $('#CheckAll').on('ifChecked ifUnchecked', function (event) {
+            if ($(this).is(':checked')) {
+                $("#Paytbody").find("[class=IsOrNo]").iCheck("check");
+                $("#Paytbody").find("[id^=IsCheck]").val("true");
+            } else {
+                $("#Paytbody").find("[class=IsOrNo]").iCheck("uncheck");
+                $("#Paytbody").find("[id^=IsCheck]").val("");
+            }
+        });
+        $(".IsOrNo").on('ifChecked ifUnchecked', function (event) {
+            var num = $(this).closest('tr').index();
+            if ($(this).is(':checked')) {
+                $("#IsCheck" + num).val("true");
+            } else {
+                $("#IsCheck" + num).val("");
+            }
+        });
+    });
+
+
+
+    function reCalcTextBoxName() {
+        //* 重新給金額編號
+        $("#Paytbody").find("[id^=PayAmount]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].PayAmount"); $(this).attr("id", "PayAmount" + i + "");
+        });
+        //* 重新給Id編號
+        $("#Paytbody").find("[id^=SeizureId]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].SeizureId"); $(this).attr("id", "SeizureId" + i + "");
+        });
+        $("#Paytbody").find("[id^=IsCheck]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].IsCheck"); $(this).attr("id", "IsCheck" + i + "");
+        });
+        $("#Paytbody").find("[id^=TripAmount]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].TripAmount"); $(this).attr("id", "TripAmount" + i + "");
+        });
+        $("#Paytbody").find("[id^=CustId]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].CustId"); $(this).attr("id", "CustId" + i + "");
+        });
+        $("#Paytbody").find("[id^=GovNo]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].GovNo"); $(this).attr("id", "GovNo" + i + "");
+        });
+        $("#Paytbody").find("[name$=AccountStatus]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].AccountStatus"); $(this).attr("id", "AccountStatus" + i + "");
+        });
+        $("#Paytbody").find("[name$=Account]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].Account"); $(this).attr("id", "Account" + i + "");
+        });
+        $("#Paytbody").find("[id^=Currency]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].Currency"); $(this).attr("id", "Currency" + i + "");
+        });
+        $("#Paytbody").find("[id^=SeizureAmount]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].SeizureAmount"); $(this).attr("id", "SeizureAmount" + i + "");
+        });
+        $("#Paytbody").find("[id^=SNO]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].SNO"); $(this).attr("id", "SNO" + i + "");
+        });
+        $("#Paytbody").find("[id^=FKSNO]").each(function (i) {
+            $(this).attr("name", "ListPay[" + i + "].FKSNO"); $(this).attr("id", "FKSNO" + i + "");
+        });
+
+        //* 已選擇中的移除
+        $("#Paytbody .js-delete").unbind("click").click(function () { return btnRemovePayClick(this); });
+        $("#Paytbody2 .js-add").unbind("click").click(function () { return btnAddPayClick(this); });
+        $("#TrNo .IsOrNo").iCheck({
+            checkboxClass: 'icheckbox_minimal',
+            hoverClass: 'hover',
+            increaseArea: '20%' // optional
+        });
+        $(".IsOrNo").on('ifChecked ifUnchecked', function (event) {
+            var num = $(this).closest('tr').index();
+            if ($(this).is(':checked')) {
+                $("#IsCheck" + num).val("true");
+            } else {
+                $("#IsCheck" + num).val("");
+            }
+        });
+        $("#Paytbody2").find("[id^=IsOrNo2]").addClass("hidden");
+    }
+    
+    //*本案件儲存
+    function btnPaySettingSave() {
+        //if ($("#Paytbody tr").length <= 0) {
+        //    jAlertError($("#AtLeastSelectOne").val());
+        //    return false;
+        //}
+
+        var msg = "";
+        var newline = "<br/>";
+        $("#Paytbody tr").each(function (i) {
+
+            var tr = $(this);
+            //var td = tr.children("td").eq(11);
+            if ($(this).find("[id^=PayAmount]").length <= 0 || isNaN($(this).find("[id^=PayAmount]").val().replace(",", ""))) {
+                msg = msg + "@Lang.csfs_Please_enter" + (i + 1) + "@Lang.csfs_pen  @Lang.csfs_Amount" + newline;
+            }
+            if ($(this).find("[id^=SeizureId]").length <= 0 || isNaN($(this).find("[id^=SeizureId]").val())) {
+                msg = msg + "@Lang.csfs_err_id" + newline;
+            }
+            @*if (td.text() != "@Lang.csfs_seizuremaintain") {
+                if (parseInt($(this).find("[id^=PayAmount]").val()) > parseInt(td.text().replace(',', ''))) {
+                    msg = msg + " 第" + i + " @Lang.csfs_Amount_max" + newline;
+                }
+            }*@
+
+
+            var curTWD = tr.children("td").eq(11);
+            var ntd = tr.children("td").eq(14);
+
+
+            if (parseInt($(this).find("[id^=PayAmount]").val()) > parseInt(ntd.text().replace(/\,/g, "")) && (curTWD.text() == 'TWD')) {
+                msg = msg + "@Lang.csfs_Amount_ntd_max" + newline;
+            }
+        });
+
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmPaySetting").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmPaySetting").serialize(),
+            dataType: "json",
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess($("#SaveSuccessMsg").val(), function () {
+                        location.href = $("#AccountPageUrl").val() + "&TabNo=2";
+                    });
+                } else {
+                    jAlertError($("#SaveFailMsg").val());
+                    $.unblockUI();
+                }
+            }
+        });
+        return false;
+    }
+
+    function btnRemovePayClick(obj) {
+        var buttonFormat = '<button type="button" class="btn btn-default btn-xs js-add"><i class="glyphicon glyphicon-plus"></i></button>';
+        var objparenttr = $(obj).parent().parent().parent().children("tr");
+        var objtr = $(obj).parent().parent();
+        var caseno = objtr.children("td").eq(2).text();//選中行的案件編號
+
+        for (var i = 0; i < objparenttr.length; i++) {
+            if (caseno == objparenttr.eq(i).children("td").eq(2).text()) {
+                //objparenttr.eq(i).children("td").eq(2).show();
+                //objparenttr.eq(i).children("td").eq(3).show();
+                //objparenttr.eq(i).children("td").eq(11).hide();
+                var objtrclone = objparenttr.eq(i).clone();
+                //objtrclone.find("td:last").html("");
+                //objtrclone.find("td:last").addClass("hidden");
+                objtrclone.find("td:first").html(buttonFormat);
+                objtrclone.find("[id=deleteId]").addClass("hidden");
+                objtrclone.find("[id=AccStatus]").addClass("hidden");
+                objtrclone.find("[id=PayAmt]").addClass("hidden");
+                objtrclone.find("[id=IsOrNo1]").addClass("hidden");
+                objtrclone.find("[id=TripAmt]").addClass("hidden");
+                objtrclone.appendTo($("#Paytbody2"));
+                objparenttr.eq(i).remove();
+                reCalcTextBoxName();
+            }
+        }
+        return false;
+    }
+
+    function btnAddPayClick(obj) {
+        //var inputAmountFormat = '<input maxlength="10" class="col-xs-12 no-padding" id="PayAmount_{0}" name="ListPay[{0}].PayAmount" type="text" value="{1}"><input id="SeizureId_{0}" name="ListPay[{0}].SeizureId" type="hidden" value="{2}">';
+        //var buttonFormat = '<button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>';
+        var checkboxFormat = '<input type="checkbox" class="IsOrNo" />';
+        var objparenttr = $(obj).parent().parent().parent().children("tr");
+        var objtr = $(obj).parent().parent();
+        var caseno = objtr.children("td").eq(2).text();//選中行的案件編號
+
+        for (var i = 0; i < objparenttr.length; i++) {
+            if (caseno == objparenttr.eq(i).children("td").eq(2).text()) {
+                var objtrclone = objparenttr.eq(i).clone();
+                objtrclone.attr("id", "TrNo");
+                //objtrclone.children("td").eq(2).hide();
+                //objtrclone.children("td").eq(3).hide();
+                //objtrclone.children("td").eq(11).show();
+                //objtrclone.find("td:last").prev().html($.validator.format(inputAmountFormat, new Array($("#Paytbody tr").length, objtrclone.data("seizureamount"), objtrclone.data("seizureid"))));
+                //objtrclone.find("td:last").removeClass("hidden");
+                //objtrclone.find("td:last").html($.validator.format(inputRemoveAmountFormat, new Array($("#Paytbody tr").length)));
+                //objtrclone.find("td:first").html(buttonFormat);
+                //objtrclone.find("td:first").addClass("hidden");
+                objtrclone.find("td:first").html(checkboxFormat);
+                objtrclone.find("[id=deleteId]").removeClass("hidden");
+                objtrclone.find("[id=AccStatus]").removeClass("hidden");
+                objtrclone.find("[id=IsOrNo2]").removeClass("hidden");
+                //objtrclone.find("[id=SeizureAmountNtd]").removeClass("hidden");
+                objtrclone.find("[id=PayAmt]").removeClass("hidden");
+                objtrclone.find("[id=TripAmt]").removeClass("hidden");
+                objtrclone.appendTo($("#Paytbody"));
+                objparenttr.eq(i).remove();
+                reCalcTextBoxName();
+            }
+        }
+    }
+
+
+    //案件類型:支付
+    //點選 支付按紐 ,需跳出解扣日 ,日期視窗 預設日為 上周四到本周一 顯示 本周三日期, 本周二,三建檔日為下周三顯示 日期
+    function btnPayAmtClick() {
+        var iLen = 0;
+        var msg = "";
+        $("#Paytbody").find("[class=IsOrNo]").each(function () {
+            if ($(this).prop("checked") === true) {
+                iLen = iLen + 1;
+                var i = $(this).closest('tr').index();
+                msg = msg + AmtCheck(i);//檢核支付金額是否小於扣押金額
+                msg = msg + TripAmountCheckPay(i, "Pay");//檢核是否有做過支付，有則不允許再支付
+            }
+        });
+        if (iLen <= 0) {
+            jAlertError($("#AtLeastSelectOne").val());
+            return false;
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+        $("#modalBreakDay").modal();//解扣日視窗
+    }
+
+    //可用餘額為0元(或小於ETABS扣押金額)時，按「支付」執行，會變成超額扣押，應該要有阻擋視窗(「支付金額」數字不得大於「扣押金額」)
+    function AmtCheck(i) {
+        var msg = "";
+        var newline = "<br/>";
+        if (parseFloat($("#PayAmount" + i).val()) > $("#SeizureAmount" + i).val()) {
+            msg = msg + "@Lang.csfs_Article" + (i + 1) + "筆「支付金額」數字不得大於「扣押金額」!!" + newline;
+        }
+        return msg;
+    }
+    //解扣日視窗 按確定
+    function btnOKSubmitClick() {
+        $.blockUI();
+        $("#BreakDay").val($("#txtBreakDay").val());
+        $("#functionPayId").val("Pay");
+        $.blockUI();
+        $.ajax({
+            url: $("#frmPaySetting").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmPaySetting").serialize(),
+            dataType: "json",
+            timeout: 180000, //超時時間180秒
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess(data.ReturnMsg, function () {
+                        $("#modalBreakDay").modal("hide");
+                        location.href = $("#AccountPageUrl").val() + "&TabNo=2";
+                    });
+                } else {
+                    jAlertError(data.ReturnMsg);
+                    $("#modalBreakDay").modal("hide");
+                    $("#functionPayId").val("");
+                    $.unblockUI();
+                }
+            }
+        });
+    }
+
+    //沖正
+    function btnPayResetClick() {
+        var iLen = 0;
+        var msg = "";
+        $("#Paytbody").find("[class=IsOrNo]").each(function () {
+            if ($(this).prop("checked") === true) {
+                iLen = iLen + 1;
+                var i = $(this).closest('tr').index();
+                //msg = msg + IsPayCheck(i);//檢核是否做過支付，未做支付不能沖正
+                msg = msg + TripAmountCheckPay(i, "Reset");//檢核是否有做過沖正，有則不允許再沖正
+            }
+        });
+        if (iLen <= 0) {
+            jAlertError($("#AtLeastSelectOne").val());
+            return false;
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+        $("#functionPayId").val("Reset");
+        $.blockUI();
+        $.ajax({
+            url: $("#frmPaySetting").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmPaySetting").serialize(),
+            dataType: "json",
+            timeout: 180000, //超時時間180秒
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess(data.ReturnMsg, function () {
+                        location.href = $("#AccountPageUrl").val() + "&TabNo=2";
+                    });
+                } else {
+                    jAlertError(data.ReturnMsg);
+                    $("#functionPayId").val("");
+                    $.unblockUI();
+                }
+            }
+        });
+    }
+    //事故
+    function btnPayAccidentClick() {
+        var iLen = 0;
+        $("#Paytbody").find("[class=IsOrNo]").each(function () {
+            if ($(this).prop("checked") === true) {
+                iLen = iLen + 1;
+            }
+        });
+        if (iLen <= 0) {
+            jAlertError($("#AtLeastSelectOne").val());
+            return false;
+        }
+        $("#functionPayId").val("Accident");
+        $.blockUI();
+        $.ajax({
+            url: $("#frmPaySetting").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmPaySetting").serialize(),
+            dataType: "json",
+            timeout: 180000, //超時時間180秒
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess(data.ReturnMsg, function () {
+                        location.href = $("#AccountPageUrl").val() + "&TabNo=2";
+                    });
+                } else {
+                    jAlertError(data.ReturnMsg);
+                    $("#functionPayId").val("");
+                    $.unblockUI();
+                }
+            }
+        });
+    }
+    //檢核是否有做過支付或沖正，有則不允許再做
+    function TripAmountCheckPay(i, kind) {
+        var msg = "";
+        var newline = "<br/>";
+        if (kind == "Pay" && parseFloat($("#TripAmount" + i).val()) > 0) {
+            msg = msg + "@Lang.csfs_Article" + (i + 1) + "筆帳戶已執行支付;只能允許沖正 !!" + newline;
+        }
+        if (kind == "Reset" && parseFloat($("#TripAmount" + i).val()) <= 0) {
+            msg = msg + "@Lang.csfs_Article" + (i + 1) + "筆帳戶尚未支付;無法沖正 !!" + newline;
+        }
+        return msg;
+    }
+    @*//檢核是否做過支付，未做支付不能沖正
+    function IsPayCheck(i) {
+        var msg = "";
+        var newline = "<br/>";
+        if (parseFloat($("#TripAmount" + i).val()) <= 0) {
+            msg = msg + "@Lang.csfs_Article" + (i + 1) + "筆帳戶未執行支付;不允許沖正 !!" + newline;
+        }
+        return msg;
+    }*@
+</script>

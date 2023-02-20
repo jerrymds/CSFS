@@ -1,0 +1,28 @@
+﻿@model dynamic
+
+<div id="err-page">
+<div id="err-page-header">
+<h1>@Lang.csfs_sysname -@Lang.csfs_err_rpt</h1></div>
+<div id="server_version">
+<p>@Lang.csfs_err_time:@ViewData["ErrTime"]</p></div>
+<div id="err-page-content">
+<div class="err-page-content-container">
+<fieldset><legend>@Lang.csfs_err_short</legend>
+    <h2>@ViewData["ErrId"]</h2>
+    <h3>@ViewData["ErrType"] </h3></fieldset></div>
+    <div class="err-page-content-container">
+<fieldset><legend>@Lang.csfs_err_detail</legend>
+    <div id="err-page-details">
+    <table border="0" cellspacing="0" cellpadding="0">
+    <tbody>
+        <tr class="alt">
+        <td>@ViewData["ErrDesc"]<br /><br />@Lang.csfs_err_info_admin
+        </td>
+    </tr>
+    </tbody>
+    </table>
+</div>
+</fieldset>
+</div>
+</div>
+</div>

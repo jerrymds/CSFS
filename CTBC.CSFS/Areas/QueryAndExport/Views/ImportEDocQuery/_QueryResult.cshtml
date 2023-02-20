@@ -1,0 +1,87 @@
+﻿@model CTBC.CSFS.ViewModels.ImportEdocDataViewModel
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.ImportEdocDatalist != null)
+                {
+                    if (Model.ImportEdocDatalist.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @*CSFS-67 modify by nianhuaxiao start 20170802*@
+                            @*@Ajax.Pager(Model.ImportEdocData.PageSize, Model.ImportEdocData.CurrentPage, Model.ImportEdocData.TotalItemCount, Model.ImportEdocDatalist, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.ImportEdocData.SortExpression, Model.ImportEdocData.SortDirection)*@
+                            @Ajax.Pager(Model.ImportEdocData.PageSize, Model.ImportEdocData.CurrentPage, Model.ImportEdocData.TotalItemCount, Model.ImportEdocData, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.ImportEdocData.SortExpression, Model.ImportEdocData.SortDirection)
+                            @*CSFS-67 modify by nianhuaxiao end 20170802*@
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th class="col-md-1">@Lang.csfs_seqnum</th>
+                            <th class="col-md-1">@Lang.csfs_gov_unit</th>
+                            <th class="col-md-1">@Lang.csfs_govword</th>
+                            <th class="col-md-1">@Lang.csfs_govnum</th>
+                            <th class="col-md-1">@Lang.csfs_gov_date</th>
+                            <th class="col-md-1">@Lang.csfs_recase</th>
+                            <th class="col-md-1">@Lang.csfs_excutedate</th>
+                            <th class="col-md-1">@Lang.csfs_timesection</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.ImportEdocDatalist != null && Model.ImportEdocDatalist.Any())
+                        {
+                            int i = 0;
+                            foreach (var item in Model.ImportEdocDatalist)
+                            {
+                                i++;
+                                string reCase = item.Added == "False" ? "是" : "否";
+                                string word = "";
+                                string no = "";
+                                string[] wordno = item.GovNo.Split(new string[] { "字第", "號" }, StringSplitOptions.RemoveEmptyEntries);
+                                if (wordno.Length > 1)
+                                {
+                                    word = wordno[0];
+                                    no = wordno[1];
+                                }
+                                <tr> 
+                                    <td class="text-center">@i</td>
+                                    <td class="text-center">@item.GovUnit</td>
+                                    <td class="text-center">@word</td>
+                                    <td class="text-center">@no</td>
+                                    <td class="text-center">@item.GovDate.ToString("yyyy/MM/dd")</td>
+                                    <td class="text-center">@reCase</td>
+                                    <td class="text-center">@item.ExecutedDate.ToString("yyyy/MM/dd")</td>
+                                    <td class="text-center">@item.Timesection</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="8"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+
+                @Html.Hidden("querystring", Model.ImportEdocData.GovUnit)
+                @Html.Hidden("querystring", Model.ImportEdocData.GovDate)
+                @Html.Hidden("querystring", Model.ImportEdocData.GovNo)
+                @Html.Hidden("querystring", Model.ImportEdocData.ExecutedDate)
+                @Html.Hidden("defaultSortColumn", Model.ImportEdocData.SortExpression)
+                @Html.Hidden("defaultSort", Model.ImportEdocData.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

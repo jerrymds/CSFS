@@ -1,0 +1,161 @@
+﻿@using CTBC.FrameWork.Util
+@model CTBC.CSFS.ViewModels.WarningQueryViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @*@if (Model.WarningQueryList != null)
+                {
+                    if (Model.WarningQueryList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.WarningQuery.PageSize, Model.WarningQuery.CurrentPage, Model.WarningQuery.TotalItemCount, Model.WarningQuery, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Get" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.WarningQuery.SortExpression, Model.WarningQuery.SortDirection)
+                        </div>
+                    }
+                }*@
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th>@Lang.csfs_seqnum</th>
+                            <th>類別</th>
+                            <th>正本</th>
+                            <th>解除日期</th>
+                            <th>TX9091</th>
+                            <th>TX9092</th>
+                            <th>@Lang.csfs_case_no</th>
+                            <th>@Lang.csfs_warn_id</th>
+                            <th>@Lang.csfs_warningnum</th>
+                            @*<th>@Lang.csfs_bankID</th>*@
+                            <th>@Lang.csfs_warn_dates</th>
+                            <th>@Lang.csfs_Unit</th>
+                            <th>@Lang.csfs_person</th>
+                            @*<th>@Lang.csfs_warn_phone</th>*@
+                            <th>@Lang.csfs_clientName</th>
+                            <th>@Lang.csfs_Police_Unit</th>
+                            <th>二層</th>
+                            <th>@Lang.csfs_warn_status</th>
+                            <th>@Lang.csfs_Close</th>
+                            <th>修改日期</th>
+                            <th>聯徵案號</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.WarningQueryList != null && Model.WarningQueryList.Any())
+                        {
+                            foreach (var item in Model.WarningQueryList)
+                            {
+
+                        <tr>
+                            <td>@item.SerialID</td>
+                            <td>@item.StateType</td>
+                            <td>@item.Original</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.RelieveDate))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.RelieveDate)</text>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.TX9091))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.TX9091)</text>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.TX9092))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.TX9092)</text>
+                                }
+                            </td>
+                            <td>
+                                @Html.ActionLink(Convert.ToString(item.DocNo) + " ", "Details", "WarningQuery", new { area = "QueryAndExport", DocNo = item.DocNo , SerialID = 0 }, new { })
+                            </td>
+                            <td>@item.CustId</td>
+                            <td>@item.CustAccount</td>
+                            @*<td>@item.BankID</td>*@
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.ForCDate))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.ForCDate)</text>
+                                }
+                            </td>
+                            <td>@item.NotificationUnit</td>
+                            <td>@item.NotificationName</td>
+                            @*<td>@item.ExtPhone</td>*@
+                            <td>@item.CustName</td>
+                            <td>@item.PoliceStation</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.Retry))
+                                {
+                                    if (item.Retry == "Y" || item.Retry == "1")
+                                    {
+                                        <text>Y</text>
+                                    }
+                                    else
+                                    {
+                                        <text>N</text>
+                                    }
+                                }
+                                else
+                                {
+                                    <text>N</text>
+                                }
+                            </td>
+                            <td>
+                                @if (item.AccountStatus == "1")
+                                {
+                                    <text>未結清</text>
+                                }
+                                else if (item.AccountStatus == "2")
+                                {
+                                    <text>結清</text>
+                                }
+                                else
+                                {
+                                    <text>其他</text>
+                                }
+                            </td>
+                            <td>
+                                @if (item.NoClosed > 0)
+                                {
+                                    <text>未結案</text>
+                                }
+                                else
+                                {
+                                    <text>已結案</text>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.ModifiedDate))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.ModifiedDate)</text>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.UniteNo))
+                                {
+                                <text>@UtlString.FormatDateTw(item.UniteNo)</text>
+                                }
+                            </td>
+                        </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>                
+            </div>
+        </div>
+    </div>
+</div>

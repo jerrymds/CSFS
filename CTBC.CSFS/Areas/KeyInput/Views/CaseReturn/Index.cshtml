@@ -1,0 +1,113 @@
+﻿@model CTBC.CSFS.Models.CaseReturn
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_casereturn;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Query", "CaseReturn", new { area = "KeyInput" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal"}))
+{
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="glyphicon glyphicon-edit"></i>
+            <h3 class="box-title">@Lang.csfs_query</h3>
+        </div><!-- /.box-header -->
+        <!-- form start -->
+        <div class="box-body ">
+            <table class="table-noborder col-md-12">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_unit</td>
+                        <td class="col-md-10" colspan="5">
+                            @Html.DropDownListFor(m => m.GovKind, (IEnumerable<SelectListItem>)ViewBag.GOV_KINDList, Lang.csfs_select, new { @id = "ddlGOV_KIND" })
+                            @Html.TextBoxFor(m => m.GovUnit, new { @id = "txtGovUnit", @MaxLength = "200" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovDateS, new { @id = "txtGovDate", data_datepicker = "true" })
+                            ~ 
+                            @Html.TextBoxFor(m => m.GovDateE, new { @id = "txtLimitDate", data_datepicker = "true" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_speed</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, Lang.csfs_select, new { @id = "ddlSpeed" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_receive_kind</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.ReceiveKind, (IEnumerable<SelectListItem>)ViewBag.ReceiveKindList, Lang.csfs_select, new { @id = "ddlReceiveKind" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_no</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.GovNo, new { @id = "txtGovNo", @MaxLength = "60" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                        <td class="col-md-3">
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, Lang.csfs_select, new { @id = "ddlCaseKind" })
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                        <td class="col-md-1 text-right">@Lang.csfs_case_unit</td>
+                        <td class="col-md-3">
+                            @(ViewBag.UnitRead == "1" ? Html.TextBoxFor(m => m.Unit, new {@id = "txtUnit", @readonly = "readonly"}) : Html.TextBoxFor(m => m.Unit, new {@id = "txtUnit"}))
+
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_person</td>
+                        <td class="col-md-3">@Html.TextBoxFor(m => m.CreateUser, new { @id = "txtPerson" })</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnClosed" type="button" class="btn btn-primary btn-xs">@Lang.csfs_closed</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    </div>
+}
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("Query", "CaseReturn", new {area = "KeyInput"})">
+</div>
+@*收發退回原因*@
+<div class="modal fade" id="modalClose" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_closed</h4>
+            </div>
+            <div class="modal-body">
+                @Lang.csfs_closed1:
+                @Html.TextAreaFor(m => m.ReturnReason, new { @id = "txtReturnReason", @rows = "7", @class = "col-xs-12 no-padding", @MaxLength = "60",@readonly="true" })
+                @Lang.csfs_return_answer:
+                @Html.TextAreaFor(m => m.ReturnAnswer, new { @id = "txtReturnAnswer", @rows = "7", @class = "col-xs-12 no-padding", @MaxLength = "60" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnReturnSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("NowPage", "CaseReturnQuery")
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("CloseCaseUrl", Url.Action("CloseCase", "CaseReturn", new { area = "KeyInput" }))
+@Html.Hidden("GetCaseKind2Url", Url.Action("ChangCaseKind1", "AgentToHandle", new { area = "Agent" }))
+@Html.Hidden("ReturnCloseConfirmMsg", Lang.csfs_returnclose_confirm)
+@Html.Hidden("ReturnCloseFailMsg", Lang.csfs_returnclose_fail)
+@Html.Hidden("ReturnCloseSuccessMsg", Lang.csfs_returnclose_ok)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("SelectOnlyOneMsg", Lang.csfs_select_only_one)
+@Html.Hidden("PlaseSelect", Lang.csfs_select)
+@Html.Hidden("TextNotNull", Lang.csfs_closed_notnull)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/bootstrap-typeahead.js")
+    @Html.Hidden("GetGovNameUrl", Url.Action("GetGovNameByGoveKind", "Home", new {area = ""}))
+    @Scripts.Render("~/Scripts/KeyInput/CaseReturn.js")
+}
+
+
+

@@ -1,0 +1,173 @@
+﻿@model  IList<CTBC.CSFS.Models.CaseAccountExternal>
+ @using CTBC.FrameWork.Util;
+
+@using (Html.BeginForm("DoSaveAccountForExternal", "AgentAccountInfoDetail", new { area = "Common" }, FormMethod.Post, new { id = "frmCreate", @class = "form-horizontal" }))
+{
+    <div>
+        <div class="box box-primary">
+            <div class="box-header"></div>
+            <div class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th class="col-xs-2" rowspan="2" colspan="2">@Lang.csfs_Fees_classification</th>
+                            <th class="col-xs-6" rowspan="2">@Lang.csfs_charging_standard</th>
+                            <th class="col-xs-1" rowspan="2">@Lang.csfs_UnitPrice</th>
+                            <th class="col-xs-3" colspan="3">@Lang.csfs_Fees_detile</th>
+                        </tr>
+                        <tr class="alert-success text-center ">
+                            <th class="col-xs-1">@Lang.csfs_number</th>
+                            <th class="col-xs-1">@Lang.csfs_Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.Any())
+                        {
+                            int a = 0;
+                            for (int i = 0; i < Model.Count; i++)
+                            {
+                                a++;
+                                if (Model[i].UnitPrice != 0)
+                                {
+                                    <tr>
+                                        <td class="col-xs-1">@Model[i].FirstCate</td>
+                                        <td class="col-xs-2">@Model[i].SecondCate</td>
+                                        <td class="col-xs-6">@Model[i].Description</td>
+                                        <td class="col-xs-1 text-right">@UtlString.FormatCurrency(Model[i].UnitPrice,0) @Html.HiddenFor(m => m[i].UnitPrice, new { @id = "UnitPrice_" + i })</td>
+                                        <td class="col-xs-1">@Html.TextBoxFor(m => m[i].Quantity, new { @MaxLength = "10", @class = "col-xs-12 no-padding", @onblur = "keydown(this)", @id = "Quantity_" + i ,@disabled="true"})</td>
+                                        <td class="col-xs-1">
+                                            @Html.TextBoxFor(m => m[i].Amount, new { @MaxLength = "10", @class = "col-xs-12 no-padding", @id = "Amount_" + i, @disabled = "true" })
+                                            @Html.HiddenFor(m => m[i].FirstCate)
+                                            @Html.HiddenFor(m => m[i].SecondCate)
+                                            @Html.HiddenFor(m => m[i].Description)
+                                            @Html.HiddenFor(m => m[i].CaseId)
+
+                                        </td>
+
+                                    </tr>
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td class="col-xs-1">@Model[i].FirstCate</td>
+                                        <td class="col-xs-2">@Model[i].SecondCate</td>
+                                        <td class="col-xs-6">@Model[i].Description</td>
+                                        <td class="col-xs-1">@Html.TextBoxFor(m => m[i].UnitPrice, new { @MaxLength = "10", @class = "col-xs-12 no-padding", @id = "UnitPrice_" + i, @disabled = "true" })</td>
+                                        <td class="col-xs-1">@Html.TextBoxFor(m => m[i].Quantity, new { @MaxLength = "10", @class = "col-xs-12 no-padding", @onblur = "keydown(this)", @id = "Quantity_" + i, @disabled = "true" })</td>
+                                        <td class="col-xs-1">
+                                            @Html.TextBoxFor(m => m[i].Amount, new { @MaxLength = "10", @class = "col-xs-12 no-padding", @id = "Amount_" + i, @disabled = "true" })
+                                            @Html.HiddenFor(m => m[i].FirstCate)
+                                            @Html.HiddenFor(m => m[i].SecondCate)
+                                            @Html.HiddenFor(m => m[i].Description)
+                                            @Html.HiddenFor(m => m[i].CaseId)
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                            <tr>
+                                <th>@Lang.csfs_others<input type="hidden" name="[@a].FirstCate" value="@Lang.csfs_others" /></th>
+                                <th>@Lang.csfs_others<input type="hidden" name="[@a].SecondCate" value="@Lang.csfs_others" /></th>
+                                <th><input type="text" class="col-xs-12 no-padding" id="Description_@a" name="[@a].Description" value="" disabled="disabled" /><input type="hidden" name="[@a].CaseId" value="@Model[0].CaseId" /></th>
+                                <th><input type="text" class="col-xs-12 no-padding" id="UnitPrice_@a" name="[@a].UnitPrice" value="0" disabled="disabled" /></th>
+                                <th><input type="text" class="col-xs-12 no-padding" id="Quantity_@a" name="[@a].Quantity" value="0" onblur="keydown(this)" disabled="disabled" /></th>
+                                <th><input type="text" class="col-xs-12 no-padding" id="Amount_@a" name="[@a].Amount" value="0" disabled="disabled" /></th>
+                            </tr>
+                            <tr>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th></th>
+                                <th>@Lang.csfs_Total</th>
+                                <th class="col-xs-1"><input type="text" class="col-xs-12 no-padding" id="Sum" disabled="disabled" /></th>
+                            </tr>
+                        }
+                        else
+                        {
+                            <tr><td colspan="12"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                <div class="col-xs-2">@Lang.csfs_receipt</div>
+                <input type="text" name="memo" id="memo" maxlength="200" class="col-xs-6 no-padding" value="@ViewBag.Memo" disabled="disabled">
+                <input type="hidden" name="CaseId" id="CaseId" value="@ViewBag.CaseId">
+                <br />
+            </div>
+            <div class="box-footer text-center">
+                @*@if (Model != null && Model.Any())
+                {
+                    <button id="btnAccountSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+                }
+
+                <button id="btnAccountCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>*@
+            </div>
+        </div>
+    </div>
+}
+@Html.Hidden("EditSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_save_fail)
+
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+@Html.Hidden("NowPage", "AgentAccountInfo")
+<script type="text/javascript">
+    var s = 0;
+    $(document).ready(function () {
+        $(document).find("[id^=Amount]").each(function () {
+            s = s + parseInt($(this).val());
+        });
+        $("#Sum").val(s);
+        $("#btnAccountSave").click(function () { return btnAccountSaveClick(); });
+    });
+    var Sum = 0;
+    function keydown(obj) {
+        var obj = $(obj).parent().parent();
+        var n = obj.find("[id^=Amount]").val();
+        Sum = $("#Sum").val();
+        Sum = Sum - parseInt(n);
+        obj.find("[id^=Amount]").val(obj.find("[id^=UnitPrice]").val() * obj.find("[id^=Quantity]").val());
+        n = obj.find("[id^=Amount]").val();
+        Sum = Sum + parseInt(n);
+        $("#Sum").val(Sum);
+    }
+    function btnAccountSaveClick() {
+        var msg = "";
+        var newline = "<br/>";
+        for (var i = 0; i < $("#query_table tbody tr").length - 1; i++) {
+            var Filter = /^(0|[1-9]\d*)$/;
+            if ($("#Description_" + i).val() == "") {
+                continue;
+            }
+            else if ($("#Quantity_" + i).val() != "" && Filter.test($("#UnitPrice_" + i).val()) == false) {
+                msg = msg + "@Lang.csfs_Article" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_UnitPrice" + " @Lang.csfs_enter_positiveint" + newline;;
+            }
+            else if ($("#Quantity_" + i).val() != "" && Filter.test($("#Quantity_" + i).val()) == false) {
+                msg = msg + "@Lang.csfs_Article" + (i + 1) + "@Lang.csfs_pen @Lang.csfs_Amount_field" + " @Lang.csfs_enter_positiveint" + newline;;
+            }
+
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        } else {
+            $.ajax({
+                url: $("#frmCreate").attr("action"),
+                type: "Post",
+                cache: false,
+                data: $("#frmCreate").serialize(),
+                dataType: "json",
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess($("#EditSuccessMsg").val(), function () { location.href = location.href; });
+                    } else {
+                        jAlertError($("#EditFailMsg").val());
+                        $.unblockUI();
+                    }
+
+                }
+            });
+        }
+    }
+</script>

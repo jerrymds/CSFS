@@ -1,0 +1,97 @@
+﻿@model CTBC.CSFS.Models.MeetingSummaryList
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_meetingsummarylist;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel1">
+            <div>
+                <table>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_meetdate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            -
+                            @Html.TextBoxFor(m => m.GovDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                    </tr>
+                </table>
+            </div>
+            <div class="box-footer text-center">
+                <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confim</button>
+                <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+    @using (Html.BeginForm("Excel", "MeetingSummaryList", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "CaseQuery", @class = "form-horizontal" }))
+{
+    <input type="hidden" value="" id="SubGovDateS" name="GovDateS" />
+    <input type="hidden" value="" id="SubGovDateE" name="GovDateE" />
+}
+</div>
+@Html.Hidden("NametxtStartDate", Lang.csfs_cal_start1_ok) @*起始日*@
+@Html.Hidden("NametxtEndDate", Lang.csfs_cal_end1_ok) @*截止日*@
+@Html.Hidden("StartDateText", Lang.csfs_gov_sdate)
+@Html.Hidden("EndDateText", Lang.csfs_gov_edate)
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("NameDate", Lang.csfs_cal_startoend_ok)
+@Html.Hidden("GetExcel", Url.Action("Excel", "MeetingSummaryList", new { area = "QueryAndExport" }))
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#btnQuery").click(function () { return Excel() });
+        $("#btnCancel").click(function () { return DoEmpty() });
+
+    });
+    function DoEmpty() {
+        $("#GovDateS").val("");
+        $("#GovDateE").val("");
+    }
+    function Excel() {
+        var msg = "";
+        var newLine = "\r\n";
+        var GovDateS = $("#GovDateS").val();
+        var GovDateE = $("#GovDateE").val();
+        if (GovDateS.length <= 0) {
+            msg = msg + $.validator.format($("#PlzInput").val(), $("#StartDateText").val()) + newLine;
+        } else if (!checkIsValidDate($("#GovDateS").val())) {
+            msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#StartDateText").val()) + newLine;
+        }
+
+        if ($("#GovDateE").val().length <= 0) {
+            msg = msg + $.validator.format($("#PlzInput").val(), $("#EndDateText").val()) + newLine;
+        } else if (!checkIsValidDate($("#GovDateE").val())) {
+            msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#EndDateText").val()) + newLine;
+        }
+
+        if (dateCompare(GovDateS, GovDateE) == 1) {
+            msg = msg + $("#NameDate").val() + newLine;
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+        $("#SubGovDateS").val(GovDateS);
+        $("#SubGovDateE").val(GovDateE);
+        $("#CaseQuery").submit();
+    }
+    function dateCompare(date1, date2) {
+        date1 = date1.replace(/\-/gi, "/");
+        date2 = date2.replace(/\-/gi, "/");
+        var time1 = new Date(date1).getTime();
+        var time2 = new Date(date2).getTime();
+        if (time1 > time2) {
+            return 1;
+        }
+        else {
+            return 0;
+        }
+    }
+</script>

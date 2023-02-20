@@ -1,0 +1,113 @@
+﻿@model CTBC.CSFS.Models.PARMCode
+
+@{
+    ViewBag.Title = "Edit";
+}
+<script language="javascript" type="text/javascript">
+
+    function getHidCodeTypeValue(obj) {
+        $("#hidCodeType").val($(obj).val());
+    }
+
+    function CloseWindow() {
+        var CodeType = $("#QueryCodeType").val();
+        var CodeNo = $("#QueryCodeNo").val();
+        var Enable = $("#QueryEnable").val();
+        location.href = '@Url.Action("Query","PARMCode")?QueryCodeType=' + CodeType + '&QueryCodeNo=' + CodeNo + '&QueryEnable=' + Enable;
+    }
+
+    function displaySuccess(xhr) {
+        $('#errorMessageDiv').show();
+    }
+</script>
+@using (Ajax.BeginForm("Edit", new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "post", OnSuccess = "displaySuccess", OnFailure = "displayError" }))
+{
+    <div class="headline">
+        @Lang.csfs_pm_edit
+    </div>
+    <div>
+        @Html.ValidationMessageFor(m => m.CodeType)
+        @Html.ValidationMessageFor(m => m.CodeTypeDesc)
+        @Html.ValidationMessageFor(m => m.CodeNo)
+        @Html.ValidationMessageFor(m => m.CodeDesc)
+        @Html.ValidationMessageFor(m => m.SortOrder)
+    </div>
+    <div style="height: 7px">
+    </div>
+    <div style="height: 7px">
+    </div>
+    <table width="100" border="1" cellpadding="3" cellspacing="0" class="query_table">
+        <tr id="tblrCodeType" >
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_codetype
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.TextBoxFor(m => m.CodeType, new { @class = "input_word", @MaxLength = "50", @readonly = "readonly" })
+            </td>
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_codetypedesc
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.TextBoxFor(m => m.CodeTypeDesc, new { @class = "input_word", @MaxLength = "50", @readonly = "readonly" })
+            </td>
+        </tr>
+        <tr>
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_detail_code
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.TextBoxFor(m => m.CodeNo, new { @class = "input_word", @MaxLength = "50" })
+            </td>
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_detail_name
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.TextBoxFor(m => m.CodeDesc, new { @class = "input_word", @MaxLength = "50" })
+            </td>
+        </tr>
+        <tr>
+            <td class="css_td_PK" width="15%" nowrap="nowrap">
+                @Lang.csfs_seq
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.TextBoxFor(m => m.SortOrder, new { @class = "input_word", @MaxLength = "50" })
+            </td>
+            <td class="query_table_td" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_enable
+            </td>
+            <td class="f_word_left" width="35%">
+                @Html.RadioButtonFor(m => m.Enable, true)@Lang.csfs_enable
+                @Html.RadioButtonFor(m => m.Enable, false)@Lang.csfs_disable
+            </td>
+        </tr>
+        <tr>
+            <td class="query_table_td" width="15%" nowrap="nowrap">
+                @Lang.csfs_pm_codetag
+            </td>
+            <td class="f_word_left" colspan="3" style="width: 70%">
+                @Html.TextBoxFor(m => m.CodeTag, new {@class = "input_word", @MaxLength = "50" })
+            </td>
+        </tr>
+        <tr>
+            <td class="query_table_td" width="15%" nowrap="nowrap">
+                @Lang.csfs_memo
+            </td>
+            <td class="f_word_left" colspan="3" style="width: 70%">
+                @Html.TextAreaFor(m => m.CodeMemo, new { @cols = "60", @rows = "5" })
+            </td>
+        </tr>
+    </table>
+    <div>
+        <button type="submit" id="btnSubmit">
+            @Lang.csfs_save
+        </button>
+        &nbsp; &nbsp;
+        <button type="button" onclick="CloseWindow();">
+            @Lang.csfs_quit
+        </button>
+    </div>    
+    @Html.HiddenFor(m => m.CodeUid);
+}
+
+ 
+

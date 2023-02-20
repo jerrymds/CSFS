@@ -1,0 +1,221 @@
+﻿@model IList<HistoryCaseSendSettingQueryResultViewModel>
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "HistoryAgentDocumentInfoDetail", new { area = "Common", CaseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_document_info</a></li>
+        @if (Html.GetBackControllerName() != "DebtPersonQuery")
+        {
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">帳務資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">正本備查</a></li>
+            <li class="active"><a href="@Url.Action("Index", "HistoryAgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">發文資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseHistoryDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">流程紀錄</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseCalculatorDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">利息計算</a></li>
+            <li class=""><a href="@Url.Action("Index", "HistoryAgentCaseMemoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">內部註記</a></li>
+        }
+        @Html.GetBackButtonInTab()
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel1">
+            <div class="box box-primary">
+                <div id="querytablediv" class="box-body">
+                    <table id="query_table" class="table table-bordered table-striped text-black sort">
+                        <thead>
+                            <tr class="alert-success text-center ">
+                                <th class="col-xs-1">@Lang.csfs_sendkind</th>
+                                <th class="col-xs-1">@Lang.csfs_editdelete</th>
+                                <th class="col-xs-1">@Lang.csfs_case_no</th>
+                                <th class="col-xs-1">@Lang.csfs_senddate</th>
+                                <th class="col-xs-1">@Lang.csfs_sendword1</th>
+                                <th class="col-xs-3">@Lang.csfs_original</th>
+                                <th class="col-xs-3">@Lang.csfs_currency</th>
+                                <th class="col-xs-1">@Lang.csfs_closeddate</th>
+                            </tr>
+                        </thead>
+                        <tbody>                            
+                            @if (Model != null && Model.Any())
+                            {
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td class="text-center">@item.SendKind</td>
+                                        <td class="text-center">
+                                            @*<a class="btn btn-default btn-xs" title="@Lang.csfs_edit" href="@Url.Action("_SendEdit", "AgentSendSettingInfo", new {area = "Agent", item.SerialId, item.CaseId})">
+                                                    <i class="fa fa-edit"></i>
+                                                </a>
+                                                <a role="menuitem" tabindex="-1" onclick="_SendDeleteClick(@item.SerialId) " class="btn btn-default btn-xs" title="@Lang.csfs_delete">
+                                                    <i class="glyphicon glyphicon-remove"></i>
+                                                </a>*@
+                                        </td>
+                                        <td class="text-center">@item.CaseNo</td>
+                                        <td class="text-center">@item.SendDate.ToString("yyyy/MM/dd")</td>
+                                        <td class="text-center">@item.SendNo</td>
+                                        <td class="text-center">@item.Receiver</td>
+                                        <td class="text-center">@item.Cc</td>
+                                        <td class="text-center">@item.ApproveDate</td>
+                                    </tr>
+                                }
+                            }
+                            else
+                            {
+                                <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <div class="box-footer  text-center">                    
+                    @*<a class="btn btn-primary btn-xs" href="@Url.Action("_SendCreate", "AgentSendSettingInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_new_send</a>*@
+                    @*<a href="@Url.Action("_SendCreate", "AgentSendSettingInfo", new { area = "Agent", caseId = ViewBag.CaseId, @radom = DateTime.Now.ToString() })" class="fancy800_280 btn btn-primary btn-xs">新增發文</a>*@
+                    @if (Html.GetBackControllerName() == "DirectorToApprove" || Html.GetBackControllerName() == "DirectorCooperative" || Html.GetBackControllerName() == "AutoAuditAssignments")
+                    {
+                        @*if (Model != null && Model.Any())
+                        {
+                            <button id="btnReturn" type="button" class="btn btn-primary btn-xs" onclick="btnReturnClick()">@Lang.csfs_return</button>
+                        }*@
+                        <button id="btnReturn" type="button" class="btn btn-primary btn-xs" onclick="btnReturnClick()">@Lang.csfs_return</button>
+                    }
+                    <a class="btn btn-primary btn-xs" href="@Url.Action("Report", "Common", new { area = "Common", caseIdList = ViewBag.CaseId,Con=ViewBag.CaseNo, fileName = ViewBag.CaseNo })" target="frmForReport">@Lang.csfs_sendinfo</a>                   
+                    @*<a class="btn btn-primary btn-xs" href="@Url.Action("Report", "AgentToHandle", new { area = "Agent", caseIdList = ViewBag.CaseId })">@Lang.csfs_print</a>*@
+                    @if (Html.GetBackControllerName() == "DirectorToApprove" || Html.GetBackControllerName() == "DirectorCooperative"|| Html.GetBackControllerName() == "AutoAuditAssignments")
+                    {
+                        <button id="btnApprove" type="button" class="btn btn-primary btn-xs">@Lang.csfs_approve</button>
+                    }                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* 退件畫面*@
+<div class="modal fade" id="modalClose" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_return</h4>
+            </div>
+            <div class="modal-body">
+                @*@if (Model != null && Model.Any())
+                { 
+                    @Lang.csfs_return1
+                    @Html.DropDownListFor(m => m[0].directorToApprove.CloseReason, (IEnumerable<SelectListItem>)ViewBag.ReturnReasonList, Lang.csfs_select, new { @id = "CloseReason" });
+                }*@
+                @Lang.csfs_return1
+                @Html.DropDownListFor(m => m[0].directorToApprove.CloseReason, (IEnumerable<SelectListItem>)ViewBag.ReturnReasonList, Lang.csfs_select, new { @id = "CloseReason" });
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnCloseSubmit" onclick="btnCloseSubmit()">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<iframe id="frmForReport" name="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+
+@Html.Hidden("DeleteConfirmMsg", Lang.csfs_del_confirm)
+@Html.Hidden("DeleteFailMsg", Lang.csfs_del_fail)
+@Html.Hidden("DeleteSuccessMsg", Lang.csfs_del_ok)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("HidCaseId", (Guid)ViewBag.CaseId)
+@Html.Hidden("HidStatus", (String)ViewBag.Status)
+@Html.Hidden("BackUrl", Html.GetBackUrl())
+@Html.Hidden("ReportUrl", Url.Action("Report", "Common", new { area = "Common" }))
+@Html.Hidden("SendDeleteUrl", Url.Action("_SendDelete", "AgentSendSettingInfo", new { area = "Agent" }))
+@Html.Hidden("ApproveUrl", Url.Action("FangXing", "DirectorToApprove", new { area = "Director" }))
+@Html.Hidden("ReturnUrl", Url.Action("Return", "DirectorToApprove", new { area = "Director" }))
+@Html.Hidden("IndexUrl", Url.Action("Index", "HistoryAgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId }))
+@* 放行 *@
+@Html.Hidden("ApprovefirmMsg", Lang.csfs_confirm_approve)
+@Html.Hidden("ApproveOkMsg", Lang.csfs_approve_success)
+@Html.Hidden("ApproveFaileMsg", Lang.csfs_approve_fail)
+
+@* 20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add start *@
+@Html.Hidden("IsBranchAgent", (string)ViewBag.IsBranchAgent)
+@* 20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add end *@
+
+@section scripts {
+    <script type="text/javascript">
+        $("#btnApprove").click(function () { return btnApproveSubmit() });
+        //20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add start
+        if ($("#IsBranchAgent").val() == "1") {
+            $("#panel1").hide();
+        }
+        //20170421 固定 RQ-2015-019666-017 派件至跨單位 宏祥 add end
+
+        //* 點選放行
+        function btnApproveSubmit() {
+            var strCaseId = $("#HidCaseId").val();
+            var strStatus = $("#HidStatus").val();
+            jConfirm($("#ApprovefirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#ApproveUrl").val(),
+                        async: false,
+                        data: { CaseIdarr: strCaseId, statusArr: strStatus},
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            //jAlertError(data.ReturnMsg);
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                jAlertSuccess($("#ApproveOkMsg").val(), function () {
+                                    $.unblockUI();
+                                    location.href = $("#BackUrl").val();
+                                });
+                            } else {
+                                //jAlertError($("#ApproveFaileMsg").val());
+                                jAlertError(data.ReturnMsg);
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        //* 點選退件
+        function btnReturnClick() {
+            $("#modalClose").modal();
+        }
+
+        //退件提交
+        function btnCloseSubmit() {
+            var strCaseId = $("#HidCaseId").val();
+            var strStatus = $("#HidStatus").val();
+            $.blockUI();
+            $.ajax({
+                type: "POST",
+                traditional: true,
+                url: $("#ReturnUrl").val(),
+                async: false,
+                data: { strIds: strCaseId, statusArr:strStatus, CloseReason: $("#CloseReason").val() },
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess("案件退回成功！", function () {
+                            $("#modalClose").modal("hide");
+                            location.href = $("#BackUrl").val();
+                            @*window.location = "@Url.Action("Index", "AgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId })";*@
+                            $.unblockUI();
+                        }); 
+                    } else {
+                        //jAlertError($("#ReturnFaileMsg").val());
+                        jAlertError(data.ReturnMsg);
+                        $.unblockUI();
+                    }
+                }
+            });
+        }
+
+    </script>
+}

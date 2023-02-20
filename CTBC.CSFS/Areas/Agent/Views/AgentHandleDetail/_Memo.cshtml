@@ -1,0 +1,77 @@
+﻿@model CTBC.CSFS.Models.AgentHandleDetail
+@{
+    ViewBag.Title = "_Memo";
+}
+
+<div class="box box-primary">
+    @using (Html.BeginForm("CreateMemo", "AgentHandleDetail", new { area = "Agent" }, FormMethod.Post, new { id = "frmCreateMemo", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            @Html.TextAreaFor(m => m.Memo, new { @id = "Memo", @rows = "22", @cols = "155" })
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnSaveMemo" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confim</button>
+            <button id="btnCancelMemo" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+       @Html.HiddenFor(m => m.CaseId)
+    }
+</div>
+
+@Html.Hidden("NowPage", "MenuMemo")
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_save_fail)
+@Html.Hidden("TextNotNull", Lang.csfs_text_notnull)
+
+<script type="text/javascript">
+    $("#btnSaveMemo").click(function () { return btnSaveMemoClick(); });
+    $("#btnCancelMemo").click(function () { return btnCancelMemoClick(); });
+
+    //* 點選取消
+    function btnCancelMemoClick() {
+        $("#Memo").val("");
+    }
+    //* 新增修改
+    function btnSaveMemoClick() {
+        trimAllInput();
+        if (!ajaxValidate()) {
+            return false;
+        }
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmCreateMemo").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmCreateMemo").serialize(),
+            dataType: "json",
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {
+                    jAlertSuccess($("#CreateSuccessMsg").val(), function () { location.href = location.href });
+                } else {
+                    jAlertError($("#CreateFailMsg").val());
+                    $.unblockUI();
+                }
+
+            }
+        });
+        return false;
+    }
+
+    function ajaxValidate() {
+        if ($.trim($("#Memo").val()) === "") {
+            jAlertError($("#TextNotNull").val());
+            return false;
+        }
+        return true;
+    }
+
+    function trimAllInput() {
+        $(":input[type='text']").each(function () {
+            $(this).val($.trim($(this).val()));
+        });
+    }
+</script>

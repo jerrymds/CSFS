@@ -1,0 +1,73 @@
+﻿@model CTBC.CSFS.Models.SeizureOldQuery
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_seizureoldquery;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "SeizureOldQuery", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right" style="white-space: nowrap">@Lang.csfs_GovNoD</td>
+                        <td class="col-md-5" style="white-space: nowrap">
+                            @Html.TextBoxFor(m => m.ReceiptSeqS, new { })
+                            ～
+                            @Html.TextBoxFor(m => m.ReceiptSeqE, new { })
+                        </td>
+                        <td class="col-md-1 text-right" style="white-space: nowrap">@Lang.csfs_receiveddate</td>
+                        <td class="col-md-5" style="white-space: nowrap">
+                            @Html.TextBoxFor(m => m.ReceivedDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.ReceivedDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right" style="white-space: nowrap">@Lang.csfs_CustomerId</td>
+                        <td class="col-md-5" style="white-space: nowrap">
+                            @Html.TextBoxFor(m => m.ObligorCompanyId, new { @MaxLength = "100" })
+                        </td>
+                        <td class="col-md-1 text-right" style="white-space: nowrap">@Lang.csfs_Branch</td>
+                        <td class="col-md-2" style="white-space: nowrap">
+                            @(ViewBag.UnitRead == "1" ? Html.TextBoxFor(m => m.BranchIdS, new { @id = "txtBranchIdS", @readonly = "readonly" }) : Html.TextBoxFor(m => m.BranchIdS, new { @MaxLength = "100", @id = "txtBranchIdS" }))
+                            ～
+                            @(ViewBag.UnitRead == "1" ? Html.TextBoxFor(m => m.BranchIdE, new { @id = "txtBranchIdE", @readonly = "readonly" }) : Html.TextBoxFor(m => m.BranchIdE, new { @MaxLength = "100", @id = "txtBranchIdE" }))
+                        </td>
+                    </tr>
+                    <tr style="white-space: nowrap">
+                        <td class="col-md-1 text-right" style="white-space: nowrap">@Lang.csfs_sendword1</td>
+                        <td class="col-md-2" style="white-space: nowrap">
+                            @Html.TextBoxFor(m => m.SendSeq, new { @MaxLength = "100" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" id="pageNum" name="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "SeizureOldQuery", new { area = "QueryAndExport" })">
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("NowPage", "SeizureOldQuery")
+@Html.Hidden("ReceivedDateText", Lang.csfs_receive_date)
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("BranchText", Lang.csfs_Branch)
+@Html.Hidden("PositiveintFormat", Lang.csfs_enter_positiveint)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/QueryAndExport/SeizureOldQuery.js")
+}
+
+

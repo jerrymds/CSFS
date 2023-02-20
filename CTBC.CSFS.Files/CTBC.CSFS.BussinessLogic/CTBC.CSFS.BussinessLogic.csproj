@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{567E7007-7B4A-499B-84D6-D11742B240A4}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>CTBC.CSFS.BussinessLogic</RootNamespace>
+    <AssemblyName>CTBC.CSFS.BussinessLogic</AssemblyName>
+    <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>..\Library\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Common, Version=4.1.0.0, Culture=neutral, PublicKeyToken=e44a2bc38ed2c13c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Microsoft.Practices.EnterpriseLibrary.Common.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.EnterpriseLibrary.Logging, Version=4.1.0.0, Culture=neutral, PublicKeyToken=e44a2bc38ed2c13c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Microsoft.Practices.EnterpriseLibrary.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.ServiceLocation">
+      <HintPath>..\Library\Microsoft.Practices.ServiceLocation.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity, Version=1.2.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\Microsoft.Practices.Unity.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Practices.Unity.Interception">
+      <HintPath>..\Library\Microsoft.Practices.Unity.Interception.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI">
+      <HintPath>..\Library\NPOI.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OOXML">
+      <HintPath>..\Library\NPOI.OOXML.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXml4Net">
+      <HintPath>..\Library\NPOI.OpenXml4Net.dll</HintPath>
+    </Reference>
+    <Reference Include="NPOI.OpenXmlFormats">
+      <HintPath>..\Library\NPOI.OpenXmlFormats.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Mvc, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\Library\System.Web.Mvc.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Reference Include="TIBCO.EMS">
+      <HintPath>..\Library\TIBCO.EMS.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AgentDepartmentAccessBIZ.cs" />
+    <Compile Include="AgentSettingBIZ.cs" />
+    <Compile Include="APLogBIZ.cs" />
+    <Compile Include="AutoAuditAssignmentsBIZ.cs" />
+    <Compile Include="CaseClosedQueryBIZ.cs" />
+    <Compile Include="CaseCustBIZ.cs" />
+    <Compile Include="CaseCustCommonBIZ.cs" />
+    <Compile Include="CaseCustHistoryBIZ.cs" />
+    <Compile Include="CaseCustManagerBIZ.cs" />
+    <Compile Include="CaseMeetBiz.cs" />
+    <Compile Include="CaseMemoBiz.cs" />
+    <Compile Include="CaseQueryBIZ.cs" />
+    <Compile Include="CaseReturnBIZ.cs" />
+    <Compile Include="CaseSendSettingBIZ.cs" />
+    <Compile Include="CasePayeeSettingBIZ.cs" />
+    <Compile Include="AgentHandleDetailBIZ.cs" />
+    <Compile Include="AgentToHandleBIZ.cs" />
+    <Compile Include="AuthZBIZ.cs" />
+    <Compile Include="CaseAccountBiz.cs" />
+    <Compile Include="CaseAttachmentBIZ.cs" />
+    <Compile Include="CaseCalculatorDetailsBIZ.cs" />
+    <Compile Include="CaseCalculatorMainBIZ.cs" />
+    <Compile Include="CaseHistoryBIZ.cs" />
+    <Compile Include="CaseMasterBIZ.cs" />
+    <Compile Include="CaseNoTableBIZ.cs" />
+    <Compile Include="CaseObligorBIZ.cs" />
+    <Compile Include="CaseWarningBIZ.cs" />
+    <Compile Include="CheckQueryAndPrintBIZ.cs" />
+    <Compile Include="CollectionToAgentBIZ.cs" />
+    <Compile Include="CollectionToSignBIZ.cs" />
+    <Compile Include="Common\CacheManager.cs" />
+    <Compile Include="Common\CommonBIZ.cs" />
+    <Compile Include="CSFSBUBIZ.cs" />
+    <Compile Include="CSFSEmployeeBIZ.cs" />
+    <Compile Include="CSFSLogBIZ.cs" />
+    <Compile Include="CSFSModificationNoticeBIZ.cs" />
+    <Compile Include="CSFSRoleBIZ.cs" />
+    <Compile Include="CSFSXMLUtil.cs" />
+    <Compile Include="CustomerInfoBIZ.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DeptAccessQueryBIZ.cs" />
+    <Compile Include="DirectorReassignBIZ.cs" />
+    <Compile Include="DirectorToApproveBIZ.cs" />
+    <Compile Include="EmailGroupBiz.cs" />
+    <Compile Include="FileLog.cs" />
+    <Compile Include="GovAddressBiz.cs" />
+    <Compile Include="HostMsgGrpBIZ.cs" />
+    <Compile Include="ImportEDocBiz.cs" />
+    <Compile Include="LdapEmployeeBiz.cs" />
+    <Compile Include="LendAttachmentBIZ.cs" />
+    <Compile Include="LendDataBIZ.cs" />
+    <Compile Include="MeetingResultBIZ.cs" />
+    <Compile Include="MeetingResultDetailBIZ.cs" />
+    <Compile Include="MeetingSummaryListBIZ.cs" />
+    <Compile Include="PARMCodeBIZ.cs" />
+    <Compile Include="PARMMenuBIZ.cs" />
+    <Compile Include="PARMQryComTblMnBIZ.cs" />
+    <Compile Include="PARMScheduleSettingBIZ.cs" />
+    <Compile Include="PARMWorkingDayBIZ.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="CheckNoSettingBIZ.cs" />
+    <Compile Include="ExternalOldQueryBIZ.cs" />
+    <Compile Include="SeizureOldQueryBIZ.cs" />
+    <Compile Include="SeizureQueryBIZ.cs" />
+    <Compile Include="SendEDocBiz.cs" />
+    <Compile Include="SendNoSettingBIZ.cs" />
+    <Compile Include="SendSettingRefBiz.cs" />
+    <Compile Include="TransactionRecordsBIZ.cs" />
+    <Compile Include="WarningQueryBIZ.cs" />
+    <Compile Include="WarningUploadBIZ.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CTBC.CSFS.Models\CTBC.CSFS.Models.csproj">
+      <Project>{de6758e5-4029-466b-841b-69c5deebb530}</Project>
+      <Name>CTBC.CSFS.Models</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.CSFS.Pattern\CTBC.CSFS.Pattern.csproj">
+      <Project>{0e078a06-8e4b-40a8-8f0b-625e854452ad}</Project>
+      <Name>CTBC.CSFS.Pattern</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.CSFS.Resource\CTBC.CSFS.Resource.csproj">
+      <Project>{b26fc559-ff34-42fe-bb98-2bff855b3a2c}</Project>
+      <Name>CTBC.CSFS.Resource</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.CSFS.ViewModels\CTBC.CSFS.ViewModels.csproj">
+      <Project>{d8ce84f3-5c1c-429a-9166-535da8da036b}</Project>
+      <Name>CTBC.CSFS.ViewModels</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.FrameWork.HTG\CTBC.FrameWork.HTG.csproj">
+      <Project>{c27f66de-5fa5-4e4a-8fcf-d6928aeabc0f}</Project>
+      <Name>CTBC.FrameWork.HTG</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.Framework.Platform\CTBC.Framework.Platform.csproj">
+      <Project>{c6fe88d5-936d-449f-a24c-ce006ebe3474}</Project>
+      <Name>CTBC.Framework.Platform</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\CTBC.Framework.Util\CTBC.Framework.Util.csproj">
+      <Project>{36a819bb-7f0a-408c-9e36-9bfefdfd2278}</Project>
+      <Name>CTBC.Framework.Util</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

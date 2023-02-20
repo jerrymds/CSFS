@@ -1,0 +1,173 @@
+﻿@using CTBC.FrameWork.Util
+@model CTBC.CSFS.ViewModels.WarningToApproveViewModel
+@{
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @*@if (Model.WarningToApproveList != null)
+                {
+                    if (Model.WarningToApproveList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.WarningToApprove.PageSize, Model.WarningToApprove.CurrentPage, Model.WarningToApprove.TotalItemCount, Model.WarningToApprove, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.WarningToApprove.SortExpression, Model.WarningToApprove.SortDirection)
+                        </div>
+                    }
+                }*@
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th><input type="checkbox" id="CheckAll"></th>
+                            @* <th>@Lang.csfs_seqnum</th>*@
+                            <th>案件編號</th>
+                            <th>類別</th>
+                            <th>通報警局</th>
+                            <th>二</th>
+                            <th>165案號</th>
+                            <th>案發日期/時間</th>
+                            <th>案發地點</th>
+                            <th>主通報</th>
+                            <th>帳號</th>
+                            <th>ID/統一證號</th>
+                            <th>中文戶名</th>
+                            <th>etabs設定警示時間</th>
+                            <th>TX9091-13</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.WarningToApproveList != null && Model.WarningToApproveList.Any())
+                        {
+                            foreach (var item in Model.WarningToApproveList)
+                            {
+                        <tr>
+                            <td class="text-center">
+                                <input type="checkbox" name="r2" class="checkfile" value="@item.NewId" data-status="@item.Status" />
+                            </td>
+                            <td>
+                                @Html.ActionLink(Convert.ToString(item.DocNo)+"-"+ Convert.ToString(item.SerialNo), "Details", "WarningQuery", new { area = "QueryAndExport", DocNo = item.DocNo, SerialID=item.SerialID }, new { })
+                            </td>
+                            <td>@item.Kind</td>
+                            <td>@item.PoliceStation</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.Retry))
+                                {
+                                    if (item.Retry == "Y" || item.Retry == "1")
+                                    {
+                                        <text>Y</text>
+                                    }
+                                    else
+                                    {
+                                        <text>N</text>
+                                    }
+                                }
+                                else
+                                {
+                                    <text>N</text>
+                                }
+                            </td>
+                            <td>@item.No_165</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.HappenDateTime))
+                                {
+                                    <text>@DateTime.Parse(item.HappenDateTime).ToString("yyyy/MM/dd HH:mm:ss")</text>
+                                    @*<text>@UtlString.FormatDateTw(item.HappenDateTime)</text>*@
+                                }
+                            </td>
+                            <td>@item.DocAddress</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.Original))
+                                {
+                                    if (item.Original == "Y" || item.Original == "1")
+                                    {
+                                        <text>Y</text>
+                                    }
+                                    else
+                                    {
+                                        <text>N</text>
+                                    }
+                                }
+                                else
+                                {
+                                    <text>N</text>
+                                }
+                            </td>
+                            <td>@item.CustAccount</td>
+                            <td>
+                                @Html.ActionLink(@item.CustId, "WarningCustomerInfo", "WarningToApprove", new { area = "Director", custId = @item.CustId, DocNo = @item.DocNo }, new { @class = "fancy800_600" })
+                            </td>
+                            <td>@item.CustName</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.EtabsDatetime))
+                                {
+                                    <text>@UtlString.FormatDateTw(item.EtabsDatetime)</text>
+                                    <text>@UtlString.FormatDateTw(item.EtabsDatetimeHour)</text>
+                                }
+                            </td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.Set))
+                                {
+                                    if (item.Set.Trim() == "Y" || item.Set.Trim() ==  "1")
+                                    {
+                                        <text>Y</text>
+                                    }
+                                    else
+                                    {
+                                        <text>N</text>
+                                    }
+                                }
+                                else
+                                {
+                                    <text>N</text>
+                                }
+                            </td>
+
+                        </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.WarningToApprove.SerialID)
+                @Html.Hidden("querystring", Model.WarningToApprove.StateType)
+                @Html.Hidden("querystring", Model.WarningToApprove.Original)
+                @Html.Hidden("querystring", Model.WarningToApprove.RelieveDate)
+                @Html.Hidden("querystring", Model.WarningToApprove.TX9091)
+                @Html.Hidden("querystring", Model.WarningToApprove.TX9092)
+                @Html.Hidden("querystring", Model.WarningToApprove.DocNo)
+                @Html.Hidden("querystring", Model.WarningToApprove.CustId)
+                @Html.Hidden("querystring", Model.WarningToApprove.CustAccount)
+                @Html.Hidden("querystring", Model.WarningToApprove.BankID)
+                @Html.Hidden("querystring", Model.WarningToApprove.ForCDate)
+                @Html.Hidden("querystring", Model.WarningToApprove.NotificationUnit)
+                @Html.Hidden("querystring", Model.WarningToApprove.NotificationName)
+                @Html.Hidden("querystring", Model.WarningToApprove.ExtPhone)
+                @Html.Hidden("querystring", Model.WarningToApprove.CustName)
+                @Html.Hidden("querystring", Model.WarningToApprove.AccountStatus)
+                @Html.Hidden("querystring", Model.WarningToApprove.PoliceStation)
+                @Html.Hidden("querystring", Model.WarningToApprove.NoClosed)
+                @Html.Hidden("querystring", Model.WarningToApprove.ModifiedDate)
+                @Html.Hidden("querystring", Model.WarningToApprove.No_165)
+                @Html.Hidden("querystring", Model.WarningToApprove.Kind)
+                @Html.Hidden("querystring", Model.WarningToApprove.Set)
+                @Html.Hidden("defaultSortColumn", Model.WarningToApprove.SortExpression)
+                @Html.Hidden("defaultSort", Model.WarningToApprove.SortDirection)
+                @Html.Hidden("TextNotNull", Lang.csfs_text_notnull)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.BindCheckBox();
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

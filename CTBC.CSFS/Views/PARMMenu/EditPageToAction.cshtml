@@ -1,0 +1,127 @@
+﻿@model CTBC.CSFS.ViewModels.PARMMenuViewModel
+
+@{
+    ViewBag.Title = "EditPageToAction";
+}
+<style type="text/css">
+    .menu_lev_2 {
+        width: 20px;
+        display: inline-block;
+    }
+
+    .menu_lev_3 {
+        width: 40px;
+        display: inline-block;
+    }
+</style>
+<div class="headline">
+    @Lang.csfs_page_to_action
+</div><br />
+<table border="1" cellpadding="3" cellspacing="0" class="query_table" style="width:600px;">
+    <thead><tr><th colspan="2">@Lang.csfs_menu_mainpage</th></tr></thead>
+    <tr><td class="query_table_td" style="width: 15%;">@Lang.csfs_menu_id</td><td style="width: 85%;">@Model.PARMMenuXMLNode.ID</td></tr>
+    <tr><td class="query_table_td" style="width: 15%;">@Lang.csfs_menu_mainpage_name</td><td style="width: 85%;">@Lang.ResourceManager.GetString(Model.PARMMenuXMLNode.TITLE.Trim())</td></tr>
+    <tr><td class="query_table_td" style="width: 15%;">@Lang.csfs_fuc_id</td><td style="width: 85%;">@Model.PARMMenuXMLNode.md_FuncID</td></tr>
+</table>
+<br />
+<button type="button" name="CheckItem" onclick="CheckAllRole();">@Lang.csfs_all_checked</button>
+<button type="button" name="CancelItem" onclick="UnCheckAllRole();">@Lang.csfs_all_cancel</button>
+@using (Ajax.BeginForm("EditPageToAction", new AjaxOptions() { HttpMethod = "post", OnSuccess = "displaySuccess", OnFailure = "displayError" }))
+    {
+<table border="1" cellpadding="3" cellspacing="0" class="query_table" style="width:600px;">
+    <thead>
+        <tr>
+            <th>
+                @Lang.csfs_wait_Action1
+                @if (Model.PARMMenuXMLNodeList != null)
+                {
+                if (Model.PARMMenuXMLNodeList.Any())
+                { 
+                @Model.PARMMenuXMLNodeList.Count
+                }else {<text>0</text>}
+                }
+                else
+                {<text>0</text>}
+
+                @Lang.csfs_wait_page2
+            </th>
+        </tr>
+    </thead>
+</table>
+<div style="height:500px;width:599px;overflow: scroll;">
+    <table border="1" cellpadding="3" cellspacing="0" class="query_table" style="width:580px;">
+        @if (Model.PARMMenuXMLNodeList != null)
+        {
+        if (Model.PARMMenuXMLNodeList.Any())
+        {
+        int cnt = Model.PARMMenuXMLNodeList.Count;
+        <tr>
+            <td style="text-align:left;">
+                @foreach (var item in Model.PARMMenuXMLNodeList)
+                {
+                <!--階層空格-->
+                if (item.MenuLevel == 2)
+                {<label class="menu_lev_2"></label>} 
+                if (item.MenuLevel == 3)
+                {<label class="menu_lev_3"></label>                }
+                if (item.MenuType == "A")
+                {
+                    if (item.ActionChecked == "Y"){
+                        <input type="checkbox" name="md_AuthZ_Seleted" value="@item.ID " checked="checked" onclick="chkRoleClick()" /><span>@item.TITLE</span><br />
+                               }else{
+                    <input type="checkbox" name="md_AuthZ_Seleted" value="@item.ID " onclick="chkRoleClick()" /><span>@item.TITLE</span><br />
+                    }
+                }
+                else { 
+                @item.TITLE<br />
+                } 
+                }
+            </td>
+        </tr>
+            }
+        else
+        { 
+        <tr><td>@Lang.csfs_no_data</td></tr>} 
+        }
+        else
+        { 
+        <tr><td>@Lang.csfs_no_data</td></tr>} 
+    </table>
+</div>
+<div style="text-align:center;width:600px;">
+    <button type="submit" id="btnSubmit">@Lang.csfs_save</button>&nbsp;&nbsp;
+    <button type="button" onclick="BackPageToAction();">@Lang.csfs_quit</button>
+</div>
+    @Html.HiddenFor(m => m.PARMMenuXMLNode.ID) 
+    @Html.HiddenFor(m => m.PARMMenuXMLNode.TITLE)
+} 
+
+<script type="text/javascript">
+    function UnCheckAllRole() {
+        $(":checkbox").removeAttr('checked');
+        chkRoleClick();
+    }
+
+    function CheckAllRole() {
+        $(":checkbox").attr('checked', 'checked');
+        chkRoleClick();
+    }
+    function displaySuccess(xhr) {
+        location.href = '@Url.Action("PageToAction","PARMMenu")';
+    }
+    function BackPageToAction() {
+        location.href = '@Url.Action("PageToAction","PARMMenu")';
+    }
+
+    function chkRoleClick() {
+        $("input:checked + span").css({ color: '#FF0000' });
+        $("input:not(:checked) + span").css({ color: '#000000' });
+    }
+
+    $(document).ready(function () {
+        $(':checkbox:checked').each(function (i) {
+            $("input:checked + span").css({ color: '#FF0000' });
+        });
+    });
+</script>
+

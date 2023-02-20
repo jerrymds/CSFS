@@ -1,0 +1,579 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GssModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="CaseCustMaster">
+          <Key>
+            <PropertyRef Name="NewID" />
+          </Key>
+          <Property Name="NewID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DocNo" Type="nvarchar" MaxLength="15" />
+          <Property Name="Version" Type="int" />
+          <Property Name="RecvDate" Type="datetime" />
+          <Property Name="QFileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="QFileName2" Type="nvarchar" MaxLength="100" />
+          <Property Name="Status" Type="nvarchar" MaxLength="2" />
+          <Property Name="FileStatus" Type="nvarchar" MaxLength="1" />
+          <Property Name="AuditStatus" Type="nvarchar" MaxLength="1" />
+          <Property Name="UploadStatus" Type="nvarchar" MaxLength="1" />
+          <Property Name="ProcessingMode" Type="nvarchar" MaxLength="30" />
+          <Property Name="CloseDate" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedUser" Type="nvarchar" MaxLength="20" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="20" />
+          <Property Name="CearanceUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CearanceUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ROpenFileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="RFileTransactionFileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ImportFormFlag" Type="nvarchar" MaxLength="1" />
+          <Property Name="QueryUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="LetterDate" Type="datetime" />
+          <Property Name="LetterDeptName" Type="nvarchar" MaxLength="100" />
+          <Property Name="LetterNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="Recipient" Type="nvarchar" MaxLength="100" />
+          <Property Name="MessageNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="MessageDate" Type="datetime" />
+          <Property Name="ImportMessage" Type="nvarchar" MaxLength="100" />
+          <Property Name="FileDI" Type="ntext" />
+          <Property Name="UploadUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PDFStatus" Type="nvarchar" MaxLength="2" />
+          <Property Name="InCharge" Type="nvarchar" MaxLength="50" />
+          <Property Name="LetterDeptNo" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="CaseCustQuery">
+          <Key>
+            <PropertyRef Name="NewID" />
+          </Key>
+          <Property Name="NewID" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DocNo" Type="nvarchar" MaxLength="15" />
+          <Property Name="Version" Type="int" />
+          <Property Name="RecvDate" Type="datetime" />
+          <Property Name="QFileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="QFileName2" Type="nvarchar" MaxLength="100" />
+          <Property Name="Status" Type="nvarchar" MaxLength="2" />
+          <Property Name="FileStatus" Type="nvarchar" MaxLength="1" />
+          <Property Name="AuditStatus" Type="nvarchar" MaxLength="1" />
+          <Property Name="UploadStatus" Type="nvarchar" MaxLength="1" />
+          <Property Name="ProcessingMode" Type="nvarchar" MaxLength="30" />
+          <Property Name="CloseDate" Type="datetime" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="CreatedUser" Type="nvarchar" MaxLength="20" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="20" />
+          <Property Name="CearanceUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="CearanceUserName" Type="nvarchar" MaxLength="50" />
+          <Property Name="ROpenFileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="RFileTransactionFileName" Type="nvarchar" MaxLength="100" />
+          <Property Name="ImportFormFlag" Type="nvarchar" MaxLength="1" />
+          <Property Name="QueryUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="LetterDate" Type="datetime" />
+          <Property Name="LetterDeptName" Type="nvarchar" MaxLength="100" />
+          <Property Name="LetterNo" Type="nvarchar" MaxLength="100" />
+          <Property Name="Recipient" Type="nvarchar" MaxLength="100" />
+          <Property Name="MessageNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="MessageDate" Type="datetime" />
+          <Property Name="ImportMessage" Type="nvarchar" MaxLength="100" />
+          <Property Name="FileDI" Type="ntext" />
+          <Property Name="UploadUserID" Type="nvarchar" MaxLength="50" />
+          <Property Name="PDFStatus" Type="nvarchar" MaxLength="2" />
+          <Property Name="InCharge" Type="nvarchar" MaxLength="50" />
+          <Property Name="LetterDeptNo" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="CaseMaster">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="uniqueidentifier" Nullable="false" />
+          <Property Name="DocNo" Type="nvarchar" MaxLength="13" Nullable="false" />
+          <Property Name="Status" Type="nvarchar" MaxLength="5" Nullable="false" />
+          <Property Name="isDelete" Type="bit" Nullable="false" />
+          <Property Name="CaseNo" Type="nvarchar" MaxLength="15" Nullable="false" />
+          <Property Name="GovKind" Type="nvarchar" MaxLength="200" />
+          <Property Name="GovUnit" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ReceiverNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="GovDate" Type="datetime" Nullable="false" />
+          <Property Name="Speed" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="ReceiveKind" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="GovNo" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="LimitDate" Type="datetime" Nullable="false" />
+          <Property Name="CaseKind" Type="nvarchar" MaxLength="200" />
+          <Property Name="CaseKind2" Type="nvarchar" MaxLength="200" />
+          <Property Name="ReceiveDate" Type="datetime" />
+          <Property Name="Unit" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Person" Type="nvarchar" MaxLength="50" />
+          <Property Name="AssignPerson" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="CloseReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="ApproveDate" Type="datetime" />
+          <Property Name="CloseDate" Type="datetime" />
+          <Property Name="AgentUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="AgentBranchId" Type="nchar" MaxLength="10" />
+          <Property Name="AgentDeptId" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApproveUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CloseUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="AgentSection" Type="nvarchar" MaxLength="50" />
+          <Property Name="OverDueMemo" Type="nvarchar" MaxLength="50" />
+          <Property Name="PropertyDeclaration" Type="nvarchar" MaxLength="30" />
+          <Property Name="ReturnReason" Type="nvarchar" MaxLength="200" />
+          <Property Name="AfterSeizureApproved" Type="bit" Nullable="false" />
+          <Property Name="ReturnAnswer" Type="nvarchar" MaxLength="200" />
+          <Property Name="PayDate" Type="datetime" />
+          <Property Name="AgentSubmitDate" Type="datetime" />
+          <Property Name="AgentSubmitDate2" Type="datetime" />
+          <Property Name="ApproveUser2" Type="nvarchar" MaxLength="50" />
+          <Property Name="ApproveDate2" Type="datetime" />
+          <Property Name="AgentUser2" Type="nvarchar" MaxLength="50" />
+          <Property Name="Receiver" Type="nvarchar" MaxLength="100" />
+          <Property Name="ReceiveAmount" Type="int" />
+          <Property Name="NotSeizureAmount" Type="int" />
+          <Property Name="RMUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="HistoryStatus" Type="nvarchar" MaxLength="2" />
+          <Property Name="IsEnable" Type="nvarchar" MaxLength="1" />
+          <Property Name="OverCancel" Type="nvarchar" MaxLength="100" />
+          <Property Name="PreSubAmount" Type="int" />
+          <Property Name="PreReceiveAmount" Type="int" />
+          <Property Name="AddCharge" Type="int" />
+          <Property Name="PreGovNo" Type="nvarchar" MaxLength="60" />
+          <Property Name="PreSubDate" Type="datetime" />
+        </EntityType>
+        <EntityType Name="GssDoc">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="DocType" Type="int" />
+          <Property Name="BatchNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="CompanyID" Type="nvarchar" MaxLength="20" />
+          <Property Name="Batchmetadata" Type="nvarchar(max)" />
+          <Property Name="BatchDate" Type="datetime" />
+          <Property Name="TransferType" Type="nvarchar" MaxLength="5" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ParserStatus" Type="int" />
+          <Property Name="ParserMessage" Type="nvarchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="GssDoc_Detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="BatchNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="DocNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="Metadata" Type="nvarchar(max)" />
+          <Property Name="FileNames" Type="nvarchar" MaxLength="2000" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ParserStatus" Type="int" />
+          <Property Name="ParserMessage" Type="nvarchar" MaxLength="50" />
+          <Property Name="CaseKind" Type="nvarchar" MaxLength="10" />
+          <Property Name="CaseId" Type="uniqueidentifier" />
+          <Property Name="SendBatchNo" Type="nvarchar" MaxLength="20" />
+          <Property Name="SendDate" Type="datetime" />
+          <Property Name="SendStatus" Type="int" />
+          <Property Name="SendMessage" Type="nvarchar" MaxLength="50" />
+          <Property Name="Sendmetadata" Type="nvarchar(max)" />
+        </EntityType>
+        <EntityContainer Name="GssModelStoreContainer">
+          <EntitySet Name="CaseCustMaster" EntityType="Self.CaseCustMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CaseCustQuery" EntityType="Self.CaseCustQuery" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CaseMaster" EntityType="Self.CaseMaster" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GssDoc" EntityType="Self.GssDoc" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="GssDoc_Detail" EntityType="Self.GssDoc_Detail" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GssModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="GssDoc">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="DocType" Type="Int32" />
+          <Property Name="BatchNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CompanyID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Batchmetadata" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="BatchDate" Type="DateTime" Precision="3" />
+          <Property Name="TransferType" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ParserStatus" Type="Int32" />
+          <Property Name="ParserMessage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="GssDoc_Detail">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="BatchNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DocNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Metadata" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="FileNames" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ParserStatus" Type="Int32" />
+          <Property Name="ParserMessage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CaseKind" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CaseId" Type="Guid" />
+          <Property Name="SendBatchNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="SendDate" Type="DateTime" Precision="3" />
+          <Property Name="SendStatus" Type="Int32" />
+          <Property Name="SendMessage" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Sendmetadata" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityContainer Name="GssEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="GssDoc" EntityType="Self.GssDoc" />
+          <EntitySet Name="GssDoc_Detail" EntityType="Self.GssDoc_Detail" />
+          <EntitySet Name="CaseMaster" EntityType="GssModel.CaseMaster" />
+          <EntitySet Name="CaseCustQuery" EntityType="GssModel.CaseCustQuery" />
+          <EntitySet Name="CaseCustMaster" EntityType="GssModel.CaseCustMaster" />
+        </EntityContainer>
+        <EntityType Name="CaseMaster">
+          <Key>
+            <PropertyRef Name="CaseId" />
+          </Key>
+          <Property Name="CaseId" Type="Guid" Nullable="false" />
+          <Property Name="DocNo" Type="String" Nullable="false" MaxLength="13" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" Nullable="false" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="isDelete" Type="Boolean" Nullable="false" />
+          <Property Name="CaseNo" Type="String" Nullable="false" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="GovKind" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GovUnit" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiverNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="GovDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Speed" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiveKind" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="GovNo" Type="String" Nullable="false" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="LimitDate" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="CaseKind" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CaseKind2" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiveDate" Type="DateTime" Precision="3" />
+          <Property Name="Unit" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Person" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AssignPerson" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="CloseReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="ApproveDate" Type="DateTime" Precision="3" />
+          <Property Name="CloseDate" Type="DateTime" Precision="3" />
+          <Property Name="AgentUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AgentBranchId" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="AgentDeptId" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApproveUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CloseUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="AgentSection" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="OverDueMemo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PropertyDeclaration" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="ReturnReason" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="AfterSeizureApproved" Type="Boolean" Nullable="false" />
+          <Property Name="ReturnAnswer" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="PayDate" Type="DateTime" Precision="3" />
+          <Property Name="AgentSubmitDate" Type="DateTime" Precision="3" />
+          <Property Name="AgentSubmitDate2" Type="DateTime" Precision="3" />
+          <Property Name="ApproveUser2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ApproveDate2" Type="DateTime" Precision="3" />
+          <Property Name="AgentUser2" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Receiver" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ReceiveAmount" Type="Int32" />
+          <Property Name="NotSeizureAmount" Type="Int32" />
+          <Property Name="RMUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="HistoryStatus" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="IsEnable" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="OverCancel" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="PreSubAmount" Type="Int32" />
+          <Property Name="PreReceiveAmount" Type="Int32" />
+          <Property Name="AddCharge" Type="Int32" />
+          <Property Name="PreGovNo" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <Property Name="PreSubDate" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="CaseCustQuery">
+          <Key>
+            <PropertyRef Name="NewID" />
+          </Key>
+          <Property Name="NewID" Type="Guid" Nullable="false" />
+          <Property Name="DocNo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Version" Type="Int32" />
+          <Property Name="RecvDate" Type="DateTime" Precision="3" />
+          <Property Name="QFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="QFileName2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="FileStatus" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="AuditStatus" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="UploadStatus" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessingMode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CloseDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CearanceUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CearanceUserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ROpenFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RFileTransactionFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ImportFormFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="QueryUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LetterDate" Type="DateTime" Precision="3" />
+          <Property Name="LetterDeptName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LetterNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Recipient" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MessageNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MessageDate" Type="DateTime" Precision="3" />
+          <Property Name="ImportMessage" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FileDI" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UploadUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PDFStatus" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="InCharge" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LetterDeptNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="CaseCustMaster">
+          <Key>
+            <PropertyRef Name="NewID" />
+          </Key>
+          <Property Name="NewID" Type="Guid" Nullable="false" />
+          <Property Name="DocNo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Version" Type="Int32" />
+          <Property Name="RecvDate" Type="DateTime" Precision="3" />
+          <Property Name="QFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="QFileName2" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Status" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="FileStatus" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="AuditStatus" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="UploadStatus" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="ProcessingMode" Type="String" MaxLength="30" FixedLength="false" Unicode="true" />
+          <Property Name="CloseDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="CreatedUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="CearanceUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CearanceUserName" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ROpenFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="RFileTransactionFileName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="ImportFormFlag" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="QueryUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LetterDate" Type="DateTime" Precision="3" />
+          <Property Name="LetterDeptName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="LetterNo" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Recipient" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="MessageNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="MessageDate" Type="DateTime" Precision="3" />
+          <Property Name="ImportMessage" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="FileDI" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="UploadUserID" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="PDFStatus" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="InCharge" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="LetterDeptNo" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GssModelStoreContainer" CdmEntityContainer="GssEntities">
+          <EntitySetMapping Name="GssDoc">
+            <EntityTypeMapping TypeName="GssModel.GssDoc">
+              <MappingFragment StoreEntitySet="GssDoc">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="DocType" ColumnName="DocType" />
+                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+                <ScalarProperty Name="CompanyID" ColumnName="CompanyID" />
+                <ScalarProperty Name="Batchmetadata" ColumnName="Batchmetadata" />
+                <ScalarProperty Name="BatchDate" ColumnName="BatchDate" />
+                <ScalarProperty Name="TransferType" ColumnName="TransferType" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ParserStatus" ColumnName="ParserStatus" />
+                <ScalarProperty Name="ParserMessage" ColumnName="ParserMessage" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="GssDoc_Detail">
+            <EntityTypeMapping TypeName="GssModel.GssDoc_Detail">
+              <MappingFragment StoreEntitySet="GssDoc_Detail">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="BatchNo" ColumnName="BatchNo" />
+                <ScalarProperty Name="DocNo" ColumnName="DocNo" />
+                <ScalarProperty Name="Metadata" ColumnName="Metadata" />
+                <ScalarProperty Name="FileNames" ColumnName="FileNames" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="ParserStatus" ColumnName="ParserStatus" />
+                <ScalarProperty Name="ParserMessage" ColumnName="ParserMessage" />
+                <ScalarProperty Name="CaseKind" ColumnName="CaseKind" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="SendBatchNo" ColumnName="SendBatchNo" />
+                <ScalarProperty Name="SendDate" ColumnName="SendDate" />
+                <ScalarProperty Name="SendStatus" ColumnName="SendStatus" />
+                <ScalarProperty Name="SendMessage" ColumnName="SendMessage" />
+                <ScalarProperty Name="Sendmetadata" ColumnName="Sendmetadata" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CaseMaster">
+            <EntityTypeMapping TypeName="GssModel.CaseMaster">
+              <MappingFragment StoreEntitySet="CaseMaster">
+                <ScalarProperty Name="PreSubDate" ColumnName="PreSubDate" />
+                <ScalarProperty Name="PreGovNo" ColumnName="PreGovNo" />
+                <ScalarProperty Name="AddCharge" ColumnName="AddCharge" />
+                <ScalarProperty Name="PreReceiveAmount" ColumnName="PreReceiveAmount" />
+                <ScalarProperty Name="PreSubAmount" ColumnName="PreSubAmount" />
+                <ScalarProperty Name="OverCancel" ColumnName="OverCancel" />
+                <ScalarProperty Name="IsEnable" ColumnName="IsEnable" />
+                <ScalarProperty Name="HistoryStatus" ColumnName="HistoryStatus" />
+                <ScalarProperty Name="RMUser" ColumnName="RMUser" />
+                <ScalarProperty Name="NotSeizureAmount" ColumnName="NotSeizureAmount" />
+                <ScalarProperty Name="ReceiveAmount" ColumnName="ReceiveAmount" />
+                <ScalarProperty Name="Receiver" ColumnName="Receiver" />
+                <ScalarProperty Name="AgentUser2" ColumnName="AgentUser2" />
+                <ScalarProperty Name="ApproveDate2" ColumnName="ApproveDate2" />
+                <ScalarProperty Name="ApproveUser2" ColumnName="ApproveUser2" />
+                <ScalarProperty Name="AgentSubmitDate2" ColumnName="AgentSubmitDate2" />
+                <ScalarProperty Name="AgentSubmitDate" ColumnName="AgentSubmitDate" />
+                <ScalarProperty Name="PayDate" ColumnName="PayDate" />
+                <ScalarProperty Name="ReturnAnswer" ColumnName="ReturnAnswer" />
+                <ScalarProperty Name="AfterSeizureApproved" ColumnName="AfterSeizureApproved" />
+                <ScalarProperty Name="ReturnReason" ColumnName="ReturnReason" />
+                <ScalarProperty Name="PropertyDeclaration" ColumnName="PropertyDeclaration" />
+                <ScalarProperty Name="OverDueMemo" ColumnName="OverDueMemo" />
+                <ScalarProperty Name="AgentSection" ColumnName="AgentSection" />
+                <ScalarProperty Name="CloseUser" ColumnName="CloseUser" />
+                <ScalarProperty Name="ApproveUser" ColumnName="ApproveUser" />
+                <ScalarProperty Name="AgentDeptId" ColumnName="AgentDeptId" />
+                <ScalarProperty Name="AgentBranchId" ColumnName="AgentBranchId" />
+                <ScalarProperty Name="AgentUser" ColumnName="AgentUser" />
+                <ScalarProperty Name="CloseDate" ColumnName="CloseDate" />
+                <ScalarProperty Name="ApproveDate" ColumnName="ApproveDate" />
+                <ScalarProperty Name="CloseReason" ColumnName="CloseReason" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="AssignPerson" ColumnName="AssignPerson" />
+                <ScalarProperty Name="Person" ColumnName="Person" />
+                <ScalarProperty Name="Unit" ColumnName="Unit" />
+                <ScalarProperty Name="ReceiveDate" ColumnName="ReceiveDate" />
+                <ScalarProperty Name="CaseKind2" ColumnName="CaseKind2" />
+                <ScalarProperty Name="CaseKind" ColumnName="CaseKind" />
+                <ScalarProperty Name="LimitDate" ColumnName="LimitDate" />
+                <ScalarProperty Name="GovNo" ColumnName="GovNo" />
+                <ScalarProperty Name="ReceiveKind" ColumnName="ReceiveKind" />
+                <ScalarProperty Name="Speed" ColumnName="Speed" />
+                <ScalarProperty Name="GovDate" ColumnName="GovDate" />
+                <ScalarProperty Name="ReceiverNo" ColumnName="ReceiverNo" />
+                <ScalarProperty Name="GovUnit" ColumnName="GovUnit" />
+                <ScalarProperty Name="GovKind" ColumnName="GovKind" />
+                <ScalarProperty Name="CaseNo" ColumnName="CaseNo" />
+                <ScalarProperty Name="isDelete" ColumnName="isDelete" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="DocNo" ColumnName="DocNo" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CaseCustQuery">
+            <EntityTypeMapping TypeName="GssModel.CaseCustQuery">
+              <MappingFragment StoreEntitySet="CaseCustQuery">
+                <ScalarProperty Name="LetterDeptNo" ColumnName="LetterDeptNo" />
+                <ScalarProperty Name="InCharge" ColumnName="InCharge" />
+                <ScalarProperty Name="PDFStatus" ColumnName="PDFStatus" />
+                <ScalarProperty Name="UploadUserID" ColumnName="UploadUserID" />
+                <ScalarProperty Name="FileDI" ColumnName="FileDI" />
+                <ScalarProperty Name="ImportMessage" ColumnName="ImportMessage" />
+                <ScalarProperty Name="MessageDate" ColumnName="MessageDate" />
+                <ScalarProperty Name="MessageNo" ColumnName="MessageNo" />
+                <ScalarProperty Name="Recipient" ColumnName="Recipient" />
+                <ScalarProperty Name="LetterNo" ColumnName="LetterNo" />
+                <ScalarProperty Name="LetterDeptName" ColumnName="LetterDeptName" />
+                <ScalarProperty Name="LetterDate" ColumnName="LetterDate" />
+                <ScalarProperty Name="QueryUserID" ColumnName="QueryUserID" />
+                <ScalarProperty Name="ImportFormFlag" ColumnName="ImportFormFlag" />
+                <ScalarProperty Name="RFileTransactionFileName" ColumnName="RFileTransactionFileName" />
+                <ScalarProperty Name="ROpenFileName" ColumnName="ROpenFileName" />
+                <ScalarProperty Name="CearanceUserName" ColumnName="CearanceUserName" />
+                <ScalarProperty Name="CearanceUserID" ColumnName="CearanceUserID" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CloseDate" ColumnName="CloseDate" />
+                <ScalarProperty Name="ProcessingMode" ColumnName="ProcessingMode" />
+                <ScalarProperty Name="UploadStatus" ColumnName="UploadStatus" />
+                <ScalarProperty Name="AuditStatus" ColumnName="AuditStatus" />
+                <ScalarProperty Name="FileStatus" ColumnName="FileStatus" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="QFileName2" ColumnName="QFileName2" />
+                <ScalarProperty Name="QFileName" ColumnName="QFileName" />
+                <ScalarProperty Name="RecvDate" ColumnName="RecvDate" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="DocNo" ColumnName="DocNo" />
+                <ScalarProperty Name="NewID" ColumnName="NewID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CaseCustMaster">
+            <EntityTypeMapping TypeName="GssModel.CaseCustMaster">
+              <MappingFragment StoreEntitySet="CaseCustMaster">
+                <ScalarProperty Name="LetterDeptNo" ColumnName="LetterDeptNo" />
+                <ScalarProperty Name="InCharge" ColumnName="InCharge" />
+                <ScalarProperty Name="PDFStatus" ColumnName="PDFStatus" />
+                <ScalarProperty Name="UploadUserID" ColumnName="UploadUserID" />
+                <ScalarProperty Name="FileDI" ColumnName="FileDI" />
+                <ScalarProperty Name="ImportMessage" ColumnName="ImportMessage" />
+                <ScalarProperty Name="MessageDate" ColumnName="MessageDate" />
+                <ScalarProperty Name="MessageNo" ColumnName="MessageNo" />
+                <ScalarProperty Name="Recipient" ColumnName="Recipient" />
+                <ScalarProperty Name="LetterNo" ColumnName="LetterNo" />
+                <ScalarProperty Name="LetterDeptName" ColumnName="LetterDeptName" />
+                <ScalarProperty Name="LetterDate" ColumnName="LetterDate" />
+                <ScalarProperty Name="QueryUserID" ColumnName="QueryUserID" />
+                <ScalarProperty Name="ImportFormFlag" ColumnName="ImportFormFlag" />
+                <ScalarProperty Name="RFileTransactionFileName" ColumnName="RFileTransactionFileName" />
+                <ScalarProperty Name="ROpenFileName" ColumnName="ROpenFileName" />
+                <ScalarProperty Name="CearanceUserName" ColumnName="CearanceUserName" />
+                <ScalarProperty Name="CearanceUserID" ColumnName="CearanceUserID" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CloseDate" ColumnName="CloseDate" />
+                <ScalarProperty Name="ProcessingMode" ColumnName="ProcessingMode" />
+                <ScalarProperty Name="UploadStatus" ColumnName="UploadStatus" />
+                <ScalarProperty Name="AuditStatus" ColumnName="AuditStatus" />
+                <ScalarProperty Name="FileStatus" ColumnName="FileStatus" />
+                <ScalarProperty Name="Status" ColumnName="Status" />
+                <ScalarProperty Name="QFileName2" ColumnName="QFileName2" />
+                <ScalarProperty Name="QFileName" ColumnName="QFileName" />
+                <ScalarProperty Name="RecvDate" ColumnName="RecvDate" />
+                <ScalarProperty Name="Version" ColumnName="Version" />
+                <ScalarProperty Name="DocNo" ColumnName="DocNo" />
+                <ScalarProperty Name="NewID" ColumnName="NewID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

@@ -1,0 +1,130 @@
+﻿@model CTBC.CSFS.ViewModels.AgentOriginalInfoViewModel
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black col-xs-14">
+                    <thead>
+                        <tr class="alert-success text-center">
+                            <th></th>
+                            <th>@Lang.csfs_case_no</th>
+                            <th>@Lang.csfs_clientID</th>
+                            <th>@Lang.csfs_clientName</th>
+                            <th>@Lang.csfs_bankID</th>
+                            <th>@Lang.csfs_bank</th>
+                            <th>@Lang.csfs_account</th>
+                            <th>@Lang.csfs_ReturnDate</th>
+                            <th>@Lang.csfs_ReturnBankDate</th>
+                            <th>@Lang.csfs_ReturnPostNo</th>
+                            <th>@Lang.csfs_BankReceiver</th>
+                            <th>@Lang.csfs_ReturnMemo</th>
+                            <th>@Lang.csfs_LendStatus</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.LendDataInfoList != null && Model.LendDataInfoList.Any())
+                        {
+                            foreach (var item in Model.LendDataInfoList)
+                            {
+
+                                <tr>
+
+                                    <td class="text-center">
+                                        <a href="@Url.Action("LendEdit", "AgentOriginalInfo", new {area = "Agent", lendid = item.LendID, nowCaseId = ViewBag.NowCaseId, @radom = DateTime.Now.ToString()})" class=" glyphicon glyphicon-edit fancy800_400"></a>
+                                        @if (item.LendStatus == "1")
+                                        {
+                                            <a class="glyphicon glyphicon-remove" role="menuitem" tabindex="-1" onclick="DeleteLend(@item.LendID)"></a>
+                                        }
+                                    </td>
+
+                                    @*@if (item.LendStatus == "1")
+                                        {
+                                            <td class="text-center">
+                                                <a href="@Url.Action("LendEdit", "AgentOriginalInfo", new {area = "Agent", lendid = item.LendID, nowCaseId = ViewBag.NowCaseId, @radom = DateTime.Now.ToString()})" class=" glyphicon glyphicon-edit fancy800_350"></a>
+                                                <a class="glyphicon glyphicon-remove" role="menuitem" tabindex="-1" onclick="DeleteLend(@item.LendID)"></a>
+                                            </td>
+                                        }
+                                        else
+                                        {
+                                            <td class="text-center">
+                                                <a href="@Url.Action("LendEdit", "AgentOriginalInfo", new {area = "Agent", lendid = item.LendID, nowCaseId = ViewBag.NowCaseId, @radom = DateTime.Now.ToString()})" class=" glyphicon glyphicon-edit fancy800_350"></a>
+                                            </td>
+                                        }*@
+                                     <td class="text-center"> @item.CaseNo</td>
+                                    <td class="text-center"> @item.ClientID</td>
+                                    <td class="text-center">@item.Name</td>
+                                    <td class="text-center">@item.BankID</td>
+                                    <td class="text-center">@item.Bank</td>
+                                    <td>@item.Account</td>
+                                    <td class="text-center">@item.ReturnDate</td>
+                                    <td class="text-center">@item.ReturnBankDate</td>
+                                    <td class="text-center">@item.ReturnPostNo</td>
+                                    <td class="text-center">@item.BankReceiver</td>
+                                    <td class="text-center">@item.ReturnMemo</td>
+                                    @if (item.LendStatus == "1")
+                                    {
+                                        <td class="text-center">
+                                            @Lang.csfs_has_return
+                                        </td>
+                                    }
+                                    else
+                                    {
+                                        <td class="text-center">
+                                            @Lang.csfs_in_reading
+                                        </td>
+                                    }
+                                    @Html.HiddenFor(m => m.LendDataInfo.LendStatus, new { @id="hidStatusFor"})
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @*@Html.Hidden("defaultSortColumn", Model.SortExpression)
+                    @Html.Hidden("defaultSort", Model.SortDirection)*@
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+@Html.Hidden("ConfirmDelMsg", Lang.csfs_confirm_delete)
+<script language="javascript">
+    //* 點擊刪除
+    function DeleteLend(lendId) {
+        jConfirm($("#ConfirmDelMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+            if (bFlag === true) {
+
+                $.blockUI();
+                $.ajax({
+                    url: $("#DeleteLendBackUrl").val(),
+                    type: "Post",
+                    cache: false,
+                    data: { LendId: lendId },
+                    error: function () {
+                        jAlertError($("#LoadErrorMsg").val());
+                        $.unblockUI();
+                    },
+                    success: function (data) {
+                        if (data) {
+                            jAlertSuccess($("#DeleteSucMsgUrl").val(), function () { $.AgentOriginalInfo.GetQueryResultLendCase(); $.AgentOriginalInfo.GetQueryResultLend(); });
+                        } else {
+                            jAlertError($("#ReturnFailMsg").val());
+                            $.unblockUI();
+                        }
+                    }
+                });
+            }
+        })
+    }
+
+</script>

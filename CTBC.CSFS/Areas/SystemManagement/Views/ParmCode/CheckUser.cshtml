@@ -1,0 +1,214 @@
+﻿@model CTBC.CSFS.Models.PARMCode
+
+@{
+    ViewBag.Title = "CheckUser";
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+
+<div class="margin">
+    <div class="box box-primary">
+        <div class="box-header">
+            <h3 class="box-title">@Lang.csfs_pm_UsrPswd</h3>
+            @using (Html.BeginForm("CheckUser", "ParmCode", new { area = "SystemManagement" }, FormMethod.Post, new { id = "frmCheckUser", @class = "form-horizontal" }))
+            {
+            <div>
+                <div class="box-header"></div>
+                <div style="margin-left:5%">
+                    <table>
+                        <tr>
+                            <td>@Lang.csfs_pm_usrLDAP&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                            <td><input type="text" id="usrLDAP" name="usrLDAP" class="tx2" /></td>
+                            <td rowspan="2">&nbsp;&nbsp;&nbsp;&nbsp;@*<input id="btnLDAP" value="@Lang.csfs_pm_CheckUser" type="button" class="btn btn-primary btn-xs" />*@</td>
+                        </tr>
+                        <tr>
+                            <td>@Lang.csfs_pm_psLDAP</td>&nbsp;&nbsp;&nbsp;&nbsp;
+                            <td><input type="password" id="psLDAP" name="psLDAP" class="tx2" /></td>
+                        </tr>
+                        <tr><td style="height:24px"></td></tr>
+                        <tr>
+                            <td>@Lang.csfs_pm_usrRACF</td>
+                            <td><input type="text" id="usrRACF" name="usrRACF" class="tx2" /></td>
+                            <td rowspan="2">&nbsp;&nbsp;&nbsp;&nbsp;<input id="btnLDAP" value="@Lang.csfs_pm_CheckUser" type="button" class="btn btn-primary btn-xs" /></td>
+                        </tr>
+                        <tr>
+                            <td>@Lang.csfs_pm_psRACF</td>
+                            <td><input type="password" id="psRACF" name="psRACF" class="tx2" /></td>
+                        </tr>
+                    </table>
+                    <br />
+                </div>
+                <div style="text-align: right;">
+                    <button id="btnSave" disabled type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+                    <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+                </div>
+            </div>
+            @Html.HiddenFor(m => m.CodeMemo, new { @id = "txtCodeMemo" })
+            @Html.HiddenFor(m => m.CodeUid, new { @id = "txtCodeUid" })
+            <input type="hidden" name="LDAPResult" id="LDAPResult" value="" />
+            @*<input type="hidden" name="RACFResult" id="RACFResult" value="" />*@
+            }
+        </div>
+    </div>
+</div>
+@Html.Hidden("InputMsg", Lang.csfs_pm_UsrPswd)
+@Html.Hidden("SaveSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("SaveFailMsg", Lang.csfs_save_fail)
+@Html.Hidden("GetLDAPAuthorizedUrl", Url.Action("GetLDAPAuthorized", "ParmCode", new { area = "SystemManagement" }))
+@*@Html.Hidden("GetRACFAuthorizedUrl", Url.Action("GetRACFAuthorized", "ParmCode", new { area = "SystemManagement" }))*@
+@Html.Hidden("GetEditUrl", Url.Action("Edit", "ParmCode", new { area = "SystemManagement" }))
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script src="~/Scripts/jquery.alerts-vsdoc.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#btnLDAP").click(function () { return btnLDAPClick(); });
+        //$("#btnRACF").click(function () { return btnRACFClick(); });
+        $("#btnSave").click(function () { return btnSaveClick(); });
+        $("#btnCancel").click(function () { return btnCancelsClick(); });
+
+    });
+
+    function btnLDAPClick() {
+        var msg = "";
+        var usrLDAP = $("#usrLDAP").val();
+        var psLDAP = $("#psLDAP").val();
+        var usrRACF = $("#usrRACF").val();
+        var psRACF = $("#psRACF").val();
+        //var usr = $("#usrLDAP").val();
+        //var pswrd = $("#psLDAP").val();
+        //var ldap = $("#LDAPResult").val();
+        //var racf = $("#RACFResult").val();
+        //if (usr.length <= 0) {
+        //    msg = $("#InputMsg").val();
+        //}
+        //if (pswrd.length <= 0) {
+        //    msg = $("#InputMsg").val();
+        //}
+        if (usrLDAP.length <= 0 || psLDAP.length <= 0 || usrRACF.length <= 0 || psRACF.length <= 0) {
+            msg = $("#InputMsg").val();
+        }
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        } else {
+            $.ajax({
+                type: "post",
+                url: $("#GetLDAPAuthorizedUrl").val(),
+                data: { userL: usrLDAP, passwordL: psLDAP, userR: usrRACF, passwordR: psRACF },
+                dataType: "json",
+                success: function (data) {
+                    if (data.status == "true") {
+                        $("#LDAPResult").val("true");
+                        //ldap = "true";
+                        //$("#LDAPResult").val(ldap);
+                        //if(ldap == "true" && racf == "true"){
+                            $("#btnSave").removeAttr("disabled");
+                        //}
+                        jAlertSuccess(data.status + " , " + data.msg);
+                    }
+                    else {
+                        jAlertError(data.status + " , " + data.msg);
+                    }
+                }
+            });
+        }
+    }
+
+    //function btnRACFClick() {
+    //    var msg = "";
+    //    var usr = $("#usrRACF").val();
+    //    var pswrd = $("#psRACF").val();
+    //    var ldap = $("#LDAPResult").val();
+    //    var racf = $("#RACFResult").val();
+    //    if (usr.length <= 0) {
+    //        msg = $("#InputMsg").val();
+    //    }
+    //    if (pswrd.length <= 0) {
+    //        msg = $("#InputMsg").val();
+    //    }
+    //    if (msg.length > 0) {
+    //        jAlertError(msg);
+    //        return false;
+    //    } else {
+    //        $.ajax({
+    //            type: "post",
+    //            url: $("#GetRACFAuthorizedUrl").val(),
+    //            data: { user: usr, password: pswrd },
+    //            dataType: "json",
+    //            success: function (data) {
+    //                if (data.status == "true") {
+    //                    racf = "true";
+    //                    $("#RACFResult").val(racf);
+    //                    if (ldap == "true" && racf == "true") {
+    //                        $("#btnSave").removeAttr("disabled");
+    //                    }
+    //                    jAlertSuccess(data.status + "," + data.msg);
+    //                }
+    //                else {
+    //                    jAlertError(data.status + "," + data.msg);
+    //                }
+    //            }
+    //        });
+    //    }
+    //}
+
+    function btnSaveClick() {
+        var msg = "";
+        if ($("#usrLDAP").val().length <= 0) {
+            msg = $("#InputMsg").val();
+        }
+        if ($("#psLDAP").val().length <= 0) {
+            msg = $("#InputMsg").val();
+        }
+        if ($("#usrRACF").val().length <= 0) {
+            msg = $("#InputMsg").val();
+        }
+        if ($("#psRACF").val().length <= 0) {
+            msg = $("#InputMsg").val();
+        }
+        //* 有必填檢核錯誤
+        if (msg.length > 0) {
+            jAlertError(msg);
+            return false;
+        }
+        //*未檢核帳密
+        var ldapCheck = $("#LDAPResult").val();
+        if (ldapCheck != "true") {
+            jAlertError("未檢核LDAP及RACF的帳密");
+            return false;
+        }
+        var usrLDAP = $("#usrLDAP").val();
+        var psLDAP = $("#psLDAP").val();
+        var usrRACF = $("#usrRACF").val();
+        var psRACF = $("#psRACF").val();
+        var codememo = usrLDAP + "," + psLDAP + "," + usrRACF + "," + psRACF;
+        $('#txtCodeMemo').val(codememo);
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmCheckUser").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmCheckUser").serialize(),
+            dataType: "json",
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data.ReturnCode === "1") {//修改成功
+                    jAlertSuccess($("#SaveSuccessMsg").val(), function() { parent.location.href = $("#GetEditUrl").val() + "?id=" + $("#txtCodeUid").val(); });
+                    //parent.$.colorbox.close();
+                } else {//修改失敗
+                    jAlertError($("#SaveFailMsg").val());
+                    $.unblockUI();
+                }
+            }
+        });
+        return false;
+    }
+
+    function btnCancelsClick() {
+        parent.$.colorbox.close();
+    }
+</script>

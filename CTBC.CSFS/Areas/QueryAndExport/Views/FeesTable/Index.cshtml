@@ -1,0 +1,347 @@
+﻿@model CTBC.CSFS.Models.CaseMaster
+
+@{
+    ViewBag.Title = Lang.csfs_query_fee;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<div class="alert alert-danger alert-dismissable">
+        <i class="fa fa-ban"></i>
+        <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
+        <b>Alert!</b>本功能需求確認中...
+    </div>*@
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "FeesTable", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_name</td>
+                        <td class="col-md-5">
+                            @*@Html.DropDownListFor(m => m.GovKind, (IEnumerable<SelectListItem>)ViewBag.GOV_KINDList, Lang.csfs_select, new { @id = "ddlGOV_KIND1" })*@
+                            @Html.TextBoxFor(m => m.GovUnit, new { @id = "txtGovUnit1", @MaxLength = "200" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-5" colspan="3">
+                            @Html.TextBoxFor(m => m.CaseNo, new { @id = "txtCaseNo" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovDateStart, new { @id = "txtGovNo1", data_datepicker = "true" })
+                            ~
+                            @Html.TextBoxFor(m => m.GovDateEnd, new { @id = "txtGovNo2", data_datepicker = "true" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_speed</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, Lang.csfs_select, new { @id = "ddlSpeed" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_receive_kind</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.ReceiveKind, (IEnumerable<SelectListItem>)ViewBag.ReceiveKindList, Lang.csfs_select, new { @id = "ddlReceiveKind" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_no</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovNo, new { @id = "txtGovNo" })
+                        </td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_agnet</td>
+                        <td class="col-md-2">
+                            @*@Html.TextBoxFor(m => m.AgentUser, new { })*@
+                            @Html.DropDownListFor(m => m.AgentUser, (IEnumerable<SelectListItem>)ViewBag.AgentUserList, Lang.csfs_select, new { @id = "ddlAgentUser" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_senddate</td>
+                        <td class="col-md-2" colspan="3">
+                            @Html.TextBoxFor(m => m.SendDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.SendDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_payStatus</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.PayStatus, (IEnumerable<SelectListItem>)ViewBag.PayStatusList, Lang.csfs_select, new { })
+                        </td>
+                        <td></td>
+                        <td></td>
+                        @Html.HiddenFor(m => m.buttontype, new { @id = "hidType" })
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_hangDate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.HangingDateStart, new {  data_datepicker = "true" })
+                            ~
+                            @Html.TextBoxFor(m => m.HangingDateEnd, new {  data_datepicker = "true" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_chargeDate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.ChargeOffsDateStart, new {  data_datepicker = "true" })
+                            ~
+                            @Html.TextBoxFor(m => m.ChargeOffsDateEnd, new { data_datepicker = "true" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnHangingDate" type="button" class="btn btn-primary btn-xs">@Lang.csfs_setHangingDate</button>
+            <button id="btnRemittance" type="reset" class="btn btn-default btn-xs">@Lang.csfs_debtexcel</button>
+        </div>
+    }
+</div>
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "FeesTable", new { area = "QueryAndExport" })">
+
+</div>
+<div class="modal fade" id="modalHanging" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@Lang.csfs_setHangingDate</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-1">掛帳日期</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.HangingDate, new { data_datepicker = "true", @id = "txtHangingDate" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalCharge" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@Lang.csfs_chareoff</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-1">@Lang.csfs_chargeDate</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.ChargeOffsDate, new { data_datepicker = "true", @id = "txtChargeDate" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1">@Lang.csfs_chargeAmount</td>
+                            <td class="col-md-2">
+                                @Html.TextBoxFor(m => m.ChargeOffsAmount, new { @id = "txtChargeAmount" })
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="col-md-1">@Lang.csfs_memo</td>
+                            <td class="col-md-2" colspan="2">
+                                @Html.TextAreaFor(m => m.Memo, new { @id = "txtMemo", @class = "col-xs-8 no-padding", @maxlength = 100 })
+                            </td>
+                        </tr>
+                        @Html.HiddenFor(m => m.CaseId, new { @id = "txtCaseId" })
+                        @Html.HiddenFor(m => m.PayeeId, new { @id = "txtPayeeId" })
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSubmitCharge">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("SetHangingDateUrl", Url.Action("SetHangingDate", "FeesTable", new { area = "QueryAndExport" }))
+@Html.Hidden("SetChargeDateUrl", Url.Action("SetChargeDate", "FeesTable", new { area = "QueryAndExport" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("SaveSuccessMsg", Lang.csfs_save_ok)
+@Html.Hidden("SaveFailMsg", Lang.csfs_save_fail)
+@Html.Hidden("SaveConfirmMsg", Lang.csfs_issave_ok)
+@Html.Hidden("HidDate", (string)ViewBag.Date)
+
+
+@section scripts {
+    @* 來文機關聯動 start*@
+    <script src="~/Scripts/bootstrap-typeahead.js"></script>
+    @Html.Hidden("GetGovNameUrl", Url.Action("GetGovNameByGoveKind", "Home", new { area = "" }))
+    @* 來文機關聯動 end *@
+
+    <script type="text/javascript">
+        $("#hidType").val("");
+        $.CSFS.bindGovKindAndUnit1("txtGovUnit1");
+        $("#btnQuery").click(function() { return btnQueryClick(); });
+        $("#btnHangingDate").click(function() { return btnHangingDateClick(); });
+        $("#btnSubmit").click(function() { return btnSubmitClick(); });
+        $("#btnSubmitCharge").click(function() { return btnSubmitChargeClick(); });
+        $("#btnRemittance").click(function() { return btnExcelClick(); });
+
+        //*查詢
+        function btnQueryClick() {
+            $.ajax({
+                url: $("#frmQuery").attr("action"),
+                type: "Post",
+                cache: false,
+                data: $("#frmQuery").serialize(),
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    $("#divResult").html(data).show();
+                    $.unblockUI();
+                    $("#querystring").val($("#frmQuery").serialize());
+                }
+            });
+        }
+
+        //*設定掛帳日
+        function btnHangingDateClick() {
+            var iLen = 0;
+            var strKey = "";
+            $(".checkfile").each(function () {
+                if ($(this).prop("checked") === true) {
+                    iLen = iLen + 1;
+                    strKey = strKey + $(this).val() + ",";
+                }
+            });
+            if (iLen <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+            $("#txtHangingDate").val($("#HidDate").val());
+            $("#modalHanging").modal();
+        }
+
+        //*掛帳日頁面儲儲存存
+        function btnSubmitClick() {
+            var aryCaseId = new Array();
+            $(".checkfile:checked").each(function () {
+                aryCaseId.push($(this).val());//向数组中添加元素
+            });
+            var aryCaseIdNew = new Array();
+            for (var i = 0; i < aryCaseId.length; i++) {
+                if (aryCaseId[i] != null && aryCaseId[i] != "") {
+                    aryCaseIdNew.push(aryCaseId[i]);
+                }
+            }
+            var strId = aryCaseIdNew.join(',');
+            if (strId.length <= 0) {
+                jAlertError($("#SelectOneMsg").val());
+                return;
+            }
+
+            jConfirm($("#SaveConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#SetHangingDateUrl").val(),
+                        async: false,
+                        data: { strIds: strId, HangingDate: $("#txtHangingDate").val() },
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                //jAlertSuccess($("#SaveSuccessMsg").val(), function () {
+                                    $("#modalHanging").modal("hide");
+                                    $("#txtHangingDate").val("");
+                                    $("#hidType").val("");
+                                    btnQueryClick();
+                                //});
+                            } else {
+                                jAlertError(data.ReturnMsg);
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        //*銷帳頁面初始值
+        $("#modalCharge").on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var recipient = button.data('valuesinite');
+            var recipient1 = button.data('valuesinite1');
+            var recipient2 = button.data('valuesinite2');
+            var recipient3 = button.data('valuesinite3');
+            var recipient4 = button.data('valuesinite4');
+            var recipient5 = button.data('valuesinite5'); 
+            var modal = $(this);
+            modal.find("#txtChargeDate").val(recipient4);
+            modal.find("#txtCaseId").val(recipient);
+            modal.find("#txtPayeeId").val(recipient1);
+            modal.find("#txtChargeAmount").val(recipient2);
+            modal.find("#txtHangingAmount").val(recipient3);
+            modal.find("#txtMemo").val(recipient5);
+        });
+
+        //*銷帳頁面儲存
+        function btnSubmitChargeClick() {
+            jConfirm($("#SaveConfirmMsg").val(), $("#j_confirm_header").val(), function (bFlag) {
+                if (bFlag === true) {
+                    $.blockUI();
+                    $.ajax({
+                        type: "POST",
+                        traditional: true,
+                        url: $("#SetChargeDateUrl").val(),
+                        async: false,
+                        data: { CaseId: $("#txtCaseId").val(), PayeeId: $("#txtPayeeId").val(), ChargeDate: $("#txtChargeDate").val(), ChargeAmount: $("#txtChargeAmount").val(), Memo: $("#txtMemo").val()},
+                        error: function () {
+                            jAlertError($("#LoadErrorMsg").val());
+                            $.unblockUI();
+                        },
+                        success: function (data) {
+                            if (data.ReturnCode === "1") {
+                                //jAlertSuccess($("#SaveSuccessMsg").val(), function () {
+                                    $("#modalCharge").modal("hide");
+                                    $("#txtHangingDate").val("");
+                                    $("#txtChargeAmount").val("");
+                                    $("#txtMemo").val("");
+                                    $("#hidType").val("");
+                                    btnQueryClick();
+                                //});
+                            } else {
+                                jAlertError($("#SaveFailMsg").val());
+                                $.unblockUI();
+                            }
+                        }
+                    });
+                }
+            });
+        }
+
+        //*匯出
+        function btnExcelClick() {
+            $("#hidType").val("excel");
+            $("#frmQuery").submit();
+        }
+
+    </script>
+}

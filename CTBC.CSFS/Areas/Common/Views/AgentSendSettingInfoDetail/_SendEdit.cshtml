@@ -1,0 +1,293 @@
+﻿@model CTBC.CSFS.ViewModels.CaseSendSettingCreateViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_document_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentAccountInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_account_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentMeetInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_meet_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentOriginalInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_original_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentDepartmentAccess", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_department_access</a></li>
+        <li class="active"><a href="@Url.Action("Index", "AgentSendSettingInfo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_sendsetting_info</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseHistory", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_case_history</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseCalculator", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_case_calculator</a></li>
+        <li class=""><a href="@Url.Action("Index", "AgentCaseMemo", new {area = "Agent", caseId = ViewBag.CaseId})">@Lang.csfs_agent_case_memo</a></li>
+        @Html.GetBackButtonInTab()
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel1">
+            <div class="box box-primary">
+                <div class="box-header">
+                    <i class="fa fa-edit"></i>
+                    <h3 class="box-title">@Lang.csfs_modify</h3>
+                </div>
+                @using (Html.BeginForm("_SendEdit", "AgentSendSettingInfo", new {area = "Agent"}, FormMethod.Post, new {id = "frmSendEdit", @class = "form-horizontal"}))
+                {
+                    <div class="box-body">
+                        <table class="table text-black sort">
+                            <tbody>
+                                <tr>
+                                    <td>@Lang.csfs_model</td>
+                                    <td colspan="3">
+                                        @Html.DropDownListFor(m => m.Template, (IEnumerable<SelectListItem>)ViewBag.TemplateList, new { @id = "ddlTemplate" })
+                                    </td>
+                                </tr>
+                            <tr>
+                                <td>@Lang.csfs_senddate</td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.SendDate, new {data_datepicker = "true", @Value = Model.SendDate.ToString("yyy/MM/dd")})
+
+                                </td>
+                                <td>@Lang.csfs_sendword1</td>
+                                <td>
+                                    @Html.TextBoxFor(m => m.SendWord, new { @MaxLength = "60", @id = "SendWord", @disabled = "true" })
+                                    @Lang.csfs_send_word1 @Html.TextBoxFor(m => m.SendNo, new {@id = "SendNo", @MaxLength = "60",@disabled = "true"})@Lang.csfs_send_word2
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Lang.csfs_case_speed</td>
+                                <td>
+                                    @Html.DropDownListFor(m => m.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, Lang.csfs_select, new { @id = "ddlSpeed", @style = "width:56%" })
+                                </td>
+                                <td>@Lang.csfs_isophcnic</td>
+                                <td>@Html.DropDownListFor(m => m.Security, (IEnumerable<SelectListItem>)ViewBag.SecurityList, Lang.csfs_select, new { @id = "ddlSecurity", @style = "width:28%" })</td>
+                            </tr>
+                            <tr>
+                                <td>@Lang.csfs_case_attachment</td>
+                                <td colspan="3">@Html.TextAreaFor(m => m.Attachment, new {@id = "Attachment", @rows = "1", @class = "col-xs-12 no-padding"})</td>
+                            </tr>
+                            <tr>
+                                <td>@Lang.csfs_gist</td>
+                                <td colspan="3">
+                                    @Html.TextAreaFor(m => m.Subject, new {@id = "Subject", @rows = "1", @class = "col-xs-12 no-padding"})
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>@Lang.csfs_logon_desc</td>
+                                <td colspan="3">
+                                    @Html.TextAreaFor(m => m.Description, new {@id = "Description", @rows = "15", @class = "col-xs-12 no-padding"})
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Lang.csfs_original
+                                    <a href="@Url.Action("QueryGovAddress", "Home", new {area = "", CaseId = ViewBag.CaseId, @radom = DateTime.Now.ToString()})"
+                                       class="fancy800_600 btn btn-default btn-xs">
+                                        <li class="fa fa-search" id="aQueryReceiver"></li>
+                                    </a>
+                                </td>
+                                <td colspan="3">
+                                    <table class="table table-bordered table-striped text-black">
+                                        <thead>
+                                        <tr class="alert-success text-center ">
+                                            <th class="col-xs-1">@Lang.csfs_delete</th>
+                                            <th class="col-xs-3">@Lang.csfs_column_name</th>
+                                            <th class="col-xs-6">@Lang.csfs_address</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="ReceiveTbody">
+                                        @if (Model != null && Model.ReceiveList != null && Model.ReceiveList.Any())
+                                        {
+                                            for (int i = 0; i < Model.ReceiveList.Count; i++)
+                                            {
+                                                <tr data-seizureid="@Model.ReceiveList[i].SerialID">
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.ReceiveList[i].GovName, new {@id = "GovName" + i})
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.ReceiveList[i].GovAddr, new { @id = "GovAddr" + i })
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    @Lang.csfs_currency
+                                    <a href="@Url.Action("QueryGovAddress", "Home", new {area = "", CaseId = ViewBag.CaseId, @radom = DateTime.Now.ToString()})"
+                                       class="fancy800_600 btn btn-default btn-xs">
+                                        <li class="fa fa-search" id="aQueryCc"></li>
+                                    </a>
+                                </td>
+                                <td colspan="3">
+                                    <table class="table table-bordered table-striped text-black">
+                                        <thead>
+                                        <tr class="alert-success text-center ">
+                                            <th class="col-xs-1">@Lang.csfs_delete</th>
+                                            <th class="col-xs-3">@Lang.csfs_column_name</th>
+                                            <th class="col-xs-6">@Lang.csfs_address</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody id="CcTbody">
+                                        @if (Model != null && Model.CcList != null && Model.CcList.Any())
+                                        {
+                                            for (int i = 0; i < Model.CcList.Count; i++)
+                                            {
+                                                <tr data-seizureid="@Model.CcList[i].SerialID">
+                                                    <td class="text-center">
+                                                        <button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button>
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.CcList[i].GovName, new { @id = "GovName" + i })
+                                                    </td>
+                                                    <td>
+                                                        @Html.TextBoxFor(m => m.CcList[i].GovAddr, new { @id = "GovAddr" + i })
+                                                    </td>
+                                                </tr>
+                                            }
+                                        }
+                                        </tbody>
+                                    </table>
+                                </td>
+                            </tr>
+                            @Html.HiddenFor(m => m.SerialId)
+                            @Html.HiddenFor(m => m.CaseId)
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="box-footer text-center">
+                        <button id="btnSaveEdit" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confim</button>
+                        <a class="btn btn-default btn-xs" href="@Url.Action("Index", "AgentSendSettingInfo", new {area = "Agent", caseId = Model.CaseId})">@Lang.csfs_cancel</a>
+                    </div>
+                }
+                br
+            </div>
+        </div>
+    </div>
+</div>
+
+
+        @Html.Hidden("EditSuccessMsg", Lang.csfs_edit_ok)
+        @Html.Hidden("EditFailMsg", Lang.csfs_edit_fail)
+        @Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+        @Html.Hidden("SendDateText", Lang.csfs_senddate)
+        @Html.Hidden("SendWordText", Lang.csfs_sendword)
+        @Html.Hidden("SendNoText", Lang.csfs_sendno)
+        @Html.Hidden("SpeedText", Lang.csfs_case_speed)
+        @Html.Hidden("SecurityText", Lang.csfs_isophcnic)
+        @Html.Hidden("SubjectText", Lang.csfs_gist)
+        @Html.Hidden("OriginalText", Lang.csfs_original)
+        @Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+        @Html.Hidden("GetSubjectUrl", Url.Action("GetSubjectAndDescription", "AgentSendSettingInfo", new { area = "Agent" }))
+
+        <script src="~/Scripts/jquery-2.1.3.min.js"></script>
+        <script type="text/javascript">
+
+            var nowTbody = "ReceiveTbody";
+            jQuery(document).ready(function () {
+                $("#btnSaveEdit").click(function () { return btnSaveEditClick(); });
+                $("#aQueryReceiver").click(function () { nowTbody = "ReceiveTbody"; });
+                $("#aQueryCc").click(function () { nowTbody = "CcTbody"; });
+                Rebind();
+            });
+
+            //* 修改
+            function btnSaveEditClick() {
+                trimAllInput();
+                if (!ajaxValidate()) {
+                    return false;
+                }
+
+                $.blockUI();
+                $.ajax({
+                    url: $("#frmSendEdit").attr("action"),
+                    type: "Post",
+                    cache: false,
+                    data: $("#frmSendEdit").serialize(),
+                    dataType: "json",
+                    error: function () {
+                        jAlertError($("#LoadErrorMsg").val());
+                        $.unblockUI();
+                    },
+                    success: function (data) {
+                        if (data.ReturnCode === "1") {
+                            jAlertSuccess($("#EditSuccessMsg").val(), function () { location.href = location.href });
+                        } else {
+                            jAlertError($("#EditFailMsg").val());
+                            $.unblockUI();
+                        }
+
+                    }
+                });
+                return false;
+            }
+
+            function ajaxValidate() {
+                var newLine = "<br/>";
+                var msg = "";
+                if ($("#SendDate").val().length <= 0) {
+                    msg = msg + $.validator.format($("#PlzInput").val(), $("#SendDateText").val()) + newLine;
+                } else if (!checkIsValidDate($("#SendDate").val())) {
+                    msg = msg + $.validator.format($("#PlzCorrectFormat").val(), $("#SendDateText").val()) + newLine;
+                }
+                if ($("#SendWord").val().length <= 0) {
+                    msg = msg + $.validator.format($("#PlzInput").val(), $("#SendWordText").val()) + newLine;
+                }
+                if ($("#SendNo").val().length <= 0) {
+                    msg = msg + $.validator.format($("#PlzInput").val(), $("#SendNoText").val()) + newLine;
+                }
+                if ($("#ddlSpeed").val().length <= 0) {
+                    msg = msg + $.validator.format($("#PlzInput").val(), $("#SpeedText").val()) + newLine;
+                }
+                if ($("#ddlSecurity").val().length <= 0) {
+                    msg = msg + $.validator.format($("#PlzInput").val(), $("#SecurityText").val()) + newLine;
+                }
+                if ($("#Subject").val().length <= 0) {
+                    msg = msg + $.validator.format($("#PlzInput").val(), $("#SubjectText").val()) + newLine;
+                }
+                if (msg.length > 0) {
+                    jAlertError(msg);
+                    return false;
+                }
+                return true;
+            }
+
+            function trimAllInput() {
+                $(":input[type='text']").each(function () {
+                    $(this).val($.trim($(this).val()));
+                });
+            }
+
+            function addTr(govName, govAddr) {
+                var str = '<tr><td class="text-center"><button type="button" class="btn btn-default btn-xs js-delete"><i class="glyphicon glyphicon-minus"></i></button></td>'
+                    + '<td><input id="GovName{2}" name="ReceiveList[{2}].GovName" type="text" value="{0}"></td>'
+                    + '<td><input id="GovAddr{2}" name="ReceiveList[{2}].GovAddr" type="text" value="{1}"></td></tr>';
+                var tr = $($.validator.format(str, new Array(govName, govAddr, $("#" + nowTbody + " tr").length)));
+                tr.appendTo("#" + nowTbody);
+                Rebind();
+            }
+            function Rebind() {
+                $("#ReceiveTbody").find("[id^=GovName]").each(function (i) {
+                    $(this).attr("name", "ReceiveList[" + i + "].GovName");
+                });
+                //* 重新給Id編號
+                $("#ReceiveTbody").find("[id^=GovAddr]").each(function (i) {
+                    $(this).attr("name", "ReceiveList[" + i + "].GovAddr");
+                });
+                $("#CcTbody").find("[id^=GovName]").each(function (i) {
+                    $(this).attr("name", "CcList[" + i + "].GovName");
+                });
+                //* 重新給Id編號
+                $("#CcTbody").find("[id^=GovAddr]").each(function (i) {
+                    $(this).attr("name", "CcList[" + i + "].GovAddr");
+                });
+
+                //* 已選擇中的移除
+                $("#ReceiveTbody .js-delete").unbind("click").click(function () { return btnRemoveClick(this); });
+                $("#CcTbody .js-delete").unbind("click").click(function () { return btnRemoveClick(this); });
+
+            }
+            function btnRemoveClick(obj) {
+                $(obj).parent().parent().remove();
+                Rebind();
+            }
+
+        </script>

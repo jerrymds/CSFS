@@ -1,0 +1,218 @@
+﻿@model CTBC.CSFS.Models.CollectionToSign
+
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_collectiontoassignment;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "CollectionToAssignment", new { area = "Collection" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                        <td class="col-md-5" colspan="5">
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, Lang.csfs_select, new { @id = "ddlCaseKind" })
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                        </td>
+                    </tr>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_unit</td>
+                        <td class="col-md-5">
+                            @*@Html.DropDownListFor(m => m.GovKind, (IEnumerable<SelectListItem>) ViewBag.GOV_KINDList, Lang.csfs_select, new {@id = "ddlGOV_KIND"})*@
+                            @Html.TextBoxFor(m => m.GovUnit, new { @id = "txtGovUnit", @MaxLength = "200" })
+
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_no</td>
+                        <td class="col-md-5" colspan="3">
+                            @Html.TextBoxFor(m => m.CaseNo, new { @id = "CaseNo" })
+                        </td>
+
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.GovDateS, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.GovDateE, new { data_datepicker = "true" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_speed</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, Lang.csfs_select, new { @id = "ddlSpeed", @style = "width:100%" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_receive_kind</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.ReceiveKind, (IEnumerable<SelectListItem>)ViewBag.ReceiveKindList, Lang.csfs_select, new { @id = "ddlReceiveKind", @style = "width:100%" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_gov_no</td>
+                        <td class="col-md-5">@Html.TextBoxFor(m => m.GovNo, new { @MaxLength = "100" })</td>
+                        <td class="col-md-1 text-right">@Lang.csfs_agnet</td>
+                        <td class="col-md-2">
+                              @*20181107 緊急 adam update start*@
+                                @Html.TextBoxFor(m => m.AgentUser, new { @MaxLength = "100" })
+                        </td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-2"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_date</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CreatedDateS, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.CreatedDateE, new { data_datepicker = "true" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_unit</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.Unit, new { @MaxLength = "100" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_keyin_person</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.Person, new { @MaxLength = "100" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnAssignShow" type="button" class="btn btn-primary btn-xs">@Lang.csfs_assign</button>
+            <button id="btnReturn" type="button" class="btn btn-primary btn-xs">@Lang.csfs_return</button>
+            <button id="btnDetails" type="button" class="btn btn-primary btn-xs">@Lang.csfs_agent_document_info</button>
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "CollectionToAssignment", new {area = "Collection"})">
+</div>
+
+<div class="modal fade" id="modalAgent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">@Lang.csfs_query</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-2 text-center">@Lang.csfs_bu_unit</td>
+                            <td class="col-md-10">
+                                @*<select id="ddlAssignDept"></select>*@
+                                @Html.DropDownListFor(m => m.Department, (IEnumerable<SelectListItem>)ViewBag.Department, new { @id = "Department" })
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            <table id="query_table" class="table table-bordered table-striped text-black">
+                <thead>
+                    <tr class="alert-success text-center ">
+                        <th class="col-md-2">@Lang.csfs_select_noline</th>
+                        <th class="col-md-10">@Lang.csfs_agnet</th>
+                    </tr>
+                </thead>
+                <tbody id ="tbobyAgentList"></tbody>
+            </table>
+        </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAssignSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modalUnits" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_query</h4>
+            </div>
+            <div class="modal-body">
+                <table class="table-noborder col-md-12">
+                    <tbody>
+                        <tr>
+                            <td class="col-md-2 text-right">@Lang.csfs_gov_unit</td>
+                            <td class="col-md-10" colspan="5">
+                                @Html.DropDownList("ddlGOV_KIND", (IEnumerable<SelectListItem>)ViewBag.GOV_KINDList, Lang.csfs_select, new { @id = "ddlGOV_KIND" })
+                                <select id="ddlGovUnit" name="GovUnit">
+                                    <option value="">@Lang.csfs_select</option>
+                                </select>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnSelectGovUnit">@Lang.csfs_btnconfirmOk</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+@*退回原因*@
+<div class="modal fade" id="modalReturn" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">@Lang.csfs_return</h4>
+            </div>
+            <div class="modal-body">
+                @Lang.csfs_return1:
+                @Html.TextAreaFor(m => m.ReturnReason, new { @id = "txtReturnReason", @rows = "15", @class = "col-xs-12 no-padding", @MaxLength = "50" })
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnReturnSubmit">@Lang.csfs_save</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">@Lang.csfs_cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@Html.Hidden("NowPage", "CollectionToAssignQuery")
+@Html.Hidden("ReturnUrl", Url.Action("Return", "CollectionToAssignment", new { area = "Collection" }))
+@Html.Hidden("AssignUrl", Url.Action("AssignAgent", "CollectionToAssignment", new { area = "Collection" }))
+@Html.Hidden("DetailsUrl", Url.Action("Index", "CollectionDocumentInfo", new { area = "Collection" }))
+@Html.Hidden("GetCaseKind2Url", Url.Action("ChangCaseKind1", "CollectionToAssignment", new { area = "Collection" }))
+@Html.Hidden("isQuery", (string)ViewBag.isQuery) 
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+@Html.Hidden("CaseKind2Query", (string)ViewBag.CaseKind2Query)
+@Html.Hidden("CaseKindQuery", (string)ViewBag.CaseKindQuery)
+@Html.Hidden("isAutoDispatch", (string)ViewBag.isAutoDispatch)
+@Html.Hidden("isAutoDispatchFS", (string)ViewBag.isAutoDispatchFS)
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("SelectOneMsg1", Lang.csfs_select_only_one)
+@Html.Hidden("ReturnConfirmMsg", Lang.csfs_return_confirm)
+@Html.Hidden("ReturnFailMsg", Lang.csfs_return_fail)
+@Html.Hidden("ReturnSuccessMsg", Lang.csfs_return_ok)
+@Html.Hidden("AssignConfirmMsg", Lang.csfs_assign_confirm)
+@Html.Hidden("AssignFailMsg", Lang.csfs_assign_fail)
+@Html.Hidden("AssignSuccessMsg", Lang.csfs_assign_success)
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("GovDateText", Lang.csfs_gov_date)
+@Html.Hidden("CreatedDateText", Lang.csfs_keyin_date)
+@Html.Hidden("PlzSelect", Lang.csfs_select)
+@Html.Hidden("TextNotNull", Lang.csfs_return_notnull)
+@Html.Hidden("PlzCaseKindMsg", "請選擇案件類型!")
+@section scripts {
+    @Scripts.Render("~/Scripts/bootstrap-typeahead.js")
+    @Html.Hidden("GetGovNameUrl", Url.Action("GetGovNameByGoveKind", "Home", new { area = "" }))
+
+    @Scripts.Render("~/Scripts/Collection/CollectionToAssignment.js")
+
+    <script language="javascript">
+        //* 所有Bu對Agent的列表
+        var agentList = $.parseJSON('@Html.Raw(ViewBag.AgentList)');
+    </script>
+}

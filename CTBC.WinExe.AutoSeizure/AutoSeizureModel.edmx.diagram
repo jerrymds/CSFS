@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="153530405e6c4a94930f5866552fdf2e" Name="Diagram1" ZoomLevel="53">
+        <EntityTypeShape EntityType="CSFS_SITModel.CaseMaster" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSFS_SITModel.CaseObligor" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CSFS_SITModel.EDocTXT2" Width="1.5" PointX="4.875" PointY="0.5" />
+        <EntityTypeShape EntityType="CSFS_SITModel.EDocTXT1_Detail" Width="1.5" PointX="5.375" PointY="5.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.EDocTXT2_Detail" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_60629" Width="1.5" PointX="2.75" PointY="4.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_60491_Detl" Width="1.5" PointX="6.25" PointY="2" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_60491_Grp" Width="1.5" PointX="5.375" PointY="5.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_60600" Width="1.5" PointX="7.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_00417" Width="1.5" PointX="9.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_00450" Width="1.5" PointX="9.75" PointY="3.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_67002" Width="1.5" PointX="9.75" PointY="7.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_67072_Detl" Width="1.5" PointX="0.75" PointY="11.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_67102" Width="1.5" PointX="12.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_67072_Grp" Width="1.5" PointX="16.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.AutoLog" Width="1.5" PointX="16.375" PointY="13.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.PARMCode" Width="1.5" PointX="0.75" PointY="17.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.CaseHistory" Width="1.5" PointX="16.375" PointY="17.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.CaseMemo" Width="1.5" PointX="18.375" PointY="0.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.CaseSeizure" Width="1.5" PointX="18.375" PointY="3.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.CaseAssignTable" Width="1.5" PointX="7.375" PointY="18.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.CaseSendSetting" Width="1.5" PointX="9.375" PointY="18.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.CaseNoTable" Width="1.5" PointX="18.375" PointY="11.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.AgentSetting" Width="1.5" PointX="11.375" PointY="18.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.EDocTXT1" Width="1.5" PointX="18.375" PointY="14.75" />
+        <EntityTypeShape EntityType="CSFS_SITModel.TX_33401" Width="1.5" PointX="13.375" PointY="14.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

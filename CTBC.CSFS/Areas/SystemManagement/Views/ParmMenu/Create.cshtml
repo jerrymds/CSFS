@@ -1,0 +1,110 @@
+﻿@model CTBC.CSFS.Models.PARMMenuVO
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_parmmenu;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_create</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("Create", "PARMMenu", new {area = "SystemManagement"}, FormMethod.Post, new {id = "frmCreate", @class = "form-horizontal"}))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-2 text-right">@Lang.csfs_menu_type</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.MenuType, new { @MaxLength = "1", @class = "col-md-12 no-padding", placeholder = string.Format(Lang.csfs_pleaseinput_0, Lang.csfs_menu_type) })
+                        </td>
+                        <td class="col-md-5">
+                            <span class="text-red">&lowast;</span>@Lang.csfs_menu_edittmp_note1
+                        </td>
+                    </tr>
+                <tr>
+                    <td class="col-md-2 text-right">@Lang.csfs_menu_level</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.MenuLevel, new { @MaxLength = "3", @class = "col-md-12 no-padding", placeholder = string.Format(Lang.csfs_pleaseinput_0, Lang.csfs_menu_level) })
+                    </td>
+                    <td class="col-md-5">
+                        <span class="text-red">&lowast;</span>@Lang.csfs_menu_edittmp_note2
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-2 text-right">@Lang.csfs_menu_parent</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.Parent, new { @MaxLength = "9", @class = "col-md-12 no-padding", placeholder = string.Format(Lang.csfs_pleaseinput_0, Lang.csfs_menu_parent) })
+                    </td>
+                    <td class="col-md-5">
+                        <span class="text-red">&lowast;</span>@Lang.csfs_menu_edittmp_note3
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-2 text-right">@Lang.csfs_menu_name</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.TITLE, new { @MaxLength = "100", @class = "col-md-12 no-padding", placeholder = string.Format(Lang.csfs_pleaseinput_0, Lang.csfs_menu_name) })
+                    </td>
+                    <td class="col-md-5">
+                    </td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-2 text-right">@Lang.csfs_menu_funcid</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.md_FuncID, new { @MaxLength = "100", @class = "col-md-12 no-padding", placeholder = string.Format(Lang.csfs_pleaseinput_0, Lang.csfs_menu_funcid) })
+                    </td>
+                    <td class="col-md-5">@Lang.csfs_menu_edittmp_note4</td>
+                </tr>
+
+                <tr>
+                    <td class="col-md-2 text-right">@Lang.csfs_menu_url</td>
+                    <td class="col-md-5">
+                        @Html.TextBoxFor(m => m.md_URL, new { @MaxLength = "100", @class = "col-md-12 no-padding", placeholder = string.Format(Lang.csfs_pleaseinput_0, Lang.csfs_menu_url) })
+                    </td>
+                    <td class="col-md-5">@Lang.csfs_menu_edittmp_note5</td>
+                </tr>
+
+                    <tr>
+                        <td class="col-md-2 text-right">@Lang.csfs_menu_sort</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.MenuSort, new { @MaxLength = "3", @class = "col-md-12 no-padding", placeholder = string.Format(Lang.csfs_pleaseinput_0, Lang.csfs_menu_sort) })
+                        </td>
+                        <td class="col-md-5">@Lang.csfs_menu_edittmp_note6</td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div><!-- /.box-body -->
+    <div class="box-footer text-center">
+        <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+        <a class="btn btn-default btn-xs" href="@Url.Action("Index", "PARMMenu", new { area = "SystemManagement" })">@Lang.csfs_cancel</a>
+    </div>
+    }
+</div>
+
+@Html.Hidden("NowPage", "MenuCreate")
+@Html.Hidden("CancelUrl", @Url.Action("Index", "PARMMenu", new { area = "SystemManagement" }))
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_add_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_add_fail)
+
+@Html.Hidden("MenuTypeRequire", Lang.csfs_menu_enter_menutype)
+@Html.Hidden("MenuTypeNotCorrected", Lang.csfs_input_menutype)
+@Html.Hidden("TittleRequire", Lang.csfs_input_title)
+@Html.Hidden("MenuLevelRequire", Lang.csfs_input_menulevel)
+@Html.Hidden("ParentRequire", Lang.csfs_input_parent)
+@Html.Hidden("FuncIdRequire", Lang.csfs_input_funcid)
+@Html.Hidden("MenuSortReuqire", Lang.csfs_input_menusort)
+@Html.Hidden("MenuLevelMax3Int", Lang.csfs_menulevel_up3int)
+@Html.Hidden("ParentMustInt", Lang.csfs_parentid_nint)
+@Html.Hidden("MenuSortMax3Int", Lang.csfs_menusrot_up3int)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/SystemManagement/PARMMenu.js")
+}

@@ -1,0 +1,87 @@
+﻿@model CTBC.CSFS.ViewModels.ExternalOldQueryViewModel
+@using CTBC.FrameWork.Util;
+
+@{
+    Layout = null;
+}
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.ExternalOldQueryList != null)
+                {
+                    if (Model.ExternalOldQueryList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.ExternalOldQuery.PageSize, Model.ExternalOldQuery.CurrentPage, Model.ExternalOldQuery.TotalItemCount, Model.ExternalOldQuery, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.ExternalOldQuery.SortExpression, Model.ExternalOldQuery.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th style="width:4%">內容</th>
+                            <th data-sortcolumn="ReceiveNbr">收文序號</th>
+                            <th data-sortcolumn="ResponseCaseNbr">發文字號</th>
+                            <th data-sortcolumn="AccountName">戶名</th>
+                            <th data-sortcolumn="AccountID">統一編號</th>
+                            <th data-sortcolumn="StatusCode">案件狀態</th>
+                            <th data-sortcolumn="SenderInstitutionClerk">發文經辦</th>
+                            <th data-sortcolumn="ReceiverInstitutionName">受文者</th>
+                            <th data-sortcolumn="ResponseCaseNbr1">函覆文號</th>
+                            <th data-sortcolumn="CloseDate">結案日</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.ExternalOldQueryList != null && Model.ExternalOldQueryList.Any())
+                        {
+                            int a = 0;
+                            foreach (var item in Model.ExternalOldQueryList)
+                            {
+                                a = a + 1;
+                                <tr>
+                                    <td class="text-center">
+                                        @Html.ActionLink(Lang.csfs_detail, "Details", "ExternalOldQuery", new { area = "QueryAndExport", ReceiveNbr = item.ReceiveNbr }, new { })
+                                    </td>
+                                    <td class="text-center">@item.ReceiveNbr</td>
+                                    <td class="text-center">@item.ResponseCaseNbr</td>
+                                    <td class="text-center">@item.AccountName</td>
+                                    <td class="text-center">@item.AccountID</td>
+                                    <td class="text-center">@item.StatusCode</td>
+                                    <td class="text-center">@item.SenderInstitutionClerk</td>
+                                    <td class="text-center">@item.ReceiverInstitutionName</td>
+                                    <td class="text-center">@item.ResponseCaseNbr1</td>
+                                    <td class="text-center">@item.CloseDate</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="13"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @Html.Hidden("querystring", Model.ExternalOldQuery.ReceiveNbr)
+                @Html.Hidden("querystring", Model.ExternalOldQuery.ResponseCaseNbr)
+                @Html.Hidden("querystring", Model.ExternalOldQuery.AccountName)
+                @Html.Hidden("querystring", Model.ExternalOldQuery.AccountID)
+                @Html.Hidden("querystring", Model.ExternalOldQuery.StatusCode)
+                @Html.Hidden("querystring", Model.ExternalOldQuery.SenderInstitutionClerk)
+                @Html.Hidden("querystring", Model.ExternalOldQuery.ReceiverInstitutionName)
+                @Html.Hidden("querystring", Model.ExternalOldQuery.ResponseCaseNbr1)
+                @Html.Hidden("querystring", Model.ExternalOldQuery.CloseDate)
+                @Html.Hidden("defaultSortColumn", Model.ExternalOldQuery.SortExpression)
+                @Html.Hidden("defaultSort", Model.ExternalOldQuery.SortDirection)
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

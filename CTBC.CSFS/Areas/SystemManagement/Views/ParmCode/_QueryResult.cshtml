@@ -1,0 +1,82 @@
+﻿@model CTBC.CSFS.ViewModels.PARMMenuViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.PARMCodeList != null)
+                {
+                    if (Model.PARMCodeList.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.PARMCode.PageSize, Model.PARMCode.CurrentPage, Model.PARMCode.TotalItemCount, Model.PARMCode, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.PARMCode.SortExpression, Model.PARMCode.SortDirection)
+                        </div>
+                    }
+                }
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th>@Lang.csfs_pm_codetype / @Lang.csfs_pm_codetypedesc</th>
+                            <th>@Lang.csfs_pm_detail_code</th>
+                            <th>@Lang.csfs_pm_detail_name</th>
+                            <th>@Lang.csfs_pm_detail_order</th>
+                            <th>@Lang.csfs_isenabled</th>
+                            <th>@Lang.csfs_edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.PARMCodeList != null && Model.PARMCodeList.Any())
+                        {
+                            foreach (var item in Model.PARMCodeList)
+                            {
+
+                                <tr>
+                                    <td>@item.CodeType / @item.CodeTypeDesc</td>
+                                    <td>@item.CodeNo</td>
+                                    <td>@item.CodeDesc</td>
+                                    <td>@item.SortOrder</td>
+                                    <td>
+                                        @if (item.Enable.HasValue && item.Enable.Value)
+                                        { @Lang.csfs_enable;
+                                        }
+                                        else
+                                        { @Lang.csfs_disable;
+                                        }
+                                    </td>
+                                    <td class="text-center">
+                                        @if (item.CodeType == "eTabsQueryStaff")
+                                        {
+                                            <a class="fancy500_300 btn btn-default btn-xs" href="@Url.Action("CheckUser", "ParmCode", new { area = "SystemManagement", id = item.CodeUid })">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn btn-default btn-xs" title="@Lang.csfs_edit" href="@Url.Action("Edit", "ParmCode", new { area = "SystemManagement", id = item.CodeUid })">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        }
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+                @*@Html.Hidden("defaultSortColumn", Model.LendDataInfo.SortExpression)
+                    @Html.Hidden("defaultSort", Model.LendDataInfo.SortDirection)*@
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>

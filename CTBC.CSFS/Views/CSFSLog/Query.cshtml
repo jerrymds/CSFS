@@ -1,0 +1,102 @@
+﻿@model CTBC.CSFS.Models.CSFSLogVO
+
+@{
+    ViewBag.Title = "Query";
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        //查詢資料
+        $("#Inquiry").click();
+
+        //設定日曆格式
+        numsDatepicker($("#StartTime"));
+        numsDatepicker($("#EndTime"));
+    });
+</script>
+<div class="headline">
+    @Lang.csfs_log_qry
+</div>
+<div class="con_title1">
+    @Lang.csfs_query_area
+</div>
+<div>
+    @using (Ajax.BeginForm("_QueryResult", new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "post", OnBegin = "ajaxValidate", OnFailure = "displayError" }))
+    {
+    
+    <table width="100" border="1" cellpadding="3" cellspacing="0" class="query_table" id="tblQuery">
+        <tr>
+            <td class="query_table_td">
+                @Lang.csfs_log_time
+            </td>
+            <td class="f_word_left" nowrap>
+                @Html.TextBoxFor(m => m.StartTime, new { @MaxLength = "10", @Value = string.Format("{0:yyyy/MM/dd}", Model.StartTime) })                
+                ~
+                @Html.TextBoxFor(m => m.EndTime, new { @MaxLength = "10", @Value = string.Format("{0:yyyy/MM/dd}", Model.EndTime) })
+                @Html.ValidationMessageFor(m => m.StartTime, "起日格式錯誤")  @Html.ValidationMessageFor(m => m.EndTime, "迄日格式錯誤")
+            </td>
+            <td class="query_table_td">@Lang.csfs_log_title</td>
+            <td class="f_word_left">
+                @Html.TextBoxFor(m => m.Title, new {  @MaxLength = "20" })<font color="red">＊</font>
+            </td>
+        </tr>
+        <tr>
+            <td class="query_table_td">@Lang.csfs_log_msg</td>
+            <td class="f_word_left">
+                @Html.TextBoxFor(m => m.Message, new {  @MaxLength = "500" })<font color="red">＊</font>
+            </td>
+            <td class="query_table_td">@Lang.csfs_usr_empid</td>
+            <td class="f_word_left">
+                @Html.TextBoxFor(m => m.UserId, new {  @MaxLength = "20" })<font color="red">＊</font>
+            </td>
+        </tr>
+        <tr>
+            <td class="query_table_td">@Lang.csfs_fun_num</td>
+            <td class="f_word_left">
+                @Html.TextBoxFor(m => m.FunctionId, new {  @MaxLength = "100" })<font color="red">＊</font>
+            </td>
+            <td class="query_table_td">URL</td>
+            <td class="f_word_left">
+                @Html.TextBoxFor(m => m.URL, new {  @MaxLength = "100" })<font color="red">＊</font>
+            </td>
+        </tr>
+        <tr>
+            <td class="query_table_td">IP</td>
+            <td class="f_word_left">
+                @Html.TextBoxFor(m => m.IP, new {  @MaxLength = "50" })<font color="red">＊</font>
+            </td>
+            <td class="query_table_td">@Lang.csfs_usr_pc_name</td>
+            <td class="f_word_left">
+                @Html.TextBoxFor(m => m.MachineName, new {  @MaxLength = "50" })<font color="red">＊</font>
+            </td>
+        </tr>
+    </table>
+    <span>@Lang.csfs_log_qry_memo1 &nbsp;<font color="red">＊</font>&nbsp;@Lang.csfs_log_qry_memo2</span>
+    <br />
+    <div style="text-align: center">
+        <button type="submit" id="Inquiry">@Lang.csfs_query</button>
+        <button type="submit" id="btnCancel" name="btnCancel" onclick="Cancel()">@Lang.csfs_cancel</button>
+    </div>  
+    }
+    <div id="result"></div>     
+</div>
+<script type="text/javascript">
+    function ajaxValidate() {
+        Comm_Trim();
+        return true;
+    }
+    function Cancel() {
+        $("#TITLE").val('');
+        $("#Message").val('');
+        $("#UserId").val('');
+        $("#FunctionId").val('');
+        $("#URL").val('');
+        $("#IP").val('');
+        $("#MachineName").val('');
+    }
+
+</script>
+
+
+
+

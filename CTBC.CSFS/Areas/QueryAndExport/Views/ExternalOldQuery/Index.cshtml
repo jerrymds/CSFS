@@ -1,0 +1,80 @@
+﻿@model CTBC.CSFS.Models.ExternalOldQuery
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_externaloldquery;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "ExternalOldQuery", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_GovNoD</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.ReceiverNbrS, new { })
+                            ～
+                            @Html.TextBoxFor(m => m.ReceiverNbrE, new { })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_Branch</td>
+                        <td class="col-md-2">
+                            @(ViewBag.UnitRead == "1" ? Html.TextBoxFor(m => m.BranchCodeS, new { @id = "txtBranchCodeS", @readonly = "readonly" }) : Html.TextBoxFor(m => m.BranchCodeS, new { @MaxLength = "100", @id = "txtBranchCodeS" }))
+                            ～
+                            @(ViewBag.UnitRead == "1" ? Html.TextBoxFor(m => m.BranchCodeE, new { @id = "txtBranchCodeE", @readonly = "readonly" }) : Html.TextBoxFor(m => m.BranchCodeE, new { @MaxLength = "100", @id = "txtBranchCodeE" }))
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_receivedata</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.ReceiveDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.ReceiveDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_closeddate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CloseDateS, new { data_datepicker = "true", @Maxlength = "9" })
+                            ～
+                            @Html.TextBoxFor(m => m.CloseDateE, new { data_datepicker = "true", @Maxlength = "9" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_InsDeptDispatchId</td>
+                        <td class="col-md-1">
+                            @Html.TextBoxFor(m => m.OrgSendCaseNbr, new { @MaxLength = "100" })
+                        </td>
+                        <td class="col-md-1 text-right">@Lang.csfs_sendword1</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.ResponseCaseNbr, new { @MaxLength = "100" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <input type="hidden" id="pageNum" name="pageNum" />
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "ExternalOldQuery", new { area = "QueryAndExport" })">
+</div>
+<iframe id="frmForReport" class="hidden" width="0" height="0" style="display: none;"></iframe>
+@Html.Hidden("NowPage", "ExternalOldQuery")
+@Html.Hidden("ReceivedDateText", Lang.csfs_receive_date)
+@Html.Hidden("CreatedDateText", Lang.csfs_closeddate)
+@Html.Hidden("BranchText", Lang.csfs_Branch)
+@Html.Hidden("PlzCorrectFormat", Lang.csfs_enter_correct_format)
+@Html.Hidden("CurrentPage", (string)ViewBag.CurrentPage)
+@Html.Hidden("PositiveintFormat", Lang.csfs_enter_positiveint)
+@Html.Hidden("isQuery", (string)ViewBag.isQuery)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/QueryAndExport/ExternalOldQuery.js")
+}
+
+

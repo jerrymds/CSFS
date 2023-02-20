@@ -1,0 +1,93 @@
+﻿@model CTBC.CSFS.Models.CollectionToSign
+
+@{
+    ViewBag.Title = "Query";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "CollectionToSign", new { area = "Collection" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-1 text-right">來文機關</td>
+                        <td class="col-md-11" colspan="5">
+                            @Html.TextBoxFor(m => m.GovUnit, new { @MaxLength = "50" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">來文日期</td>
+                        <td class="col-md-5">
+                            <input type="text" data-datepicker="true" id="GovDateS" />
+                            ～
+                            <input type="text" data-datepicker="true" id="GovDateE" />
+                        </td>
+                        <td class="col-md-1 text-right">速別</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.Speed, (IEnumerable<SelectListItem>)ViewBag.SpeedList, Lang.csfs_select, new { @id = "ddlSpeed" })
+                        </td>
+                        <td class="col-md-1 text-right">來文方式</td>
+                        <td class="col-md-2">
+                            @Html.DropDownListFor(m => m.ReceiveKind, (IEnumerable<SelectListItem>)ViewBag.ReceiveKindList, Lang.csfs_select, new { @id = "ddlReceiveKind" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">來文字號</td>
+                        <td class="col-md-5">@Html.TextBoxFor(m => m.GovNo, new { @MaxLength = "60" })</td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-2"></td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-2"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">類別</td>
+                        <td class="col-md-5">
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, Lang.csfs_select, new { @id = "ddlCaseKind" })
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                        </td>
+                        <td class="col-md-1 text-right">分行別</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.Unit, new { @MaxLength = "50" })
+                        </td>
+                        <td class="col-md-1 text-right">建檔人員</td>
+                        <td class="col-md-2">
+                            @Html.TextBoxFor(m => m.Person, new { @MaxLength = "30" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnSign" type="button" class="btn btn-default btn-xs">@Lang.csfs_sign</button>
+            <button id="btnReturn" type="button" class="btn btn-default btn-xs">@Lang.csfs_return</button>
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "CollectionToSign", new { area = "Collection" })">
+
+</div>
+@Html.Hidden("NowPage", "MenuQuery")
+@Html.Hidden("SignUrl", Url.Action("Sign", "CollectionToSign", new { area = "Collection" }))
+@Html.Hidden("ReturnUrl", Url.Action("Return", "CollectionToSign", new { area = "Collection" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("SignConfirmMsg", Lang.csfs_sign_confirm)
+@Html.Hidden("SignFailMsg", Lang.csfs_sign_fail)
+@Html.Hidden("SignSuccessMsg", Lang.csfs_sign_ok)
+@Html.Hidden("ReturnConfirmMsg", Lang.csfs_return_confirm)
+@Html.Hidden("ReturnFailMsg", Lang.csfs_return_fail)
+@Html.Hidden("ReturnSuccessMsg", Lang.csfs_return_ok)
+
+@section scripts {
+    @Scripts.Render("~/Scripts/Collection/CollectionToSign.js")
+}

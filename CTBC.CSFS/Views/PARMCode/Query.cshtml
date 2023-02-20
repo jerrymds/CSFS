@@ -1,0 +1,219 @@
+﻿@model CTBC.CSFS.Models.PARMCode
+
+@{
+    ViewBag.Title = "Query";
+}
+
+<link href="@Url.Content("~/Content/themes/base/jquery-ui-1.8.4.custom.css")" rel="stylesheet" type="text/css" />
+<script src="@Url.Content("~/Scripts/jquery-1.4.2.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery-1.8.5.ui.min.js")" type="text/javascript"></script>
+<script type="text/javascript">
+    // 參數類型下拉列表聯動
+    function BindCodeList() {
+        var codeType = $("#ddlCodeType").attr("selected", "selected").val();
+        $("#hidCodeType").val(codeType);
+        $.ajax({
+            type: "post",
+            url: '@Url.Action("BindCode","PARMCode")',
+            data: {codeType:codeType},
+            dataType: "json",
+            success: function (data) {
+                $("#ddlCode").html("");
+                $("#ddlCode").append("<option value='' selected='selected'>@Lang.csfs_all</option>");
+                $.each(data, function (index, item) {
+                    $("#ddlCode").append("<option value='" + item.CodeNo + "'>" + item.CodeDesc + "</option>");
+                });
+            }
+        });
+    }
+
+    // 清除頁面元素選定項
+    function ClearAway() {
+        $("select").attr("selected", "selected").val("");
+        $("#ddlCode").html("");
+        $("#ddlCode").append("<option value='' selected='selected'>@Lang.csfs_all</option>");
+        location.href = '@Url.Action("Query","PARMCode")';
+    }
+
+    // 為hidCodeNo獲取綁定值
+    function GetCodeNoValue(obj) {
+        $("#hidCodeNo").val($(obj).attr("selected", "selected").val());
+    }
+
+    function CodeAdd() {
+        var parmAddCodeType = $("#ddlCodeType").val();
+        location.href = '@Url.Action("Create","PARMCode")?action=Add&key=&CodeType=' + parmAddCodeType;
+    }
+
+    //------------------------------------------------------------
+    //參數類別名稱(CodeTypeDesc) 下拉Combobox
+    //參考網址:http://robertmarkbramprogrammer.blogspot.tw/2010/09/event-handling-with-jquery-autocomplete.html
+    //------------------------------------------------------------
+    (function ($) {
+        $.widget("ui.combobox", {
+            _create: function () {
+                var self = this;
+                var select = this.element,
+               theWidth = select.width(),
+               selected = select.children(":selected"),
+               theTitle = select.attr("title"),
+               value = selected.val() ? selected.text() : "";
+                select.hide();
+                var input = $("<input style=\"width:" + theWidth + "px\">")
+               .val(value)
+               .attr('title', '' + theTitle + '')
+               .autocomplete({
+                   delay: 0,
+                   minLength: 0,
+                   source: function (request, response) {
+                       var matcher = new RegExp($.ui.autocomplete.escapeRegex(request.term), "i");
+                       response(select.children("option").map(function () {
+                           var text = $(this).text();
+                           if (this.value && (!request.term || matcher.test(text)))
+                               return {
+                                   label: text.replace(
+                                 new RegExp(
+                                    "(?![^&;]+;)(?!<[^<>]*)(" +
+                                    $.ui.autocomplete.escapeRegex(request.term) +
+                                    ")(?![^<>]*>)(?![^&;]+;)", "gi"
+                                 ), "<strong>$1</strong>"),
+                                   value: text,
+                                   option: this
+                               };
+                       }));
+                   },
+                   select: function (event, ui) {
+                       ui.item.option.selected = true;
+                       //select.val( ui.item.option.value );
+                       self._trigger("selected", event, {
+                           item: ui.item.option
+                       });
+                   },
+                   change: function (event, ui) {
+                       if (!ui.item) {
+                           var matcher = new RegExp("^" + $.ui.autocomplete.escapeRegex($(this).val()) + "$", "i"),
+                           valid = false;
+                           select.children("option").each(function () {
+                               if (this.value.match(matcher)) {
+                                   this.selected = valid = true;
+                                   return false;
+                               }
+                           });
+                           if (!valid) {
+                               // remove invalid value, as it didn't match anything
+                               $(this).val("");
+                               select.val("");
+                               return false;
+                           }
+                       }
+                   }
+               })
+               .addClass("ui-widget ui-widget-content ui-corner-left");
+                var span = $("<span style=\" white-space: nowrap;\"></span>")
+                  .append(input).insertAfter(select);
+                input.data("autocomplete")._renderItem = function (ul, item) {
+                    return $("<li></li>")
+                  .data("item.autocomplete", item)
+                  .append("<a>" + item.label + "</a>")
+                  .appendTo(ul);
+                };
+
+                $("<button> </button>")
+               .attr("tabIndex", -1)
+               .attr("title", "Show All Items")
+               .insertAfter(input)
+               .button({
+                   icons: {
+                       primary: "ui-icon-triangle-1-s"
+                   },
+                   text: false
+               })
+               .removeClass("ui-corner-all")
+               .addClass("ui-corner-right ui-button-icon")
+               .click(function () {
+                   // close if already visible
+                   if (input.autocomplete("widget").is(":visible")) {
+                       input.autocomplete("close");
+                       return;
+                   }
+
+                   // pass empty string as value to search for, displaying all results
+                   input.autocomplete("search", "");
+                   input.focus();
+               });
+            }
+        });
+    })(jQuery);
+    $(document).ready(function () {
+        $("#btnSubmit").click();
+        $("#ddlCodeType").combobox({
+            selected: function (event, ui) {
+                BindCodeList();
+            }
+        });
+    });
+    //------------------------------------------------------------
+    // End -- 參數類別名稱(CodeTypeDesc) 下拉Combox
+    //------------------------------------------------------------
+    function ajaxValidate() {
+        Comm_Trim();
+        return true;
+    }
+</script>
+<div class="headline">
+    @Lang.csfs_pm_mt_list
+</div>
+<div class="con_title1">
+    @Lang.csfs_query_area
+</div>
+<div>
+    @using (Ajax.BeginForm("_QueryResult", new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "POST", OnBegin = "ajaxValidate", OnFailure = "displayError" }))
+    {   
+    <div>
+        <table width="100" border="1" cellpadding="3" cellspacing="0" class="query_table">
+            <tr>
+                <td class="query_table_td" width="15%" nowrap="nowrap">
+                    @Lang.csfs_pm_codetypedesc
+                </td>
+                <td class="f_word_left" width="35%">
+                    @Html.DropDownListFor(m => m.QueryCodeType, (IEnumerable<SelectListItem>
+                    )ViewBag.codeTypeList, Lang.csfs_all, new { @id = "ddlCodeType", @onchange = "javascript:BindCodeList();" })
+                    @Html.HiddenFor(m => m.CodeType, new { @id = "hidCodeType", @Value = "" })
+                </td>
+                <td class="query_table_td" width="15%">
+                    @Lang.csfs_pm_detail_name
+                </td>
+                <td class="f_word_left" width="35%">
+                    @Html.DropDownListFor(m => m.QueryCodeNo, (IEnumerable<SelectListItem>
+                 )ViewBag.codeList, Lang.csfs_all, new { @id = "ddlCode", @onchange = "javascript:GetCodeNoValue(this);" })
+                    @Html.HiddenFor(m => m.CodeNo, new { @id = "hidCodeNo", @Value = "" })
+                </td>
+            </tr>
+            <tr>
+                <td class="query_table_td" width="15%">
+                    @Lang.csfs_pm_enable
+                </td>
+                <td class="f_word_left" colspan="3">
+                    @Html.DropDownListFor(m => m.QueryEnable, (IEnumerable<SelectListItem>)new List<SelectListItem> { new SelectListItem() { Value = "1", Text = Lang.csfs_enable }, new SelectListItem() { Value = "0", Text = Lang.csfs_disable } }, Lang.csfs_all)
+                </td>
+            </tr>
+        </table>
+        <div align="center">
+            <br />
+            <button type="submit" id="btnSubmit">
+                @Lang.csfs_query
+            </button>
+            &nbsp; &nbsp;
+            <button type="button" onclick='javascript:ClearAway();'>
+                @Lang.csfs_clear
+            </button>&nbsp; &nbsp;
+            <button type="button" onclick='CodeAdd()'>
+                @Lang.csfs_create
+            </button>
+        </div>
+    </div>
+    }
+    <div id="result"></div>
+</div>
+
+

@@ -1,0 +1,114 @@
+﻿<head>
+    <style type="text/css">
+        .auto-style1 {
+            height: 20px;
+        }
+    </style>
+</head>
+@model CTBC.CSFS.ViewModels.CaseSeizureViewModel
+
+@{
+    Layout = null;
+}
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @if (Model.CaseMasterlist != null)
+                {
+                    if (Model.CaseMasterlist.Any())
+                    {
+                        <div class="box-tools pull-right" id="pager">
+                            @Ajax.Pager(Model.CaseMaster.PageSize, Model.CaseMaster.CurrentPage, Model.CaseMaster.TotalItemCount, Model.CaseMaster, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.CaseMaster.SortExpression, Model.CaseMaster.SortDirection)
+                        </div>
+                    } }</div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                    <tr class="alert-success text-center ">
+                        <th><input type="checkbox" class="checkfile" value="" name="r2" id="CheckAll"/></th>
+                        <th>@Lang.csfs_menu_sort</th>
+                        <th>@Lang.csfs_case_no</th>
+                        <th>@Lang.csfs_receiver</th>
+                        <th>@Lang.csfs_posttype</th>
+                        <th>@Lang.csfs_case_kind</th>
+                        <th>@Lang.csfs_case_kind2</th>
+                        <th>@Lang.csfs_sendword1</th>
+                        <th>@Lang.csfs_agnet</th>
+                        <th>@Lang.csfs_postNo</th>
+                        <th>@Lang.csfs_senddate1</th>
+                        <th>@Lang.csfs_sendperson</th>
+                        @if (Model.CaseMaster.PostType == "1")
+                        {
+                            <th>@Lang.csfs_moneyNumber</th>
+                        }
+                    </tr>
+                    </thead>
+                    <tbody id="MailBody">
+                    @if (Model != null && Model.CaseMasterlist != null && Model.CaseMasterlist.Any())
+                    {
+                        int i = 0;
+                        foreach (var item in Model.CaseMasterlist)
+                        {
+                            i++;
+                        <tr>
+                            <td class="text-center">
+                                <input type="checkbox" class="checkfile" value="@item.DetailsId|@i" name="r2" />
+                            </td>
+                            <td class="text-center" hidden>
+                                <input type="checkbox" class="checkmail" value="@item.MailNo" name="r2" />
+                            </td>
+                            <td class="text-center">@i</td>
+                            <td class="text-center">@item.CaseNo</td>
+                            <td class="text-center">@item.GovName</td>
+                            @if (item.SendType == "1")
+                            {
+                                <td class="text-center">正本</td>
+                            }
+                            else if (item.SendType == "2")
+                            {
+                                <td class="text-center">副本</td>
+                            }
+                            else
+                            {
+                                <td class="text-center"></td>
+                            }
+                            <td class="text-center">@item.CaseKind</td>
+                            <td class="text-center">@item.CaseKind2</td>
+                            <td class="text-center">@item.SendWord @item.SendNo</td>
+                            <td class="text-center">@item.AgentUser</td>
+                            <td class="text-center">@item.MailNo</td>
+                            <td class="text-center">@item.MailDate</td>
+                            <td class="text-center">@item.CreatedUser</td>
+                            @if (Model.CaseMaster.PostType == "1")
+                            {
+                                <th class="text-center">
+                                    @if (item.SendType == "1")
+                                    {
+                                        @item.CheckNo
+                                    }
+                                </th>
+                            }
+                        </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr class="gridrow"><td colspan="15" class="auto-style1"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                    }
+                    </tbody>
+                </table>
+                @*@Html.Hidden("defaultSortColumn", Model.LendDataInfo.SortExpression)
+                    @Html.Hidden("defaultSort", Model.LendDataInfo.SortDirection)*@
+            </div><!-- /.box-body -->
+        </div><!-- /.box -->
+    </div>
+</div>
+<input type="hidden" id="hidMinNo" value="@ViewBag.MinNo" />
+<input type="hidden" id="hidMaxNo" value="@ViewBag.MaxNo" />
+<script type="text/javascript">
+    $.custPagination.BindCheckBox();
+</script>

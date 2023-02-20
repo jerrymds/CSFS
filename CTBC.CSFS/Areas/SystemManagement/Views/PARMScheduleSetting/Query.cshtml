@@ -1,0 +1,55 @@
+﻿@model CTBC.CSFS.Models.PARMScheduleSettingVO
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_PARMScheduleSetting;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Ajax.BeginForm("_QueryResult", "PARMScheduleSetting", new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "post", OnBegin = "ajaxValidate", OnFailure = "displayError" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                <tr>
+                    <td class="col-md-2 text-right">@Lang.csfs_schedule_name</td>
+                    <td class="col-md-4">@Html.TextBoxFor(m => m.Name, new { @MaxLength = "20" })@*<span class="text-red">＊</span>*@</td>
+                    <td class="col-md-2 text-right">@Lang.csfs_schedule_path</td>
+                    <td class="col-md-4">@Html.TextBoxFor(m => m.Path, new { @MaxLength = "20" })@*<span class="text-red">＊</span>*@</td>
+                </tr>
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+        <div class="box-footer text-center">
+            <button type="submit" id="Inquiry" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button type="button" id="btnCancel" name="btnCancel" onclick="Cancel();" class="btn btn-primary btn-xs">@Lang.csfs_cancel</button>
+            <button type="button" onclick="location.href='@Url.Action("Create", "PARMScheduleSetting")';" class=" btn btn-primary btn-xs">@Lang.csfs_create</button>
+        </div>
+    }
+</div>
+<div id="result" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "PARMScheduleSetting", new { area = "SystemManagement" })"></div>    
+@section scripts {
+    <script type="text/javascript">
+        function ajaxValidate() {
+            trimAllInput();
+            return true;
+        }
+
+        function Cancel() {
+            $("#Name").val('');
+            $("#Path").val('');
+        }
+
+        function displayError() {
+            jAlertError($("#LoadErrorMsg").val());
+        }
+
+        $(document).ready(function() {
+            $("#Inquiry").click();
+        });
+    </script>
+}

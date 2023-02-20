@@ -1,0 +1,109 @@
+﻿@model IList<CTBC.CSFS.Models.AgentDepartmentAccess>
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenttohandle;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="nav-tabs-custom">
+    <!-- Tabs within a box -->
+    <ul class="nav nav-tabs" style="cursor: move;">
+        <li class=""><a href="@Url.Action("Index", "AgentDocumentInfoDetail", new { area = "Common", CaseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">@Lang.csfs_agent_document_info</a></li>
+        @if (Html.GetBackControllerName() != "DebtPersonQuery")
+        {
+            <li class=""><a href="@Url.Action("Index", "AgentAccountInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">帳務資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentMeetInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">會辦資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentOriginalInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">正本備查</a></li>
+            <li class="active"><a href="@Url.Action("Index", "AgentDepartmentAccessDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">資訊部調閱</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentSendSettingInfoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">發文資訊</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseHistoryDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">流程紀錄</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseCalculatorDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">利息計算</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentCaseMemoDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">內部註記</a></li>
+            <li class=""><a href="@Url.Action("Index", "AgentTransactionRecordsDetail", new { area = "Common", caseId = ViewBag.CaseId, FromControl = ViewBag.FromControl })">資訊異動記錄</a></li>
+        }
+        @Html.GetBackButtonInTab()
+    </ul>
+    <div class="tab-content ">
+        <div class="tab-pane active" id="panel1">
+            <div class="box box-primary">
+                <!-- form start -->
+                <div class="box-body ">
+                    <div>
+                        <table class="table table-bordered table-striped text-black sort">
+                            <thead>
+                                <tr class="alert-success text-center ">
+                                    <th style="width: 5%">@Lang.csfs_edit</th>
+                                    <th style="width: 5%">@Lang.csfs_delete</th>
+                                    <th style="width: 5%">@Lang.csfs_no</th>
+                                    <th style="width: 20%">@Lang.csfs_create_date</th>
+                                    <th style="width: 15%">@Lang.csfs_create_user</th>
+                                    <th style="width: 50%">@Lang.csfs_content</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        <tr>
+                                            <td style="width: 5%" class="text-center">
+                                                @*<a href="@Url.Action("Edit", "AgentDepartmentAccess", new {area = "Agent", AccessId = Model[i].AccessId, @radom = DateTime.Now.ToString()})" class=" glyphicon glyphicon-edit fancy800_310"></a>*@
+                                            </td>
+                                            <td style="width: 5%" class="text-center">
+                                                @*<a class="glyphicon glyphicon-remove" role="menuitem" tabindex="-1" onclick="DeleteLend('@Model[i].AccessId') "></a>*@
+                                            </td>
+                                            <td style="width: 5%" class="text-center">@(i + 1)</td>
+                                            <td style="width: 20%">@Model[i].CreatedDate</td>
+                                            <td style="width: 15%">@Model[i].EmpName</td>
+                                            <td style="width: 50%">@Model[i].AccessData</td>
+                                        </tr>
+                                    }
+                                }
+                                else
+                                {
+                                    <tr><td colspan="6"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                                }
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+
+                <div class="box-footer text-center">
+                    @*<a href="@Url.Action("Create", "AgentDepartmentAccess", new {area = "Agent", CaseID = ViewBag.CaseId, @radom = DateTime.Now.ToString()})" class="fancy800_300 btn btn-primary btn-xs">@Lang.csfs_create_lend</a>*@
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@Html.Hidden("DeleteLendUrl", Url.Action("Delete", "AgentDepartmentAccess", new { area = "Agent" }))
+@Html.Hidden("DeleteSucMsgUrl", Lang.csfs_del_ok)
+@Html.Hidden("ReturnFailMsg", Lang.csfs_del_fail)
+@Html.Hidden("ConfirmDelMsg", Lang.csfs_confirm_delete)
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    function DeleteLend(obj) {
+        if (!confirm($("#ConfirmDelMsg").val())) return false;
+        $.blockUI();
+        $.ajax({
+            url: $("#DeleteLendUrl").val(),
+            type: "Post",
+            cache: false,
+            data: { AccessId: obj },
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                if (data) {
+                    jAlertSuccess($("#DeleteSucMsgUrl").val(), function () { location.href = location.href; });
+                } else {
+                    jAlertError($("#ReturnFailMsg").val());
+                    $.unblockUI();
+                }
+            }
+        });
+    }
+    function myfunction() {
+        $(".active").children().click();
+    }
+</script>

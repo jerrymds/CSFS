@@ -1,0 +1,90 @@
+﻿@model CTBC.CSFS.Models.PARMMenuVO
+
+@{
+    ViewBag.Title = "Edit";
+}
+<script type="text/javascript">
+    function CloseWindow() {
+        location.href = '@Url.Action("Query","PARMMenu") ';
+    }
+</script>
+<div class="headline">
+    @Lang.csfs_menu_mg_edit
+</div>
+    @using (Ajax.BeginForm("Edit", new AjaxOptions() { HttpMethod = "post", OnBegin = "ajaxValidate", OnFailure = "displayError" }))
+      {
+    
+    @Html.HiddenFor(m => m.ID) 
+    @Html.Partial("_MenuEditTemplate")
+<div>
+    <button type="submit" id="btnSubmit" onclick="UpdateMenuColumn()">
+        @Lang.csfs_save
+    </button>
+    &nbsp; &nbsp;
+    <button type="button" onclick="CloseWindow();">
+        @Lang.csfs_quit
+    </button>
+</div>
+    } 
+<script type="text/javascript">
+    function UpdateMenuColumn() {
+        var menuType = $.trim($("#MenuType").val().toUpperCase());
+        $("#MenuType").val(menuType);
+    }
+
+    function ajaxValidate() {
+        if ($.trim($("#MenuType").val()) == '') {
+            alert("@Lang.csfs_input_menutype");
+            return false;
+        }
+        var menuType = $.trim($("#MenuType").val().toUpperCase());
+        if (menuType != 'M' &&
+            menuType != 'P' &&
+            menuType != 'C' &&
+            menuType != 'A'
+        ) {
+            alert("@Lang.csfs_input_menutype");
+            return false;
+        }
+        if ($.trim($("#TITLE").val()) == '') {
+            alert("@Lang.csfs_input_title");
+            return false;
+        }
+        if ($.trim($("#MenuType").val()) != 'P') {
+            if ($.trim($("#MenuLevel").val()) == '') {
+                alert("@Lang.csfs_input_menulevel");
+                return false;
+            }
+            if ($.trim($("#Parent").val()) == '') {
+                alert("@Lang.csfs_input_parent");
+                return false;
+            }
+            if ($.trim($("#md_FuncID").val()) == '') {
+                alert("@Lang.csfs_input_funcid");
+                return false;
+            }
+            if ($.trim($("#MenuType").val()) == 'M') {
+                if ($.trim($("#MenuSort").val()) == '') {
+                    alert("@Lang.csfs_input_menusort");
+                    return false;
+                }
+            }
+            if (!/^[0-9]{0,3}$/i.test($.trim($("#MenuLevel").val()))) {
+                alert("@Lang.csfs_menulevel_up3int");
+                return false;
+            }
+            if (!/^[0-9]{0,9}$/i.test($.trim($("#Parent").val()))) {
+                alert("@Lang.csfs_parentid_nint");
+                return false;
+            }
+            if (!/^[0-9]{0,3}$/i.test($.trim($("#MenuSort").val()))) {
+                alert("@Lang.csfs_menusrot_up3int");
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
+
+
+

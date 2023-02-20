@@ -1,0 +1,436 @@
+﻿@model CTBC.CSFS.Models.SendSettingRef
+
+@{
+    ViewBag.Title = Lang.csfs_title_SendSettingRef;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div>
+    @using (Html.BeginForm("EditSSR", "SendSettingRef", new { area = "SystemManagement" }, FormMethod.Post, new { id = "frmEditSSR", @class = "form-horizontal" }))
+    {
+        <div class="box-body">
+            <table class="table text-black no-border">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_type</td>
+                        <td>
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList,Lang.csfs_select, new { @id = "ddlCaseKind" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_type1</td>
+                        <td>
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_theme</td>
+                        <td colspan="3">
+                            @Html.TextAreaFor(m => m.Subject, new { @id = "Subject", @rows = "2", @class = "col-xs-12 no-padding" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_content</td>
+                        <td colspan="3">
+                            @Html.TextAreaFor(m => m.Description, new { @id = "Description", @rows = "8", @class = "col-xs-12 no-padding" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right"></td>
+                        <td colspan="3">
+                            <button id="btnAddCaseNo" type="button" onclick="CaseNo('{CaseNo}')" class="btn btn-default btn-xs">@Lang.csfs_case_no</button>
+                            <button id="btnAddGovNo" type="button" onclick="GovNo('{GovNo}')" class="btn btn-default btn-xs">@Lang.csfs_GovNo</button>
+                            <button id="btnAddCaseKind2" type="button" onclick="Kind('{CaseKind2}')" class="btn btn-default btn-xs">@Lang.csfs_case_kind</button>
+                            <button id="btnAddAgentUser" type="button" onclick="AgentUser('{AgentUser}')" class="btn btn-default btn-xs">@Lang.csfs_AgentUser</button>
+                            <button id="btnAddDocNo" type="button" onclick="DocNo('{DocNo}')" class="btn btn-default btn-xs">@Lang.csfs_DocNo</button>
+                            <button id="btnAddGovNoD" type="button" onclick="GovNoD('{GovNo}')" class="btn btn-default btn-xs">@Lang.csfs_GovNoD</button>
+                            <button id="btnAddGovDate" type="button" onclick="GovDate('{GovDate}')" class="btn btn-default btn-xs">@Lang.csfs_gov_date</button>
+                            <button id="btnAddCustId" type="button" onclick="CustId('{CustId}')" class="btn btn-default btn-xs">@Lang.csfs_clientID</button>
+                            <button id="btnAddCustName" type="button" onclick="CustName('{CustName}')" class="btn btn-default btn-xs">@Lang.csfs_clientName</button>
+                            <button id="btnAddAccount" type="button" onclick="Account('{Account}')" class="btn btn-default btn-xs">@Lang.csfs_account</button>
+                            <button id="btnAddBranchName" type="button" onclick="BranchName('{BranchName}')" class="btn btn-default btn-xs">@Lang.csfs_bank</button> 
+                            <button id="btnAddSeizureAmountNtd" type="button" onclick="SeizureAmountNtd('{SeizureAmountNtd}')" class="btn btn-default btn-xs">@Lang.csfs_cal_caseamount</button>
+                            <button id="btnAddPayAmount" type="button" onclick="PayAmount('{PayAmount}')" class="btn btn-default btn-xs">@Lang.csfs_pay_amt</button>
+                            <button id="btnAddMoney" type="button" onclick="Money('{Money}')" class="btn btn-default btn-xs">@Lang.csfs_pay_amt</button>
+                            <button id="btnAddFee" type="button" onclick="Fee('{Fee}')" class="btn btn-default btn-xs">@Lang.csfs_fee</button>
+                            <button id="btnAddCheckNo" type="button" onclick="CheckNo('{CheckNo}')" class="btn btn-default btn-xs">@Lang.csfs_this_bankcode</button>
+                            <button id="btnAddReceivePerson" type="button" onclick="ReceivePerson('{ReceivePerson}')" class="btn btn-default btn-xs">@Lang.csfs_receive_person</button>
+                            <button id="btnAddMemo" type="button" onclick="Memo('{Memo}')" class="btn btn-default btn-xs">@Lang.csfs_memo</button>
+                            <button id="btnAddObligorName" type="button" onclick="ObligorName('{ObligorName}')" class="btn btn-default btn-xs">@Lang.csfs_client_name</button>
+                            <button id="btnAddObligorNo" type="button" onclick="ObligorNo('{ObligorNo}')" class="btn btn-default btn-xs">@Lang.csfs_client_id</button>
+                            <button id="btnAddObligorAccount" type="button" onclick="ObligorAccount('{ObligorAccount}')" class="btn btn-default btn-xs">@Lang.csfs_client_account</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_save</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+@Html.Hidden("EditSuccessMsg", Lang.csfs_edit_ok)
+@Html.Hidden("EditFailMsg", Lang.csfs_edit_fail)
+@Html.Hidden("GetCaseKind2Url", Url.Action("ChangCaseKind1", "Common", new { area = "Common" }))
+@Html.Hidden("PlzInput", Lang.csfs_enter_parm0)
+@Html.Hidden("CaseKindText", Lang.csfs_type)
+@Html.Hidden("CaseKindsText", Lang.csfs_type1)
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("r165Reading", Lang.csfs_165_reading)
+@Html.Hidden("Not165Reading", Lang.csfs_not_165_reading)
+@Html.Hidden("PropertyDeclaration", Lang.csfs_property_declaration1)
+@Html.Hidden("DeadDeclaration", "國稅局死亡")
+@Html.Hidden("Seizure", Lang.csfs_seizure)
+@Html.Hidden("Pay", Lang.csfs_Pay)
+@Html.Hidden("PayReback", "支付電子回文")
+@Html.Hidden("SeizureEdoc", Lang.csfs_seizureEdoc)
+
+@section scripts {
+    <script type="text/javascript">
+        $("#btnSave").click(function () { return btnSaveClick(); });
+        $(function () {
+            ChangeCaseKind();
+            ChangeCaseKind2();
+        });
+
+        $("#ddlCaseKind").change(function () {
+            ChangeCaseKind();
+        });
+        $("#ddlCaseKind2").change(function () {
+            ChangeCaseKind2();
+        });
+        function ChangeCaseKind() {
+            var casekind = $("#ddlCaseKind option:selected").val();
+            if (casekind.trim().length == 0) {
+                $("#ddlCaseKind2").empty();
+                $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+            }
+            else if (casekind == "外來文案件") {
+                $("#ddlCaseKind2").empty();
+                $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#r165Reading").val()).text($("#r165Reading").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#Not165Reading").val()).text($("#Not165Reading").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#PropertyDeclaration").val()).text($("#PropertyDeclaration").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#DeadDeclaration").val()).text($("#DeadDeclaration").val()));
+            }
+            else {
+                $("#ddlCaseKind2").empty();
+                $("#ddlCaseKind2").append($("<option></option>").val('').text($("#PleaseSelect").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#Seizure").val()).text($("#Seizure").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#Pay").val()).text($("#Pay").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#PayReback").val()).text($("#PayReback").val()));
+                $("#ddlCaseKind2").append($("<option></option>").val($("#SeizureEdoc").val()).text($("#SeizureEdoc").val()));
+            }
+        }
+        function ChangeCaseKind2() {
+            var casekind2 = $("#ddlCaseKind2 option:selected").val();
+            if (casekind2.length > 0) {
+                $.ajax({
+                    url: '@Url.Action("CaseKind2", "SendSettingRef")',
+                    data: { CaseKind2: casekind2 },
+                    type: 'post',
+                    cache: false,
+                    async: false,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data.length > 0) {
+                            $.each(data, function (i, item) {
+                                $("#Subject").text(item.Key);
+                                $("#Description").text(item.Value);
+                            });
+                        }
+                        else {
+                            $('#Subject').text("");
+                            $('#Description').text("");
+                        }
+                    }
+                });
+            }
+        }
+
+        function btnSaveClick() {
+            trimAllInput();
+            if (!ajaxValidate()) {
+                return false;
+            }
+
+            $.blockUI();
+            $.ajax({
+                url: $("#frmEditSSR").attr("action"),
+                type: "Post",
+                cache: false,
+                data: $("#frmEditSSR").serialize(),
+                dataType: "json",
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode === "1") {
+                        jAlertSuccess($("#EditSuccessMsg").val(), function () { location.href = location.href });
+                    } else {
+                        jAlertError($("#EditFailMsg").val());
+                        $.unblockUI();
+                    }
+
+                }
+            });
+            return false;
+        }
+        function CaseNo(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function GovNo(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function Kind(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function AgentUser(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function DocNo(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function GovNoD(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function CustId(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function GovDate(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function CustName(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function Account(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function BranchName(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function SeizureAmountNtd(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function PayAmount(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function Money(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function Fee(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function CheckNo(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function ReceivePerson(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function Memo(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function ObligorName(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function ObligorNo(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function ObligorAccount(str) {
+            var tc = document.getElementById("Description");
+            var tclen = tc.value.length;
+            tc.focus();
+            if (typeof document.selection != "undefined") {
+                document.selection.createRange().text = str;
+            }
+            else {
+                tc.value = tc.value.substr(0, tc.selectionStart) + str + tc.value.substring(tc.selectionStart, tclen);
+            }
+        }
+        function ajaxValidate() {
+            var NewLine = "<br/>";
+            var Msg = "";
+            if ($("#ddlCaseKind").val().length <= 0) {
+                Msg = Msg + $.validator.format($("#PlzInput").val(), $("#CaseKindText").val()) + NewLine;
+            }
+            if ($("#ddlCaseKind2").val().length <= 0) {
+                Msg = Msg + $.validator.format($("#PlzInput").val(), $("#CaseKindsText").val()) + NewLine;
+            }
+            if (Msg.length > 0) {
+                jAlertError(Msg);
+                return false;
+            }
+            return true;
+        }
+        function trimAllInput() {
+            $(":input[type='text']").each(function () {
+                $(this).val($.trim($(this).val()));
+            });
+        }
+    </script>
+}

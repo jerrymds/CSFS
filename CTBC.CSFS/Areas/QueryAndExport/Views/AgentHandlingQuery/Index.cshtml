@@ -1,0 +1,157 @@
+﻿@model CTBC.CSFS.Models.CaseMaster
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_agenthandlingquery;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="box box-primary">
+    <!-- form start -->
+    @using (Html.BeginForm("CaseMasterExcel", "AgentHandlingQuery", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder col-md-12">
+                <tbody>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_case_kind</td>
+                        <td class="col-md-5">
+                            @Html.DropDownListFor(m => m.CaseKind, (IEnumerable<SelectListItem>)ViewBag.CaseKindList, Lang.csfs_select, new { @id = "ddlCaseKind" })
+                            @Html.DropDownListFor(m => m.CaseKind2, (IEnumerable<SelectListItem>)ViewBag.CaseKind2List, Lang.csfs_select, new { @id = "ddlCaseKind2" })
+                        </td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-5"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_receivedata</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CreatedDateStart, new { @id = "txtCreatedDate1", data_datepicker = "true" })
+                            ~
+                            @Html.TextBoxFor(m => m.CreatedDateEnd, new { @id = "txtCreatedDate2", data_datepicker = "true" })
+                        </td>
+                        @*<td class="col-md-1 text-right"> ~</td>
+                        <td class="col-md-3">@Html.TextBoxFor(m => m.CreatedDateEnd, new { @id = "txtCreatedDate2", data_datepicker = "true" })</td>*@
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-5"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_closeddate</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CloseDateStart, new { @id = "txtCloseDate1", data_datepicker = "true" })
+                            ~
+                            @Html.TextBoxFor(m => m.CloseDateEnd, new { @id = "txtCloseDate2", data_datepicker = "true" })
+                        </td>
+                        @*<td class="col-md-1 text-right">~</td>
+                        <td class="col-md-3">@Html.TextBoxFor(m => m.CloseDateEnd, new { @id = "txtCloseDate2", data_datepicker = "true" })</td>*@
+                        <td class="col-md-1 text-right">@Lang.csfs_accountkind</td>
+                        <td class="col-md-5">
+                            @Html.DropDownListFor(m => m.AccountKind, (IEnumerable<SelectListItem>)ViewBag.AccountKindList, new { @id = "ddlAccountKind" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_bankID</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.Unit, new { @id = "txtUnit", @MaxLength = "200" })
+                        </td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-5"></td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-1 text-right">@Lang.csfs_agent_depart</td>
+                        <td class="col-md-5">
+                            @Html.DropDownListFor(m => m.Depart, (IEnumerable<SelectListItem>)ViewBag.DepartList, new { @id = "ddlDepart" })
+                        </td>
+                        <td class="col-md-1 text-right"></td>
+                        <td class="col-md-5"></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confim</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+        </div>
+    }
+</div>
+@Html.Hidden("SyncAuthUrl", Url.Action("ChangCaseKind1", "Common", new { area = "Common" }))
+@Html.Hidden("PleaseSelect", Lang.csfs_select)
+@Html.Hidden("NametxtDate1", Lang.csfs_date1)
+@Html.Hidden("NametxtDate2", Lang.csfs_date2)
+@Html.Hidden("NametxtDate3", Lang.csfs_date3)
+@Html.Hidden("NametxtDate4", Lang.csfs_date4)
+
+@section scripts {
+    <script type="text/javascript">
+        $("#btnQuery").click(function () {
+            var newLine = "<br/>";
+            var msg = "";
+            if (!checkIsValidDate($("#txtCreatedDate1").val())) {
+                msg = msg + $("#NametxtDate1").val() + newLine;
+            }
+            if (!checkIsValidDate($("#txtCreatedDate2").val())) {
+                msg = msg + $("#NametxtDate2").val() + newLine;
+            }
+            if (!checkIsValidDate($("#txtCloseDate1").val())) {
+                msg = msg + $("#NametxtDate3").val() + newLine;
+            }
+            if (!checkIsValidDate($("#txtCloseDate2").val())) {
+                msg = msg + $("#NametxtDate4").val() + newLine;
+            }
+            //* 有必填檢核錯誤
+            if (msg.length > 0) {
+                jAlertError(msg);
+                return false;
+            }
+
+            $("#frmQuery").submit();
+        })//*點擊查詢
+        //點擊取消
+        $("#btnCancel").click(function () {
+            $("#ddlCaseKind2").attr("disabled", "disabled");
+        })
+
+        //二級連動
+        $('#ddlCaseKind2').attr("disabled", "true");
+        //點擊來文機關選擇
+        $("#ddlCaseKind").change(function () {
+            changeCaseKind();
+        });
+        //來文機關綁定
+        function changeCaseKind() {
+            try {
+                var selectedValue = $('#ddlCaseKind option:selected').val();
+                if (selectedValue == "") {
+                    $('#ddlCaseKind2').attr("disabled", "true");
+                    $("#ddlCaseKind2").empty();
+                    $("#ddlCaseKind2").append($('<option></option>').val('').text($("#PleaseSelect").val()));
+                } else {
+                    if ($.trim(selectedValue).length > 0) {
+                        $.ajax({
+                            type: "POST",
+                            async: false,
+                            url: $("#SyncAuthUrl").val(),
+                            data: { caseKind: selectedValue },
+                            success: function (data) {
+                                if (data.length > 0) {
+                                    $("#ddlCaseKind2").removeAttr("disabled");
+                                    $("#ddlCaseKind2").empty();
+                                    $("#ddlCaseKind2").append($('<option></option>').val('').text($("#PleaseSelect").val()));
+                                    $.each(data, function (i, item) {
+                                        $("#ddlCaseKind2").append($('<option></option>').val(item.Value).text(item.Value));
+                                    });
+                                } else {
+                                    $("#ddlCaseKind2").attr("disabled", "true");
+                                    $("#ddlCaseKind2").empty();
+                                    $("#ddlCaseKind2").append($('<option></option>').val('').text($("#PleaseSelect").val()));
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+            catch (e) {
+            }
+        }
+    </script>
+}
+
+

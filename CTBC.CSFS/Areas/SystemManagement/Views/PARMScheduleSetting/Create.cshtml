@@ -1,0 +1,114 @@
+﻿@model CTBC.CSFS.Models.PARMScheduleSettingVO
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_PARMScheduleSetting;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-edit"></i>
+        <h3 class="box-title">@Lang.csfs_create</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Ajax.BeginForm("Create", new AjaxOptions() { HttpMethod = "post", OnBegin = "ajaxValidate", OnFailure = "displayError" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_schedule_name
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.Name, new { @class = "", @MaxLength = "50" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_schedule_path
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.Path, new { @class = "", @MaxLength = "100" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_schedule_param
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.Arguments, new { @class = "", @MaxLength = "50" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_enable_ornot
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.Enabled, new { @class = "", @MaxLength = "1" }) @Lang.csfs_y_or_n
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_schedule_status
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.Status, new { @class = "", @MaxLength = "1" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            OneTime @Lang.csfs_start_time
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.OneTime, new { @class = "", @MaxLength = "19" })<span>@Lang.csfs_schedule_memo1</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_schedule_fix_hh
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.RegularHour, new { @class = "", @MaxLength = "2" })<span>@Lang.csfs_schedule_memo2</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right" nowrap="nowrap">
+                            @Lang.csfs_schedule_fix_mm
+                        </td>
+                        <td class="col-md-10">
+                            @Html.TextBoxFor(m => m.RegularMinute, new { @class = "", @MaxLength = "2" })<span>@Lang.csfs_schedule_memo3</span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+        </div><!-- /.box-body -->
+        <div class="box-footer text-center">
+            <button type="submit" id="btnSubmit" class="btn btn-primary btn-xs">
+                @Lang.csfs_save
+            </button>
+            <a class="btn btn-default btn-xs" href="@Url.Action("Query", "PARMScheduleSetting", new { area = "SystemManagement" })">@Lang.csfs_cancel</a>
+
+        </div>
+    }
+</div>
+
+
+@section scripts {
+    <script type="text/javascript">
+        function ajaxValidate() {
+            if ($.trim($("#Name").val()) === '' || $.trim($("#Path").val()) === '') {
+                jAlertError("@Lang.csfs_schedule_msg1");
+                return false;
+            } else {
+                return true;
+            }
+        }
+        function displayError() {
+            jAlertError($("#LoadErrorMsg").val());
+        }
+
+    </script>
+}
+
+

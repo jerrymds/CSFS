@@ -1,0 +1,296 @@
+﻿@using System.Web.Mvc.Html;
+@using System.Web.Mvc;
+@using CTBC.CSFS.Models;
+@using System.Web.Optimization;
+@using CTBC.CSFS;
+@model CTBC.CSFS.Models.CaseHisCondition
+    @{
+    ViewBag.Title = "歷史交易紀錄明細";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box-footer text-center">
+    <table border="0" style="width:100%">
+        <tr>
+            @*<td style="text-align:center;width:80%">
+                    <button type="button" id="btnSave" class="btn btn-primary btn-xs" onclick="SaveData();">儲存</button>
+            </td>*@
+            <td style="text-align:right;width:20%;" nowrap>
+                @Html.GetBackButtonInTab()
+            </td>
+        </tr>
+    </table>
+</div>
+<br />
+@using (Html.BeginForm("_QueryResult", "eTrsHisRecordDetail", new { area = "TrsDetail" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+{
+    @Html.HiddenFor(m => m.CaseId, new { id = "hidCaseId" })
+    @Html.HiddenFor(m => m.NewID, new { id = "hidNewID" })
+    @Html.HiddenFor(m => m.PageSource, new { id = "hidPageSource" })
+}
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "eTrsHisRecordDetail", new { area = "TrsDetail" ,model=Model})">
+</div>
+@Html.HiddenFor(m => m.PageFrom)
+@Html.HiddenFor(m => m.DocNo, new { id = "hidDocNo" })
+@Html.Hidden("NowPage", "eTrsHisRecordDetail")
+@Html.Hidden("CancelUrl", @Url.Action("Index", "eTrsHisRecord", new { area = "TrsDetail", isBack = "1" }))
+@Html.Hidden("CreateSuccessMsg", Lang.csfs_add_ok)
+@Html.Hidden("CreateFailMsg", Lang.csfs_add_fail)
+@Html.Hidden("hidSave", Url.Action("Save", "eTrsHisRecordDetail", new { area = "TrsDetail" }))
+@Html.Hidden("hidReturnViewByPk", Url.Action("ReturnViewByPk", "eTrsHisRecordDetail", new { area = "TrsDetail" }))
+@Html.Hidden("hidReturnFileDownLoad", Url.Action("ReturnFileDownLoad", "eTrsHisRecordDetail", new { area = "TrsDetail" }))
+
+@Html.Hidden("hidtxtReciveFilePath", @ViewData["txtReciveFilePath"])
+<script src="~/Scripts/jquery-2.1.3.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $(".content-header").hide();
+        QueryClick();
+    });
+
+    // 查詢
+    function QueryClick() {
+        $("#divResult").html("");
+        trimAllInput();
+
+        $.blockUI();
+        $.ajax({
+            url: $("#frmQuery").attr("action"),
+            type: "Post",
+            cache: false,
+            data: $("#frmQuery").serialize(),
+            error: function () {
+                jAlertError($("#LoadErrorMsg").val());
+                $.unblockUI();
+            },
+            success: function (data) {
+                $("#divResult").html(data).show();
+                $.unblockUI();
+                $("#querystring").val($("#frmQuery").serialize());
+            }
+        });
+    }
+
+   
+
+    // 完成
+    function Save() {
+        //$.blockUI();
+        //var CaseTrsQueryDetails = new Array();
+        //var CaseTrsQueryDetails = {
+        //    RowNum : "1",
+        //CustID : "A122948724",
+        //CustAccount :"123456789012",
+        //CaseStatusName : "未處理",
+        //QDateS : "2018/12/01",
+        //QDateE : "2018/12/31",
+        //RFDMQryMessage: "1111",
+        //LastDate: "2019/12/31"
+        //};
+        //var obj = ["中","1","2019/01/01"];
+        //CaseTrsQueryDetails.push(obj);
+        //modellist["RowNum"] = "1";
+        //modellist["CustID"] = "A122948724";
+        //modellist["CustAccount"] = "123456789012";
+        //modellist["CaseStatusName"] = "未處理";
+        //modellist["QDateS"] = "2018/12/01";
+        //modellist["QDateE"] = "2018/12/31";
+        //modellist["RFDMQryMessage"] = "1111";
+        //modellist["OpenDate"] = "2019/01/01";
+        //modellist["LastDate"] = "2019/12/31";
+
+        var model = new Array();
+        //var postData = { values: stringArray };
+        $("#details_table TBODY tr").each(function () {
+            var row = $(this);
+            var CaseTrsQueryDetails = {};
+            CaseTrsQueryDetails.chkbox = row.find("td").eq(0).html();
+            CaseTrsQueryDetails.RowNum = row.find("td").eq(1).html();
+            CaseTrsQueryDetails.CustID = row.find("td").eq(2).html();
+            CaseTrsQueryDetails.CustAccount = row.find("td").eq(3).html();
+            CaseTrsQueryDetails.CaseStatusName = row.find("td").eq(4).html();
+            CaseTrsQueryDetails.QDateS = row.find("td").eq(5).html();
+            CaseTrsQueryDetails.QDateE = row.find("td").eq(6).html();
+            CaseTrsQueryDetails.RFDMQryMessage = row.find("td").eq(7).html();
+            CaseTrsQueryDetails.OpenDate = row.find("td").eq(8).html();
+            CaseTrsQueryDetails.LastDate = row.find("td").eq(9).html();
+             model.push(CaseTrsQueryDetails);
+        });
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: $("#hidSave").val(),
+            //data: {
+            //    model: JSON.stringify(model),
+            //    CaseId: $("#hidCaseId").val().toString(),
+            //    NewID: $("#hidNewID").val().toString()
+            //},
+            data:JSON.stringify(model),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            success: function (data) {
+              //  $.unblockUI();
+                if (data) {
+                    alert("儲存成功");
+
+                    // 返回清單頁面
+                    location.href = $("#CancelUrl").val();
+
+                } else {
+                    alert("儲存失敗");
+                }
+            }
+        });
+    }
+
+    function SaveData() {
+        //if (CheckData()) {
+        //    $("#divResult").html("");
+
+            $.blockUI();
+            $.ajax({
+                url: $("#frmSave").attr("action"),
+                type: "Post",
+                cache: false,
+                data: $("#frmSave").serialize(),
+                error: function () {
+                    jAlertError($("#LoadErrorMsg").val());
+                    $.unblockUI();
+                },
+                success: function (data) {
+                    if (data.ReturnCode == "1")
+                    {
+                        alert("修改成功 !");
+                        $.unblockUI();
+                    }
+                    else
+                    {
+                        if (data.ReturnMsg != "")
+                        {
+                            alert(data.ReturnMsg);
+                        }
+                        else
+                        {
+                            alert("系統異常錯誤!");
+                        }
+                        $.unblockUI();
+                    }
+                }
+                //success: function (data) {
+                //    $.unblockUI();
+                //}
+            });
+            return false;
+        }
+    //}
+
+    // 欄位檢核
+    function CheckData() {
+        var msg = "";
+        trimAllInput();
+
+        // 查詢範圍
+        var CloseDateMsg = CheckDate($("#ForCDateS").val(), $("#ForCDateE").val(), "查詢區間")
+        if (CloseDateMsg != "") {
+            msg += CloseDateMsg;
+        }
+
+        if (msg == "") {
+            return true;
+        } else {
+            jAlertError(msg);
+
+            return false;
+        }
+    }
+
+    // 日期檢核
+    function CheckDate(startDate, endDate, alertMsg) {
+        var msg = "";
+
+        if (startDate != "" && endDate != "") {
+            startDate = ChangeDate(startDate);
+            endDate = ChangeDate(endDate);
+
+            if (new Date(startDate) > new Date(endDate)) {
+                msg = alertMsg + "起日不得大於迄日!\r\n";
+            }
+        }
+
+        return msg;
+    }
+
+    // 轉換成西元年
+    function ChangeDate(strDate) {
+        // 截取年份
+        var pYear = strDate.substring(0, strDate.indexOf('/'));
+
+        // 截取月份和天
+        var pMonthDay = strDate.substring(strDate.indexOf('/'), strDate.length);
+
+        // 年份+1991
+        if (parseInt(pYear) <= 200) {
+            pYear = parseInt(pYear) + 1911;
+        }
+
+        return pYear + "/" + pMonthDay;
+    }
+
+    // 全選
+    function ChkAll() {
+        if ($("#check01").prop("checked") == true) {
+            $(".checkfile").prop("checked", "checked");
+        } else {
+            $(".checkfile").removeAttr("checked");
+        }
+    }
+
+    // checkbox點擊事件
+    function ChildItem() {
+        // 選中個數
+        var chkResult = 0;
+        $(".checkfile").each(function () {
+            if ($(this).prop("checked") == true) {
+                chkResult++;
+            }
+        });
+
+        if (chkResult == $(".checkfile").length) {
+            $("#check01").prop("checked", "checked");
+        } else {
+            $("#check01").removeAttr("checked");
+        }
+    }
+
+    // 回文檢視
+    function ReturnViewByPk() {
+        var strPk = $("#hidNewID").val().toString();
+
+        var strDocNo = $("#hidDocNo").val().toString();
+
+        $.blockUI();
+
+        $.ajax({
+            type: "POST",
+            async: false,
+            url: $("#hidIsExistReturnfile").val(),
+            data: {
+                strPk: strPk,
+                strDocNo: strDocNo
+            },
+            success: function (data) {
+                $.unblockUI();
+                if (data == "Y") {
+                    window.location.href = "CaseCustManagerDetail/ReturnViewByPk?strPk=" + strPk + "&strDocNo=" + strDocNo;
+
+                }
+                else {
+                    alert("沒有回文資料，無法檢視！");
+                }
+            }
+        });
+    }
+
+
+</script>

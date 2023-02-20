@@ -1,0 +1,399 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="CSFSModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="PARMCode">
+          <Key>
+            <PropertyRef Name="CodeUid" />
+          </Key>
+          <Property Name="CodeUid" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CodeType" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CodeTypeDesc" Type="nvarchar" MaxLength="200" />
+          <Property Name="CodeNo" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="CodeDesc" Type="nvarchar" MaxLength="200" />
+          <Property Name="SortOrder" Type="int" />
+          <Property Name="CodeTag" Type="nvarchar" MaxLength="50" />
+          <Property Name="CodeMemo" Type="nvarchar" MaxLength="500" />
+          <Property Name="Enable" Type="bit" />
+          <Property Name="CreatedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedDate" Type="datetime" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="50" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="BANCSCode" Type="varchar" MaxLength="10" />
+          <Property Name="SeizureAmt" Type="int" />
+        </EntityType>
+        <EntityType Name="TX_20450">
+          <Key>
+            <PropertyRef Name="SNO" />
+          </Key>
+          <Property Name="SNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cCretDT" Type="datetime" />
+          <Property Name="CaseId" Type="uniqueidentifier" />
+          <Property Name="Account" Type="nvarchar" MaxLength="20" />
+          <Property Name="outputCode" Type="nvarchar" MaxLength="10" />
+          <Property Name="DATA1" Type="nvarchar" MaxLength="80" />
+          <Property Name="DATA2" Type="nvarchar" MaxLength="80" />
+          <Property Name="DATA3" Type="nvarchar" MaxLength="80" />
+          <Property Name="DATA4" Type="nvarchar" MaxLength="80" />
+          <Property Name="DATA5" Type="nvarchar" MaxLength="80" />
+          <Property Name="DATA6" Type="nvarchar" MaxLength="80" />
+          <Property Name="FIELD_07" Type="nvarchar" MaxLength="80" />
+          <Property Name="FILLER5" Type="nvarchar" MaxLength="80" />
+          <Property Name="FILLER6" Type="nvarchar" MaxLength="80" />
+          <Property Name="FILLER7" Type="nvarchar" MaxLength="80" />
+          <Property Name="TrnNum" Type="nvarchar" MaxLength="21" />
+          <Property Name="RepMessage" Type="nvarchar" MaxLength="65" />
+        </EntityType>
+        <EntityType Name="TX_20480">
+          <Key>
+            <PropertyRef Name="SNO" />
+          </Key>
+          <Property Name="SNO" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cCretDT" Type="datetime" />
+          <Property Name="CaseId" Type="uniqueidentifier" />
+          <Property Name="Account" Type="nvarchar" MaxLength="20" />
+          <Property Name="outputCode" Type="nvarchar" MaxLength="20" />
+          <Property Name="DATA1" Type="nvarchar" MaxLength="80" />
+          <Property Name="DATA2" Type="nvarchar" MaxLength="80" />
+          <Property Name="TrnNum" Type="nvarchar" MaxLength="21" />
+          <Property Name="RepMessage" Type="nvarchar" MaxLength="65" />
+        </EntityType>
+        <EntityType Name="WarningAcctBalance">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CaseId" Type="uniqueidentifier" />
+          <Property Name="TXDate" Type="datetime" />
+          <Property Name="Account" Type="nvarchar" MaxLength="20" />
+          <Property Name="Balance" Type="nvarchar" MaxLength="19" />
+          <Property Name="CreatedId" Type="nvarchar" MaxLength="10" />
+          <Property Name="CreatedTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="WarningGenAcct">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="INST_NO" Type="nvarchar" MaxLength="3" />
+          <Property Name="HOME_BRCH" Type="nvarchar" MaxLength="4" />
+          <Property Name="ACCT_NO" Type="nvarchar" MaxLength="16" />
+          <Property Name="ACT_DATE_TIME" Type="nvarchar" MaxLength="20" />
+          <Property Name="ACT_DATE" Type="nvarchar" MaxLength="8" />
+          <Property Name="ACT_CCYY" Type="nvarchar" MaxLength="4" />
+          <Property Name="ACT_MM" Type="nvarchar" MaxLength="2" />
+          <Property Name="ACT_DD" Type="nvarchar" MaxLength="2" />
+          <Property Name="ACT_TIME" Type="nvarchar" MaxLength="12" />
+          <Property Name="TRAN_TYPE" Type="nvarchar" MaxLength="2" />
+          <Property Name="TRAN_STATUS" Type="nvarchar" MaxLength="2" />
+          <Property Name="TRAN_DATE" Type="nvarchar" MaxLength="8" />
+          <Property Name="BRANCH" Type="nvarchar" MaxLength="4" />
+          <Property Name="BRANCH_TERM" Type="nvarchar" MaxLength="3" />
+          <Property Name="TELLER" Type="nvarchar" MaxLength="5" />
+          <Property Name="TRAN_CODE" Type="nvarchar" MaxLength="7" />
+          <Property Name="POST_DATE" Type="nvarchar" MaxLength="8" />
+          <Property Name="JRNL_NO" Type="nvarchar" MaxLength="7" />
+          <Property Name="AMOUNT" Type="nvarchar" MaxLength="19" />
+          <Property Name="BTCH_NO_U" Type="nvarchar" MaxLength="2" />
+          <Property Name="CORRECTION" Type="nvarchar" MaxLength="1" />
+          <Property Name="DEFER_DAYS" Type="nvarchar" MaxLength="3" />
+          <Property Name="BALANCE" Type="nvarchar" MaxLength="19" />
+          <Property Name="FOREIGN_FLAG" Type="nvarchar" MaxLength="1" />
+          <Property Name="FILLER" Type="nvarchar" MaxLength="33" />
+          <Property Name="CreatedId" Type="nvarchar" MaxLength="10" />
+          <Property Name="CreatedTime" Type="datetime" />
+          <Property Name="CHQ_PAYEE" Type="nvarchar" MaxLength="50" />
+          <Property Name="ACCOUNT_NO" Type="nvarchar" MaxLength="16" />
+          <Property Name="SYSTEM" Type="nvarchar" MaxLength="3" />
+          <Property Name="DESCR" Type="nvarchar" MaxLength="1" />
+          <Property Name="DocNo" Type="nvarchar" MaxLength="15" />
+          <Property Name="HangAmount" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="eTabs" Type="nvarchar" MaxLength="1" />
+          <Property Name="Memo" Type="nvarchar" MaxLength="250" />
+          <Property Name="TimeLog" Type="nvarchar" MaxLength="250" />
+          <Property Name="ModifiedUser" Type="nvarchar" MaxLength="10" />
+          <Property Name="ModifiedDate" Type="datetime" />
+          <Property Name="BALANCE450" Type="nvarchar" MaxLength="19" />
+        </EntityType>
+        <EntityContainer Name="CSFSModelStoreContainer">
+          <EntitySet Name="PARMCode" EntityType="Self.PARMCode" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TX_20450" EntityType="Self.TX_20450" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="TX_20480" EntityType="Self.TX_20480" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WarningAcctBalance" EntityType="Self.WarningAcctBalance" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="WarningGenAcct" EntityType="Self.WarningGenAcct" Schema="dbo" store:Type="Tables" />
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="CSFSModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="CSFSEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="TX_20450" EntityType="CSFSModel.TX_20450" />
+          <EntitySet Name="TX_20480" EntityType="CSFSModel.TX_20480" />
+          <EntitySet Name="WarningAcctBalance" EntityType="CSFSModel.WarningAcctBalance" />
+          <EntitySet Name="WarningGenAcct" EntityType="CSFSModel.WarningGenAcct" />
+          <EntitySet Name="PARMCode" EntityType="CSFSModel.PARMCode" />
+        </EntityContainer>
+        <EntityType Name="TX_20450">
+          <Key>
+            <PropertyRef Name="SNO" />
+          </Key>
+          <Property Name="SNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cCretDT" Type="DateTime" Precision="3" />
+          <Property Name="CaseId" Type="Guid" />
+          <Property Name="Account" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="outputCode" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="DATA1" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="DATA2" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="DATA3" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="DATA4" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="DATA5" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="DATA6" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="FIELD_07" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="FILLER5" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="FILLER6" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="FILLER7" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="TrnNum" Type="String" MaxLength="21" FixedLength="false" Unicode="true" />
+          <Property Name="RepMessage" Type="String" MaxLength="65" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="TX_20480">
+          <Key>
+            <PropertyRef Name="SNO" />
+          </Key>
+          <Property Name="SNO" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cCretDT" Type="DateTime" Precision="3" />
+          <Property Name="CaseId" Type="Guid" />
+          <Property Name="Account" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="outputCode" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="DATA1" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="DATA2" Type="String" MaxLength="80" FixedLength="false" Unicode="true" />
+          <Property Name="TrnNum" Type="String" MaxLength="21" FixedLength="false" Unicode="true" />
+          <Property Name="RepMessage" Type="String" MaxLength="65" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="WarningAcctBalance">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CaseId" Type="Guid" />
+          <Property Name="TXDate" Type="DateTime" Precision="3" />
+          <Property Name="Account" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Balance" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="WarningGenAcct">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="INST_NO" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="HOME_BRCH" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ACCT_NO" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="ACT_DATE_TIME" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="ACT_DATE" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="ACT_CCYY" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="ACT_MM" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="ACT_DD" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="ACT_TIME" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="TRAN_TYPE" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="TRAN_STATUS" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="TRAN_DATE" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="BRANCH" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="BRANCH_TERM" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="TELLER" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="TRAN_CODE" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Name="POST_DATE" Type="String" MaxLength="8" FixedLength="false" Unicode="true" />
+          <Property Name="JRNL_NO" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Name="AMOUNT" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="BTCH_NO_U" Type="String" MaxLength="2" FixedLength="false" Unicode="true" />
+          <Property Name="CORRECTION" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="DEFER_DAYS" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="BALANCE" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+          <Property Name="FOREIGN_FLAG" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="FILLER" Type="String" MaxLength="33" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedId" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="CHQ_PAYEE" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ACCOUNT_NO" Type="String" MaxLength="16" FixedLength="false" Unicode="true" />
+          <Property Name="SYSTEM" Type="String" MaxLength="3" FixedLength="false" Unicode="true" />
+          <Property Name="DESCR" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="DocNo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="HangAmount" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="eTabs" Type="String" MaxLength="1" FixedLength="false" Unicode="true" />
+          <Property Name="Memo" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="TimeLog" Type="String" MaxLength="250" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="BALANCE450" Type="String" MaxLength="19" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="PARMCode">
+          <Key>
+            <PropertyRef Name="CodeUid" />
+          </Key>
+          <Property Name="CodeUid" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CodeType" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CodeTypeDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="CodeNo" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CodeDesc" Type="String" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="SortOrder" Type="Int32" />
+          <Property Name="CodeTag" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CodeMemo" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="Enable" Type="Boolean" />
+          <Property Name="CreatedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="CreatedDate" Type="DateTime" Precision="3" />
+          <Property Name="ModifiedUser" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="ModifiedDate" Type="DateTime" Precision="3" />
+          <Property Name="BANCSCode" Type="String" MaxLength="10" FixedLength="false" Unicode="false" />
+          <Property Name="SeizureAmt" Type="Int32" />
+        </EntityType>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="CSFSModelStoreContainer" CdmEntityContainer="CSFSEntities">
+          <EntitySetMapping Name="TX_20450">
+            <EntityTypeMapping TypeName="CSFSModel.TX_20450">
+              <MappingFragment StoreEntitySet="TX_20450">
+                <ScalarProperty Name="RepMessage" ColumnName="RepMessage" />
+                <ScalarProperty Name="TrnNum" ColumnName="TrnNum" />
+                <ScalarProperty Name="FILLER7" ColumnName="FILLER7" />
+                <ScalarProperty Name="FILLER6" ColumnName="FILLER6" />
+                <ScalarProperty Name="FILLER5" ColumnName="FILLER5" />
+                <ScalarProperty Name="FIELD_07" ColumnName="FIELD_07" />
+                <ScalarProperty Name="DATA6" ColumnName="DATA6" />
+                <ScalarProperty Name="DATA5" ColumnName="DATA5" />
+                <ScalarProperty Name="DATA4" ColumnName="DATA4" />
+                <ScalarProperty Name="DATA3" ColumnName="DATA3" />
+                <ScalarProperty Name="DATA2" ColumnName="DATA2" />
+                <ScalarProperty Name="DATA1" ColumnName="DATA1" />
+                <ScalarProperty Name="outputCode" ColumnName="outputCode" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="cCretDT" ColumnName="cCretDT" />
+                <ScalarProperty Name="SNO" ColumnName="SNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TX_20480">
+            <EntityTypeMapping TypeName="CSFSModel.TX_20480">
+              <MappingFragment StoreEntitySet="TX_20480">
+                <ScalarProperty Name="RepMessage" ColumnName="RepMessage" />
+                <ScalarProperty Name="TrnNum" ColumnName="TrnNum" />
+                <ScalarProperty Name="DATA2" ColumnName="DATA2" />
+                <ScalarProperty Name="DATA1" ColumnName="DATA1" />
+                <ScalarProperty Name="outputCode" ColumnName="outputCode" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="cCretDT" ColumnName="cCretDT" />
+                <ScalarProperty Name="SNO" ColumnName="SNO" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WarningAcctBalance">
+            <EntityTypeMapping TypeName="CSFSModel.WarningAcctBalance">
+              <MappingFragment StoreEntitySet="WarningAcctBalance">
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedId" ColumnName="CreatedId" />
+                <ScalarProperty Name="Balance" ColumnName="Balance" />
+                <ScalarProperty Name="Account" ColumnName="Account" />
+                <ScalarProperty Name="TXDate" ColumnName="TXDate" />
+                <ScalarProperty Name="CaseId" ColumnName="CaseId" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="WarningGenAcct">
+            <EntityTypeMapping TypeName="CSFSModel.WarningGenAcct">
+              <MappingFragment StoreEntitySet="WarningGenAcct">
+                <ScalarProperty Name="BALANCE450" ColumnName="BALANCE450" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="TimeLog" ColumnName="TimeLog" />
+                <ScalarProperty Name="Memo" ColumnName="Memo" />
+                <ScalarProperty Name="eTabs" ColumnName="eTabs" />
+                <ScalarProperty Name="HangAmount" ColumnName="HangAmount" />
+                <ScalarProperty Name="DocNo" ColumnName="DocNo" />
+                <ScalarProperty Name="DESCR" ColumnName="DESCR" />
+                <ScalarProperty Name="SYSTEM" ColumnName="SYSTEM" />
+                <ScalarProperty Name="ACCOUNT_NO" ColumnName="ACCOUNT_NO" />
+                <ScalarProperty Name="CHQ_PAYEE" ColumnName="CHQ_PAYEE" />
+                <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
+                <ScalarProperty Name="CreatedId" ColumnName="CreatedId" />
+                <ScalarProperty Name="FILLER" ColumnName="FILLER" />
+                <ScalarProperty Name="FOREIGN_FLAG" ColumnName="FOREIGN_FLAG" />
+                <ScalarProperty Name="BALANCE" ColumnName="BALANCE" />
+                <ScalarProperty Name="DEFER_DAYS" ColumnName="DEFER_DAYS" />
+                <ScalarProperty Name="CORRECTION" ColumnName="CORRECTION" />
+                <ScalarProperty Name="BTCH_NO_U" ColumnName="BTCH_NO_U" />
+                <ScalarProperty Name="AMOUNT" ColumnName="AMOUNT" />
+                <ScalarProperty Name="JRNL_NO" ColumnName="JRNL_NO" />
+                <ScalarProperty Name="POST_DATE" ColumnName="POST_DATE" />
+                <ScalarProperty Name="TRAN_CODE" ColumnName="TRAN_CODE" />
+                <ScalarProperty Name="TELLER" ColumnName="TELLER" />
+                <ScalarProperty Name="BRANCH_TERM" ColumnName="BRANCH_TERM" />
+                <ScalarProperty Name="BRANCH" ColumnName="BRANCH" />
+                <ScalarProperty Name="TRAN_DATE" ColumnName="TRAN_DATE" />
+                <ScalarProperty Name="TRAN_STATUS" ColumnName="TRAN_STATUS" />
+                <ScalarProperty Name="TRAN_TYPE" ColumnName="TRAN_TYPE" />
+                <ScalarProperty Name="ACT_TIME" ColumnName="ACT_TIME" />
+                <ScalarProperty Name="ACT_DD" ColumnName="ACT_DD" />
+                <ScalarProperty Name="ACT_MM" ColumnName="ACT_MM" />
+                <ScalarProperty Name="ACT_CCYY" ColumnName="ACT_CCYY" />
+                <ScalarProperty Name="ACT_DATE" ColumnName="ACT_DATE" />
+                <ScalarProperty Name="ACT_DATE_TIME" ColumnName="ACT_DATE_TIME" />
+                <ScalarProperty Name="ACCT_NO" ColumnName="ACCT_NO" />
+                <ScalarProperty Name="HOME_BRCH" ColumnName="HOME_BRCH" />
+                <ScalarProperty Name="INST_NO" ColumnName="INST_NO" />
+                <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PARMCode">
+            <EntityTypeMapping TypeName="CSFSModel.PARMCode">
+              <MappingFragment StoreEntitySet="PARMCode">
+                <ScalarProperty Name="SeizureAmt" ColumnName="SeizureAmt" />
+                <ScalarProperty Name="BANCSCode" ColumnName="BANCSCode" />
+                <ScalarProperty Name="ModifiedDate" ColumnName="ModifiedDate" />
+                <ScalarProperty Name="ModifiedUser" ColumnName="ModifiedUser" />
+                <ScalarProperty Name="CreatedDate" ColumnName="CreatedDate" />
+                <ScalarProperty Name="CreatedUser" ColumnName="CreatedUser" />
+                <ScalarProperty Name="Enable" ColumnName="Enable" />
+                <ScalarProperty Name="CodeMemo" ColumnName="CodeMemo" />
+                <ScalarProperty Name="CodeTag" ColumnName="CodeTag" />
+                <ScalarProperty Name="SortOrder" ColumnName="SortOrder" />
+                <ScalarProperty Name="CodeDesc" ColumnName="CodeDesc" />
+                <ScalarProperty Name="CodeNo" ColumnName="CodeNo" />
+                <ScalarProperty Name="CodeTypeDesc" ColumnName="CodeTypeDesc" />
+                <ScalarProperty Name="CodeType" ColumnName="CodeType" />
+                <ScalarProperty Name="CodeUid" ColumnName="CodeUid" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="無" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

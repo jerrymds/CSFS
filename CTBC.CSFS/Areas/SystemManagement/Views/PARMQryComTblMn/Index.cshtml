@@ -1,0 +1,52 @@
+﻿@model PARMQryComTblMnViewModel
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_PARMScheduleSetting;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="con_title1">
+    <span>@Lang.csfs_query</span>
+</div>
+<div id="QryConArea">
+    @using (Ajax.BeginForm("ExecuteResult", new AjaxOptions() { UpdateTargetId = "result", HttpMethod = "post" }))
+    {
+    
+    <table width="100%" border="1" cellpadding="3" cellspacing="0" class="query_table">
+        <tr>
+            <td style="width: 80%;">
+                @Html.TextAreaFor(m => m.QryCondition, new { @style = "width:100%;height:250px" })
+            </td>
+        </tr>
+    </table>
+    }
+</div>
+<div>
+    <button type="button" onclick="ExecuteResult()">
+        @Lang.csfs_query
+    </button>
+    <button type="button" onclick="ClearQryCondition()">
+        @Lang.csfs_cancel
+    </button>
+    <button type="button" onclick="location.href = '@Url.Action("Query","CSFSLog")';">
+        @Lang.csfs_return_send
+    </button>
+</div>
+<div id="divResult">
+</div>
+<script type="text/javascript" language="javascript">
+
+    // 執行
+    function ExecuteResult() {
+        if ($("#QryCondition").val() == "") {
+            alert("please input QryCondition！");
+        }
+        else {
+            $.post('@Url.Action("_QueryResult","PARMQryComTblMn")?' + $("form").serialize(), function (data) {
+                $("#divResult").html(data);
+            });
+        }
+    }
+    function ClearQryCondition() {
+        $("#QryCondition").val('');
+        $("#divResult").html('');
+    }
+</script>

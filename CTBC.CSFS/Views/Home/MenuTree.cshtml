@@ -1,0 +1,223 @@
+﻿
+@{
+    Layout = null;
+}
+@model dynamic
+@using System.Text;
+@using CTBC.Framework.Platform;
+@using System.Configuration;
+@using System.Xml;
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>MenuTree</title>
+    @*<!-[if gte IE 6]>
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <![endif]->
+    <script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/jquery-1.10.2.js")" type="text/javascript"></script>*@
+
+    <link href="@Url.Content("~/Content/treeview/jquery.treeview.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/treeview/screen.css")" rel="stylesheet" type="text/css" />
+    <script src="@Url.Content("~/Scripts/jquery-1.10.2.min.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/treeview/jquery.cookie.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/treeview/jquery.treeview.js")" type="text/javascript"></script>
+    <script src="@Url.Content("~/Scripts/Common.js")" type="text/javascript"></script>
+
+
+</head>
+<body>
+    @*<div>
+        登入者角色清單
+        <p><a href="~/PARMCode/Index" target="mainFrame">參數維護</a></p>
+    </div>*@
+    <div style="margin-top:5px;margin-left:5px;font-size:13px;">
+        <span class="show_idname">@Lang.csfs_logon_usr:@(((CTBC.Framework.Platform.User)Session["LogonUser"]).Name)</span>&nbsp;&nbsp;
+        <input type="button" id="btnShowRoles" onclick="showRoles()" value="@Lang.csfs_logon_list" />
+    </div>
+    @{
+        string rList = Lang.csfs_logonusr_roles+ ":\\r\\n\\r\\n";
+        try
+        {
+            List<CTBC.Framework.Platform.User.RoleInfo> mtRoles = new List<CTBC.Framework.Platform.User.RoleInfo>();
+            mtRoles = ((CTBC.Framework.Platform.User)Session["LogonUser"]).Roles;
+            if (mtRoles.Count > 0)
+            {
+                int i = 0;
+                foreach (CTBC.Framework.Platform.User.RoleInfo item in mtRoles)
+                {
+                    i++;
+                    rList += i + "." + item.RoleName + "(" + item.RoleLDAPId + ")\\r\\n";
+                }
+            }
+            else { rList = Lang.csfs_query_nodata; }
+        }
+        catch { rList = Lang.csfs_query_nodata; }
+    }
+    <script type="text/javascript">
+        function showRoles() {
+            alert('@rList');
+        }
+    </script> 
+    @functions{
+        //所有Menu授權資料    
+        string AppAuthZ = "";
+        //應用系統LDAP DN
+        string LDAPServiceDN = (ConfigurationManager.AppSettings["LDAPServiceDN"] == null ? "CSFS" : ConfigurationManager.AppSettings["LDAPServiceDN"]);
+        //該User的被授權角色
+        List<string> usrCurrRoles = new List<string>();
+        List<User.RoleInfo> tUsrCurrRoles = new List<User.RoleInfo>();
+        //MenuTree字串
+        StringBuilder sb = new StringBuilder();
+
+        public string GetMenuTree()
+        {
+            try
+            {
+                System.Xml.XmlDocument AuthZ = new System.Xml.XmlDocument();
+
+                //取得所有Menu授權資料
+                if (CTBC.Framework.Platform.AppCache.InCache("AppAuthZ"))
+                { AppAuthZ = (string)CTBC.Framework.Platform.AppCache.Get("AppAuthZ"); }
+                else
+                { AppAuthZ = ""; }
+
+                //取得該User的被授權角色
+                if (HttpContext.Current.Session["LogonUser"] != null)
+                {
+                    tUsrCurrRoles = ((User)HttpContext.Current.Session["LogonUser"]).Roles;
+                    foreach (User.RoleInfo r in tUsrCurrRoles)
+                    {
+                        usrCurrRoles.Add(r.RoleLDAPId);
+                    }
+                }
+
+                //如果有Menu授權資料 + 且User有被授權至少一個角色
+                if (!string.IsNullOrEmpty(AppAuthZ) && usrCurrRoles.Count > 0)
+                {
+                    //Load Menu授權資料,並且只讀取Menu這個項目所有節點資料
+                    AuthZ.LoadXml(AppAuthZ);
+                    XmlNode lo_Node = AuthZ.DocumentElement.SelectSingleNode("//*[@md_FuncID='Menu']");
+
+                    //顯示id與class可隨display style修改
+                    sb.Append("<ul id=\"browser\" class=\"filetree\"><li>");
+
+                    //ReadTopNode
+                    //class可隨display style修改
+                    sb.Append("<span class=\"folder\">" + Lang.ResourceManager.GetString(lo_Node.Attributes["TITLE"].Value.Trim()) + "</span>");
+
+                    //ReadSubNode
+                    XmlNodeList nodelist = lo_Node.ChildNodes;
+                    GetSubNode(nodelist);
+                    sb.Append("</li></ul>");
+                }
+                return sb.ToString();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        //讀取子節點
+        private void GetSubNode(XmlNodeList nodelist)
+        {
+            List<string> oneMenuRoles = new List<string>();
+            bool addMenu = false;
+            int nodeListCnt = 0;
+            nodeListCnt = nodelist.Count;
+            if (nodeListCnt > 0)
+                sb.Append("<ul>");
+
+            //取得該節點項下所有子節點,並組成Menu Html
+            foreach (XmlNode item in nodelist)
+            {
+                if (item.Attributes["md_AuthZ"] != null)
+                {
+                    //取得本項Menu被授權的Role清單
+                    oneMenuRoles = GetOneMenuRoles(HttpUtility.UrlDecode(item.Attributes["md_AuthZ"].Value));
+
+                    //比較目前使用者被授權的角色(usrCurrRoles)是否有權看到此Menu(usrCurrRoles是否存在oneMenuRoles內)
+                    addMenu = IsAuthorized(oneMenuRoles, usrCurrRoles);
+
+                    //該Menu被授權,顯示此一Menu
+                    if (addMenu)
+                    {
+                        //讀取該節點項下所有子節點
+                        XmlNodeList nodeListChild = item.ChildNodes;
+
+                        sb.Append("<li>");
+
+                        //若該節點項下有子節點
+                        if (nodeListChild.Count > 0)
+                            //顯示節點Menu
+                            //class可隨display style修改
+                            sb.Append("<span class=\"folder\">" + Lang.ResourceManager.GetString(item.Attributes["TITLE"].Value.Trim()) + "</span>");
+                        else
+                        {
+                            //顯示子節點
+                            //class可隨display style修改
+                            string tURL = (item.Attributes["md_URL"] != null) ? item.Attributes["md_URL"].Value : "";
+                            sb.Append("<span class=\"file\"><a href=\"" + Url.Content("~/") + tURL + "\" target=\"mainFrame\">" + Lang.ResourceManager.GetString(item.Attributes["TITLE"].Value.Trim()) + "</a></span>");// Lang.csfs_menu_tit_workingday
+                        }
+
+                        //遞回讀取子節點
+                        GetSubNode(nodeListChild);
+                        sb.Append("</li>");
+                    }
+                }
+            }
+
+            if (nodeListCnt > 0)
+                sb.Append("</ul>");
+        }
+
+        //取得本項Menu被授權的Role清單
+        private List<string> GetOneMenuRoles(string authZString)
+        {
+            List<string> roles = new List<string>();
+            XmlDocument lo_DOM = new XmlDocument();
+            lo_DOM.LoadXml(authZString);
+            XmlNode role_Node = lo_DOM.DocumentElement.SelectSingleNode("/Data");
+
+            XmlNodeList nodelist = role_Node.ChildNodes;
+            foreach (XmlNode item in nodelist)
+            {
+                roles.Add(item.ChildNodes[0].InnerText.Replace("cn=", "").Replace("," + LDAPServiceDN, ""));//取代,ou=CSFS,ou=APPs,o=CTCB 為""
+            }
+            return roles;
+        }
+
+        //此項Menu是否被授權
+        private bool IsAuthorized(List<string> oneMenuRoles, List<string> usrCurrRoles)
+        {
+            bool isAuth = false;
+            foreach (string item in usrCurrRoles)
+            {
+                //如果此項Menu中的角色
+                if (oneMenuRoles.Contains(item))
+                {
+                    isAuth = true;
+                    break;
+                }
+            }
+            return isAuth;
+        }
+  
+    }
+
+    @{
+        string menuTreeStr = GetMenuTree();
+        <div id="MenuTree">@Html.Raw(menuTreeStr)</div>
+    }
+         <script type="text/javascript">
+
+            $("#browser").treeview({
+                persist: "location",
+                collapsed: true,
+                unique: false
+            });
+        </script>
+    </body>
+    </html>

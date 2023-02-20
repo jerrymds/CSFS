@@ -1,0 +1,63 @@
+﻿@model CTBC.CSFS.Models.PARMMenuVO
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_collectiontoassignment;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="box box-primary">
+    <div class="box-header">
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("Index", "DirectorToSign", new {area = "Director"}, FormMethod.Post, new {id = "frmQuery", @class = "form-horizontal", enctype = "multipart/form-data"}))
+    {
+        <div class="box-body ">
+            <div class="form-group">
+                <label class="col-sm-2 control-label">@Lang.csfs_menu_name</label>
+                <div class="col-sm-6">
+                    <input type="text" id="TITLE" name="TITLE" class="form-control"/>
+                </div>
+                <div class="col-sm-4 text-inline"><span class="text-red">&lowast;</span>@Lang.csfs_menu_help1</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">日期範例</label>
+                <div class="col-sm-6">
+                    <input type="text" data-datepicker="true" id="txtDateS"/>
+                    ~
+
+                    <input type="text" data-datepicker="true" id="txtDateE" />
+                </div>
+                <div class="col-sm-4 text-inline"><span class="text-red">&lowast;</span>@Lang.csfs_menu_help2</div>
+            </div>
+
+            <div class="form-group">
+                <label class="col-sm-2 control-label">彈出窗口範例</label>
+                <div class="col-sm-6">
+                  
+
+                </div>
+                <div class="col-sm-4 text-inline"><span class="text-red">&lowast;</span>@Lang.csfs_menu_help2</div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label">上傳</label>
+                <div class="col-sm-10">
+                    @***** 上傳部分開始 ******@
+                    <div id="divUploadList">
+                        <div class="row">
+                            <input type="file" class="col-sm-6" name="fileAttNames" id="fileAtt1"/>
+                        </div>
+                    </div>
+                    @***** 上傳部分結束 ******@
+                </div>
+            </div>
+        </div><!-- /.box-body -->
+        <div class="box-footer">
+            <button id="btnQuery" type="submit" class="btn btn-primary">@Lang.csfs_query</button>
+        </div>
+    }
+</div>
+@section scripts {
+    @* 如果有多文件上傳才引用下面JS *@
+    @Scripts.Render("~/Scripts/common.uploadlist.js")
+}

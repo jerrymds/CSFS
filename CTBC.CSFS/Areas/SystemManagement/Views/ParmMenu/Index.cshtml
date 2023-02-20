@@ -1,0 +1,64 @@
+﻿@model CTBC.CSFS.Models.PARMMenuVO
+
+@{
+    ViewBag.Title = Lang.csfs_menu_tit_parmmenu;
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_query</h3>
+    </div><!-- /.box-header -->
+    <!-- form start -->
+    @using (Html.BeginForm("_QueryResult", "PARMMenu", new { area = "SystemManagement" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        @* 請使用 col-md-數字來設定寬度 一行總和為12 *@
+                        <td class="col-md-3 text-right">@Lang.csfs_menu_name</td>
+                        <td class="col-md-6">
+                            @Html.TextBoxFor(m => m.TITLE, new { @MaxLength = "100", @class = "col-md-12 no-padding", placeholder = string.Format(Lang.csfs_pleaseinput_0, Lang.csfs_menu_name) })
+                        </td>
+                        <td class="col-md-3">
+                            <span class="text-red">&lowast;</span>@Lang.csfs_menu_help1
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-3 text-right">@Lang.csfs_menu_funcid</td>
+                        <td class="col-md-6">
+                            @Html.TextBoxFor(m => m.md_FuncID, new { @MaxLength = "100", @class = "col-md-12 no-padding", placeholder = string.Format(Lang.csfs_pleaseinput_0, Lang.csfs_menu_funcid) })
+                        </td>
+                        <td class="col-md-3">
+                            <span class="text-red">&lowast;</span>@Lang.csfs_menu_help2
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div><!-- /.box-body -->
+        <div class="box-footer text-center">
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <a class="btn btn-primary btn-xs" href="@Url.Action("Create", "PARMMenu", new {area = "SystemManagement"})">@Lang.csfs_create</a>
+            
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "PARMMenu", new { area = "SystemManagement" })">
+
+</div>
+@Html.Hidden("NowPage", "MenuQuery")
+@Html.Hidden("EditUrl", Url.Action("Edit", "PARMMenu", new { area = "SystemManagement" }))
+@Html.Hidden("DeleteUrl", Url.Action("Delete", "PARMMenu", new { area = "SystemManagement" }))
+@Html.Hidden("SelectOneMsg", Lang.csfs_select_one)
+@Html.Hidden("DeleteConfirmMsg", Lang.csfs_del_confirm)
+@Html.Hidden("DeleteFailMsg", Lang.csfs_del_fail)
+@Html.Hidden("DeleteSuccessMsg", Lang.csfs_del_ok)
+
+
+@section scripts {
+    @Scripts.Render("~/Scripts/SystemManagement/PARMMenu.js")
+}
