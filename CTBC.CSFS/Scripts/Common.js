@@ -12,6 +12,8 @@
             //* init
             $.CSFS.bindFancybox();
             $.CSFS.bindDatePicker();
+            //moment 設定語系
+            moment.locale();
         },
         //* 綁定彈出
         bindFancybox: function () {
@@ -64,9 +66,7 @@
                 var list = $("[data-datepicker]");
                 $.each(list, function (i) {
                     numsDatepicker($("#" + list[i].id));
-                    //$("#" + list[i].id).blur(function () { checkIsValidDate($("#" + list[i].id)) });
                 });
-
             }
         },
         //* 來文機關聯動
@@ -105,6 +105,99 @@
                     }
                 });
             }
+        },
+        //用來儲存多語系訊息
+        msgLang: {},
+        //設定多語系訊息
+        setMsg: function (msg) {
+            msg = msg || {};
+            $.extend(this.msgLang, msg);
+        },
+        //頁面有用到的參數可設定到這裡
+        config: {},
+        //設定頁面參數
+        setConfig: function (config) {
+            config = config || {};
+            $.extend(this.config, config);
+        },
+        //表單驗證
+        formValid: function (formId, rules, messages, saveHanlder) {
+            var form = $("#" + formId);
+            form.validate({
+                errorElement: 'span', //default input error message container
+                errorClass: 'help-block', // default input error message class
+                focusInvalid: false, // do not focus the last invalid input
+                ignore: "",
+                rules: rules,
+                messages: messages,
+                invalidHandler: function (event, validator) {
+                    //display error alert on form submit              
+                },
+                highlight: function (element) {
+                    // hightlight error inputs
+                    $(element).closest('.form-validate').addClass('has-error'); // set error class to the control group
+                },
+                unhighlight: function (element) {
+                    // revert the change done by hightlight
+                    $(element).closest('.form-validate').removeClass('has-error'); // set error class to the control group
+                },
+                success: function (element) {
+                    $(element).closest('.form-validate').removeClass('has-error'); // set success class to the control group
+                },
+                submitHandler: function (form) {
+                    if (saveHanlder) {
+                        saveHanlder();
+                    }
+                    else {
+                        form.submit();
+                    }
+                }
+            });
+        },
+        //ajax call result
+        resultHandler: function (result, succHandler) {
+            //ReturnCode == "1" 成功
+            if (result.ReturnCode == "1") {
+                if (result.ReturnMsg && result.ReturnMsg != "") {
+                    jAlertSuccess(result.ReturnMsg, succHandler);
+                }
+                else {
+                    if (succHandler) succHandler();
+                }
+            }
+            else {
+                if (result === "" && succHandler) {
+                    succHandler();
+                    return;
+                }
+
+                var err = "";
+                if (result.responseText) {
+                    err = result.responseText;
+                }
+                else if (result.ReturnMsg) {
+                    err = result.ReturnMsg;
+                }
+                else {
+                    err = result;
+                }
+
+                jAlertError(err, succHandler);
+            }
+        },
+        //民國年轉西元年
+        twToDate: function (twd) {
+            var d = moment(twd, 'YYYY/MM/DD');
+            if (d.isValid() == false) {
+                return twd;
+            }
+            return d.add(1911, 'years').format('YYYY/MM/DD');
+        },
+        //日期相減返回天數
+        diffDays: function (date1, date2) {
+            var d1 = moment(date1, 'YYYY/MM/DD');
+            var d2 = moment(date2, 'YYYY/MM/DD');
+            return d1.diff(d2, 'days');
         }
     });
     //===========================================================================================

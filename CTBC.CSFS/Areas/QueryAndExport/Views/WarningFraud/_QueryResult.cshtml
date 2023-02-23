@@ -1,0 +1,87 @@
+﻿@model CTBC.CSFS.ViewModels.WarningFraudViewModel
+
+<div class="row">
+    <div class="col-xs-12">
+        <div class="box box-primary">
+            <div class="box-header">
+                <i class="glyphicon glyphicon-th"></i>
+                <h3 class="box-title">@Lang.csfs_result_area</h3>
+                @Html.Partial("_Pager", new CTBC.CSFS.Models.Entity { CurrentPage = Model.CurrentPage, PageSize = Model.PageSize, TotalItemCount = Model.TotalItemCount, SortExpression = Model.SortExpression})
+            </div>
+            <div id="querytablediv" class="box-body">
+                <table id="query_table" class="table table-bordered table-striped text-black sort">
+                    <thead>
+                        <tr class="alert-success text-center ">
+                            <th>序號</th>
+                            <th>編輯</th>
+                            <th>刪除</th>
+                            <th>下載</th>
+                            <th>鍵檔日期</th>
+                            <th>165案號</th>
+                            <th>被聯防帳號</th>
+                            <th>通報單位</th>
+                            <th>通報人員</th>
+                            <th>分機</th>
+                            <th>警局</th>
+                            <th>被害人</th>
+                            <th>工單編號</th>
+                            <th>銀行別</th>
+                            <th>備註</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (Model != null && Model.WarningFraudList != null && Model.WarningFraudList.Any())
+                        {
+                            foreach (var item in Model.WarningFraudList)
+                            {
+                                <tr>
+                                    <td class="text-center">
+                                        @item.RowNum
+                                    </td>
+                                    <td class="text-center">
+                                        <a href="@Url.Action("EditWarn", "WarningFraud", new { area = "QueryAndExport", no = item.No, @radom = DateTime.Now.ToString() })" class="fancy1000_580"><i class=" glyphicon glyphicon-edit"></i></a>
+                                    </td>
+                                    <td class="text-center">
+                                        <a onclick='$.WarningFraud.DeleteData("@item.No")' style="cursor:pointer">
+                                            <i class="glyphicon glyphicon-remove"></i>
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        @if(item.AttachmentId > 0)
+                                        {
+                                            <a onclick='$.WarningFraud.Download("@item.AttachmentId")' style="cursor:pointer">
+                                                <i class="glyphicon glyphicon-download-alt"></i>
+                                            </a>
+                                        }
+                                    </td>
+                                    <td>@item.CreatedDate</td>
+                                    <td>@item.COL_165CASE</td>
+                                    <td>@item.COL_ACCOUNT2</td>
+                                    <td>@item.Unit</td>
+                                    <td>@item.CaseCreator</td>
+                                    <td>@item.EXT</td>
+                                    <td>@item.COL_POLICE</td>
+                                    <td>@item.COL_VICTIM</td>
+                                    <td>@item.COL_C1003CASE</td>
+                                    <td>@item.COL_OTHERBANKID</td>
+                                    <td>@item.Memo</td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr class="gridrow"><td colspan="15"><span class="text-red text-center">@Lang.csfs_query_nodata</span></td></tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script language="javascript">
+    jQuery(document).ready(function () {
+        $.CSFS.bindFancybox();
+        $.custPagination.BindCheckBox();
+        $.custPagination.sort($("#divResult"));
+    });
+</script>

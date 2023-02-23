@@ -180,6 +180,11 @@
         /// 警示 上傳
         /// </summary>
         public static string WarnAttach = "WarnAttach";
+
+        /// <summary>
+        /// 聯防 上傳
+        /// </summary>
+        public static string WarnFraudAttach = "WarnFraudAttach";
     }
 
     /// <summary>

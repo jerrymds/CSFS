@@ -2383,6 +2383,15 @@ namespace CTBC.CSFS.Resource {
         }
         
         /// <summary>
+        ///   查詢類似 日期區間不可大於設定值 的當地語系化字串。
+        /// </summary>
+        public static string csfs_date7 {
+            get {
+                return ResourceManager.GetString("csfs_date7", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 死亡案件查詢 的當地語系化字串。
         /// </summary>
         public static string csfs_dead_search {
@@ -5209,6 +5218,15 @@ namespace CTBC.CSFS.Resource {
         }
         
         /// <summary>
+        ///   查詢類似 聯防案件編輯及查詢 的當地語系化字串。
+        /// </summary>
+        public static string csfs_menu_tit_warningfraud {
+            get {
+                return ResourceManager.GetString("csfs_menu_tit_warningfraud", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查詢類似 工單匯入查詢 的當地語系化字串。
         /// </summary>
         public static string csfs_menu_tit_warningimportquery {
@@ -5241,15 +5259,6 @@ namespace CTBC.CSFS.Resource {
         public static string csfs_menu_tit_Warningtoapprove {
             get {
                 return ResourceManager.GetString("csfs_menu_tit_Warningtoapprove", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   查詢類似 聯防案件編輯及查詢 的當地語系化字串。
-        /// </summary>
-        public static string csfs_menu_tit_warningunionquery {
-            get {
-                return ResourceManager.GetString("csfs_menu_tit_warningunionquery", resourceCulture);
             }
         }
         

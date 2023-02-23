@@ -363,4 +363,11 @@ a.Paging{
     border-bottom: 0;
   }
 
-
+/*表單行距*/
+.form-body .row {
+    height: 60px !important;
+}
+/*表單驗證提示文字大小*/
+.help-block {
+    font-size: 12px;
+}

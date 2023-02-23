@@ -78,7 +78,6 @@
   <ItemGroup>
     <Compile Include="DSRptRecieve.cs">
       <DependentUpon>DSRptRecieve.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="DSRptRecieve.designer.cs">
       <DependentUpon>DSRptRecieve.cs</DependentUpon>

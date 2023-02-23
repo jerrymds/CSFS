@@ -25,6 +25,7 @@
     <SccLocalPath>SAK</SccLocalPath>
     <SccAuxPath>SAK</SccAuxPath>
     <SccProvider>SAK</SccProvider>
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -243,9 +244,9 @@
     <Compile Include="Areas\QueryAndExport\Controllers\SeizureQueryController.cs" />
     <Compile Include="Areas\QueryAndExport\Controllers\The20DaysPayController.cs" />
     <Compile Include="Areas\QueryAndExport\Controllers\WarningAccountQueryController.cs" />
+    <Compile Include="Areas\QueryAndExport\Controllers\WarningFraudController.cs" />
     <Compile Include="Areas\QueryAndExport\Controllers\WarningImporyQueryController.cs" />
     <Compile Include="Areas\QueryAndExport\Controllers\WarningQueryController.cs" />
-    <Compile Include="Areas\QueryAndExport\Controllers\WarningUnionQueryController.cs" />
     <Compile Include="Areas\QueryAndExport\Controllers\WarningUploadController.cs" />
     <Compile Include="Areas\QueryAndExport\QueryAndExportAreaRegistration.cs" />
     <Compile Include="Areas\SystemManagement\Controllers\AgentSettingController.cs" />
@@ -291,7 +292,6 @@
     </Compile>
     <Compile Include="Reports\DataSets\CaseMaster.cs">
       <DependentUpon>CaseMaster.xsd</DependentUpon>
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\DataSets\CaseMaster.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -827,10 +827,10 @@
     <Content Include="Areas\Director\Views\WarningToApprove\_QueryResult.cshtml" />
     <Content Include="Areas\QueryAndExport\Views\WarningImportQuery\Index.cshtml" />
     <Content Include="Areas\QueryAndExport\Views\WarningImportQuery\_QueryResult.cshtml" />
-    <Content Include="Areas\QueryAndExport\Views\WarningUnionQuery\CreateWarn.cshtml" />
-    <Content Include="Areas\QueryAndExport\Views\WarningUnionQuery\EditWarn.cshtml" />
-    <Content Include="Areas\QueryAndExport\Views\WarningUnionQuery\Index.cshtml" />
-    <Content Include="Areas\QueryAndExport\Views\WarningUnionQuery\_QueryResult.cshtml" />
+    <Content Include="Areas\QueryAndExport\Views\WarningFraud\CreateWarn.cshtml" />
+    <Content Include="Areas\QueryAndExport\Views\WarningFraud\Edit.cshtml" />
+    <Content Include="Areas\QueryAndExport\Views\WarningFraud\Index.cshtml" />
+    <Content Include="Areas\QueryAndExport\Views\WarningFraud\_QueryResult.cshtml" />
     <None Include="Properties\PublishProfiles\CSFSWeb.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -1025,6 +1025,7 @@
     <Content Include="Scripts\plugins\jqueryKnob\jquery.knob.js" />
     <Content Include="Scripts\plugins\jvectormap\jquery-jvectormap-1.2.2.min.js" />
     <Content Include="Scripts\plugins\jvectormap\jquery-jvectormap-world-mill-en.js" />
+    <Content Include="Scripts\plugins\moment\moment-with-locales.min.js" />
     <Content Include="Scripts\plugins\morris\morris.js" />
     <Content Include="Scripts\plugins\morris\morris.min.js" />
     <Content Include="Scripts\plugins\raphael\raphael-min.js" />
@@ -1033,8 +1034,9 @@
     <Content Include="Scripts\QueryAndExport\ExternalOldQuery.js" />
     <Content Include="Scripts\QueryAndExport\SeizureOldQuery.js" />
     <Content Include="Scripts\QueryAndExport\SeizureQuery.js" />
+    <Content Include="Scripts\QueryAndExport\WarningAccountQuery.js" />
+    <Content Include="Scripts\QueryAndExport\WarningFraud.js" />
     <Content Include="Scripts\QueryAndExport\WarningQuery.js" />
-    <Content Include="Scripts\QueryAndExport\WarningUnionQuery.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\SystemManagement\GovAddress.js" />
@@ -1073,6 +1075,7 @@
     <Content Include="Reports\Rdlc\ReceiptSeizureCheckNo.rdlc" />
     <Content Include="Reports\Rdlc\SeizureSeizureCheckNo.rdlc" />
     <Content Include="Reports\Rdlc\SeizureSeizureCheckNoCC.rdlc" />
+    <Content Include="Views\Shared\_Pager.cshtml" />
     <None Include="Web References\CSFSURL\attDownload.wsdl" />
     <Content Include="Web References\CSFSURL\Reference.map">
       <Generator>MSDiscoCodeGenerator</Generator>

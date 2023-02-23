@@ -42,33 +42,37 @@
   <ItemGroup>
     <Compile Include="AgentAndBuInfo.cs" />
     <Compile Include="AgentDepartmentAccessViewModel.cs" />
-    <Compile Include="CaseCustViewModel.cs" />
+    <Compile Include="WarningFraudViewModel.cs" />
+    <Compile Include="WarningImportQueryDataViewModel.cs" />
+    <Compile Include="WarningUnionQueryViewModel.cs" />
+    <Compile Include="WarningReturnViewModel.cs" />
+    <Compile Include="WarningToApproveViewModel.cs" />
+    <Compile Include="NewCaseCustViewModel.cs" />
     <Compile Include="CaseDeadViewModel.cs" />
+    <Compile Include="HistoryAgentOriginalInfoViewModel.cs" />
+    <Compile Include="HistoryAgentHandleDetailViewModel.cs" />
+    <Compile Include="HistoryCancelSeizureViewModel.cs" />
     <Compile Include="CaseMasterViewModel.cs" />
+    <Compile Include="CaseCustViewModel.cs" />
+    <Compile Include="HistoryCasePayeeSettingViewModel.cs" />
+    <Compile Include="HistoryCaseSendSettingViewModel.cs" />
     <Compile Include="CaseTrsConditionViewModel.cs" />
     <Compile Include="CaseTrsDetailViewModel.cs" />
     <Compile Include="CaseTrsViewModel.cs" />
     <Compile Include="Email_NoticeViewModel.cs" />
-    <Compile Include="HistoryAgentHandleDetailViewModel.cs" />
-    <Compile Include="HistoryAgentOriginalInfoViewModel.cs" />
-    <Compile Include="HistoryCancelSeizureViewModel.cs" />
     <Compile Include="HistoryCaseMemoViewModel.cs" />
-    <Compile Include="HistoryCasePayeeSettingViewModel.cs" />
     <Compile Include="HistoryCaseSeizureViewModel.cs" />
-    <Compile Include="HistoryCaseSendSettingViewModel.cs" />
-    <Compile Include="HistoryPaySettingViewModel.cs" />
     <Compile Include="HistoryQueryViewModel.cs" />
     <Compile Include="HistoryTxCustomerInfo.cs" />
     <Compile Include="ImportEdocDataViewModel.cs" />
     <Compile Include="ExternalOldQueryViewModel.cs" />
-    <Compile Include="NewCaseCustViewModel.cs" />
     <Compile Include="PARMQryComTblMnViewModel.cs" />
+    <Compile Include="HistoryPaySettingViewModel.cs" />
     <Compile Include="SeizureOldQueryViewModel.cs" />
     <Compile Include="SendTimeSectionViewModel.cs" />
     <Compile Include="TransactionRecordsViewModel.cs" />
     <Compile Include="TxCustomerInfo.cs" />
     <Compile Include="WarningAccountQueryViewModel.cs" />
-    <Compile Include="WarningImportQueryDataViewModel.cs" />
     <Compile Include="WarningQueryViewModel.cs" />
     <Compile Include="AgentToHandleViewModel.cs" />
     <Compile Include="CaseMemoViewModel.cs" />
@@ -99,9 +103,6 @@
     <Compile Include="PARMMenuViewModel.cs" />
     <Compile Include="PaySettingViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="WarningReturnViewModel.cs" />
-    <Compile Include="WarningToApproveViewModel.cs" />
-    <Compile Include="WarningUnionQueryViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\CTBC.CSFS.Models\CTBC.CSFS.Models.csproj">

@@ -1,0 +1,91 @@
+﻿@using CTBC.CSFS.Models
+@using CTBC.FrameWork.Platform
+@model CTBC.CSFS.Models.WarningFraud
+@{
+    ViewBag.Title = "聯防案件編輯及查詢";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="box box-primary">
+    <div class="box-header">
+        <i class="glyphicon glyphicon-search"></i>
+        <h3 class="box-title">@Lang.csfs_menu_tit_warningfraud</h3>
+    </div>
+    @using (Html.BeginForm("_QueryResult", "WarningFraud", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmQuery", @class = "form-horizontal" }))
+    {
+        @Html.HiddenFor(m => m.SortExpression)
+        @Html.HiddenFor(m => m.CurrentPage)
+        @Html.HiddenFor(m => m.PageSize)
+        <div class="box-body ">
+            <table class="table-noborder">
+                <tbody>
+                    <tr>
+                        <td class="col-md-2 text-right">165案號</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.COL_165CASE, new { maxlength = "10" })
+                        </td>
+                        <td class="col-md-1 text-right">被聯防帳號</td>
+                        <td class="col-md-3">
+                            @Html.TextBoxFor(m => m.COL_ACCOUNT2, new { maxlength = "16" })
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">工單編號</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.COL_C1003CASE, new { maxlength = "10" })
+                        </td>
+                        <td class="col-md-2 text-right">通報單位</td>
+                        <td class="col-md-4">
+                            @Html.DropDownListFor(m => m.Unit, (IEnumerable<SelectListItem>)ViewBag.Unit)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="col-md-2 text-right">建檔日期</td>
+                        <td class="col-md-5">
+                            @Html.TextBoxFor(m => m.CreateDateS, new { data_datepicker = "true" })
+                            ～
+                            @Html.TextBoxFor(m => m.CreateDateE, new { data_datepicker = "true" })
+                        </td>
+                        <td class="col-md-2 text-right">銀行別</td>
+                        <td class="col-md-4">
+                            @Html.TextBoxFor(m => m.COL_OTHERBANKID, new { maxlength = "255" })
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="box-footer text-center">
+            <a href="@Url.Action("CreateWarn", "WarningFraud", new { area = "QueryAndExport" })" class="btn btn-primary btn-xs fancy1000_580">@Lang.csfs_warn_add</a>
+            <button id="btnQuery" type="button" class="btn btn-primary btn-xs">@Lang.csfs_query</button>
+            <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            <button id="btnExcel" type="button" class="btn btn-default btn-xs">匯出</button>
+        </div>
+    }
+</div>
+
+<div id="divResult" class="table-wrap" data-target-url="@Url.Action("_QueryResult", "WarningFraud", new { area = "QueryAndExport" })">
+
+</div>
+
+@section scripts {
+    @Scripts.Render("~/Scripts/QueryAndExport/WarningFraud.js")
+    <script type="text/javascript">
+        $.CSFS.setConfig({
+            'CheckDays': '@AppCache.Get("CheckDays")',
+            'NowPage': 'WarningFraud',
+            'ExcelUrl': '@Url.Action("Export", "WarningFraud", new { area = "QueryAndExport" })',
+            'QueryUrl': '@Url.Action("_QueryResult", "WarningFraud", new { area = "QueryAndExport" })',
+            'IndexUrl': '@Url.Action("Index", "WarningFraud", new { area = "QueryAndExport" })',
+            'DelUrl': '@Url.Action("DeleteWarn", "WarningFraud", new { area = "QueryAndExport" })',
+            'DownloadUrl': '@Url.Action("DownFile", "Home", new { area = "", uploadkind = Uploadkind.WarnFraudAttach })'
+        });
+        $.CSFS.setMsg({
+            'SelectOneMsg': '@Lang.csfs_select',
+            'NameOneQuery': '@Lang.csfs_inputOneQuery',
+            'DateRangeMsg': '@Lang.csfs_date7',
+            'ConfirmDelete': '@Lang.csfs_confirm_delete'
+        });
+</script>
+}
+
+

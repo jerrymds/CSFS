@@ -1,0 +1,168 @@
+﻿@using CTBC.FrameWork.Platform
+@model CTBC.CSFS.Models.WarningFraud
+@{
+    ViewBag.Title = "CreateWarn";
+    Layout = "~/Views/Shared/_Colorbox_Layout.cshtml";
+}
+
+<div class="margin">
+    <div class="box box-primary">
+        <div class="box-header">
+            <i class="glyphicon glyphicon-search"></i>
+            <h3 class="box-title">
+            @if(ViewBag.NowPage == "CreateWarn")
+            {
+                @("新增聯防案件")
+            }
+            else
+            {
+                @("修改聯防案件")
+            }
+            </h3>
+        </div>
+        <!-- form start -->
+        @using (Html.BeginForm("CreateWarn", "WarningFraud", new { area = "QueryAndExport" }, FormMethod.Post, new { id = "frmCreate", @class = "form-inline row", enctype="multipart/form-data" }))
+        {
+            <div class="box-body ">
+                <div class="form-body">
+                    <div class="row form-group col-sm-12">
+                        <div class="col-sm-6 form-validate">
+                            <label class="control-label col-sm-4">
+                                鍵檔日期 <span class="text-red">*</span>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.CreatedDate, new { @class="form-control input-sm", data_datepicker="true", style="width:100px" })
+                                <span for="CreatedDate" class="help-block"></span>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-sm-4">E化案號</label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.COL_C1003CASE, new { @class="form-control input-sm", maxlength="255" })
+                            </div>
+                        </div>                        
+                    </div>
+                    <div class="row form-group col-sm-12">
+                        <div class="col-sm-6 form-validate">
+                            <label class="control-label col-sm-4">
+                                165案號/編號 <span class="text-red">*</span>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.COL_165CASE, new { @class="form-control input-sm", maxlength="10" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-sm-4">工單編號</label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.CASE_NO, new { @class="form-control input-sm", maxlength="10" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group col-sm-12">
+                        <div class="col-sm-6 form-validate">
+                            <label class="control-label col-sm-4">
+                                被聯防帳號 <span class="text-red">*</span>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.COL_ACCOUNT2, new { @class="form-control input-sm", maxlength="16" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-validate">
+                            <label class="control-label col-sm-4">
+                                通報單位 <span class="text-red">*</span>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.DropDownListFor(m => m.Unit, (IEnumerable<SelectListItem>)ViewBag.Unit, new { @class="form-control input-sm" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group col-sm-12">
+                        <div class="col-sm-6">
+                            <label class="control-label col-sm-4">警局</label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.COL_POLICE, new { @class="form-control input-sm", maxlength="255" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6 form-validate">
+                            <label class="control-label col-sm-4">
+                                通報人員 <span class="text-red">*</span>
+                            </label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.CaseCreator, new { @class="form-control input-sm", maxlength="255" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group col-sm-12">
+                        <div class="col-sm-6">
+                            <label class="control-label col-sm-4">銀行別</label>
+                            <div class="col-sm-8">
+                                @Html.DropDownListFor(m => m.COL_OTHERBANKID, (IEnumerable<SelectListItem>)ViewBag.BankCode, new { @class="form-control input-sm" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-sm-4">分機</label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.EXT, new { @class="form-control input-sm", style="width: 100px", maxlength="10" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group col-sm-12">
+                        <div class="col-sm-6">
+                            <label class="control-label col-sm-4">附件</label>
+                            <div class="col-sm-8">
+                                <div id="divUpload">
+                                    <input type="file" name="attachFile" id="attachFile" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip" />
+                                </div>
+                                <div id="divAttach">
+                                    <span id="attachmentName"></span>
+                                    <button id="btnDelFile" type="button" class="btn btn-danger btn-xs">@Lang.csfs_delete</button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label class="control-label col-sm-4">被害人</label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.COL_VICTIM, new { @class="form-control input-sm", maxlength="255" })
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group col-sm-12">
+                        <div class="col-sm-6">
+                            <label class="control-label col-sm-4">備註</label>
+                            <div class="col-sm-8">
+                                @Html.TextBoxFor(m => m.Memo, new { @class="form-control input-sm", maxlength="255" })
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box-footer text-center">
+                <button id="btnSave" type="button" class="btn btn-primary btn-xs">@Lang.csfs_confirm</button>
+                <button id="btnCancel" type="reset" class="btn btn-default btn-xs">@Lang.csfs_cancel</button>
+            </div>
+        }
+    </div>
+</div>
+
+@section scripts{
+    @Scripts.Render("~/Scripts/QueryAndExport/WarningFraud.js")
+    <script type="text/javascript">
+        $.CSFS.setConfig({
+            'CheckDays': '@AppCache.Get("CheckDays")',
+            'NowPage': '@ViewBag.NowPage',
+            'ExcelUrl': '@Url.Action("Expert", "WarningFraud", new { area = "QueryAndExport" })',
+            'QueryUrl': '@Url.Action("_QueryResult", "WarningFraud", new { area = "QueryAndExport" })',
+            'IndexUrl': '@Url.Action("Index", "WarningFraud", new { area = "QueryAndExport" })',
+            'CaseNoUrl': '@Url.Action("CheckCaseNo", "WarningFraud", new { area = "QueryAndExport" })',
+            'DelAttchUrl': '@Url.Action("DeleteAttatch", "WarningFraud", new { area = "QueryAndExport" })',
+            'CreateWarnUrl': '@Url.Action("CreateWarn", "WarningFraud", new { area = "QueryAndExport" })',
+            'EditWarnUrl': '@Url.Action("EditWarn", "WarningFraud", new { area = "QueryAndExport" })',
+            'HasAttach': '@Model.AttachmentId',
+            'AttachmentName': '@Model.WarningFraudAttach.AttachmentName'
+        });
+    </script>
+}
+

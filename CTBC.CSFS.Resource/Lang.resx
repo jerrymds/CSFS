@@ -3168,7 +3168,10 @@
   <data name="csfs_menu_tit_warningimportquery" xml:space="preserve">
     <value>工單匯入查詢</value>
   </data>
-  <data name="csfs_menu_tit_warningunionquery" xml:space="preserve">
+  <data name="csfs_menu_tit_warningfraud" xml:space="preserve">
     <value>聯防案件編輯及查詢</value>
+  </data>
+  <data name="csfs_date7" xml:space="preserve">
+    <value>日期區間不可大於設定值</value>
   </data>
 </root>

@@ -1,0 +1,14 @@
+﻿@model CTBC.CSFS.Models.Entity
+<div class="box-tools pull-right" id="pager">
+    @Ajax.Pager(Model.PageSize, Model.CurrentPage, Model.TotalItemCount, null, new AjaxOptions() { UpdateTargetId = "divResult", HttpMethod = "Post" }, Lang.csfs_common, Lang.csfs_page, Lang.csfs_record, Model.SortExpression, Model.SortDirection)
+</div>
+@*<div class="box-tools pull-right">
+    每頁筆數：
+    <select id="pageSize">
+        <option value="10">10筆</option>
+        <option value="20">20筆</option>
+        <option value="30">30筆</option>
+        <option value="50">50筆</option>
+        <option value="100">100筆</option>
+    </select>
+</div>*@

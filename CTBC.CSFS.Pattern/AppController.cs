@@ -128,7 +128,47 @@ namespace CTBC.CSFS.Pattern
             }
             return ActionCode.View;
         }
-	}
+
+        public void WriteExceptionLog(Exception ex)
+        {
+            CSFSException csfsExp = new CSFSException
+            {
+                errId = "CSFS-SYS-9999",
+                errDesc = ex.Message + " " + ex.Source,
+                errDetail = ex.ToString()
+            };
+            CSFSLog log = new CSFSLog
+            {
+                Message = "errId=" + csfsExp.errId + ";errDesc=" + csfsExp.errDesc + ";errDetail=" + csfsExp.errDetail,
+                TimeStamp = DateTime.Now,
+                Title = "Exception",
+                Priority = 1,
+                EventId = 103,
+                Severity = (csfsExp.sverity == "Critical") ? System.Diagnostics.TraceEventType.Critical : System.Diagnostics.TraceEventType.Error
+            };
+            log.Categories.Add("Exception");
+            
+            if (Session == null)
+            {
+                log.dic["UserId"] = "Anonymous";
+                log.dic["SessionId"] = "Not Yet Asign a SessionId";
+            }
+            else
+            {
+                log.dic["UserId"] = (Session["UserAccount"] != null) ? Session["UserAccount"].ToString() : "Anonymous";
+                log.dic["SessionId"] = Session.SessionID;
+            }
+            log.dic["Result"] = Result.Failure;
+            log.dic["ActionCode"] = ActionCode.Error;
+            log.dic["TranFlag"] = TranFlag.After;
+            log.dic["FunctionId"] = "Action." + csfsExp.controller + "." + csfsExp.action;
+            log.dic["URL"] = Request.RawUrl;
+            log.dic["IP"] = Request.UserHostAddress;
+            log.dic["MachineName"] = Request.UserHostName;
+            log.ExtendedProperties = log.dic;
+            Logger.Write(log);
+        }
+    }
 
 
 	/// <summary>

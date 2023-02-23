@@ -27,6 +27,8 @@ namespace CTBC.CSFS.Pattern
 
         #region 屬性
 
+        int pageSize = 0;
+
         /// <summary>
         /// 資料清單之當前頁頁碼
         /// </summary>
@@ -35,12 +37,29 @@ namespace CTBC.CSFS.Pattern
         /// <summary>
         /// 資料清單之每頁資料數
         /// </summary>
-        public int PageSize { get { return Config.GetPerPageRows(); } }
+        public int PageSize 
+        { 
+            get 
+            { 
+                return this.pageSize == 0 ? Config.GetPerPageRows() : this.pageSize; 
+            } 
+            set { this.pageSize = value; }
+        }
 
         /// <summary>
         /// 當前條件所檢索出數據量
         /// </summary>
         public int DataRecords { set; get; }
+
+        /// <summary>
+        /// 查詢的所有筆數
+        /// </summary>
+        public int TotalDataCount { get; set; }
+
+        /// <summary>
+        /// 排序的欄位
+        /// </summary>
+        public string SortExpression { get; set; }
 
         /// <summary>
         /// 可獨立代入ConnectionString
@@ -49,6 +68,11 @@ namespace CTBC.CSFS.Pattern
         {
             set { _strConnectionString = value; }
         }
+
+        /// <summary>
+        /// 設定訊息，讓執行個體可以取得訊息
+        /// </summary>
+        public string Message { get; protected set; }
 
         /// <summary>
         /// 參數集合
@@ -106,6 +130,7 @@ namespace CTBC.CSFS.Pattern
             return AConnection.BeginTransaction();
         }
 
+        #region ExecuteNonQuery
         /// <summary>
         /// 執行Sql，返回影響的行數
         /// </summary>
@@ -228,6 +253,7 @@ namespace CTBC.CSFS.Pattern
         {
             return ExecuteNonQuery(Sql, ATans);
         }
+        #endregion
 
         #region 舊版程式
         /// <summary>
@@ -260,6 +286,7 @@ namespace CTBC.CSFS.Pattern
         }
         #endregion
 
+        #region StoredProcedure
         /// <summary>
         /// 查詢結果集
         /// </summary>
@@ -313,7 +340,6 @@ namespace CTBC.CSFS.Pattern
             return rtn;
         }
 
-
         /// <summary>
         /// 查詢結果集-SP for Transaction,added by smallzhi 20130620
         /// </summary>
@@ -337,6 +363,40 @@ namespace CTBC.CSFS.Pattern
             return rtn;
         }
 
+        /// <summary>
+        /// 查詢結果集
+        /// </summary>
+        /// <param name="spName">SP名稱</param>
+        /// <returns></returns>
+        /// 20140317 add using statement
+        protected DataTable ExecuteSP(string spName)
+        {
+            DataSet dt = new DataSet();
+            SqlParameter newOP;
+            using (SqlConnection AConnection = this.OpenConnection())
+            {
+                using (SqlCommand NewCommand = new SqlCommand())
+                {
+                    NewCommand.Connection = AConnection;
+                    NewCommand.CommandType = CommandType.StoredProcedure;
+                    NewCommand.CommandText = spName;
+                    foreach (CommandParameter NewParameter in this.Parameter)
+                    {
+                        newOP = new SqlParameter(NewParameter.ColumnName, NewParameter.Value ?? DBNull.Value);
+                        NewCommand.Parameters.Add(newOP);
+                    }
+                    using (SqlDataAdapter Adapter = new SqlDataAdapter(NewCommand))
+                    {
+                        Adapter.Fill(dt);
+                    }
+                }
+            }
+            return dt.Tables[0];
+        }
+
+        #endregion
+
+        #region Scalar
         /// <summary>
         /// 執行Sql，返回物件
         /// </summary>
@@ -399,7 +459,9 @@ namespace CTBC.CSFS.Pattern
             }
             return result;
         }
+        #endregion
 
+        #region Reader
         /// <summary>
         /// 執行Sql，返回Reader物件
         /// </summary>
@@ -428,7 +490,9 @@ namespace CTBC.CSFS.Pattern
             }
             return NewCommand.ExecuteReader(CommandBehavior.CloseConnection);
         }
+        #endregion
 
+        #region Search
         /// <summary>
         /// 查詢結果集
         /// </summary>
@@ -513,38 +577,70 @@ namespace CTBC.CSFS.Pattern
             }
             return dsResult.Tables[0];
         }
+        #endregion
 
+        #region Search Paged
         /// <summary>
-        /// 查詢結果集
+        /// 產生分頁SQL
         /// </summary>
-        /// <param name="spName">SP名稱</param>
+        /// <param name="sql">實際查詢的SQL</param>
+        /// <param name="orderBy">排序 EX : Col1, Col2 desc </param>
+        /// <param name="pageIndex">分頁索引</param>
+        /// <param name="pageSize">分頁筆數</param>
         /// <returns></returns>
-        /// 20140317 add using statement
-        protected DataTable ExecuteSP(string spName)
+        private string GetPagedCommand(string sql, string orderBy, int pageIndex, int pageSize)
         {
-            DataSet dt = new DataSet();
-            SqlParameter newOP;
-            using (SqlConnection AConnection = this.OpenConnection())
+            if(string.IsNullOrWhiteSpace(orderBy))
             {
-                using (SqlCommand NewCommand = new SqlCommand())
-                {
-                    NewCommand.Connection = AConnection;
-                    NewCommand.CommandType = CommandType.StoredProcedure;
-                    NewCommand.CommandText = spName;
-                    foreach (CommandParameter NewParameter in this.Parameter)
-                    {
-                        newOP = new SqlParameter(NewParameter.ColumnName, NewParameter.Value ?? DBNull.Value);
-                        NewCommand.Parameters.Add(newOP);
-                    }
-                    using (SqlDataAdapter Adapter = new SqlDataAdapter(NewCommand))
-                    {
-                        Adapter.Fill(dt);
-                    }
-                }
+                orderBy = "1";
             }
-            return dt.Tables[0];
+
+            pageIndex = pageIndex == 0 ? 0 : pageIndex - 1;
+            int pageStart = pageIndex * pageSize;
+            string queryCmd = $@";WITH T AS ({sql})
+                                 SELECT TotalCount = COUNT(1) OVER (), RowNum = ROW_NUMBER() OVER (ORDER BY {orderBy}), T.*
+                                 FROM T ORDER BY {orderBy} OFFSET({pageIndex}) * {pageSize} ROWS
+                                 FETCH NEXT {pageSize} ROWS ONLY;";
+
+            return queryCmd;
         }
 
+        /// <summary>
+        /// 查詢分頁資料
+        /// </summary>
+        /// <param name="Sql"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns>DataTable, TotalCount</returns>
+        public DataTable SearchPaged(string Sql)
+        {
+            string pagedSql = GetPagedCommand(Sql, this.SortExpression, this.PageIndex, this.PageSize);
+            DataTable dt = Search(pagedSql);
+            if(dt.Rows.Count > 0)
+            {
+                this.TotalDataCount = (int)dt.Rows[0]["TotalCount"];
+            }
+            return dt;
+        }
+
+        /// <summary>
+        /// 查詢分頁資料
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="sql"></param>
+        /// <param name="orderBy"></param>
+        /// <param name="pageIndex"></param>
+        /// <param name="pageSize"></param>
+        /// <returns>IList<T>, TotalCount</returns>
+        public IList<T> SearchPagedList<T>(string sql)
+        {
+            var list = this.DataSetToList<T>(this.SearchPaged(sql));
+            return list;
+        }
+        #endregion
+
+        #region 泛型
         /// <summary>
         /// 把DataTable轉換成List
         /// </summary>
@@ -773,7 +869,73 @@ namespace CTBC.CSFS.Pattern
             }
             return list;
         }
+        #endregion
 
+        #region Log
+        public void ExecuteCSFSLogSave(string _user, string _controller, string _action, string _ip, string _parameters, string _cusid)
+        {
+            try
+            {
+                StringBuilder strsql = new StringBuilder(@"  
+                                                                 INSERT INTO APLogRawData
+                                                                       (
+                                                                        DataTimestamp
+                                                                       ,Controller
+                                                                       ,[Action]
+                                                                       ,[IP]
+                                                                       ,[Parameters]
+                                                                       ,[CusID]
+                                                                       ,[LogonUser]
+                                                                        )
+                                                                 VALUES
+                                                                       (
+			                                                            getdate()
+			                                                            ,@Controller
+			                                                            ,@Action
+                                                                        ,@IP
+			                                                            ,@Parameters
+                                                                        ,@CusID
+			                                                            ,@LogonUser
+                                                                       )");
+
+                // 執行單獨的，不需要再次記錄Log的方法
+                CommandParameterCollection para = new CommandParameterCollection();
+                para.Add(new CommandParameter("@Controller", (string.IsNullOrEmpty(_controller)) ? "NoController" : _controller));
+                para.Add(new CommandParameter("@Action", (string.IsNullOrEmpty(_action)) ? "NoAction" : _action));
+                para.Add(new CommandParameter("@IP", _ip));
+                para.Add(new CommandParameter("@Parameters", _parameters));
+                if (_cusid.Trim().Length > 11)
+                {
+                    _cusid = _cusid.Substring(0, 11);
+                }
+                para.Add(new CommandParameter("@CusID", _cusid));
+                //para.Add(new CommandParameter("@ApplNo", _applno));
+                para.Add(new CommandParameter("@LogonUser", (string.IsNullOrEmpty(_user)) ? "NoUser" : _user));
+
+                using (SqlConnection AConnection = this.OpenConnection())
+                {
+                    using (SqlCommand NewCommand = new SqlCommand(strsql.ToString(), AConnection))
+                    {
+                        foreach (CommandParameter NewParameter in para)
+                        {
+                            if (strsql.ToString().ToUpper().Contains(NewParameter.ColumnName.Replace("@", "").ToUpper()))
+                            {
+                                SqlParameter newSParam = new SqlParameter(NewParameter.ColumnName, NewParameter.Value ?? DBNull.Value);
+                                NewCommand.Parameters.Add(newSParam);
+                            }
+                        }
+                        NewCommand.CommandText = strsql.ToString();
+                        if (_cusid.Trim().Length > 0)
+                        {
+                            NewCommand.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
         /// <summary>
         /// 20150729 APLOG儲存
         /// </summary>
@@ -841,6 +1003,8 @@ namespace CTBC.CSFS.Pattern
             {
             }
         }
+        #endregion
+
         #endregion
     }
 }

@@ -7,5 +7,6 @@
         /// </summary>
         public string ReturnCode { get; set; }
         public string ReturnMsg { get; set; }
+        public object Data { get; set; }
     }
 }
