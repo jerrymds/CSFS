@@ -827,7 +827,6 @@
     <Content Include="Areas\Director\Views\WarningToApprove\_QueryResult.cshtml" />
     <Content Include="Areas\QueryAndExport\Views\WarningImportQuery\Index.cshtml" />
     <Content Include="Areas\QueryAndExport\Views\WarningImportQuery\_QueryResult.cshtml" />
-    <Content Include="Areas\QueryAndExport\Views\WarningFraud\CreateWarn.cshtml" />
     <Content Include="Areas\QueryAndExport\Views\WarningFraud\Edit.cshtml" />
     <Content Include="Areas\QueryAndExport\Views\WarningFraud\Index.cshtml" />
     <Content Include="Areas\QueryAndExport\Views\WarningFraud\_QueryResult.cshtml" />

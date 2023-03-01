@@ -44,7 +44,6 @@
     <Compile Include="AgentDepartmentAccessViewModel.cs" />
     <Compile Include="WarningFraudViewModel.cs" />
     <Compile Include="WarningImportQueryDataViewModel.cs" />
-    <Compile Include="WarningUnionQueryViewModel.cs" />
     <Compile Include="WarningReturnViewModel.cs" />
     <Compile Include="WarningToApproveViewModel.cs" />
     <Compile Include="NewCaseCustViewModel.cs" />

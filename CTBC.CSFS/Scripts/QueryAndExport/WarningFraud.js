@@ -110,6 +110,12 @@
             $.validator.addMethod("selRequired", function (val, element) {
                 return $('select[name="' + element.name + '"] option:selected').val() != "";
             });
+            $.validator.addMethod("chkFileSize", function (val, element) {
+                if (element.files.length > 0) {
+                    return element.files[0].size < $.CSFS.config.UploadMaxLength;
+                }
+                return true;
+            });
 
             validRules = {
                 "COL_165CASE": { required: true },
@@ -117,7 +123,8 @@
                 "Unit": { selRequired: true },
                 "COL_POLICE": { required: true },
                 "CaseCreator": { required: true },
-                "CreatedDate": { required: true }
+                "CreatedDate": { required: true },
+                "attachFile": { chkFileSize: true }
             }
 
             rulesMessage = {
@@ -126,7 +133,8 @@
                 "Unit": { selRequired: "通報單位不可空白" },
                 "COL_POLICE": { required: "警局不可空白" },
                 "CaseCreator": { required: "通報人員不可空白" },
-                "CreatedDate": { required: "鍵檔日期不可空白" }
+                "CreatedDate": { required: "鍵檔日期不可空白" },
+                "attachFile": { chkFileSize: "上傳檔案大小超過設定值 " + $.CSFS.formatFileSize($.CSFS.config.UploadMaxLength) }
             }
 
             //指定 url
@@ -259,6 +267,10 @@
         Download: function (id) {
             var actionUrl = $.CSFS.config.DownloadUrl + "&id=" + id;
             $("#frmDownload").attr("src", actionUrl);
+        },
+        //* 檢查檔案大小是否超過設定
+        CheckFileSize: function (fileSize) {
+
         }
     });
     //===========================================================================================

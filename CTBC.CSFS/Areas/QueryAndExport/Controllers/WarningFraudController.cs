@@ -49,7 +49,7 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
             model.CreateDateE = DateTime.Now.AddYears(-1911).ToString("yyy/MM/dd");
             model.CurrentPage = 1;
             model.PageSize = 10;
-            model.SortExpression = "NO";
+            model.SortExpression = "CreatedDate,COL_165CASE,COL_ACCOUNT2";
             BindDropDownList();
             return View(model);
         }
@@ -126,6 +126,8 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
         /// <returns></returns>
         public ActionResult CreateWarn()
         {
+            //上傳檔案大小限制
+            ViewBag.UploadMaxLength = ConfigurationManager.AppSettings["UploadMaxLength"] ?? "10485760";
             ViewBag.NowPage = "CreateWarn";
             BindDropDownList("客服中心");
             WarningFraud model = new WarningFraud
@@ -206,6 +208,9 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
         {
             try
             {
+                //上傳檔案大小限制
+                ViewBag.UploadMaxLength = ConfigurationManager.AppSettings["UploadMaxLength"] ?? "10485760";
+
                 if (no <= 0)
                 {
                     throw new Exception("取得聯防案件失敗");
@@ -433,7 +438,7 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
         private WarningFraudAttach UploadFile(HttpPostedFileBase attachFile, string COL_165CASE)
         {
             string newName = $"{COL_165CASE}_{DateTime.Now.ToString("yyyyMMddHHmmssfff")}{Path.GetExtension(attachFile.FileName)}";
-            string serverPath = Path.Combine("~/", ConfigurationManager.AppSettings["UploadFolder"], "WarningFraud");
+            string serverPath = Path.Combine("~/", ConfigurationManager.AppSettings["UploadFolder"], "WarningFraud", DateTime.Now.ToString("yyyyMM"));
             string realPath = Server.MapPath(serverPath);
             if (!UtlFileSystem.FolderIsExist(realPath))
                 UtlFileSystem.CreateFolder(realPath);

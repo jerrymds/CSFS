@@ -15,7 +15,7 @@
                             <th>序號</th>
                             <th>編輯</th>
                             <th>刪除</th>
-                            <th>下載</th>
+                            <th>列印</th>
                             <th>鍵檔日期</th>
                             <th>165案號</th>
                             <th>被聯防帳號</th>
@@ -50,7 +50,7 @@
                                         @if(item.AttachmentId > 0)
                                         {
                                             <a onclick='$.WarningFraud.Download("@item.AttachmentId")' style="cursor:pointer">
-                                                <i class="glyphicon glyphicon-download-alt"></i>
+                                                <i class="glyphicon glyphicon-file"></i>
                                             </a>
                                         }
                                     </td>

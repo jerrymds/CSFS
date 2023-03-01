@@ -63,7 +63,6 @@
     <Compile Include="WarningFraud.cs" />
     <Compile Include="WarningFraudAttach.cs" />
     <Compile Include="WarningImportQueryData.cs" />
-    <Compile Include="WarningUnionQuery.cs" />
     <Compile Include="WarningReturn.cs" />
     <Compile Include="WarningToApprove.cs" />
     <Compile Include="HistoryBatchQueue.cs" />
