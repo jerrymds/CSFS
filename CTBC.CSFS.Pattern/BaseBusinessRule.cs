@@ -597,10 +597,12 @@ namespace CTBC.CSFS.Pattern
 
             pageIndex = pageIndex == 0 ? 0 : pageIndex - 1;
             int pageStart = pageIndex * pageSize;
-            string queryCmd = $@";WITH T AS ({sql})
-                                 SELECT TotalCount = COUNT(1) OVER (), RowNum = ROW_NUMBER() OVER (ORDER BY {orderBy}), T.*
-                                 FROM T ORDER BY {orderBy} OFFSET({pageIndex}) * {pageSize} ROWS
-                                 FETCH NEXT {pageSize} ROWS ONLY;";
+            string queryCmd = @";WITH T AS ({0})
+                                 SELECT TotalCount = COUNT(1) OVER (), RowNum = ROW_NUMBER() OVER (ORDER BY {1}), T.*
+                                 FROM T ORDER BY {1} OFFSET({2}) * {3} ROWS
+                                 FETCH NEXT {3} ROWS ONLY;";
+
+            queryCmd = string.Format(queryCmd, sql, orderBy, pageIndex, pageSize);
 
             return queryCmd;
         }
