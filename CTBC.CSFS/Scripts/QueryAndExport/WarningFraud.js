@@ -26,7 +26,6 @@
             $("#btnQuery").click(function () { return $.WarningFraud.QueryData(); });
             $("#btnCancel").click(function () { return btnCancelClick(); });
             $("#btnExcel").click(function () { return ExcelClick(); });
-            //$("#pageSize").on('change', function (e) { return pageSizeChange(); });
 
             function ExcelClick() {
                 $("#frmQuery").attr("action", $.CSFS.config.ExcelUrl);
@@ -50,7 +49,7 @@
             //註冊表單驗證
             $.WarningFraud.initFormValidate();
             //通報單位下拉選單預設
-            $("#ddlUnit").val("客服中心");
+            $("#Unit").val("客服中心");
         },
         //* 初始化修改頁面
         initWarningFraudEdit: function () {
@@ -102,14 +101,15 @@
             //註冊表單驗證
             $.WarningFraud.initFormValidate();
             //通報單位下拉選單預設
-            $("#ddlUnit").val($("#Unit").val());
+            $("#Unit").val($("#hidUnit").val());
         },
         //* 初始化表單驗證
         initFormValidate: function () {
-            //檢核通報單位
+            //下拉選單必填檢核
             $.validator.addMethod("selRequired", function (val, element) {
                 return $('select[name="' + element.name + '"] option:selected').val() != "";
             });
+            //上傳檔案大小檢核
             $.validator.addMethod("chkFileSize", function (val, element) {
                 if (element.files.length > 0) {
                     return element.files[0].size < $.CSFS.config.UploadMaxLength;
@@ -197,8 +197,15 @@
         //* 查詢資料
         QueryData: function () {
             var msg = "";
-            if ($.CSFS.diffDays($("#txtCreateDateE").val(), $("#txtCreateDateS").val()) > $.CSFS.config.CheckDays) {
-                msg = $.CSFS.msgLang.DateRangeMsg + $.CSFS.config.CheckDays + '天';
+            var newLine = "</br>";
+            if ($("#CreateDateS").val() == "") {
+                msg += "鍵檔日期起不可空白" + newLine;
+            }
+            if ($("#CreateDateE").val() == "") {
+                msg += "鍵檔日期迄不可空白" + newLine;
+            }
+            if ($.CSFS.diffDays($("#CreateDateE").val(), $("#CreateDateS").val()) > $.CSFS.config.CheckDays) {
+                msg += $.CSFS.msgLang.DateRangeMsg + $.CSFS.config.CheckDays + '天' + newLine;
             }
 
             //* 有必填檢核錯誤

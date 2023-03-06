@@ -78,7 +78,7 @@ namespace CTBC.CSFS.BussinessLogic
                           , w.COL_ACCOUNT2, w.EXT, w.Memo, a.AttachmentId
                           , CONVERT(varchar, w.CreatedDate, 111) AS CreatedDate
                         FROM WarningFraud AS w
-						LEFT JOIN WarningFraudAttach AS a ON w.COL_165CASE = a.COL_165CASE
+						LEFT JOIN WarningFraudAttach AS a ON w.NO = a.WarningFraudNo
 						WHERE C1003_BUSTYPE <> '警示通報' " + sqlStrWhere + "";
 
                 IList<WarningFraud> _ilsit;
@@ -119,6 +119,8 @@ namespace CTBC.CSFS.BussinessLogic
                     string sql = @"Insert Into WarningFraud (CASE_NO, COL_165CASE, COL_C1003CASE, C1003_BUSTYPE, COL_POLICE, COL_ACCOUNT2, Unit, CaseCreator, EXT, COL_VICTIM, COL_OTHERBANKID, Memo, CreatedDate, CreatedUser, ModifiedDate, ModifiedUser, Status)
                                    Values (@CASE_NO, @COL_165CASE, @COL_C1003CASE, '聯防', @COL_POLICE, @COL_ACCOUNT2, @Unit, @CaseCreator, @EXT, @COL_VICTIM, @COL_OTHERBANKID, @Memo, @CreatedDate, @CreatedUser, GetDate(), @ModifiedUser, '0');";
 
+                    sql += "Select SCOPE_IDENTITY() AS No;";
+
                     Parameter.Clear();
                     Parameter.Add(new CommandParameter("@CASE_NO", model.CASE_NO));
                     Parameter.Add(new CommandParameter("@COL_165CASE", model.COL_165CASE));
@@ -135,25 +137,27 @@ namespace CTBC.CSFS.BussinessLogic
                     Parameter.Add(new CommandParameter("@CreatedUser", model.CreatedUser));
                     Parameter.Add(new CommandParameter("@ModifiedUser", model.ModifiedUser));
 
-                    int effactCount = ExecuteNonQuery(sql, dbTransaction);
+                    object insertResult = ExecuteScalar(sql, dbTransaction);
                     #endregion
 
-                    #region 附件
-                    if(model.WarningFraudAttach != null)
-                    {
-                        effactCount += CreateAttatchment(model.WarningFraudAttach, dbTransaction);
-                    }
-                    #endregion
-
-                    if(effactCount == 0)
+                    if (insertResult == null)
                     {
                         dbTransaction.Rollback();
                     }
                     else
                     {
+                        #region 附件
+                        if (model.WarningFraudAttach != null)
+                        {
+                            model.WarningFraudAttach.WarningFraudNo = int.Parse(insertResult.ToString());
+                            CreateAttatchment(model.WarningFraudAttach, dbTransaction);
+                        }
+                        #endregion
+
                         dbTransaction.Commit();
                         flag = true;
                     }
+
                 }
 
                 return flag;
@@ -211,6 +215,7 @@ namespace CTBC.CSFS.BussinessLogic
                     #region 附件
                     if (model.WarningFraudAttach != null)
                     {
+                        model.WarningFraudAttach.WarningFraudNo = model.No;
                         effactCount += CreateAttatchment(model.WarningFraudAttach, dbTransaction);
                     }
                     #endregion
@@ -242,13 +247,13 @@ namespace CTBC.CSFS.BussinessLogic
         /// <returns></returns>
         public int CreateAttatchment(WarningFraudAttach model, IDbTransaction trans = null)
         {
-            string strSql = @" Insert Into WarningFraudAttach (COL_165CASE, AttachmentName, AttachmentServerPath, AttachmentServerName, CreatedUser, CreatedDate) 
-                               Values (@COL_165CASE, @AttachmentName, @AttachmentServerPath, @AttachmentServerName, @CreatedUser,GETDATE());";
+            string strSql = @" Insert Into WarningFraudAttach (WarningFraudNo, AttachmentName, AttachmentServerPath, AttachmentServerName, CreatedUser, CreatedDate) 
+                               Values (@WarningFraudNo, @AttachmentName, @AttachmentServerPath, @AttachmentServerName, @CreatedUser,GETDATE());";
 
             base.Parameter.Clear();
 
             // 添加參數
-            base.Parameter.Add(new CommandParameter("@COL_165CASE", model.COL_165CASE));
+            base.Parameter.Add(new CommandParameter("@WarningFraudNo", model.WarningFraudNo));
             base.Parameter.Add(new CommandParameter("@AttachmentName", model.AttachmentName));
             base.Parameter.Add(new CommandParameter("@AttachmentServerPath", model.AttachmentServerPath));
             base.Parameter.Add(new CommandParameter("@AttachmentServerName", model.AttachmentServerName));
@@ -307,7 +312,7 @@ namespace CTBC.CSFS.BussinessLogic
         {
             try
             {
-                string sql = @"Select AttachmentId, COL_165CASE, AttachmentName, AttachmentServerPath, AttachmentServerName
+                string sql = @"Select AttachmentId, WarningFraudNo, AttachmentName, AttachmentServerPath, AttachmentServerName
                             From WarningFraudAttach Where AttachmentId = @AttachmentId";
 
                 Parameter.Clear();
@@ -399,7 +404,7 @@ namespace CTBC.CSFS.BussinessLogic
                                   , w.COL_ACCOUNT2, w.EXT, w.Memo, a.AttachmentId
                                   , CONVERT(varchar, w.CreatedDate, 111) AS CreatedDate
                                 FROM WarningFraud AS w
-						        LEFT JOIN WarningFraudAttach AS a ON w.COL_165CASE = a.COL_165CASE
+						        LEFT JOIN WarningFraudAttach AS a ON w.NO = a.WarningFraudNo
 						        WHERE [NO] = @NO";
 
                 Parameter.Clear();

@@ -11,7 +11,7 @@ namespace CTBC.CSFS.Models
         /// <summary>
         /// PK
         /// </summary>
-        public long No { get; set; }
+        public int No { get; set; }
         /// <summary>
         /// 
         /// </summary>

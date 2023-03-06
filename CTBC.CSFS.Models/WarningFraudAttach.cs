@@ -9,7 +9,7 @@ namespace CTBC.CSFS.Models
     public class WarningFraudAttach
     {
         public int AttachmentId { get; set; }
-        public string COL_165CASE { get; set; }
+        public int WarningFraudNo { get; set; }
         public string AttachmentName { get; set; }
         public string AttachmentServerPath { get; set; }
         public string AttachmentServerName { get; set; }

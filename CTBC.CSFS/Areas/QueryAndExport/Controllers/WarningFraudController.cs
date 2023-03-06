@@ -88,7 +88,7 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
         public WarningFraudViewModel SearchList(WarningFraud model)
         {
             wqBiz = new WarningFraudBIZ
-            {
+            { 
                 PageIndex = model.CurrentPage,
                 PageSize = model.PageSize,
                 SortExpression = model.SortExpression
@@ -334,7 +334,7 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
 
             MemoryStream ms = new MemoryStream();
             ms = wqBiz.Export_Excel(model);
-            string fileName = Lang.csfs_menu_tit_warningfraud + "_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
+            string fileName = "聯防案件編輯及查詢_" + DateTime.Now.ToString("yyyyMMddHHmmss") + ".xls";
             if(ms != null && ms.Length > 0)
             {
                 Response.ClearContent();
@@ -437,7 +437,7 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
         /// <returns></returns>
         private WarningFraudAttach UploadFile(HttpPostedFileBase attachFile, string COL_165CASE)
         {
-            string newName = $"{COL_165CASE}_{DateTime.Now.ToString("yyyyMMddHHmmssfff")}{Path.GetExtension(attachFile.FileName)}";
+            string newName = string.Format("{0}_{1}{2}", COL_165CASE, DateTime.Now.ToString("yyyyMMddHHmmssfff"), Path.GetExtension(attachFile.FileName));
             string serverPath = Path.Combine("~/", ConfigurationManager.AppSettings["UploadFolder"], "WarningFraud", DateTime.Now.ToString("yyyyMM"));
             string realPath = Server.MapPath(serverPath);
             if (!UtlFileSystem.FolderIsExist(realPath))
@@ -448,7 +448,6 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
 
             var aModel = new WarningFraudAttach
             {
-                COL_165CASE = COL_165CASE,
                 AttachmentName = Path.GetFileName(attachFile.FileName),
                 AttachmentServerName = newName,
                 AttachmentServerPath = serverPath,

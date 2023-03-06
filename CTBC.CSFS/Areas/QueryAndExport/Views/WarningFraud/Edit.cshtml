@@ -74,8 +74,8 @@
                                 通報單位 <span class="text-red">*</span>
                             </label>
                             <div class="col-sm-8">
-                                @Html.DropDownList("ddlUnit", (SelectList)ViewBag.Unit, new { @class="form-control input-sm" })
-                                @Html.HiddenFor(m => m.Unit)
+                                @Html.DropDownListFor(m => m.Unit, (SelectList)ViewBag.Unit, new { @class="form-control input-sm" })
+                                @Html.Hidden("hidUnit", Model.Unit)
                             </div>
                         </div>
                     </div>

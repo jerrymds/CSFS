@@ -196,7 +196,9 @@
         //日期相減返回天數
         diffDays: function (date1, date2) {
             var d1 = moment(date1, 'YYYY/MM/DD');
+            if (d1.year() < 1911) d1 = d1.add(1911, 'y');
             var d2 = moment(date2, 'YYYY/MM/DD');
+            if (d2.year() < 1911) d2 = d2.add(1911, 'y');
             return d1.diff(d2, 'days');
         },
         formatFileSize: function (byteStr) {
