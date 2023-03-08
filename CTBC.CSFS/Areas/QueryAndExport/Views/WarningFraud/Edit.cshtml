@@ -118,9 +118,21 @@
                                 <div id="divUpload">
                                     <input type="file" name="attachFile" id="attachFile" class="form-control" accept=".pdf,.doc,.docx,.xls,.xlsx,.zip" />
                                 </div>
-                                <div id="divAttach" style="display: none">
-                                    <span id="attachmentName"></span>
-                                    <button id="btnDelFile" type="button" class="btn btn-danger btn-xs">@Lang.csfs_delete</button>
+                                <div id="divAttach" style="display: none" class="has-error">
+                                    <table class="table table-bordered">
+                                        @for(int i = 0; i < Model.WarningFraudAttach.Count; i++)
+                                        { 
+                                            <tr>
+                                                <td>
+                                                    @Model.WarningFraudAttach[i].AttachmentName
+                                                </td>
+                                                <td>
+                                                    <button id="btnDelFile" type="button" class="btn btn-danger btn-xs" onclick="$.WarningFraud.DelAttach(@Model.WarningFraudAttach[i].AttachmentId)">@Lang.csfs_delete</button>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </table>
+                                    <span class="help-block">(附件全部行除才可重新上傳)</span>
                                 </div>
                             </div>
                         </div>
@@ -133,13 +145,13 @@
                     </div>
                     <div class="row form-group col-sm-12">
                         <div class="col-sm-6">
+                            
+                        </div>
+                        <div class="col-sm-6">
                             <label class="control-label col-sm-4">備註</label>
                             <div class="col-sm-8">
                                 @Html.TextBoxFor(m => m.Memo, new { @class="form-control input-sm", maxlength="255" })
                             </div>
-                        </div>
-                        <div class="col-sm-6">
-                            
                         </div>
                     </div>
                 </div>
@@ -166,8 +178,7 @@
             'DelAttchUrl': '@Url.Action("DeleteAttatch", "WarningFraud", new { area = "QueryAndExport" })',
             'CreateWarnUrl': '@Url.Action("CreateWarn", "WarningFraud", new { area = "QueryAndExport" })',
             'EditWarnUrl': '@Url.Action("EditWarn", "WarningFraud", new { area = "QueryAndExport" })',
-            'HasAttach': @Model.AttachmentId,
-            'AttachmentName': '@Model.WarningFraudAttach.AttachmentName'
+            'HasAttach': @Model.AttachmentId
         });
         $.CSFS.setMsg({
             'ConfirmDelete': '@Lang.csfs_confirm_delete'

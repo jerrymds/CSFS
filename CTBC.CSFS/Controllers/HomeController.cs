@@ -119,16 +119,6 @@ namespace CTBC.CSFS.Controllers
                 fileServerName = attach.AttachmentServerName;
                 fileName = attach.AttachmentName;
             }
-            //下載聯防附件
-            else if(uploadkind == Uploadkind.WarnFraudAttach)
-            {
-                WarningFraudAttach attach = new WarningFraudBIZ().GetAttachInfo(id);
-                if (attach == null)
-                    return null;
-                filePath = attach.AttachmentServerPath;
-                fileServerName = attach.AttachmentServerName;
-                fileName = attach.AttachmentName;
-            }
             else if (uploadkind.Length>20)
             {
                 int at = uploadkind.IndexOf("|");

@@ -73,9 +73,9 @@ namespace CTBC.CSFS.BussinessLogic
                     base.Parameter.Add(new CommandParameter("@COL_OTHERBANKID", "%" + model.COL_OTHERBANKID + "%"));
                 }
 
-                sqlStr = @"SELECT w.[NO], w.COL_ID, w.CASE_NO, w.COL_C1003CASE, w.CaseCreator
+                sqlStr = @"SELECT DISTINCT w.[NO], w.COL_ID, w.CASE_NO, w.COL_C1003CASE, w.CaseCreator
                           , w.COL_POLICE, w.COL_VICTIM, w.COL_OTHERBANKID, w.COL_165CASE, w.Unit
-                          , w.COL_ACCOUNT2, w.EXT, w.Memo, a.AttachmentId
+                          , w.COL_ACCOUNT2, w.EXT, w.Memo, a.WarningFraudNo AS AttachmentId
                           , CONVERT(varchar, w.CreatedDate, 111) AS CreatedDate
                         FROM WarningFraud AS w
 						LEFT JOIN WarningFraudAttach AS a ON w.NO = a.WarningFraudNo
@@ -147,10 +147,10 @@ namespace CTBC.CSFS.BussinessLogic
                     else
                     {
                         #region 附件
-                        if (model.WarningFraudAttach != null)
+                        if (model.WarningFraudAttach.Count > 0)
                         {
-                            model.WarningFraudAttach.WarningFraudNo = int.Parse(insertResult.ToString());
-                            CreateAttatchment(model.WarningFraudAttach, dbTransaction);
+                            model.WarningFraudAttach[0].WarningFraudNo = int.Parse(insertResult.ToString());
+                            CreateAttatchment(model.WarningFraudAttach[0], dbTransaction);
                         }
                         #endregion
 
@@ -213,10 +213,10 @@ namespace CTBC.CSFS.BussinessLogic
                     #endregion
 
                     #region 附件
-                    if (model.WarningFraudAttach != null)
+                    if (model.WarningFraudAttach.Count > 0)
                     {
-                        model.WarningFraudAttach.WarningFraudNo = model.No;
-                        effactCount += CreateAttatchment(model.WarningFraudAttach, dbTransaction);
+                        model.WarningFraudAttach[0].WarningFraudNo = model.No;
+                        effactCount += CreateAttatchment(model.WarningFraudAttach[0], dbTransaction);
                     }
                     #endregion
 
@@ -306,9 +306,32 @@ namespace CTBC.CSFS.BussinessLogic
         /// <summary>
         /// 取附件資料
         /// </summary>
-        /// <param name="attachId"></param>
+        /// <param name="warningFraudNo"></param>
         /// <returns></returns>
-        public WarningFraudAttach GetAttachInfo(int attachId)
+        public List<WarningFraudAttach> GetAttachList(int warningFraudNo)
+        {
+            try
+            {
+                string sql = @"Select AttachmentId, WarningFraudNo, AttachmentName, AttachmentServerPath, AttachmentServerName
+                            From WarningFraudAttach Where WarningFraudNo = @WarningFraudNo";
+
+                Parameter.Clear();
+                Parameter.Add(new CommandParameter("@WarningFraudNo", warningFraudNo));
+                IList<WarningFraudAttach> list = SearchList<WarningFraudAttach>(sql);
+                return list.ToList();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        /// <summary>
+        /// 取附件資料
+        /// </summary>
+        /// <param name="attachmentId"></param>
+        /// <returns></returns>
+        public WarningFraudAttach GetAttachInfo(int attachmentId)
         {
             try
             {
@@ -316,7 +339,7 @@ namespace CTBC.CSFS.BussinessLogic
                             From WarningFraudAttach Where AttachmentId = @AttachmentId";
 
                 Parameter.Clear();
-                Parameter.Add(new CommandParameter("@AttachmentId", attachId));
+                Parameter.Add(new CommandParameter("@AttachmentId", attachmentId));
                 IList<WarningFraudAttach> list = SearchList<WarningFraudAttach>(sql);
                 return list.FirstOrDefault();
             }
@@ -399,9 +422,9 @@ namespace CTBC.CSFS.BussinessLogic
         {
             try
             {
-                string sql = @"SELECT w.[NO], w.COL_ID, w.CASE_NO, w.COL_C1003CASE, w.CaseCreator
+                string sql = @"SELECT DISTINCT w.[NO], w.COL_ID, w.CASE_NO, w.COL_C1003CASE, w.CaseCreator
                                   , w.COL_POLICE, w.COL_VICTIM, w.COL_OTHERBANKID, w.COL_165CASE, w.Unit
-                                  , w.COL_ACCOUNT2, w.EXT, w.Memo, a.AttachmentId
+                                  , w.COL_ACCOUNT2, w.EXT, w.Memo, a.WarningFraudNo AS AttachmentId
                                   , CONVERT(varchar, w.CreatedDate, 111) AS CreatedDate
                                 FROM WarningFraud AS w
 						        LEFT JOIN WarningFraudAttach AS a ON w.NO = a.WarningFraudNo

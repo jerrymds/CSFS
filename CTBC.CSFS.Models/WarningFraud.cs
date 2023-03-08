@@ -181,6 +181,6 @@ namespace CTBC.CSFS.Models
         /// <summary>
         /// 附件
         /// </summary>
-        public WarningFraudAttach WarningFraudAttach { get; set; }
+        public List<WarningFraudAttach> WarningFraudAttach { get; set; }
     }
 }

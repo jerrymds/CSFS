@@ -77,7 +77,7 @@
             'QueryUrl': '@Url.Action("_QueryResult", "WarningFraud", new { area = "QueryAndExport" })',
             'IndexUrl': '@Url.Action("Index", "WarningFraud", new { area = "QueryAndExport" })',
             'DelUrl': '@Url.Action("DeleteWarn", "WarningFraud", new { area = "QueryAndExport" })',
-            'DownloadUrl': '@Url.Action("DownFile", "Home", new { area = "", uploadkind = Uploadkind.WarnFraudAttach })'
+            'DownloadUrl': '@Url.Action("Download", "WarningFraud", new { area = "QueryAndExport" })'
         });
         $.CSFS.setMsg({
             'SelectOneMsg': '@Lang.csfs_select',

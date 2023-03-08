@@ -11,9 +11,9 @@ using CTBC.CSFS.Filter;
 using CTBC.CSFS.Pattern;
 using CTBC.CSFS.BussinessLogic;
 using CTBC.CSFS.Models;
-using CTBC.CSFS.Resource;
 using CTBC.CSFS.ViewModels;
 using CTBC.FrameWork.Util;
+using ICSharpCode.SharpZipLib.Zip;
 
 
 namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
@@ -133,7 +133,7 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
             WarningFraud model = new WarningFraud
             {
                 CreatedDate = UtlString.FormatDateTw(DateTime.Now.ToString("yyyy/MM/dd")),
-                WarningFraudAttach = new WarningFraudAttach()
+                WarningFraudAttach = new List<WarningFraudAttach>()
             };
             return View("Edit", model);
         }
@@ -224,12 +224,12 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
 
                     if(vmodel.AttachmentId > 0)
                     {
-                        vmodel.WarningFraudAttach = wqBiz.GetAttachInfo(vmodel.AttachmentId);
+                        vmodel.WarningFraudAttach = wqBiz.GetAttachList(vmodel.AttachmentId);
                     }
 
                     if (vmodel.WarningFraudAttach == null)
                     {
-                        vmodel.WarningFraudAttach = new WarningFraudAttach();
+                        vmodel.WarningFraudAttach = new List<WarningFraudAttach>();
                     }
 
                     BindDropDownList(vmodel.Unit);
@@ -399,15 +399,7 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
                 if(amodel != null)
                 {
                     #region 刪除實體檔
-                    string absoluFilePath = Path.Combine(Server.MapPath(amodel.AttachmentServerPath), amodel.AttachmentServerName);
-                    if(System.IO.File.Exists(absoluFilePath))
-                    {
-                        try
-                        {
-                            System.IO.File.Delete(absoluFilePath);
-                        }
-                        catch { }
-                    }
+                    DelFile(new List<WarningFraudAttach> { amodel });
                     #endregion
 
                     #region 刪除資料庫
@@ -430,15 +422,129 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
         }
 
         /// <summary>
+        /// 下載檔案
+        /// </summary>
+        /// <param name="warningFraudNo"></param>
+        /// <returns></returns>
+        public ActionResult Download(int warningFraudNo)
+        {
+            try
+            {
+                wqBiz = new WarningFraudBIZ();
+                var warningFraud = wqBiz.GetWarningFraud(warningFraudNo);
+                var dwnFileName = string.Format("{0}_{1}.zip", warningFraud.COL_165CASE, DateTime.Now.ToString("yyyyMMddHHmmss"));
+                var attachs = wqBiz.GetAttachList(warningFraudNo);
+                using (MemoryStream memStream = new MemoryStream())
+                {
+                    using (ZipOutputStream zipOutStream = new ZipOutputStream(memStream))
+                    {
+                        attachs.ForEach(f =>
+                        {
+                            AddFileToZip(zipOutStream, f);
+                        });
+                    }
+                    return File(memStream.ToArray(), "application/octet-stream", dwnFileName);
+                }
+            }
+            catch(Exception ex)
+            {
+                WriteExceptionLog(ex);
+                Response.StatusCode = 400;
+                return Content("No Data");
+            }
+        }
+
+        /// <summary>
+        /// 下載附件打包成 ZIP
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="attach"></param>
+        private void AddFileToZip(ZipOutputStream stream, WarningFraudAttach attach)
+        {
+            byte[] buffer = new byte[4096];
+            string absFilePath = Path.Combine(Server.MapPath(attach.AttachmentServerPath), attach.AttachmentServerName);
+            if(System.IO.File.Exists(absFilePath))
+            {
+                ZipEntry entry = new ZipEntry(attach.AttachmentName);
+                stream.PutNextEntry(entry);
+                using (FileStream fs = System.IO.File.OpenRead(absFilePath))
+                {
+                    int readLength;
+                    do
+                    {
+                        readLength = fs.Read(buffer, 0, buffer.Length);
+                        if(readLength > 0)
+                        {
+                            stream.Write(buffer, 0, readLength);
+                        }
+                    } 
+                    while (readLength > 0);
+                }
+            }
+            else
+            {
+                //透過 WebService 去另一台下載檔案
+                CSFSURL.attDownload csDown = new CSFSURL.attDownload();
+                string serverPath = attach.AttachmentServerPath.Replace("~/TEMP", "");
+                string fileBase64String = csDown.UrlDownloadFile(serverPath, attach.AttachmentServerName);
+                if(!string.IsNullOrWhiteSpace(fileBase64String))
+                {
+                    ZipEntry entry = new ZipEntry(attach.AttachmentName);
+                    stream.PutNextEntry(entry);
+                    byte[] fileBytes = Convert.FromBase64String(fileBase64String);
+                    using (MemoryStream ms = new MemoryStream(fileBytes))
+                    {
+                        int readLength;
+                        do
+                        {
+                            readLength = ms.Read(buffer, 0, buffer.Length);
+                            if(readLength > 0)
+                            {
+                                stream.Write(buffer, 0, readLength);
+                            }
+                        }
+                        while (readLength > 0);
+                    }
+                }
+                else
+                {
+                    //第二台 Web Server 找不到檔案到 Batch Server 下載
+                    WebService.WarningFraud.attDownload attDownload = new WebService.WarningFraud.attDownload();
+                    serverPath = attach.AttachmentServerPath.Replace("~/TEMP", "");
+                    fileBase64String = attDownload.UrlDownloadFile(serverPath, attach.AttachmentServerName);
+                    if (!string.IsNullOrWhiteSpace(fileBase64String))
+                    {
+                        ZipEntry entry = new ZipEntry(attach.AttachmentName);
+                        stream.PutNextEntry(entry);
+                        byte[] fileBytes = Convert.FromBase64String(fileBase64String);
+                        using (MemoryStream ms = new MemoryStream(fileBytes))
+                        {
+                            int readLength;
+                            do
+                            {
+                                readLength = ms.Read(buffer, 0, buffer.Length);
+                                if (readLength > 0)
+                                {
+                                    stream.Write(buffer, 0, readLength);
+                                }
+                            }
+                            while (readLength > 0);
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
         /// 儲存上傳附件
         /// </summary>
         /// <param name="attachFile"></param>
         /// <param name="COL_165CASE"></param>
         /// <returns></returns>
-        private WarningFraudAttach UploadFile(HttpPostedFileBase attachFile, string COL_165CASE)
+        private List<WarningFraudAttach> UploadFile(HttpPostedFileBase attachFile, string COL_165CASE)
         {
             string newName = string.Format("{0}_{1}{2}", COL_165CASE, DateTime.Now.ToString("yyyyMMddHHmmssfff"), Path.GetExtension(attachFile.FileName));
-            string serverPath = Path.Combine("~/", ConfigurationManager.AppSettings["UploadFolder"], "WarningFraud", DateTime.Now.ToString("yyyyMM"));
+            string serverPath = Path.Combine("~/TEMP", "WarningFraud", DateTime.Now.ToString("yyyyMM"));
             string realPath = Server.MapPath(serverPath);
             if (!UtlFileSystem.FolderIsExist(realPath))
                 UtlFileSystem.CreateFolder(realPath);
@@ -454,15 +560,21 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
                 CreatedUser = LogonUser.Account
             };
 
-            return aModel;
+            return new List<WarningFraudAttach> { aModel };
         }
 
-        private void DelFile(WarningFraudAttach attach)
+        private void DelFile(List<WarningFraudAttach> attach)
         {
-            if (attach != null)
+            if (attach.Count > 0)
             {
-                string path = System.IO.Path.Combine(Server.MapPath(attach.AttachmentServerPath), attach.AttachmentServerName);
-                System.IO.File.Delete(path);
+                attach.ForEach(m =>
+                {
+                    string path = System.IO.Path.Combine(Server.MapPath(m.AttachmentServerPath), m.AttachmentServerName);
+                    if(System.IO.File.Exists(path))
+                    {
+                        System.IO.File.Delete(path);
+                    }
+                });
             }
         }
     }

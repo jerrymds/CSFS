@@ -59,43 +59,9 @@
             $("#btnCancel").click(function () {
                 parent.$.colorbox.close();
             });
-            $("#btnDelFile").click(function () {
-                DelFile();
-            });
-
-            function DelFile() {
-                jConfirm($.CSFS.msgLang.ConfirmDelete, "刪除附件", DoDelFile);
-
-                function DoDelFile(res) {
-                    if (res == false) return;
-                    var formData = new FormData();
-                    formData.append("attachmentId", $.CSFS.config.HasAttach);
-                    $.blockUI();
-                    $.ajax({
-                        url: $.CSFS.config.DelAttchUrl,
-                        type: "POST",
-                        data: formData,
-                        contentType: false,
-                        processData: false,
-                        error: function () {
-                            jAlertError($("#LoadErrorMsg").val());
-                            $.unblockUI();
-                        },
-                        success: function (result) {
-                            $.CSFS.resultHandler(result, function () {
-                                parent.$.colorbox.close();
-                                parent.$.WarningFraud.QueryData();
-                            });
-                        }
-                    }).done(function () {
-                        $.unblockUI();
-                    });
-                }
-            }
 
             if ($.CSFS.config.HasAttach > 0) {
                 $("#divUpload").hide();
-                $("#attachmentName").text($.CSFS.config.AttachmentName);
                 $("#divAttach").show();
             }
             //註冊表單驗證
@@ -272,12 +238,39 @@
         },
         //* 下載
         Download: function (id) {
-            var actionUrl = $.CSFS.config.DownloadUrl + "&id=" + id;
-            $("#frmDownload").attr("src", actionUrl);
+            var actionUrl = $.CSFS.config.DownloadUrl + "?warningFraudNo=" + id;
+            $("#frmQuery").attr("action", actionUrl);
+            $("#frmQuery").submit();
         },
-        //* 檢查檔案大小是否超過設定
-        CheckFileSize: function (fileSize) {
+        //* 刪除附件
+        DelAttach: function (attachmentId) {
+            jConfirm($.CSFS.msgLang.ConfirmDelete, "刪除附件", DoDelFile);
 
+            function DoDelFile(res) {
+                if (res == false) return;
+                var formData = new FormData();
+                formData.append("attachmentId", attachmentId);
+                $.blockUI();
+                $.ajax({
+                    url: $.CSFS.config.DelAttchUrl,
+                    type: "POST",
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    error: function () {
+                        jAlertError($("#LoadErrorMsg").val());
+                        $.unblockUI();
+                    },
+                    success: function (result) {
+                        $.CSFS.resultHandler(result, function () {
+                            parent.$.colorbox.close();
+                            parent.$.WarningFraud.QueryData();
+                        });
+                    }
+                }).done(function () {
+                    $.unblockUI();
+                });
+            }
         }
     });
     //===========================================================================================

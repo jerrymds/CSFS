@@ -42,5 +42,15 @@ namespace CTBC.CSFS.Properties {
                 return ((string)(this["CTBC_CSFS_CSFSURL_attDownload"]));
             }
         }
+		
+		[global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.WebServiceUrl)]
+        [global::System.Configuration.DefaultSettingValueAttribute("http://localhost:35947/attDownload.asmx")]
+        public string CTBC_CSFS_WebService_WarningFraud_attDownload {
+            get {
+                return ((string)(this["CTBC_CSFS_WebService_WarningFraud_attDownload"]));
+            }
+        }
     }
 }
