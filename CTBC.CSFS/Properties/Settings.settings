@@ -8,8 +8,5 @@
     <Setting Name="CTBC_CSFS_CSFSURL_attDownload" Type="(Web Service URL)" Scope="Application">
       <Value Profile="(Default)">http://localhost:35947/attDownload.asmx</Value>
     </Setting>
-	<Setting Name="CTBC_CSFS_WebService_WarningFraud_attDownload" Type="(Web Service URL)" Scope="Application">
-      <Value Profile="(Default)">http://localhost:35947/attDownload.asmx</Value>
-    </Setting>
   </Settings>
 </SettingsFile>

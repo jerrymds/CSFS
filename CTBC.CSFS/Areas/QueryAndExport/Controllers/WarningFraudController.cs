@@ -485,8 +485,7 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
             {
                 //透過 WebService 去另一台下載檔案
                 CSFSURL.attDownload csDown = new CSFSURL.attDownload();
-                string serverPath = attach.AttachmentServerPath.Replace("~/TEMP", "");
-                string fileBase64String = csDown.UrlDownloadFile(serverPath, attach.AttachmentServerName);
+                string fileBase64String = csDown.UrlDownloadFile(attach.AttachmentServerPath, attach.AttachmentServerName);
                 if(!string.IsNullOrWhiteSpace(fileBase64String))
                 {
                     ZipEntry entry = new ZipEntry(attach.AttachmentName);
@@ -509,14 +508,15 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
                 else
                 {
                     //第二台 Web Server 找不到檔案到 Batch Server 下載
-                    WebService.WarningFraud.attDownload attDownload = new WebService.WarningFraud.attDownload();
-                    serverPath = attach.AttachmentServerPath.Replace("~/TEMP", "");
-                    fileBase64String = attDownload.UrlDownloadFile(serverPath, attach.AttachmentServerName);
-                    if (!string.IsNullOrWhiteSpace(fileBase64String))
+                    string serverPath = ConfigurationManager.AppSettings["WarningAttachFile"].ToString();
+                    WebService.OpenStream.OpenFileStream openFileStream = new WebService.OpenStream.OpenFileStream();
+                    string fileName = Path.Combine(serverPath, attach.AttachmentServerPath.Replace("~/", "").TrimEnd(), attach.AttachmentServerName);
+                    fileName = fileName.Replace("/", "\\");
+                    byte[] fileBytes = openFileStream.OpenFile(fileName);
+                    if (fileBytes != null)
                     {
                         ZipEntry entry = new ZipEntry(attach.AttachmentName);
                         stream.PutNextEntry(entry);
-                        byte[] fileBytes = Convert.FromBase64String(fileBase64String);
                         using (MemoryStream ms = new MemoryStream(fileBytes))
                         {
                             int readLength;
@@ -544,7 +544,7 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
         private List<WarningFraudAttach> UploadFile(HttpPostedFileBase attachFile, string COL_165CASE)
         {
             string newName = string.Format("{0}_{1}{2}", COL_165CASE, DateTime.Now.ToString("yyyyMMddHHmmssfff"), Path.GetExtension(attachFile.FileName));
-            string serverPath = Path.Combine("~/TEMP", "WarningFraud", DateTime.Now.ToString("yyyyMM"));
+            string serverPath = Path.Combine(ConfigurationManager.AppSettings["UploadFolder"], "WarningFraud", DateTime.Now.ToString("yyyyMM"));
             string realPath = Server.MapPath(serverPath);
             if (!UtlFileSystem.FolderIsExist(realPath))
                 UtlFileSystem.CreateFolder(realPath);
@@ -569,10 +569,20 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
             {
                 attach.ForEach(m =>
                 {
-                    string path = System.IO.Path.Combine(Server.MapPath(m.AttachmentServerPath), m.AttachmentServerName);
-                    if(System.IO.File.Exists(path))
+                    if(m.AttachmentServerPath.Contains("~/File"))
                     {
-                        System.IO.File.Delete(path);
+                        string serverPath = ConfigurationManager.AppSettings["WarningAttachFile"].ToString();
+                        WebService.OpenStream.OpenFileStream openFileStream = new WebService.OpenStream.OpenFileStream();
+                        string fileName = Path.Combine(serverPath, m.AttachmentServerPath.Replace("~/", ""), m.AttachmentServerName);
+                        openFileStream.DeleteFile(fileName);
+                    }
+                    else
+                    {
+                        string path = System.IO.Path.Combine(Server.MapPath(m.AttachmentServerPath), m.AttachmentServerName);
+                        if (System.IO.File.Exists(path))
+                        {
+                            System.IO.File.Delete(path);
+                        }
                     }
                 });
             }
