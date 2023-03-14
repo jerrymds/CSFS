@@ -544,7 +544,7 @@ namespace CTBC.CSFS.Areas.QueryAndExport.Controllers
         private List<WarningFraudAttach> UploadFile(HttpPostedFileBase attachFile, string COL_165CASE)
         {
             string newName = string.Format("{0}_{1}{2}", COL_165CASE, DateTime.Now.ToString("yyyyMMddHHmmssfff"), Path.GetExtension(attachFile.FileName));
-            string serverPath = Path.Combine(ConfigurationManager.AppSettings["UploadFolder"], "WarningFraud", DateTime.Now.ToString("yyyyMM"));
+            string serverPath = Path.Combine("~/" + ConfigurationManager.AppSettings["UploadFolder"], "WarningFraud", DateTime.Now.ToString("yyyyMM"));
             string realPath = Server.MapPath(serverPath);
             if (!UtlFileSystem.FolderIsExist(realPath))
                 UtlFileSystem.CreateFolder(realPath);
